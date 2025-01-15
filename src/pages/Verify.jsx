@@ -12,7 +12,8 @@ export default function Verify() {
     message: "",
     disable: true,
   });
-  const userMailHint = location?.state?.email || "";
+  const userMailHint = location?.state?.mailHint || "";
+
   const verifyOtp = async () => {
     const id = location?.state?.id || "";
     const verify = utils.verifyValue(otp.input, "otp");
@@ -28,7 +29,6 @@ export default function Verify() {
           message: response.msg,
         });
       }
-      console.log(response);
     } else {
       setOtp({
         ...otp,
@@ -42,18 +42,19 @@ export default function Verify() {
       <div className="otpTitle">
         <b>Verify Your Email</b>
         <p>
-          Enter 4 digits OTP that we sent to <span>m****@gmail.com</span>
+          Enter 4 digits OTP that we sent to <span>{userMailHint}</span>
         </p>
       </div>
-
-      <LoginInput
-        placeholder="Enter 4 digit OTP"
-        formData={otp}
-        setFormData={setOtp}
-      />
+      <div className="inputWrapperLogin">
+        <LoginInput
+          placeholder="Enter 4 digit OTP"
+          formData={otp}
+          setFormData={setOtp}
+        />
+      </div>
       <LoginButton
         text="Verify"
-        formData={otp}
+        disabled={otp.disable}
         func={() => {
           verifyOtp();
         }}

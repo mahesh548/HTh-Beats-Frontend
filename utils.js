@@ -70,7 +70,7 @@ const utils = {
       if (userRegex.test(value)) {
         return "pass";
       } else {
-        return "Only Letters Numbers Underscore Are Allowed";
+        return "Only Letters,Numbers,Underscore Are Allowed";
       }
     }
     if (type == "e") {

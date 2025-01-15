@@ -44,14 +44,16 @@ export default function Login() {
     <>
       <div className="loginContainer">
         <LogoBack />
-        <LoginInput
-          placeholder="Enter Your Username or Email"
-          formData={username}
-          setFormData={setUsername}
-        />
+        <div className="inputWrapperLogin">
+          <LoginInput
+            placeholder="Enter Your Username or Email"
+            formData={username}
+            setFormData={setUsername}
+          />
+        </div>
         <LoginButton
           text="Continue"
-          formData={username}
+          disabled={username.disable}
           func={() => {
             login();
           }}
