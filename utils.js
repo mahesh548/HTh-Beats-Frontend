@@ -19,8 +19,9 @@ const utils = {
       if (methods == "DELETE") {
         data = await axios.delete(url, { data: payload });
       }
+
       localStorage.setItem("session", data?.headers?.session);
-      if (data?.auth == false) {
+      if (data?.data?.auth == false) {
         localStorage.clear();
         const navigate = useNavigate();
         navigate("/login");
@@ -47,8 +48,9 @@ const utils = {
       if (methods == "DELETE") {
         data = await axios.delete(url, { data: payload });
       }
+
       localStorage.setItem("session", data?.headers?.session);
-      if (data?.auth == false) {
+      if (data?.data?.auth == false) {
         localStorage.clear();
         const navigate = useNavigate();
         navigate("/login");

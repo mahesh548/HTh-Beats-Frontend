@@ -2,6 +2,8 @@ import utils from "../../utils";
 import LoginButton from "./components/LoginButton";
 import LoginInput from "./components/LoginInput";
 import { useState } from "react";
+import LogoBack from "./components/LogoBack";
+import ContinueGoogle from "./components/ContinueGoogle";
 
 export default function Login() {
   const [username, setUsername] = useState({
@@ -13,7 +15,18 @@ export default function Login() {
   const login = async () => {
     const verify = utils.verifyValue(username.input, "u&e");
     if (verify == "pass") {
-      console.log("Login Successful");
+      const jsonData = { searchId: username.input };
+      const response = await utils.BACKEND("/login", "POST", jsonData);
+      if (response.status == true) {
+        alert("enter otp");
+      }
+      if (response.status == false) {
+        setUsername({
+          ...username,
+          message: response.msg,
+        });
+      }
+      console.log(response);
     } else {
       setUsername({
         ...username,
@@ -25,11 +38,7 @@ export default function Login() {
   return (
     <>
       <div className="loginContainer">
-        <div className="loginTitle">
-          <img src="logo.png" alt="logo" />
-          <p>Beats</p>
-        </div>
-
+        <LogoBack />
         <LoginInput
           placeholder="Enter Your Username or Email"
           formData={username}
@@ -42,6 +51,12 @@ export default function Login() {
             login();
           }}
         />
+        <div className="partitionLine">
+          <hr />
+          <p>OR</p>
+          <hr />
+        </div>
+        <ContinueGoogle />
       </div>
     </>
   );

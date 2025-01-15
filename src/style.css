@@ -82,3 +82,51 @@ body {
 
   font-size: 25px;
 }
+.backy {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  z-index: -1;
+}
+.backy img {
+  width: 100%;
+  filter: blur(55px) saturate(1.5);
+  pointer-events: none;
+  object-fit: cover;
+  opacity: 0.5;
+  height: 50vh;
+}
+.partitionLine {
+  color: #f5deb3;
+  display: grid;
+  grid-template-columns: auto max-content auto;
+  align-items: center;
+  column-gap: 8px;
+  margin-bottom: 30px;
+}
+.partitionLine hr {
+  margin: 0px;
+  height: 2px;
+  border-radius: 40px;
+}
+.partitionLine p {
+  margin-bottom: 0px;
+  color: wheat;
+}
+.googleButton {
+  padding: 10px 40px;
+  z-index: 3;
+  margin-bottom: 30px;
+  font-family: signika negative;
+  border: 0px solid wheat;
+  background-color: wheat;
+  font-weight: bolder;
+  color: black;
+  border-radius: 40px;
+  column-gap: 8px;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  justify-content: center;
+}
