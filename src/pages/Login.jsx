@@ -4,6 +4,7 @@ import LoginInput from "./components/LoginInput";
 import { useState } from "react";
 import LogoBack from "./components/LogoBack";
 import ContinueGoogle from "./components/ContinueGoogle";
+import LoginFooter from "./components/LoginFooter";
 
 export default function Login() {
   const [username, setUsername] = useState({
@@ -57,6 +58,7 @@ export default function Login() {
           <hr />
         </div>
         <ContinueGoogle />
+        <LoginFooter text="don't have an account? Sign Up" url="/signup" />
       </div>
     </>
   );
