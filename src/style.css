@@ -13,7 +13,9 @@ body {
 * {
   font-family: "Signika Negative", sans-serif;
 }
-
+p {
+  margin-bottom: 0px;
+}
 .floatingFormCustomInput {
   display: block;
   margin: auto;
@@ -143,4 +145,17 @@ body {
   background: transparent;
   border-top: 1px solid #ffffff3d;
   padding: 15px;
+}
+.otpTitle {
+  max-width: 80vw;
+  text-align: center;
+  color: white;
+  margin-top: 25px;
+}
+.otpTitle b {
+  font-size: 25px;
+}
+.otpTitle p {
+  color: #ffffffe3;
+  font-size: 12px;
 }

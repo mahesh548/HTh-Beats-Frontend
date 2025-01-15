@@ -10,7 +10,8 @@ export default function Main() {
       const isAuth = await auth.authentication();
       console.log(isAuth);
       if (!isAuth) {
-        navigate("/login");
+        localStorage.clear();
+        navigate("/HTh-Beats");
       }
     };
     checkAuth();

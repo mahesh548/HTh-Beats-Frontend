@@ -65,6 +65,7 @@ const utils = {
   verifyValue: (value, type) => {
     const userRegex = /^[a-zA-Z0-9_]+$/;
     const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const otpRegex = /^[0-9]{4}$/;
     if (type == "u") {
       if (userRegex.test(value)) {
         return "pass";
@@ -84,6 +85,13 @@ const utils = {
         return "pass";
       } else {
         return "Enter A Valid Email or Username";
+      }
+    }
+    if (type == "otp") {
+      if (otpRegex.test(value)) {
+        return "pass";
+      } else {
+        return "Enter A Valid OTP";
       }
     }
   },

@@ -5,8 +5,10 @@ import { useState } from "react";
 import LogoBack from "./components/LogoBack";
 import ContinueGoogle from "./components/ContinueGoogle";
 import LoginFooter from "./components/LoginFooter";
+import { useNavigate } from "react-router";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [username, setUsername] = useState({
     input: "",
     message: "",
@@ -19,7 +21,9 @@ export default function Login() {
       const jsonData = { searchId: username.input };
       const response = await utils.BACKEND("/login", "POST", jsonData);
       if (response.status == true) {
-        alert("enter otp");
+        navigate("/verify", {
+          state: { id: response.id, mailHint: response.mailHint },
+        });
       }
       if (response.status == false) {
         setUsername({
