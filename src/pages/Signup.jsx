@@ -5,6 +5,7 @@ import { useState } from "react";
 import utils from "../../utils";
 import { useNavigate } from "react-router";
 import LoginFooter from "./components/LoginFooter";
+import ContinueGoogle from "./components/ContinueGoogle";
 
 export default function signup() {
   const navigate = useNavigate();
@@ -74,6 +75,12 @@ export default function signup() {
             signup();
           }}
         />
+        <div className="partitionLine">
+          <hr />
+          <p>OR</p>
+          <hr />
+        </div>
+        <ContinueGoogle />
         <LoginFooter text="already have an account? Login" url="/login" />
       </div>
     </>

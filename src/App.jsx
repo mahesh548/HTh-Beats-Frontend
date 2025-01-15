@@ -10,12 +10,14 @@ import Verify from "./pages/Verify";
 
 //css
 import "./style.css";
+import ChooseUsername from "./pages/ChooseUsername";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/username" element={<ChooseUsername />} />
       <Route path="/verify" element={<Verify />} />
       <Route path="/HTh-Beats" element={<Launch />} />
       <Route path="/" element={<Main />} />

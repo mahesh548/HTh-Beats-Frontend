@@ -7,12 +7,11 @@ export default function ContinueGoogle() {
     const { credential } = res;
     const jsonData = { token: credential };
     const response = await utils.BACKEND("/google-login", "POST", jsonData);
-    console.log(response);
     if (response.status == true) {
       navigate("/");
     }
     if (response.status == false && response.msg == "email not exist!") {
-      alert(response.msg);
+      navigate("/username", { state: { token: credential } });
     }
   };
 
