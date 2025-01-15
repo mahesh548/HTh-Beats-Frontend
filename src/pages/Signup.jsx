@@ -19,12 +19,15 @@ export default function signup() {
     message: "",
     disable: true,
   });
+  const [loader, setLoader] = useState(false);
   const signup = async () => {
     const verifyEmail = utils.verifyValue(emailAdress.input, "e");
     const verifyUsername = utils.verifyValue(username.input, "u");
     if (verifyEmail == "pass" && verifyUsername == "pass") {
+      setLoader(true);
       const jsonData = { email: emailAdress.input, username: username.input };
       const response = await utils.BACKEND("/signup", "POST", jsonData);
+      setLoader(false);
       if (response.status == true) {
         navigate("/verify", {
           state: { id: response.id, mailHint: response.mailHint },
@@ -74,6 +77,7 @@ export default function signup() {
           func={() => {
             signup();
           }}
+          loader={loader}
         />
         <div className="partitionLine">
           <hr />

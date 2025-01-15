@@ -13,11 +13,14 @@ export default function ChooseUsername() {
     message: "",
     disable: true,
   });
+  const [loader, setLoader] = useState(false);
   const GoogleSignup = async () => {
     const verify = utils.verifyValue(username.input, "u");
     if (verify == "pass") {
+      setLoader(true);
       const jsonData = { username: username.input, token: credential };
       const response = await utils.BACKEND("/google-signup", "POST", jsonData);
+      setLoader(false);
       if (response.status == true) {
         navigate("/");
       } else if (response.status == false && response.field == "username") {
@@ -50,6 +53,7 @@ export default function ChooseUsername() {
           func={() => {
             GoogleSignup();
           }}
+          loader={loader}
         />
       </div>
     </>

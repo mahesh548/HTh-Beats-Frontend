@@ -12,14 +12,17 @@ export default function Verify() {
     message: "",
     disable: true,
   });
+  const [loader, setLoader] = useState(false);
   const userMailHint = location?.state?.mailHint || "";
 
   const verifyOtp = async () => {
     const id = location?.state?.id || "";
     const verify = utils.verifyValue(otp.input, "otp");
     if (verify == "pass") {
+      setLoader(true);
       const jsonData = { otp: otp.input, id: id };
       const response = await utils.BACKEND("/verify", "POST", jsonData);
+      setLoader(false);
       if (response.status == true) {
         navigate("/");
       }
@@ -58,6 +61,7 @@ export default function Verify() {
         func={() => {
           verifyOtp();
         }}
+        loader={loader}
       />
     </div>
   );

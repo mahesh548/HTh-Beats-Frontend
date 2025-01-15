@@ -1,12 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import utils from "../../../utils";
 import { useNavigate } from "react-router";
+import LoginButtonLoader from "./LoginButtonLoader";
 export default function ContinueGoogle() {
   const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
   const handleCredentialResponse = async (res) => {
     const { credential } = res;
+    setLoader(true);
     const jsonData = { token: credential };
     const response = await utils.BACKEND("/google-login", "POST", jsonData);
+    setLoader(false);
     if (response.status == true) {
       navigate("/");
     }
@@ -22,6 +26,10 @@ export default function ContinueGoogle() {
       callback: handleCredentialResponse,
     });
   }, []);
+
+  if (loader) {
+    return <LoginButtonLoader />;
+  }
 
   return (
     <button

@@ -1,4 +1,9 @@
-export default function LoginButton({ text, disabled, func }) {
+import LoginButtonLoader from "./LoginButtonLoader";
+export default function LoginButton({ text, disabled, func, loader }) {
+  if (loader) {
+    return <LoginButtonLoader />;
+  }
+
   return (
     <button
       className="customLoginButton"
