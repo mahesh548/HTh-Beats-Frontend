@@ -13,8 +13,16 @@ body {
 * {
   font-family: "Signika Negative", sans-serif;
 }
+#root {
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+}
 p {
   margin-bottom: 0px;
+}
+.page {
+  height: 100dvh !important;
 }
 .inputWrapperLogin {
   margin-top: 50px;
@@ -69,7 +77,7 @@ p {
   display: grid;
   margin: auto;
   justify-content: center;
-  margin-top: 20px;
+  padding-top: 20px;
 }
 .loginTitle {
   display: grid;
@@ -168,4 +176,25 @@ p {
   width: 20px;
   vertical-align: middle;
   border-width: 3px;
+}
+
+.pop-enter {
+  scale: 0.9;
+  transform: translateY(20px);
+}
+
+.pop-enter-active {
+  scale: 1;
+  transform: translateY(0px);
+  transition: scale 200ms ease-in, transform 200ms ease-in;
+}
+
+.pop-exit {
+  scale: 0;
+  opacity: 0;
+}
+.pop-exit-active {
+  scale: 0;
+  opacity: 0;
+  transition: scale 200ms ease-in, opacity 200ms ease-in;
 }

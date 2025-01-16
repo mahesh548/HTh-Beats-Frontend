@@ -18,5 +18,9 @@ export default function Loader() {
     };
     checkAuth();
   }, []);
-  return <h1>Loading...</h1>;
+  return (
+    <div className="page">
+      <h1>Loading...</h1>
+    </div>
+  );
 }

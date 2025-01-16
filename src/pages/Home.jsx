@@ -4,7 +4,7 @@ export default function Home() {
   const auth = useContext(AuthContext);
 
   return (
-    <div>
+    <div className="page">
       <h1>Welcome {auth?.user?.username}</h1>
     </div>
   );

@@ -57,35 +57,37 @@ export default function signup() {
   };
   return (
     <>
-      <div className="loginContainer">
-        <LogoBack />
-        <div className="inputWrapperLogin">
-          <LoginInput
-            placeholder="Enter Email Adress"
-            formData={emailAdress}
-            setFormData={setEmailAdress}
+      <div className="page">
+        <div className="loginContainer">
+          <LogoBack />
+          <div className="inputWrapperLogin">
+            <LoginInput
+              placeholder="Enter Email Adress"
+              formData={emailAdress}
+              setFormData={setEmailAdress}
+            />
+            <LoginInput
+              placeholder="Choose User Name"
+              formData={username}
+              setFormData={setUsername}
+            />
+          </div>
+          <LoginButton
+            text={"Continue"}
+            disabled={username.disable || emailAdress.disable}
+            func={() => {
+              signup();
+            }}
+            loader={loader}
           />
-          <LoginInput
-            placeholder="Choose User Name"
-            formData={username}
-            setFormData={setUsername}
-          />
+          <div className="partitionLine">
+            <hr />
+            <p>OR</p>
+            <hr />
+          </div>
+          <ContinueGoogle />
+          <LoginFooter text="already have an account? Login" url="/login" />
         </div>
-        <LoginButton
-          text={"Continue"}
-          disabled={username.disable || emailAdress.disable}
-          func={() => {
-            signup();
-          }}
-          loader={loader}
-        />
-        <div className="partitionLine">
-          <hr />
-          <p>OR</p>
-          <hr />
-        </div>
-        <ContinueGoogle />
-        <LoginFooter text="already have an account? Login" url="/login" />
       </div>
     </>
   );

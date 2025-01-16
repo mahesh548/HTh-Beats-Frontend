@@ -10,10 +10,12 @@ export default function Launch() {
 
   return (
     <>
-      <h1>HTh-Beats</h1>
-      <div>
-        <button onClick={goToLogin}>Login</button>
-        <button onClick={goToSignup}>Signup</button>
+      <div className="page">
+        <h1>HTh-Beats</h1>
+        <div>
+          <button onClick={goToLogin}>Login</button>
+          <button onClick={goToSignup}>Signup</button>
+        </div>
       </div>
     </>
   );
