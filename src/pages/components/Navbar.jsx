@@ -23,7 +23,7 @@ export default function Navbar() {
       console.log(isAuth);
       if (!isAuth) {
         localStorage.clear();
-        navigate("/HTh-Beats");
+        navigate("/login");
       }
     };
     checkAuth();
@@ -35,17 +35,21 @@ export default function Navbar() {
       <div className="navBOTTOM">
         <Link to="/home">
           <div className="navBTN">
-            <button>
-              <img src={isActive("/home") ? homeSvgFilled : homeSvgOutlined} />
+            <button className="pop">
+              <img
+                src={isActive("/home") ? homeSvgFilled : homeSvgOutlined}
+                className="pop"
+              />
               <p className="menuLab">Home</p>
             </button>
           </div>
         </Link>
         <Link to="/search">
           <div className="navBTN">
-            <button>
+            <button className="pop">
               <img
                 src={isActive("/search") ? searchSvgFilled : searchSvgOutlined}
+                className="pop"
               />
               <p className="menuLab">Search</p>
             </button>
@@ -53,15 +57,16 @@ export default function Navbar() {
         </Link>
 
         <div className="navBTN">
-          <button>
-            <Add />
+          <button className="pop">
+            <Add className="pop" />
             <p className="menuLab">Create</p>
           </button>
         </div>
         <Link to="library">
           <div className="navBTN">
-            <button>
+            <button className="pop">
               <img
+                className="pop"
                 src={
                   isActive("/library") ? librarySvgFilled : librarySvgOutlined
                 }
@@ -72,10 +77,10 @@ export default function Navbar() {
         </Link>
         <Link to="profile">
           <div className="navBTN">
-            <button>
+            <button className="pop">
               <img
                 src={auth?.user?.pic ? auth?.user?.pic : "logo.png"}
-                className="navBottomProfilePicture"
+                className="navBottomProfilePicture pop"
                 alt="porfile picture"
               />
               <p className="menuLab">Profile</p>

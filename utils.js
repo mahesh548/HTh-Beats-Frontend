@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useNavigate } from "react-router";
-const apiUrl = "https://92rrp2s6-5000.inc1.devtunnels.ms";
+const apiUrl = "https://92rrp2s6-5000.inc1.devtunnels.ms/api";
 const backendUrl = "https://92rrp2s6-8080.inc1.devtunnels.ms";
 
 const utils = {
-  BACKEND: async (path, methods, payload = {}) => {
+  BACKEND: async (path = "/", methods = "POST", payload = {}) => {
     try {
       const url = `${backendUrl}${path}`;
       const session = localStorage.getItem("session");
@@ -33,7 +33,7 @@ const utils = {
       }
     }
   },
-  API: async (path, methods, payload = {}) => {
+  API: async (path = "/", methods = "GET", payload = {}) => {
     try {
       const url = `${apiUrl}${path}`;
       const session = localStorage.getItem("session");
@@ -94,6 +94,15 @@ const utils = {
         return "Enter A Valid OTP";
       }
     }
+  },
+  dura: (time) => {
+    const now = new Date();
+    const old = new Date(time);
+    const mili = now - old;
+    const sec = Math.floor(mili / 1000);
+    const min = Math.floor(sec / 60);
+    const hrs = Math.floor(min / 60);
+    return { mili, sec, min, hrs };
   },
 };
 

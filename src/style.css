@@ -24,6 +24,20 @@ p {
 .page {
   height: 100dvh !important;
 }
+.thinFont {
+  font-weight: 100 !important;
+}
+
+.hiddenScrollbar {
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hiddenScrollbar::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Edge */
+}
+
 /* LOGIN , SIGNUP , LOADER AND SOME OTHER STYLES */
 .inputWrapperLogin {
   margin-top: 50px;
@@ -181,19 +195,22 @@ p {
 
 /* NAVBAR */
 .navBOTTOM {
-  background-color: #00000062;
-  height: 50px;
+  height: 80px;
   width: 100%;
   position: fixed;
   bottom: 0;
   left: 0;
-  background-image: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.781));
+  background-image: linear-gradient(
+    180deg,
+    #00000000 0% 5%,
+    #000000c9,
+    #000000e8
+  );
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 5px;
-  backdrop-filter: blur(2px);
   transform: translateZ(0);
-  padding-top: 5px;
+  padding-top: 35px;
 }
 .navBOTTOM a {
   text-decoration: none;
@@ -228,4 +245,68 @@ p {
   width: 25px;
   border-radius: 100%;
   margin-top: -3px;
+}
+.pop {
+  transition: scale 500ms ease;
+  user-select: none;
+  touch-action: manipulation;
+  scale: 1;
+}
+.pop:active {
+  scale: 0.8;
+}
+/* HOME PAGE CSS */
+.homeHeading {
+  color: white;
+}
+.labelText {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+.sliderContainer {
+  overflow: scroll;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  margin-top: 15px;
+}
+.slider {
+  background-color: transparent;
+  height: auto;
+  width: fit-content;
+  display: grid;
+  column-width: 200px;
+  justify-content: space-between;
+  column-gap: 15px;
+  row-gap: 5px;
+}
+.TimelineSquareItem {
+  grid-row: 1;
+}
+.TimelineSquareItem img {
+  height: 140px;
+  width: 140px;
+  border-radius: 8px;
+}
+.TimelineSquareItem p {
+  color: grey;
+  font-weight: 100;
+  font-size: 14px;
+  margin-top: 15px;
+}
+.TimelineRoundItem {
+  grid-row: 1;
+}
+.TimelineRoundItem img {
+  height: 140px;
+  width: 140px;
+  border-radius: 100%;
+}
+.TimelineRoundItem p {
+  color: white;
+  font-weight: 400;
+  font-size: 14px;
+  margin-top: 15px;
+  text-align: center;
 }

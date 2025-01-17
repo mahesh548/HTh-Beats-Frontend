@@ -1,8 +1,14 @@
 import { createContext, useState } from "react";
 import utils from "../../../utils";
-import { use } from "react";
-
 export const AuthContext = createContext();
+/* 
+{
+username:"username",
+pic:"avtar.png",
+id:"uuid",
+languages:["hindi","English"]
+}
+*/
 
 export default function Auth({ children }) {
   const [user, setUser] = useState(null);
@@ -11,6 +17,7 @@ export default function Auth({ children }) {
     if (session) {
       return true;
     }
+    return false;
   };
   const authentication = async () => {
     const userData = await utils.BACKEND("/user_data", "POST");
