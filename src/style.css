@@ -289,8 +289,8 @@ p {
   grid-row: 1;
 }
 .TimelineSquareItem img {
-  height: 140px;
-  width: 140px;
+  height: 150px;
+  width: 150px;
   border-radius: 8px;
 }
 .TimelineSquareItem p {
@@ -322,19 +322,17 @@ p {
   text-align: center;
 }
 .promoContainer {
-  height: 200px;
+  height: auto;
   width: 95%;
   margin: auto;
   background-color: #2c2c2c;
   border-radius: 12px;
   margin-top: 20px;
-  padding: 10px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  padding: 15px;
 }
 .promoTitle {
   color: white;
-  font-size: 20px;
+  font-size: 25px;
 }
 .thinTwoLineText {
   color: var(--thin-text-color);
@@ -351,4 +349,35 @@ p {
 }
 .promoSubtitle {
   margin-top: 0px;
+}
+.smallFourBanner {
+  width: 50%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 50% 50%;
+  gap: 4px;
+  margin: auto;
+  margin-top: 25px;
+}
+.smallFourBanner img {
+  width: 100%;
+  border-radius: 4px;
+}
+.promoDetails {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 40px;
+  column-gap: 10px;
+  margin-top: 25px;
+}
+.promoDetails p {
+  margin-top: 0px;
+  line-height: 1.4;
+}
+.promoDetails button {
+  border: none;
+  background-color: #ffffff40;
+  aspect-ratio: 1/1;
+  border-radius: 100%;
+  color: white;
 }
