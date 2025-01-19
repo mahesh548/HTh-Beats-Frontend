@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { AuthContext } from "./Auth";
 import TimelineSlider from "./TimelineSlider";
 import TimelinePromo from "./TimelinePromo";
+import utils from "../../../utils";
+import { Add, History } from "@mui/icons-material";
 
 export default function CreateHome() {
   const auth = useContext(AuthContext);
@@ -32,7 +34,6 @@ export default function CreateHome() {
       className="page hiddenScrollbar"
       style={{ overflowY: "scroll", paddingBottom: "100px" }}
     >
-      <h1 className="homeHeading">Welcome {auth.user?.username}</h1>
       {charts && <TimelineSlider label="Try these playlists" data={charts} />}
       {new_albums && (
         <TimelineSlider label="Today's biggest hits" data={new_albums} />
