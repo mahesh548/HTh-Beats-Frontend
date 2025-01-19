@@ -4,9 +4,15 @@ import TimelineSlider from "./TimelineSlider";
 import TimelineSquare from "./TimelineSquare";
 export default function CreateHome() {
   const auth = useContext(AuthContext);
-  const { browse_discover, charts, city_mod, radio, tag_mixes } = JSON.parse(
-    localStorage.homeCache
-  );
+  const {
+    charts,
+    city_mod,
+    radio,
+    tag_mixes,
+    artist_recos,
+    new_albums,
+    new_trending,
+  } = JSON.parse(localStorage.homeCache);
   return (
     <div
       className="page hiddenScrollbar"
@@ -26,11 +32,32 @@ export default function CreateHome() {
                 text={title}
                 type={type}
                 id={perma_id}
+                style={type == "artist" ? "round" : ""}
               />
             );
           })}
         </TimelineSlider>
       )}
+      {new_albums && (
+        <TimelineSlider label="Today's hits">
+          {new_albums.map((item) => {
+            const { id, image, title, type, perma_url } = item;
+            const perma_id = perma_url.split("/").pop();
+
+            return (
+              <TimelineSquare
+                key={id}
+                img={image}
+                text={title}
+                type={type}
+                id={perma_id}
+                style={type == "artist" ? "round" : ""}
+              />
+            );
+          })}
+        </TimelineSlider>
+      )}
+
       {tag_mixes && (
         <TimelineSlider label="Lets mix things up">
           {tag_mixes.map((item) => {
@@ -44,6 +71,26 @@ export default function CreateHome() {
                 text={title}
                 type={type}
                 id={perma_id}
+                style={type == "artist" ? "round" : ""}
+              />
+            );
+          })}
+        </TimelineSlider>
+      )}
+      {new_trending && (
+        <TimelineSlider label="Trending playlist">
+          {new_trending.map((item) => {
+            const { id, image, title, type, perma_url } = item;
+            const perma_id = perma_url.split("/").pop();
+
+            return (
+              <TimelineSquare
+                key={id}
+                img={image}
+                text={title}
+                type={type}
+                id={perma_id}
+                style={type == "artist" ? "round" : ""}
               />
             );
           })}
@@ -62,6 +109,7 @@ export default function CreateHome() {
                 text={title}
                 type={type}
                 id={perma_id}
+                style={type == "artist" ? "round" : ""}
               />
             );
           })}
@@ -80,6 +128,26 @@ export default function CreateHome() {
                 text={title}
                 type={type}
                 id={perma_id}
+                style={type == "artist" ? "round" : ""}
+              />
+            );
+          })}
+        </TimelineSlider>
+      )}
+      {artist_recos && (
+        <TimelineSlider label="Artist you may like">
+          {artist_recos.map((item) => {
+            const { id, image, title, type, perma_url } = item;
+            const perma_id = perma_url.split("/").pop();
+
+            return (
+              <TimelineSquare
+                key={id}
+                img={image}
+                text={title}
+                type={type}
+                id={perma_id}
+                style="round"
               />
             );
           })}

@@ -1,4 +1,4 @@
-export default function TimelineSquare({ img, text, id, type }) {
+export default function TimelineSquare({ img, text, id, type, style = "" }) {
   const func = () => {
     console.log(text);
     console.log(id);
@@ -7,10 +7,10 @@ export default function TimelineSquare({ img, text, id, type }) {
 
   return (
     <div
-      className={type == "artist" ? "TimelineRoundItem" : "TimelineSquareItem"}
+      className={style == "round" ? "TimelineRoundItem" : "TimelineSquareItem"}
     >
       <img src={img} alt="playlist banner" onClick={() => func()} />
-      <p>{text}</p>
+      <p>{text.replaceAll("&quot;", "")}</p>
     </div>
   );
 }

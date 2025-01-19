@@ -13,6 +13,10 @@ body {
 * {
   font-family: "Signika Negative", sans-serif;
 }
+:root {
+  --thin-text-color: #c1c1c1;
+  --thin-text-line-height: 1.2;
+}
 #root {
   height: 100dvh;
   width: 100vw;
@@ -290,10 +294,17 @@ p {
   border-radius: 8px;
 }
 .TimelineSquareItem p {
-  color: grey;
+  color: var(--thin-text-color);
+  line-height: var(--thin-text-line-height);
   font-weight: 100;
   font-size: 14px;
   margin-top: 15px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: calc(var(--thin-text-line-height) * 2);
 }
 .TimelineRoundItem {
   grid-row: 1;

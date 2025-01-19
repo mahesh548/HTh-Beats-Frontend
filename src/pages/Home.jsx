@@ -8,12 +8,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getHome = async () => {
-      const queryData = auth.user.languages.join(",");
-      const response = await utils.API(`/home?lang=${queryData}`, "GET");
+      const response = await utils.API(`/home`, "GET");
 
       if (
         response?.data?.hasOwnProperty("browse_discover") ||
-        response?.data?.hasOwnProperty("global_config")
+        response?.data?.hasOwnProperty("global_config") ||
+        response?.data?.hasOwnProperty("charts")
       ) {
         response.data.createdAt = Date.now();
         localStorage.setItem("homeCache", JSON.stringify(response.data));
