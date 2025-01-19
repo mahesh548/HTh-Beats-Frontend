@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "./Auth";
 import TimelineSlider from "./TimelineSlider";
+import TimelinePromo from "./TimelinePromo";
 
 export default function CreateHome() {
   const auth = useContext(AuthContext);
@@ -25,7 +26,7 @@ export default function CreateHome() {
       }
     }
   }
-  console.log(promo);
+
   return (
     <div
       className="page hiddenScrollbar"
@@ -55,6 +56,8 @@ export default function CreateHome() {
           style="round"
         />
       )}
+      <div style={{ height: "40px" }}></div>
+      {promo && <TimelinePromo promo={promo} />}
     </div>
   );
 }
