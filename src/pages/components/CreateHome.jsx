@@ -2,8 +2,6 @@ import { useContext } from "react";
 import { AuthContext } from "./Auth";
 import TimelineSlider from "./TimelineSlider";
 import TimelinePromo from "./TimelinePromo";
-import utils from "../../../utils";
-import { Add, History } from "@mui/icons-material";
 
 export default function CreateHome() {
   const auth = useContext(AuthContext);

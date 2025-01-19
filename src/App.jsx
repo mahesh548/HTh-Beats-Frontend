@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Verify from "./pages/Verify";
+import Playlist from "./pages/Playlist";
 import ChooseUsername from "./pages/ChooseUsername";
 import Loader from "./pages/Loader";
 
@@ -31,6 +32,7 @@ export default function App() {
       <Route element={<Navbar />}>
         <Route path="/home" element={<Home />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/playlist/:id" element={<Playlist />} />
       </Route>
 
       {/* ERROR PAGES */}
