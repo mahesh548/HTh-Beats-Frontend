@@ -1,9 +1,10 @@
 import { useContext } from "react";
 import { AuthContext } from "./Auth";
 import TimelineSlider from "./TimelineSlider";
-import TimelineSquare from "./TimelineSquare";
+
 export default function CreateHome() {
   const auth = useContext(AuthContext);
+  const homeCache = JSON.parse(localStorage.homeCache);
   const {
     charts,
     city_mod,
@@ -12,146 +13,47 @@ export default function CreateHome() {
     artist_recos,
     new_albums,
     new_trending,
-  } = JSON.parse(localStorage.homeCache);
+    top_playlists,
+  } = homeCache;
+
+  let promo = {};
+  for (const key in homeCache) {
+    if (Object.prototype.hasOwnProperty.call(homeCache, key)) {
+      const element = homeCache[key];
+      if (key.startsWith("promo") && element[0]["type"] != "show") {
+        promo[key] = element;
+      }
+    }
+  }
+  console.log(promo);
   return (
     <div
       className="page hiddenScrollbar"
       style={{ overflowY: "scroll", paddingBottom: "100px" }}
     >
       <h1 className="homeHeading">Welcome {auth.user?.username}</h1>
-      {charts && (
-        <TimelineSlider label="Try these playlists">
-          {charts.map((item) => {
-            const { id, image, title, type, perma_url } = item;
-            const perma_id = perma_url.split("/").pop();
-
-            return (
-              <TimelineSquare
-                key={id}
-                img={image}
-                text={title}
-                type={type}
-                id={perma_id}
-                style={type == "artist" ? "round" : ""}
-              />
-            );
-          })}
-        </TimelineSlider>
-      )}
+      {charts && <TimelineSlider label="Try these playlists" data={charts} />}
       {new_albums && (
-        <TimelineSlider label="Today's hits">
-          {new_albums.map((item) => {
-            const { id, image, title, type, perma_url } = item;
-            const perma_id = perma_url.split("/").pop();
-
-            return (
-              <TimelineSquare
-                key={id}
-                img={image}
-                text={title}
-                type={type}
-                id={perma_id}
-                style={type == "artist" ? "round" : ""}
-              />
-            );
-          })}
-        </TimelineSlider>
+        <TimelineSlider label="Today's biggest hits" data={new_albums} />
       )}
 
       {tag_mixes && (
-        <TimelineSlider label="Lets mix things up">
-          {tag_mixes.map((item) => {
-            const { id, image, title, type, perma_url } = item;
-            const perma_id = perma_url.split("/").pop();
-
-            return (
-              <TimelineSquare
-                key={id}
-                img={image}
-                text={title}
-                type={type}
-                id={perma_id}
-                style={type == "artist" ? "round" : ""}
-              />
-            );
-          })}
-        </TimelineSlider>
+        <TimelineSlider label="Lets mix things up" data={tag_mixes} />
       )}
       {new_trending && (
-        <TimelineSlider label="Trending playlist">
-          {new_trending.map((item) => {
-            const { id, image, title, type, perma_url } = item;
-            const perma_id = perma_url.split("/").pop();
-
-            return (
-              <TimelineSquare
-                key={id}
-                img={image}
-                text={title}
-                type={type}
-                id={perma_id}
-                style={type == "artist" ? "round" : ""}
-              />
-            );
-          })}
-        </TimelineSlider>
+        <TimelineSlider label="Trending right now" data={new_trending} />
       )}
-      {radio && (
-        <TimelineSlider label="Featured radio stations">
-          {radio.map((item) => {
-            const { id, image, title, type, perma_url } = item;
-            const perma_id = perma_url.split("/").pop();
-
-            return (
-              <TimelineSquare
-                key={id}
-                img={image}
-                text={title}
-                type={type}
-                id={perma_id}
-                style={type == "artist" ? "round" : ""}
-              />
-            );
-          })}
-        </TimelineSlider>
-      )}
-      {city_mod && (
-        <TimelineSlider label="Fresh new music">
-          {city_mod.map((item) => {
-            const { id, image, title, type, perma_url } = item;
-            const perma_id = perma_url.split("/").pop();
-
-            return (
-              <TimelineSquare
-                key={id}
-                img={image}
-                text={title}
-                type={type}
-                id={perma_id}
-                style={type == "artist" ? "round" : ""}
-              />
-            );
-          })}
-        </TimelineSlider>
+      {radio && <TimelineSlider label="Featured radio stations" data={radio} />}
+      {city_mod && <TimelineSlider label="Fresh new music" data={city_mod} />}
+      {top_playlists && (
+        <TimelineSlider label="Most played playlists" data={top_playlists} />
       )}
       {artist_recos && (
-        <TimelineSlider label="Artist you may like">
-          {artist_recos.map((item) => {
-            const { id, image, title, type, perma_url } = item;
-            const perma_id = perma_url.split("/").pop();
-
-            return (
-              <TimelineSquare
-                key={id}
-                img={image}
-                text={title}
-                type={type}
-                id={perma_id}
-                style="round"
-              />
-            );
-          })}
-        </TimelineSlider>
+        <TimelineSlider
+          label="Artist you may like"
+          data={artist_recos}
+          style="round"
+        />
       )}
     </div>
   );
