@@ -8,9 +8,14 @@ export default function playlist() {
   const [loader, setLoader] = useState(true);
   useEffect(() => {
     const getPlaylist = async () => {
-      const response = await utils.API("/playlist");
+      const response = await utils.API(`/entity/playlist?id=${id}`, "GET");
+      console.log(response);
+      if (response.hasOwnProperty("list")) {
+        setLoader(false);
+      }
     };
-  });
+    getPlaylist();
+  }, []);
   const CreatePlaylist = () => {
     return <h1>hello</h1>;
   };

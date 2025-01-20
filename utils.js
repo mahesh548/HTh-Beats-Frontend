@@ -22,13 +22,13 @@ const utils = {
 
       localStorage.setItem("session", data?.headers?.session);
       if (data?.data?.auth == false) {
-        localStorage.clear();
-        const navigate = useNavigate();
-        navigate("/login");
+        utils.Logout();
       }
       return data?.data;
     } catch (error) {
-      if (error.response) {
+      if (error?.response?.data?.auth == false) {
+        utils.Logout();
+      } else {
         return error.response;
       }
     }
@@ -48,16 +48,16 @@ const utils = {
       if (methods == "DELETE") {
         data = await axios.delete(url, { data: payload });
       }
-
+      console.log(data?.headers?.session);
       localStorage.setItem("session", data?.headers?.session);
       if (data?.data?.auth == false) {
-        localStorage.clear();
-        const navigate = useNavigate();
-        navigate("/login");
+        utils.Logout();
       }
       return data?.data;
     } catch (error) {
-      if (error.response) {
+      if (error?.response?.data?.auth == false) {
+        utils.Logout();
+      } else {
         return error.response;
       }
     }
@@ -143,6 +143,11 @@ const utils = {
         resolve("");
       };
     });
+  },
+  Logout: () => {
+    /* localStorage.clear();
+    window.location.href = "/login"; */
+    console.log("logging out");
   },
 };
 

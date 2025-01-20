@@ -19,7 +19,7 @@ export default function Navbar() {
   const location = useLocation();
   useEffect(() => {
     const checkAuth = async () => {
-      const isAuth = await auth.authentication();
+      const isAuth = await auth.checkSession();
       console.log(isAuth);
       if (!isAuth) {
         localStorage.clear();

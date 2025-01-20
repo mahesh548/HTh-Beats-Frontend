@@ -7,7 +7,7 @@ export default function Loader() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const isAuth = await auth.checkSession();
+      const isAuth = await auth.authentication();
       if (isAuth) {
         navigate("/home");
       } else {
