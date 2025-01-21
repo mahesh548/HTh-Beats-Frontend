@@ -8,7 +8,7 @@ import CreatePlaylist from "./components/CreatePlaylist";
 export default function playlist() {
   const auth = useContext(AuthContext);
   const { id } = useParams();
-  const [playlistData, setplaylistData] = useState(true);
+  const [playlistData, setplaylistData] = useState(false);
 
   useEffect(() => {
     const getPlaylist = async () => {

@@ -109,6 +109,7 @@ const utils = {
   },
   getAverageColor: (imageUrl) => {
     return new Promise((resolve) => {
+      console.log(imageUrl);
       const img = new Image();
       img.crossOrigin = "Anonymous";
       img.src = imageUrl;
