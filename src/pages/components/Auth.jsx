@@ -22,7 +22,7 @@ export default function Auth({ children }) {
   const authentication = async () => {
     const userData = await utils.BACKEND("/user_data", "POST");
     if (userData.status == true) {
-      setUser(userData.msg);
+      setUser({ ...userData.msg, verified: true });
       return true;
     }
     return false;

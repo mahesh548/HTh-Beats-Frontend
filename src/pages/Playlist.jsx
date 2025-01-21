@@ -1,24 +1,31 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import PageLoader from "./components/PageLoader";
 import utils from "../../utils";
+import { AuthContext } from "./components/Auth";
+import CreatePlaylist from "./components/CreatePlaylist";
 
 export default function playlist() {
+  const auth = useContext(AuthContext);
   const { id } = useParams();
-  const [loader, setLoader] = useState(true);
+  const [playlistData, setplaylistData] = useState(true);
+
   useEffect(() => {
     const getPlaylist = async () => {
       const response = await utils.API(`/entity/playlist?id=${id}`, "GET");
-      console.log(response);
+
       if (response.hasOwnProperty("list")) {
-        setLoader(false);
+        setplaylistData(response);
       }
     };
-    getPlaylist();
-  }, []);
-  const CreatePlaylist = () => {
-    return <h1>hello</h1>;
-  };
+    if (auth.user?.verified) {
+      getPlaylist();
+    }
+  }, [auth.user]);
 
-  return loader ? <PageLoader /> : <CreatePlaylist />;
+  return playlistData == false ? (
+    <PageLoader />
+  ) : (
+    <CreatePlaylist data={playlistData} />
+  );
 }

@@ -48,7 +48,7 @@ const utils = {
       if (methods == "DELETE") {
         data = await axios.delete(url, { data: payload });
       }
-      console.log(data?.headers?.session);
+
       localStorage.setItem("session", data?.headers?.session);
       if (data?.data?.auth == false) {
         utils.Logout();
@@ -145,9 +145,8 @@ const utils = {
     });
   },
   Logout: () => {
-    /* localStorage.clear();
-    window.location.href = "/login"; */
-    console.log("logging out");
+    localStorage.clear();
+    window.location.href = "/login";
   },
 };
 
