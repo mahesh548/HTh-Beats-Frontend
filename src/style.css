@@ -395,7 +395,7 @@ p {
   margin: auto;
   margin-top: -300px;
 }
-.playlistMain img {
+.playlistMainImg {
   height: 235px;
   width: 235px;
   display: block;
@@ -413,4 +413,52 @@ p {
   margin: 10px;
   margin-top: 30px;
   font-weight: 500;
+}
+.playlistDetails {
+  padding: 0px 10px;
+  margin-top: 40px;
+}
+.playlistOwnersDetails {
+  display: grid;
+  grid-template-columns: 30px auto;
+  color: white;
+  align-items: center;
+  margin-top: 10px;
+  justify-items: start;
+}
+.playlistOwnersDetails img {
+  height: 25px;
+  width: 25px;
+}
+.playlistButtonCont {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 10px;
+}
+.playlistButtonSecondary {
+  background-color: transparent;
+  border: 0px;
+  color: var(--thin-text-color);
+  padding: 0px;
+  margin-right: 15px;
+}
+.playlistButtonSecondary img {
+  height: 28px;
+  width: 28px;
+  opacity: 0.8;
+}
+.playlistButton {
+  height: 50px;
+  width: 50px;
+  background-color: wheat;
+  color: black;
+  border-radius: 100%;
+  border: 0px;
+}
+.playlistButton svg {
+  height: 30px;
+  width: 30px;
 }

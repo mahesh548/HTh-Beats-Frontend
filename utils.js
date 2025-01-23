@@ -109,7 +109,6 @@ const utils = {
   },
   getAverageColor: (imageUrl) => {
     return new Promise((resolve) => {
-      console.log(imageUrl);
       const img = new Image();
       img.crossOrigin = "Anonymous";
       img.src = imageUrl;
@@ -148,6 +147,11 @@ const utils = {
   Logout: () => {
     localStorage.clear();
     window.location.href = "/login";
+  },
+  refineText: (str) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(str, "text/html");
+    return doc.documentElement.textContent;
   },
 };
 
