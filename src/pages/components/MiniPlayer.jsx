@@ -3,9 +3,12 @@ import { songContext } from "./Song";
 import utils from "../../../utils";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
+import { useLocation, useNavigate } from "react-router";
 
 export default function MiniPlayer() {
   const { Queue, setQueue } = useContext(songContext);
+  const navigate = useNavigate();
+  const location = useLocation();
   const setColor = async (url) => {
     const color = await utils.getAverageColor(url, 0.5);
     document.getElementById("miniPlayer").style.backgroundColor = color;
@@ -17,6 +20,9 @@ export default function MiniPlayer() {
       setQueue({ type: "STATUS", value: "resume" });
     }
   };
+  const showPlayer = () => {
+    navigate(`${location.pathname}#player`);
+  };
 
   const RenderMiniPlayer = () => {
     const data = utils.getItemFromId(Queue.song, Queue.playlist.list);
@@ -27,8 +33,9 @@ export default function MiniPlayer() {
           src={data.image}
           alt=""
           className="playlistSongImg miniPlayerPoster"
+          onClick={() => showPlayer()}
         />
-        <div>
+        <div onClick={() => showPlayer()}>
           <p className="thinOneLineText playlistSongTitle">
             {utils.refineText(data.title)}
           </p>

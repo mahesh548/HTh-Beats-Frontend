@@ -532,9 +532,74 @@ p {
   border: none;
   color: #c1c1c1;
   img {
-    height: 30px;
+    height: 25px;
   }
   svg {
     font-size: 35px;
   }
+}
+/* PLAYER CSS */
+.playerCont {
+  height: 100dvh;
+  width: 100%;
+  background-color: black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+.player {
+  height: 100dvh;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 50px auto max-content 50px;
+  justify-items: center;
+  margin: auto;
+}
+.playerNav {
+  display: grid;
+  grid-template-columns: 50px auto 50px;
+  width: 100%;
+  button {
+    background-color: transparent;
+    color: white;
+    border: none;
+    svg {
+      font-size: 30px;
+    }
+  }
+  div {
+    text-align: center;
+    color: white;
+    font-size: 12px;
+  }
+}
+.playerBanner {
+  width: 88%;
+  aspect-ratio: 1/1;
+  border-radius: 12px;
+}
+.playerController {
+  height: 250px;
+}
+.playerDetails {
+  display: grid;
+  grid-template-columns: auto 50px;
+  width: 88%;
+  margin: auto;
+  button {
+    background-color: transparent;
+    border: none;
+    img {
+      width: 35px;
+    }
+  }
+}
+.playerTitle {
+  color: white;
+  font-size: 25px;
+  font-weight: 500;
+}
+.playerSubtitle {
+  font-size: 15px;
 }

@@ -1,5 +1,5 @@
 import { useNavigate, Outlet, Link, useLocation } from "react-router";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./Auth";
 
 //icons
@@ -14,11 +14,13 @@ import librarySvgOutlined from "../../assets/icons/librarySvgOutlined.svg";
 import { Add } from "@mui/icons-material";
 import Audio from "./Audio";
 import MiniPlayer from "./MiniPlayer";
+import Player from "./Player";
 
 export default function Navbar() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
+  const [showPlayer, setShowPlayer] = useState(false);
   useEffect(() => {
     const checkAuth = async () => {
       const isAuth = await auth.authentication();
@@ -30,12 +32,21 @@ export default function Navbar() {
     };
     checkAuth();
   }, []);
+  useEffect(() => {
+    if (location.hash === "#player") {
+      setShowPlayer(true);
+    } else {
+      setShowPlayer(false);
+    }
+  }, [location.hash]);
 
   const isActive = (path) => location.pathname === path;
   return (
     <>
       <Audio />
+      {showPlayer && <Player />}
       <MiniPlayer />
+
       <div className="navBOTTOM">
         <Link to="/home">
           <div className="navBTN">
