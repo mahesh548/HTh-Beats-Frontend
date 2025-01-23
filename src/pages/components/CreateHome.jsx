@@ -28,10 +28,7 @@ export default function CreateHome() {
   }
 
   return (
-    <div
-      className="page hiddenScrollbar"
-      style={{ overflowY: "scroll", paddingBottom: "100px" }}
-    >
+    <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       {charts && <TimelineSlider label="Try these playlists" data={charts} />}
       {new_albums && (
         <TimelineSlider label="Today's biggest hits" data={new_albums} />

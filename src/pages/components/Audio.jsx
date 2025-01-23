@@ -9,14 +9,31 @@ export default function Audio() {
     const play = () => {
       const audio = document.getElementById("audio");
       const song = utils.getItemFromId(Queue.song, Queue.playlist.list);
-      console.log(song);
       audio.src = utils.decryptor(song.more_info.encrypted_media_url);
       audio.play();
     };
-    if (Queue?.song && Queue?.playlist) {
+
+    const pause = () => {
+      const audio = document.getElementById("audio");
+      audio.pause();
+    };
+    const resume = () => {
+      const audio = document.getElementById("audio");
+      audio.play();
+    };
+    if (Queue.status == "play") {
       play();
     }
-  }, [Queue]);
+
+    if (Queue.status == "pause") {
+      pause();
+    }
+    if (Queue.status == "resume") {
+      resume();
+    }
+    console.log(Queue.status);
+  }, [Queue?.status, Queue?.song]);
+
   return (
     <audio
       src=""

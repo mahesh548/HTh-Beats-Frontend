@@ -27,6 +27,7 @@ p {
 }
 .page {
   height: 100dvh !important;
+  padding-bottom: 150px !important;
 }
 .thinFont {
   font-weight: 100 !important;
@@ -504,4 +505,36 @@ p {
 }
 .playlistSongButton img {
   height: 30px;
+}
+/* MINI PLAYER */
+.miniPlayer {
+  position: fixed;
+  bottom: 60px;
+  height: 60px;
+  width: 95%;
+  background-color: grey;
+  left: 50%;
+  right: 50%;
+  transform: translate(-50%, 0);
+  z-index: 5;
+  border-radius: 8px;
+  grid-template-columns: 50px auto 40px 55px;
+  column-gap: 5px;
+}
+.miniPlayerPoster {
+  height: 35px;
+  width: 35px;
+  margin: auto;
+  border-radius: 8px;
+}
+.miniPlayerButton {
+  background-color: transparent;
+  border: none;
+  color: #c1c1c1;
+  img {
+    height: 30px;
+  }
+  svg {
+    font-size: 35px;
+  }
 }

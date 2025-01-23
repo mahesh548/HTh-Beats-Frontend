@@ -25,18 +25,14 @@ export default function CreatePlaylist({ data }) {
   const play = (id) => {
     setQueue({
       type: "NEW",
-      value: { playlist: { ...data }, song: id, play: true },
+      value: { playlist: { ...data }, song: id, status: "play" },
     });
-    console.log(Queue);
   };
   const more_opt = (id) => {
     console.log("more");
   };
   return (
-    <div
-      className="page hiddenScrollbar"
-      style={{ overflowY: "scroll", paddingBottom: "100px" }}
-    >
+    <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
       <div className="playlistMain">
         <BackButton />

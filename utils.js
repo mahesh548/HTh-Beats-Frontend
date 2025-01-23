@@ -107,7 +107,7 @@ const utils = {
   capitalLetter: (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1, str.length);
   },
-  getAverageColor: (imageUrl) => {
+  getAverageColor: (imageUrl, factor = 1) => {
     return new Promise((resolve) => {
       const img = new Image();
       img.crossOrigin = "Anonymous";
@@ -131,9 +131,9 @@ const utils = {
         }
 
         const pixelCount = pixels.length / 4;
-        r = Math.floor(r / pixelCount);
-        g = Math.floor(g / pixelCount);
-        b = Math.floor(b / pixelCount);
+        r = Math.floor((r / pixelCount) * factor);
+        g = Math.floor((g / pixelCount) * factor);
+        b = Math.floor((b / pixelCount) * factor);
 
         resolve(`rgb(${r}, ${g}, ${b})`);
       };

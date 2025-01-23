@@ -10,8 +10,8 @@ const songReducer = (state, action) => {
     case "SONG":
       return { ...state, song: action.value };
 
-    case "PLAY":
-      return { ...state, play: action.value };
+    case "STATUS":
+      return { ...state, status: action.value };
 
     case "NEW":
       return { ...action.value };
