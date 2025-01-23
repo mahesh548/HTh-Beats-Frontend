@@ -1,9 +1,17 @@
 import { useContext } from "react";
 import { songContext } from "./Song";
-import { ChevronLeftRounded, MoreVertRounded } from "@mui/icons-material";
+import {
+  ChevronLeftRounded,
+  MoreVertRounded,
+  PlayCircleFilled,
+  QueueMusicOutlined,
+  SkipNextRounded,
+  SkipPreviousRounded,
+} from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router";
 import utils from "../../../utils";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
+import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
@@ -50,6 +58,38 @@ export default function Player() {
               </div>
               <button>
                 <img src={likeOutlined} alt="" />
+              </button>
+            </div>
+            <input
+              className="sliderRange"
+              type="range"
+              /*  oninput="seek()" */
+              id="range"
+              value="0"
+              width="100%"
+              /* style="border-radius: 40px; " */
+            />
+            <div id="cd" class="cd">
+              00:00
+            </div>
+            <div id="fd" class="fd">
+              00:00
+            </div>
+            <div className="playerButtons">
+              <button style={{ justifyContent: "start" }}>
+                <img src={downloadOutlined} width={"30px"} />
+              </button>
+              <button>
+                <SkipPreviousRounded style={{ fontSize: "60px" }} />
+              </button>
+              <button>
+                <PlayCircleFilled style={{ fontSize: "70px" }} />
+              </button>
+              <button>
+                <SkipNextRounded style={{ fontSize: "60px" }} />
+              </button>
+              <button style={{ justifyContent: "end", color: "#c1c1c1" }}>
+                <QueueMusicOutlined style={{ fontSize: "30px" }} />
               </button>
             </div>
           </div>
