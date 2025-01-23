@@ -153,6 +153,19 @@ const utils = {
     const doc = parser.parseFromString(str, "text/html");
     return doc.documentElement.textContent;
   },
+  getItemFromId: (id, array) => {
+    return array.filter((item) => item.id == id)[0];
+  },
+  decryptor: (encryptedUrl) => {
+    const key = CryptoJS.enc.Utf8.parse("38346591");
+    const ciphertext = encryptedUrl;
+    const decrypted = CryptoJS.TripleDES.decrypt(ciphertext, key, {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.Pkcs7,
+    });
+    const plaintext = decrypted.toString(CryptoJS.enc.Utf8);
+    return plaintext.replace("_96.mp4", "_320.mp4");
+  },
 };
 
 export default utils;

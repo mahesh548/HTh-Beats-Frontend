@@ -12,6 +12,7 @@ import librarySvgOutlined from "../../assets/icons/librarySvgOutlined.svg";
 
 //icons
 import { Add } from "@mui/icons-material";
+import Audio from "./Audio";
 
 export default function Navbar() {
   const auth = useContext(AuthContext);
@@ -32,6 +33,8 @@ export default function Navbar() {
   const isActive = (path) => location.pathname === path;
   return (
     <>
+      <Audio />
+
       <div className="navBOTTOM">
         <Link to="/home">
           <div className="navBTN">

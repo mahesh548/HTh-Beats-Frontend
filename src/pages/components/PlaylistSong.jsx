@@ -1,15 +1,26 @@
 import { MoreVertRounded } from "@mui/icons-material";
 import utils from "../../../utils";
 import likeFilled from "../../assets/icons/likeFilled.svg";
-export default function PlaylistSong({ data, func, more_func }) {
+export default function PlaylistSong({ data, play, more_opt }) {
   return (
     <div className="playlistSong">
-      <img src={data.image} alt={data.title} className="playlistSongImg" />
+      <img
+        src={data.image}
+        alt={data.title}
+        className="playlistSongImg"
+        onClick={() => play(data.id)}
+      />
       <div>
-        <p className="thinOneLineText playlistSongTitle">
+        <p
+          className="thinOneLineText playlistSongTitle"
+          onClick={() => play(data.id)}
+        >
           {utils.refineText(data.title)}
         </p>
-        <p className="thinOneLineText playlistSongSubTitle">
+        <p
+          className="thinOneLineText playlistSongSubTitle"
+          onClick={() => play(data.id)}
+        >
           {data.subtitle?.length != 0
             ? utils.refineText(data.subtitle)
             : utils.refineText(

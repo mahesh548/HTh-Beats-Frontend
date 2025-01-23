@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import utils from "../../../utils";
 import BackButton from "./BackButton";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
@@ -7,7 +7,9 @@ import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
 import { PlayArrowRounded } from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
+import { songContext } from "./Song";
 export default function CreatePlaylist({ data }) {
+  const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
   useEffect(() => {
     const setColor = async () => {
@@ -20,10 +22,14 @@ export default function CreatePlaylist({ data }) {
     }
   }, [data]);
 
-  const func = () => {
-    console.log("func");
+  const play = (id) => {
+    setQueue({
+      type: "NEW",
+      value: { playlist: { ...data }, song: id, play: true },
+    });
+    console.log(Queue);
   };
-  const more_func = () => {
+  const more_opt = (id) => {
     console.log("more");
   };
   return (
@@ -71,8 +77,8 @@ export default function CreatePlaylist({ data }) {
           return (
             <PlaylistSong
               data={item}
-              func={func}
-              more_func={more_func}
+              play={play}
+              more_opt={more_opt}
               key={item.id}
             />
           );
