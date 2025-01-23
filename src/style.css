@@ -347,6 +347,18 @@ p {
   text-overflow: ellipsis;
   max-height: calc(var(--thin-text-line-height) * 2);
 }
+.thinOneLineText {
+  color: var(--thin-text-color);
+  line-height: var(--thin-text-line-height);
+  font-weight: 100;
+  font-size: 14px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: calc(var(--thin-text-line-height));
+}
 .promoSubtitle {
   margin-top: 0px;
 }
@@ -461,4 +473,35 @@ p {
 .playlistButton svg {
   height: 30px;
   width: 30px;
+}
+.songList {
+  padding: 0px 10px;
+  margin-top: 30px;
+}
+.playlistSong {
+  display: grid;
+  grid-template-columns: 50px auto 40px 40px;
+  margin-top: 10px;
+  column-gap: 8px;
+  align-items: center;
+}
+.playlistSongImg {
+  height: 50px;
+  width: 50px;
+}
+.playlistSongTitle {
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+}
+.playlistSongSubTitle {
+  margin-top: 3px;
+}
+.playlistSongButton {
+  background-color: transparent;
+  border: none;
+  color: var(--thin-text-color);
+}
+.playlistSongButton img {
+  height: 30px;
 }

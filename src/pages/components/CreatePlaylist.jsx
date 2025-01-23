@@ -5,7 +5,8 @@ import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import likeFilled from "../../assets/icons/likeFilled.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
-import { PlayArrow, PlayArrowRounded } from "@mui/icons-material";
+import { PlayArrowRounded } from "@mui/icons-material";
+import PlaylistSong from "./PlaylistSong";
 export default function CreatePlaylist({ data }) {
   const [bg, setBg] = useState("#8d8d8d");
   useEffect(() => {
@@ -18,8 +19,18 @@ export default function CreatePlaylist({ data }) {
       setColor();
     }
   }, [data]);
+
+  const func = () => {
+    console.log("func");
+  };
+  const more_func = () => {
+    console.log("more");
+  };
   return (
-    <div className="page hiddenScrollbar">
+    <div
+      className="page hiddenScrollbar"
+      style={{ overflowY: "scroll", paddingBottom: "100px" }}
+    >
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
       <div className="playlistMain">
         <BackButton />
@@ -54,6 +65,18 @@ export default function CreatePlaylist({ data }) {
             </button>
           </div>
         </div>
+      </div>
+      <div className="songList">
+        {data.list.map((item) => {
+          return (
+            <PlaylistSong
+              data={item}
+              func={func}
+              more_func={more_func}
+              key={item.id}
+            />
+          );
+        })}
       </div>
     </div>
   );
