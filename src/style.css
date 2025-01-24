@@ -538,6 +538,15 @@ p {
     font-size: 35px;
   }
 }
+.miniRange {
+  position: absolute;
+  width: 95%;
+  height: 2px;
+  bottom: 1px;
+  border-radius: 40px;
+  left: 50%;
+  transform: translate(-50%, 0px);
+}
 /* PLAYER CSS */
 .playerCont {
   height: 100dvh;

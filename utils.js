@@ -191,14 +191,15 @@ const utils = {
     if (rangeItem.length != 0) {
       rangeItem.forEach((item) => {
         item.value = audio.currentTime;
-        item.style.background = utils.timeLineStyle(item);
+        item.style.background = utils.timeLineStyle(audio);
       });
     }
   },
-  timeLineStyle: (range) => {
-    var value = ((range.value - range.min) / (range.max - range.min)) * 100;
+  timeLineStyle: (audioElement) => {
+    const value = (audioElement.currentTime / audioElement.duration) * 100;
+
     return (
-      "linear-gradient(to right,#ffffff 0%, #ffffff " +
+      "linear-gradient(to right, #ffffff 0%, #ffffff " +
       value +
       "%, #80808096 " +
       value +

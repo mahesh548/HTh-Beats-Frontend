@@ -29,6 +29,7 @@ export default function MiniPlayer() {
     setColor(data.image);
     return (
       <div className="playlistSong miniPlayer" id="miniPlayer">
+        <div className="miniRange RANGE"></div>
         <img
           src={data.image}
           alt=""
