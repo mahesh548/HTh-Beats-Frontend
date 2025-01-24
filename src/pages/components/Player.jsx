@@ -3,13 +3,11 @@ import { songContext } from "./Song";
 import {
   ChevronLeftRounded,
   FormatQuoteRounded,
-  IosShareRounded,
   MoreHorizRounded,
+  PauseCircleFilled,
   PlayCircleFilled,
-  QueueMusicOutlined,
   RepeatOutlined,
   ShareOutlined,
-  ShareRounded,
   SkipNextRounded,
   SkipPreviousRounded,
 } from "@mui/icons-material";
@@ -28,9 +26,17 @@ export default function Player() {
   if (Queue?.song?.length == undefined) {
     closePlayer();
   }
+  const togglePlay = () => {
+    if (Queue.status == "play" || Queue.status == "resume") {
+      setQueue({ type: "STATUS", value: "pause" });
+    } else {
+      setQueue({ type: "STATUS", value: "resume" });
+    }
+  };
 
   const RenderPlayer = () => {
     const data = utils.getItemFromId(Queue.song, Queue.playlist.list);
+
     return (
       <div className="playerCont">
         <div className="blurPage">
@@ -79,39 +85,39 @@ export default function Player() {
               </button>
               <button className="lyricsLine">
                 <FormatQuoteRounded />
-                {data.more_info.has_lyrics ? (
-                  <p>{data.more_info.lyrics_snippet}</p>
-                ) : (
-                  <p>No Lyrics</p>
-                )}
+                <p>{data.more_info?.lyrics_snippet || "No Lyrics"}</p>
               </button>
             </div>
             <input
               className="sliderRange"
               type="range"
               /*  oninput="seek()" */
-              id="range"
+              /* id="range" */
               value="0"
               width="100%"
               /* style="border-radius: 40px; " */
             />
-            <div id="cd" class="cd">
+            <div id="cd" className="cd">
               00:00
             </div>
-            <div id="fd" class="fd">
+            <div id="fd" className="fd">
               00:00
             </div>
             <div className="playerButtons">
               <button style={{ justifyContent: "start" }}>
                 <img src={downloadOutlined} width={"30px"} />
               </button>
-              <button>
+              <button onClick={() => setQueue({ type: "PREV" })}>
                 <SkipPreviousRounded style={{ fontSize: "60px" }} />
               </button>
-              <button>
-                <PlayCircleFilled style={{ fontSize: "70px" }} />
+              <button onClick={() => togglePlay()}>
+                {Queue.status == "pause" ? (
+                  <PlayCircleFilled style={{ fontSize: "70px" }} />
+                ) : (
+                  <PauseCircleFilled style={{ fontSize: "70px" }} />
+                )}
               </button>
-              <button>
+              <button onClick={() => setQueue({ type: "NEXT" })}>
                 <SkipNextRounded style={{ fontSize: "60px" }} />
               </button>
               <button style={{ justifyContent: "end" }}>

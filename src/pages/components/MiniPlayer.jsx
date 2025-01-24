@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { songContext } from "./Song";
 import utils from "../../../utils";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
-import likeOutlined from "../../assets/icons/likeOutlined.svg";
+import likeOutlinedPlayer from "../../assets/icons/likeOutlinedPlayer.svg";
 import { useLocation, useNavigate } from "react-router";
 
 export default function MiniPlayer() {
@@ -49,7 +49,7 @@ export default function MiniPlayer() {
         </div>
         <div>
           <button className="miniPlayerButton">
-            <img src={likeOutlined} alt="" />
+            <img src={likeOutlinedPlayer} alt="" />
           </button>
         </div>
         <div>

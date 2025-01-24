@@ -31,7 +31,6 @@ export default function Audio() {
     if (Queue.status == "resume") {
       resume();
     }
-    console.log(Queue.status);
   }, [Queue?.status, Queue?.song]);
 
   return (
