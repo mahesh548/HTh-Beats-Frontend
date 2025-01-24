@@ -2,39 +2,57 @@ import { useContext } from "react";
 import { songContext } from "./Song";
 import {
   ChevronLeftRounded,
-  MoreVertRounded,
+  FormatQuoteRounded,
+  IosShareRounded,
+  MoreHorizRounded,
   PlayCircleFilled,
   QueueMusicOutlined,
+  RepeatOutlined,
+  ShareOutlined,
+  ShareRounded,
   SkipNextRounded,
   SkipPreviousRounded,
 } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router";
 import utils from "../../../utils";
-import likeOutlined from "../../assets/icons/likeOutlined.svg";
-import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
-
+import likeOutlined from "../../assets/icons/likeOutlinedPlayer.svg";
+import downloadOutlined from "../../assets/icons/downloadOutlinedPlayer.svg";
+import playlistOutlined from "../../assets/icons/playlistOutlined.svg";
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
   const navigate = useNavigate();
   const location = useLocation();
-  if (Queue?.song?.length == undefined) {
+  const closePlayer = () => {
     navigate(location.pathname);
+  };
+  if (Queue?.song?.length == undefined) {
+    closePlayer();
   }
+
   const RenderPlayer = () => {
     const data = utils.getItemFromId(Queue.song, Queue.playlist.list);
     return (
       <div className="playerCont">
+        <div className="blurPage">
+          <div></div>
+          <img src={data.image} alt="" />
+        </div>
         <div className="player">
           <div className="playerNav">
-            <button>
+            <button onClick={() => closePlayer()}>
               <ChevronLeftRounded />
             </button>
             <div>
-              <p>PLAYING FROM PLAYLIST</p>
-              <b>playlist name</b>
+              <p>PLAYING FROM {Queue.playlist.type.toUpperCase()}</p>
+              <b
+                className="thinOneLineText"
+                style={{ color: "white", fontWeight: "bold" }}
+              >
+                {Queue.playlist.title}
+              </b>
             </div>
             <button>
-              <MoreVertRounded />
+              <MoreHorizRounded />
             </button>
           </div>
           <img
@@ -58,6 +76,14 @@ export default function Player() {
               </div>
               <button>
                 <img src={likeOutlined} alt="" />
+              </button>
+              <button className="lyricsLine">
+                <FormatQuoteRounded />
+                {data.more_info.has_lyrics ? (
+                  <p>{data.more_info.lyrics_snippet}</p>
+                ) : (
+                  <p>No Lyrics</p>
+                )}
               </button>
             </div>
             <input
@@ -88,10 +114,18 @@ export default function Player() {
               <button>
                 <SkipNextRounded style={{ fontSize: "60px" }} />
               </button>
-              <button style={{ justifyContent: "end", color: "#c1c1c1" }}>
-                <QueueMusicOutlined style={{ fontSize: "30px" }} />
+              <button style={{ justifyContent: "end" }}>
+                <img src={playlistOutlined} width={"30px"} />
               </button>
             </div>
+          </div>
+          <div className="playerBottomBar">
+            <button>
+              <RepeatOutlined />
+            </button>
+            <button>
+              <ShareOutlined />
+            </button>
           </div>
         </div>
       </div>

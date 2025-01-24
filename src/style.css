@@ -555,6 +555,7 @@ p {
   grid-template-rows: 50px auto max-content 50px;
   justify-items: center;
   margin: auto;
+  align-items: center;
 }
 .playerNav {
   display: grid;
@@ -609,9 +610,11 @@ p {
   grid-template-columns: auto 50px;
   width: 100%;
   margin: auto;
+  margin-bottom: 15px;
   button {
     background-color: transparent;
     border: none;
+    padding: 0px;
     img {
       width: 35px;
     }
@@ -645,6 +648,8 @@ p {
   display: grid;
   width: 100%;
   grid-template-columns: 1fr 1fr auto 1fr 1fr;
+  margin-top: 40px;
+  column-gap: 15px;
   button {
     background-color: transparent;
     border: none;
@@ -652,5 +657,75 @@ p {
     display: grid;
     justify-content: center;
     align-items: center;
+    padding: 0px;
   }
+}
+.playerBottomBar {
+  display: grid;
+  width: 88%;
+  grid-template-columns: max-content max-content;
+  justify-content: space-between;
+  button {
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    padding: 0px;
+  }
+}
+.lyricsLine {
+  font-size: 15px;
+  display: inline-grid;
+  background-color: rgba(41, 41, 41, 0) !important;
+  border-radius: 40px;
+  width: fit-content;
+  padding-right: 10px !important;
+  color: white;
+  margin-top: 20px;
+  column-gap: 5px;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  padding-left: 3px !important;
+  opacity: 1;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  svg {
+    vertical-align: middle;
+    font-size: 13px;
+    background-color: white;
+    border-radius: 100%;
+    color: black;
+    padding: 2px;
+  }
+}
+.lyricsLine p {
+  display: inline-block;
+  color: #fff;
+  font-size: 12px;
+
+  width: fit-content;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0px;
+  margin: 0px;
+  text-align: left;
+  max-width: 200px;
+}
+
+.blurPage {
+  height: 100dvh;
+  filter: blur(50px);
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+  background-image: linear-gradient(90deg, black, transparent);
+}
+.blurPage div {
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  background-image: linear-gradient(1deg, black, transparent);
+}
+.blurPage img {
+  height: 100dvh;
+  width: 100%;
 }
