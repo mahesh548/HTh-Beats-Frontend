@@ -40,6 +40,7 @@ export default function Audio() {
       autoPlay={false}
       style={{ display: "none" }}
       id="audio"
+      onTimeUpdate={utils.timelineUpdater}
     ></audio>
   );
 }

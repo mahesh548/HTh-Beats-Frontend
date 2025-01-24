@@ -89,19 +89,21 @@ export default function Player() {
               </button>
             </div>
             <input
-              className="sliderRange"
+              className="sliderRange RANGE"
               type="range"
               /*  oninput="seek()" */
-              /* id="range" */
+              id="timeLine"
               value="0"
               width="100%"
+              max={data.more_info.duration}
+
               /* style="border-radius: 40px; " */
             />
-            <div id="cd" className="cd">
+            <div id="cd" className="cd CD">
               00:00
             </div>
             <div id="fd" className="fd">
-              00:00
+              {utils.formatDuration(data.more_info.duration) || "00:00"}
             </div>
             <div className="playerButtons">
               <button style={{ justifyContent: "start" }}>

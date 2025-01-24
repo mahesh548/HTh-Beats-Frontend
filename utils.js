@@ -166,6 +166,45 @@ const utils = {
     const plaintext = decrypted.toString(CryptoJS.enc.Utf8);
     return plaintext.replace("_96.mp4", "_320.mp4");
   },
+  formatDuration: (time) => {
+    var hrs = ~~(time / 3600);
+    var mins = ~~((time % 3600) / 60);
+    var secs = ~~time % 60;
+
+    var ret = "";
+    if (hrs > 0) {
+      ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+    }
+    ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+    ret += "" + secs;
+    return ret;
+  },
+  timelineUpdater: () => {
+    const audio = document.getElementById("audio");
+    const currentDurationItem = [...document.getElementsByClassName("CD")];
+    const rangeItem = [...document.getElementsByClassName("RANGE")];
+    if (currentDurationItem.length != 0) {
+      currentDurationItem.forEach(
+        (item) => (item.innerText = utils.formatDuration(audio.currentTime))
+      );
+    }
+    if (rangeItem.length != 0) {
+      rangeItem.forEach((item) => {
+        item.value = audio.currentTime;
+        item.style.background = utils.timeLineStyle(item);
+      });
+    }
+  },
+  timeLineStyle: (range) => {
+    var value = ((range.value - range.min) / (range.max - range.min)) * 100;
+    return (
+      "linear-gradient(to right,#ffffff 0%, #ffffff " +
+      value +
+      "%, #80808096 " +
+      value +
+      "%, #80808096 100%)"
+    );
+  },
 };
 
 export default utils;

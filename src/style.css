@@ -593,6 +593,7 @@ p {
     background: #d3d3d357;
     outline: none;
     margin: auto;
+    border-radius: 40px;
   }
 }
 
