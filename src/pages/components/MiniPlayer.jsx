@@ -24,42 +24,44 @@ export default function MiniPlayer() {
     navigate(`${location.pathname}#player`);
   };
 
-  const RenderMiniPlayer = () => {
-    const data = utils.getItemFromId(Queue.song, Queue.playlist.list);
-    setColor(data.image);
-    return (
-      <div className="playlistSong miniPlayer" id="miniPlayer">
-        <div className="miniRange RANGE"></div>
-        <img
-          src={data.image}
-          alt=""
-          className="playlistSongImg miniPlayerPoster"
-          onClick={() => showPlayer()}
-        />
-        <div onClick={() => showPlayer()}>
-          <p className="thinOneLineText playlistSongTitle">
-            {utils.refineText(data.title)}
-          </p>
-          <p className="thinOneLineText playlistSongSubTitle">
-            {data.subtitle?.length != 0
-              ? utils.refineText(data.subtitle)
-              : utils.refineText(
-                  `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
-                )}
-          </p>
-        </div>
-        <div>
-          <button className="miniPlayerButton">
-            <img src={likeOutlinedPlayer} alt="" />
-          </button>
-        </div>
-        <div>
-          <button className="miniPlayerButton" onClick={() => togglePlay()}>
-            {Queue.status == "pause" ? <PlayArrowRounded /> : <PauseRounded />}
-          </button>
-        </div>
+  if (Queue.song == undefined) {
+    return <></>;
+  }
+
+  const data = utils.getItemFromId(Queue.song, Queue.playlist.list);
+  setColor(data.image);
+
+  return (
+    <div className="playlistSong miniPlayer" id="miniPlayer">
+      <div className="miniRange RANGE"></div>
+      <img
+        src={data.image}
+        alt=""
+        className="playlistSongImg miniPlayerPoster"
+        onClick={() => showPlayer()}
+      />
+      <div onClick={() => showPlayer()}>
+        <p className="thinOneLineText playlistSongTitle">
+          {utils.refineText(data.title)}
+        </p>
+        <p className="thinOneLineText playlistSongSubTitle">
+          {data.subtitle?.length != 0
+            ? utils.refineText(data.subtitle)
+            : utils.refineText(
+                `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
+              )}
+        </p>
       </div>
-    );
-  };
-  return Queue?.song && Queue?.playlist ? <RenderMiniPlayer /> : <></>;
+      <div>
+        <button className="miniPlayerButton">
+          <img src={likeOutlinedPlayer} alt="" />
+        </button>
+      </div>
+      <div>
+        <button className="miniPlayerButton" onClick={() => togglePlay()}>
+          {Queue.status == "pause" ? <PlayArrowRounded /> : <PauseRounded />}
+        </button>
+      </div>
+    </div>
+  );
 }

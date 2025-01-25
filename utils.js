@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useNavigate } from "react-router";
 const apiUrl = "https://92rrp2s6-5000.inc1.devtunnels.ms/api";
 const backendUrl = "https://92rrp2s6-8080.inc1.devtunnels.ms";
 
