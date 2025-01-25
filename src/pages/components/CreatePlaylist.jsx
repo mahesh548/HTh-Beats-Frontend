@@ -3,11 +3,13 @@ import utils from "../../../utils";
 import BackButton from "./BackButton";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import likeFilled from "../../assets/icons/likeFilled.svg";
+import searchOutlined from "../../assets/icons/searchSvgOutlined.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
-import { PlayArrowRounded } from "@mui/icons-material";
+import { ArrowBack, PlayArrowRounded } from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
+import { useInView } from "react-intersection-observer";
 export default function CreatePlaylist({ data }) {
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
@@ -22,6 +24,10 @@ export default function CreatePlaylist({ data }) {
     }
   }, [data]);
 
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+  });
+
   const play = (id) => {
     setQueue({
       type: "NEW",
@@ -35,8 +41,25 @@ export default function CreatePlaylist({ data }) {
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
       <div className="playlistMain">
+        {!inView && (
+          <div className="playlistNavbar" style={{ backgroundColor: bg }}>
+            <button className="iconButton">
+              <ArrowBack />
+            </button>
+            <p className="thinOneLineText playlistTitle">{data.title}</p>
+            <button className="iconButton">
+              <img src={searchOutlined} height={"20px"} />
+            </button>
+          </div>
+        )}
+
         <BackButton />
-        <img src={data.image} alt={data.title} className="playlistMainImg" />
+        <img
+          src={data.image}
+          alt={data.title}
+          className="playlistMainImg"
+          ref={ref}
+        />
         <div className="playlistDetails">
           <p className="thinTwoLineText">
             {utils.refineText(data.header_desc)}

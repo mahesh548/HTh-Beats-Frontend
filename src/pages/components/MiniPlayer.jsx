@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { songContext } from "./Song";
 import utils from "../../../utils";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";

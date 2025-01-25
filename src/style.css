@@ -42,7 +42,11 @@ p {
 .hiddenScrollbar::-webkit-scrollbar {
   display: none; /* For Chrome, Safari, and Edge */
 }
-
+.iconButton {
+  background-color: transparent;
+  border: none;
+  color: white;
+}
 /* LOGIN , SIGNUP , LOADER AND SOME OTHER STYLES */
 .inputWrapperLogin {
   margin-top: 50px;
@@ -420,12 +424,41 @@ p {
   background-color: transparent;
   border: none;
   color: white;
+  border-radius: 100%;
+  margin: 10px;
+  margin-top: 15px;
+  height: 30px;
+  width: 30px;
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  padding: 20px;
 }
 .backButtonPlaylist svg {
   font-size: 30px;
-  margin: 10px;
-  margin-top: 30px;
+
   font-weight: 500;
+}
+.playlistNavbar {
+  position: fixed;
+  height: 60px;
+  display: grid;
+  grid-template-columns: 55px auto 55px;
+  top: 10px;
+  left: 0px;
+  width: 95%;
+  column-gap: 0px;
+  left: 50%;
+  translate: -50% 0;
+  border-radius: 8px;
+  z-index: 1;
+  align-items: center;
+}
+.playlistTitle {
+  color: white;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
 }
 .playlistDetails {
   padding: 0px 10px;
