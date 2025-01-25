@@ -12,12 +12,13 @@ import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
 export default function CreatePlaylist({ data }) {
   const { Queue, setQueue } = useContext(songContext);
-  const [bg, setBg] = useState("#8d8d8d");
+  const [bg, setBg] = useState(["#8d8d8d", "#8d8d8d"]);
   useEffect(() => {
     const setColor = async () => {
       const color = await utils.getAverageColor(data.image);
+      const navColor = await utils.getAverageColor(data.image, 0.6);
 
-      setBg(color ? color : "#8d8d8d");
+      setBg(color && navColor ? [color, navColor] : ["#8d8d8d", "#8d8d8d"]);
     };
     if (data.image) {
       setColor();
@@ -39,10 +40,13 @@ export default function CreatePlaylist({ data }) {
   };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
-      <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
+      <div
+        className="backgroundGradient"
+        style={{ backgroundColor: bg[0] }}
+      ></div>
       <div className="playlistMain">
         {!inView && (
-          <div className="playlistNavbar" style={{ backgroundColor: bg }}>
+          <div className="playlistNavbar" style={{ backgroundColor: bg[1] }}>
             <button className="iconButton">
               <ArrowBack />
             </button>
