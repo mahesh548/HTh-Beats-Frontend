@@ -3,7 +3,7 @@ import { songContext } from "./Song";
 import utils from "../../../utils";
 
 export default function Audio() {
-  const { Queue } = useContext(songContext);
+  const { Queue, setQueue } = useContext(songContext);
 
   useEffect(() => {
     const play = () => {
@@ -41,6 +41,7 @@ export default function Audio() {
       style={{ display: "none" }}
       id="audio"
       onTimeUpdate={utils.timelineUpdater}
+      onEnded={() => setQueue({ type: "NEXT" })}
     ></audio>
   );
 }

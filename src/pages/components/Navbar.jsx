@@ -35,8 +35,10 @@ export default function Navbar() {
   useEffect(() => {
     if (location.hash === "#player") {
       setShowPlayer(true);
+      history.replaceState(null, "", window.location.pathname + "#player");
     } else {
       setShowPlayer(false);
+      history.replaceState(null, "", window.location.pathname);
     }
   }, [location.hash]);
 
