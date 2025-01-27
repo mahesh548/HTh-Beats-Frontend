@@ -16,6 +16,12 @@ body {
 :root {
   --thin-text-color: #c1c1c1;
   --thin-text-line-height: 1.2;
+
+  --rsbs-backdrop-bg: #00000099;
+  --rsbs-bg: #3c3c3c;
+  --rsbs-handle-bg: #ffffffd3;
+  --rsbs-max-w: auto;
+  --rsbs-overlay-rounded: 16px;
 }
 #root {
   height: 100dvh;
