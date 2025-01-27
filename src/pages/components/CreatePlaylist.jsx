@@ -3,22 +3,23 @@ import utils from "../../../utils";
 import BackButton from "./BackButton";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import likeFilled from "../../assets/icons/likeFilled.svg";
-import searchOutlined from "../../assets/icons/searchSvgOutlined.svg";
+
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
-import { ArrowBack, PlayArrowRounded } from "@mui/icons-material";
+import { PlayArrowRounded } from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
-export default function CreatePlaylist({ data }) {
+import PlaylistNavbar from "./PlaylistNavbar";
+
+export default function CreatePlaylist({ data, response, setData }) {
   const { Queue, setQueue } = useContext(songContext);
-  const [bg, setBg] = useState(["#8d8d8d", "#8d8d8d"]);
+  const [bg, setBg] = useState("#8d8d8d");
   useEffect(() => {
     const setColor = async () => {
       const color = await utils.getAverageColor(data.image);
-      const navColor = await utils.getAverageColor(data.image, 0.6);
 
-      setBg(color && navColor ? [color, navColor] : ["#8d8d8d", "#8d8d8d"]);
+      setBg(color ? color : "#8d8d8d");
     };
     if (data.image) {
       setColor();
@@ -40,21 +41,15 @@ export default function CreatePlaylist({ data }) {
   };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
-      <div
-        className="backgroundGradient"
-        style={{ backgroundColor: bg[0] }}
-      ></div>
+      <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
       <div className="playlistMain">
         {!inView && (
-          <div className="playlistNavbar" style={{ backgroundColor: bg[1] }}>
-            <button className="iconButton">
-              <ArrowBack />
-            </button>
-            <p className="thinOneLineText playlistTitle">{data.title}</p>
-            <button className="iconButton">
-              <img src={searchOutlined} height={"20px"} />
-            </button>
-          </div>
+          <PlaylistNavbar
+            response={response}
+            setData={setData}
+            src={data.image}
+            title={data.title}
+          />
         )}
 
         <BackButton />
