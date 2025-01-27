@@ -13,7 +13,6 @@ import { useInView } from "react-intersection-observer";
 import PlaylistNavbar from "./PlaylistNavbar";
 
 export default function CreatePlaylist({ response }) {
-  console.log(response);
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
@@ -97,6 +96,7 @@ export default function CreatePlaylist({ response }) {
               play={play}
               more_opt={more_opt}
               key={item.id}
+              isPlaying={item.id == Queue.song}
             />
           );
         })}

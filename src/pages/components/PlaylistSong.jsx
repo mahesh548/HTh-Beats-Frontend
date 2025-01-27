@@ -1,7 +1,7 @@
 import { MoreVertRounded } from "@mui/icons-material";
 import utils from "../../../utils";
 import likeFilled from "../../assets/icons/likeFilled.svg";
-export default function PlaylistSong({ data, play, more_opt }) {
+export default function PlaylistSong({ data, play, more_opt, isPlaying }) {
   return (
     <div className="playlistSong">
       <img
@@ -14,6 +14,7 @@ export default function PlaylistSong({ data, play, more_opt }) {
         <p
           className="thinOneLineText playlistSongTitle"
           onClick={() => play(data.id)}
+          style={{ color: isPlaying ? "wheat" : "#ffffff" }}
         >
           {utils.refineText(data.title)}
         </p>
