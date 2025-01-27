@@ -9,11 +9,10 @@ export default function playlist() {
   const auth = useContext(AuthContext);
   const { id } = useParams();
   const [playlistData, setplaylistData] = useState(false);
-  let response;
 
   useEffect(() => {
     const getPlaylist = async () => {
-      response = await utils.API(`/entity/playlist?id=${id}`, "GET");
+      const response = await utils.API(`/entity/playlist?id=${id}`, "GET");
 
       if (response.hasOwnProperty("list")) {
         setplaylistData(response);
@@ -27,10 +26,6 @@ export default function playlist() {
   return playlistData == false ? (
     <PageLoader />
   ) : (
-    <CreatePlaylist
-      data={playlistData}
-      response={response}
-      setData={setplaylistData}
-    />
+    <CreatePlaylist response={playlistData} />
   );
 }

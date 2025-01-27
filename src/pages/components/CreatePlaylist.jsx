@@ -12,7 +12,9 @@ import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
 import PlaylistNavbar from "./PlaylistNavbar";
 
-export default function CreatePlaylist({ data, response, setData }) {
+export default function CreatePlaylist({ response }) {
+  console.log(response);
+  const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
   useEffect(() => {
@@ -46,8 +48,6 @@ export default function CreatePlaylist({ data, response, setData }) {
         <PlaylistNavbar
           response={response}
           setData={setData}
-          src={data.image}
-          title={data.title}
           display={inView}
         />
 
