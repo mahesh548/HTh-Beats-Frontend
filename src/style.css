@@ -443,7 +443,7 @@ p {
   position: fixed;
   height: 60px;
   display: grid;
-  grid-template-columns: 55px auto 55px;
+  grid-template-columns: 55px auto;
   top: 10px;
   left: 0px;
   width: 95%;
@@ -453,6 +453,36 @@ p {
   border-radius: 8px;
   z-index: 1;
   align-items: center;
+}
+.playlistNavbarInfo {
+  display: grid;
+  grid-template-columns: auto 55px;
+  align-items: center;
+}
+.playlistSearch {
+  display: grid;
+  grid-template-columns: auto 60px;
+  align-items: center;
+  column-gap: 10px;
+  padding-right: 10px;
+}
+.playlistSearch input {
+  background-color: #ffffff36;
+  border: none;
+  outline: none;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: white;
+}
+.playlistSearch input::placeholder {
+  color: white;
+}
+.playlistSearch button {
+  border: none;
+  border-radius: 4px;
+  background-color: #ffffff36;
+  color: white;
+  padding: 2px;
 }
 .playlistTitle {
   color: white;

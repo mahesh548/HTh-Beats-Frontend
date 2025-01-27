@@ -43,14 +43,13 @@ export default function CreatePlaylist({ data, response, setData }) {
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
       <div className="playlistMain">
-        {!inView && (
-          <PlaylistNavbar
-            response={response}
-            setData={setData}
-            src={data.image}
-            title={data.title}
-          />
-        )}
+        <PlaylistNavbar
+          response={response}
+          setData={setData}
+          src={data.image}
+          title={data.title}
+          display={inView}
+        />
 
         <BackButton />
         <img
