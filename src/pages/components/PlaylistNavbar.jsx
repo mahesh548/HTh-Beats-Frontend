@@ -1,6 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import searchOutlined from "../../assets/icons/searchSvgOutlined.svg";
-import { ArrowBack } from "@mui/icons-material";
+import {
+  ArrowBack,
+  RadioButtonChecked,
+  RadioButtonUncheckedOutlined,
+} from "@mui/icons-material";
 import utils from "../../../utils";
 import OffCanvas from "./BottomSheet";
 import { HashContext } from "./Hash";
@@ -8,6 +12,7 @@ import { HashContext } from "./Hash";
 export default function PlaylistNavbar({ response, setData, display }) {
   const [bg, setBg] = useState("#8d8d8d");
   const [isOn, setIsOn] = useState(false);
+  const [sorted, setSorted] = useState("default");
   const { open, close, openElements } = useContext(HashContext);
 
   useEffect(() => {
@@ -34,14 +39,43 @@ export default function PlaylistNavbar({ response, setData, display }) {
   };
   console.log(openElements);
   const isCanvasOpen = openElements.includes("sort");
+
   return (
     <>
       <OffCanvas open={isCanvasOpen} dismiss={() => close("sort")}>
         <div className="sortCont">
-          <button>Custom</button>
-          <button>Title</button>
-          <button>Artist</button>
-          <button>Release date</button>
+          <button onClick={() => setSorted("default")}>
+            <p>Default</p>
+            {sorted == "default" ? (
+              <RadioButtonChecked />
+            ) : (
+              <RadioButtonUncheckedOutlined />
+            )}
+          </button>
+          <button onClick={() => setSorted("artist")}>
+            <p>Artist</p>
+            {sorted == "artist" ? (
+              <RadioButtonChecked />
+            ) : (
+              <RadioButtonUncheckedOutlined />
+            )}
+          </button>
+          <button onClick={() => setSorted("title")}>
+            <p>Title</p>
+            {sorted == "title" ? (
+              <RadioButtonChecked />
+            ) : (
+              <RadioButtonUncheckedOutlined />
+            )}
+          </button>
+          <button onClick={() => setSorted("release_date")}>
+            <p>Release Date</p>
+            {sorted == "release_date" ? (
+              <RadioButtonChecked />
+            ) : (
+              <RadioButtonUncheckedOutlined />
+            )}
+          </button>
         </div>
       </OffCanvas>
       <div

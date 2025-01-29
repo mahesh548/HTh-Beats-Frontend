@@ -26,14 +26,13 @@ export default function HashProvider({ children }) {
   };
   const close = (id) => {
     if (openElements.includes(id)) {
-      /*  const newOpenElements = [...openElements];
+      const newOpenElements = [...openElements];
       newOpenElements.splice(newOpenElements.indexOf(id), 1);
       const url =
         newOpenElements.length == 0
           ? location.pathname
           : `${location.pathname}?open=${newOpenElements.join("&open=")}`;
-      navigate(url, { replace: true }); */
-      navigate(-1);
+      navigate(url, { replace: true });
     }
   };
   return (

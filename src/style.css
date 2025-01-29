@@ -492,6 +492,25 @@ p {
 }
 .sortCont {
   display: grid;
+  width: 95%;
+  margin: auto;
+  margin-top: 10px;
+}
+
+.sortCont button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  text-align: left;
+  display: grid;
+  grid-template-columns: auto 40px;
+  margin-top: 15px;
+}
+.sortCont button p {
+  font-size: 18px;
+}
+.sortCont button svg {
+  color: wheat;
 }
 .playlistTitle {
   color: white;
