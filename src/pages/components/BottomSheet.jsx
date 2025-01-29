@@ -1,10 +1,10 @@
 import { BottomSheet } from "react-spring-bottom-sheet";
 import "react-spring-bottom-sheet/dist/style.css";
-export default function OffCanvas({ children, open, setOpen }) {
+export default function OffCanvas({ children, open, dismiss }) {
   return (
     <BottomSheet
       open={open}
-      onDismiss={() => setOpen(false)}
+      onDismiss={() => dismiss()}
       snapPoints={({ minHeight, maxHeight }) => [minHeight, maxHeight * 0.5]}
       defaultSnap={({ snapPoints }) => Math.min(...snapPoints)}
     >

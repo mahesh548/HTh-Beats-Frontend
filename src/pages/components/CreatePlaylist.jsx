@@ -11,12 +11,10 @@ import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
 import PlaylistNavbar from "./PlaylistNavbar";
-import OffCanvas from "./BottomSheet";
 
 export default function CreatePlaylist({ response }) {
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
-  const [open, setOpen] = useState(false);
   const [bg, setBg] = useState("#8d8d8d");
   useEffect(() => {
     const setColor = async () => {
@@ -45,11 +43,7 @@ export default function CreatePlaylist({ response }) {
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
-      <OffCanvas open={open} setOpen={setOpen}>
-        <button>This is test button</button>
-        <button>This is test button</button>
-        <button>This is test button</button>
-      </OffCanvas>
+
       <div className="playlistMain">
         <PlaylistNavbar
           response={response}

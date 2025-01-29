@@ -15,12 +15,13 @@ import { Add } from "@mui/icons-material";
 import Audio from "./Audio";
 import MiniPlayer from "./MiniPlayer";
 import Player from "./Player";
+import { HashContext } from "./Hash";
 
 export default function Navbar() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const [showPlayer, setShowPlayer] = useState(false);
+  const { openElements } = useContext(HashContext);
   useEffect(() => {
     const checkAuth = async () => {
       const isAuth = await auth.authentication();
@@ -32,31 +33,20 @@ export default function Navbar() {
     };
     checkAuth();
   }, []);
-  useEffect(() => {
-    if (location.hash === "#player") {
-      setShowPlayer(true);
-      history.replaceState(null, "", window.location.pathname + "#player");
-    } else {
-      setShowPlayer(false);
-      history.replaceState(null, "", window.location.pathname);
-    }
-  }, [location.hash]);
 
   const isActive = (path) => location.pathname === path;
+
   return (
     <>
       <Audio />
-      {showPlayer && <Player />}
+      {openElements.includes("player") && <Player />}
       <MiniPlayer />
 
       <div className="navBOTTOM">
         <Link to="/home">
           <div className="navBTN">
             <button className="pop">
-              <img
-                src={isActive("/home") ? homeSvgFilled : homeSvgOutlined}
-                className="pop"
-              />
+              <img src={isActive("/home") ? homeSvgFilled : homeSvgOutlined} />
               <p className="menuLab">Home</p>
             </button>
           </div>

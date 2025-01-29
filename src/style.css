@@ -490,6 +490,9 @@ p {
   color: white;
   padding: 2px;
 }
+.sortCont {
+  display: grid;
+}
 .playlistTitle {
   color: white;
   font-size: 18px;
