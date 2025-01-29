@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import utils from "../../../utils";
+import { debounce } from "lodash";
 
 export default function Like({
   isLiked,
@@ -13,15 +14,42 @@ export default function Like({
   useEffect(() => {
     setLikeIt(isLiked);
   }, []);
+
   const save = async () => {
-    const response = await utils.BACKEND("/save", "POST", {
-      savedData: likeData,
-    });
-    if (response?.status == true) {
-      setLikeIt(true);
-    }
+    setLikeIt(true);
+
+    callApi("like");
   };
-  const unSave = async () => {};
+  const unSave = async () => {
+    setLikeIt(false);
+
+    callApi("dislike");
+  };
+
+  const callApi = useCallback(
+    debounce((action) => {
+      const req = async () => {
+        if (action == "like") {
+          const response = await utils.BACKEND("/save", "POST", {
+            savedData: likeData,
+          });
+          if (response?.status == true) {
+            setLikeIt(true);
+          }
+        } else {
+          const response = await utils.BACKEND("/save", "DELETE", {
+            savedData: likeData,
+          });
+          if (response?.status == true) {
+            setLikeIt(false);
+          }
+        }
+      };
+      req();
+    }, 500),
+    []
+  );
+
   return likeIt ? (
     <button className={styleClass} onClick={() => unSave()}>
       <img src={filledSrc} />
