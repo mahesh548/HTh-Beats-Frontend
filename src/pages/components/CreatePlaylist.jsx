@@ -6,11 +6,12 @@ import likeFilled from "../../assets/icons/likeFilled.svg";
 
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
-import { PlayArrowRounded } from "@mui/icons-material";
+import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
 import PlaylistNavbar from "./PlaylistNavbar";
+import Like from "./Like";
 
 export default function CreatePlaylist({ response }) {
   const [data, setData] = useState(response);
@@ -39,6 +40,10 @@ export default function CreatePlaylist({ response }) {
   };
   const more_opt = (id) => {
     console.log("more");
+  };
+  const likeData = {
+    id: response?.id,
+    type: "entity",
   };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
@@ -72,9 +77,13 @@ export default function CreatePlaylist({ response }) {
         </div>
         <div className="playlistButtonCont">
           <div>
-            <button className="playlistButtonSecondary">
-              <img src={likeOutlined} />
-            </button>
+            <Like
+              isLiked={response.isLiked}
+              styleClass="playlistButtonSecondary"
+              outlinedSrc={likeOutlined}
+              filledSrc={likeFilled}
+              data={likeData}
+            />
             <button className="playlistButtonSecondary">
               <img src={downloadOutlined} />
             </button>
@@ -83,9 +92,21 @@ export default function CreatePlaylist({ response }) {
             </button>
           </div>
           <div>
-            <button className="playlistButton">
-              <PlayArrowRounded />
-            </button>
+            {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (
+              <button
+                className="playlistButton"
+                onClick={() => setQueue({ type: "STATUS", value: "pause" })}
+              >
+                <PauseRounded />
+              </button>
+            ) : (
+              <button
+                className="playlistButton"
+                onClick={() => play(data.list[0].id)}
+              >
+                <PlayArrowRounded />
+              </button>
+            )}
           </div>
         </div>
       </div>

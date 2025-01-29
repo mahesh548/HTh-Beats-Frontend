@@ -559,7 +559,7 @@ p {
 .playlistButtonSecondary img {
   height: 28px;
   width: 28px;
-  opacity: 0.8;
+  /* opacity: 0.8; */
 }
 .playlistButton {
   height: 50px;

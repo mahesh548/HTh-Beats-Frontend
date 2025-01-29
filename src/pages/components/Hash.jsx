@@ -11,7 +11,6 @@ export default function HashProvider({ children }) {
     const params = new URLSearchParams(location.search);
     const opens = params.getAll("open");
     setOpenElements([...opens]);
-    console.log("params changes");
   }, [location.search]);
 
   const open = (id) => {

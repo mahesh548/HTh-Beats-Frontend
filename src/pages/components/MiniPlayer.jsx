@@ -3,7 +3,9 @@ import { songContext } from "./Song";
 import utils from "../../../utils";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
 import likeOutlinedPlayer from "../../assets/icons/likeOutlinedPlayer.svg";
+import likeFilled from "../../assets/icons/likeFilled.svg";
 import { HashContext } from "./Hash";
+import Like from "./Like";
 
 export default function MiniPlayer() {
   const { Queue, setQueue } = useContext(songContext);
@@ -50,9 +52,12 @@ export default function MiniPlayer() {
         </p>
       </div>
       <div>
-        <button className="miniPlayerButton">
-          <img src={likeOutlinedPlayer} alt="" />
-        </button>
+        <Like
+          styleClass="miniPlayerButton"
+          isLiked={false}
+          outlinedSrc={likeOutlinedPlayer}
+          filledSrc={likeFilled}
+        />
       </div>
       <div>
         <button className="miniPlayerButton" onClick={() => togglePlay()}>

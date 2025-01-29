@@ -14,8 +14,10 @@ import {
 import { useLocation, useNavigate } from "react-router";
 import utils from "../../../utils";
 import likeOutlined from "../../assets/icons/likeOutlinedPlayer.svg";
+import likeFilled from "../../assets/icons/likeFilled.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlinedPlayer.svg";
 import playlistOutlined from "../../assets/icons/playlistOutlined.svg";
+import Like from "./Like";
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
   const navigate = useNavigate();
@@ -90,9 +92,14 @@ export default function Player() {
                     )}
               </p>
             </div>
-            <button>
-              <img src={likeOutlined} alt="" />
-            </button>
+
+            <Like
+              styleClass=""
+              isLiked={false}
+              outlinedSrc={likeOutlined}
+              filledSrc={likeFilled}
+            />
+
             <button className="lyricsLine">
               <FormatQuoteRounded />
               <p>{data.more_info?.lyrics_snippet || "No Lyrics"}</p>
