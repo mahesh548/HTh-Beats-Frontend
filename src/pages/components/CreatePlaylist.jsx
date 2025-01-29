@@ -78,11 +78,11 @@ export default function CreatePlaylist({ response }) {
         <div className="playlistButtonCont">
           <div>
             <Like
-              isLiked={response.isLiked}
+              isLiked={data.isLiked}
               styleClass="playlistButtonSecondary"
               outlinedSrc={likeOutlined}
               filledSrc={likeFilled}
-              data={likeData}
+              likeData={likeData}
             />
             <button className="playlistButtonSecondary">
               <img src={downloadOutlined} />

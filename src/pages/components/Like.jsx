@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import utils from "../../../utils";
 
 export default function Like({
@@ -5,14 +6,23 @@ export default function Like({
   styleClass,
   outlinedSrc,
   filledSrc,
-  data,
+  likeData,
 }) {
+  const [likeIt, setLikeIt] = useState();
+
+  useEffect(() => {
+    setLikeIt(isLiked);
+  }, []);
   const save = async () => {
-    const response = await utils.BACKEND("/save", "POST", { savedData: data });
-    console.log(response);
+    const response = await utils.BACKEND("/save", "POST", {
+      savedData: likeData,
+    });
+    if (response?.status == true) {
+      setLikeIt(true);
+    }
   };
   const unSave = async () => {};
-  return isLiked ? (
+  return likeIt ? (
     <button className={styleClass} onClick={() => unSave()}>
       <img src={filledSrc} />
     </button>
