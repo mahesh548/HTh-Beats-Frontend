@@ -33,6 +33,7 @@ export default function HashProvider({ children }) {
           ? location.pathname
           : `${location.pathname}?open=${newOpenElements.join("&open=")}`;
       navigate(url, { replace: true });
+      history.go(-1);
     }
   };
   return (

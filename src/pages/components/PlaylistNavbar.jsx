@@ -26,6 +26,69 @@ export default function PlaylistNavbar({ response, setData, display }) {
     }
   }, [response]);
 
+  const sorting = (type) => {
+    if (type == "title") {
+      const sortedData = response.list.sort((a, b) => {
+        return a.title.localeCompare(b.title, undefined, {
+          sensitivity: "base",
+        });
+      });
+      console.log(sortedData);
+      setData({ ...response, list: sortedData });
+    }
+    if (type == "album") {
+      const sortedData = response.list.sort((a, b) => {
+        return a.more_info?.album?.localeCompare(
+          b.more_info?.album,
+          undefined,
+          {
+            sensitivity: "base",
+          }
+        );
+      });
+      console.log(sortedData);
+      setData({ ...response, list: sortedData });
+    }
+    if (type == "artist") {
+      const sortedData = response.list.sort((a, b) => {
+        return a.more_info?.artistMap?.primary_artists[0]?.name?.localeCompare(
+          b.more_info?.artistMap?.primary_artists[0]?.name,
+          undefined,
+          {
+            sensitivity: "base",
+          }
+        );
+      });
+      console.log(sortedData);
+      setData({ ...response, list: sortedData });
+    }
+    if (type == "duration") {
+      const sortedData = response.list.sort((a, b) => {
+        return b.more_info.duration - a.more_info.duration;
+      });
+      console.log(sortedData);
+      setData({ ...response, list: sortedData });
+    }
+    if (type == "play_count") {
+      const sortedData = response.list.sort((a, b) => {
+        return b?.play_count - a?.play_count;
+      });
+      console.log(sortedData);
+      setData({ ...response, list: sortedData });
+    }
+    if (type == "release_date") {
+      const sortedData = response.list.sort((a, b) => {
+        return (
+          new Date(b.more_info?.release_date) -
+          new Date(a.more_info?.release_date)
+        );
+      });
+      console.log(sortedData);
+      setData({ ...response, list: sortedData });
+    }
+    setSorted(type);
+  };
+
   const searchPlaylist = (e) => {
     if (e.target.value.length == 0) {
       setIsOn(false);
@@ -44,23 +107,7 @@ export default function PlaylistNavbar({ response, setData, display }) {
     <>
       <OffCanvas open={isCanvasOpen} dismiss={() => close("sort")}>
         <div className="sortCont">
-          <button onClick={() => setSorted("default")}>
-            <p>Default</p>
-            {sorted == "default" ? (
-              <RadioButtonChecked />
-            ) : (
-              <RadioButtonUncheckedOutlined />
-            )}
-          </button>
-          <button onClick={() => setSorted("artist")}>
-            <p>Artist</p>
-            {sorted == "artist" ? (
-              <RadioButtonChecked />
-            ) : (
-              <RadioButtonUncheckedOutlined />
-            )}
-          </button>
-          <button onClick={() => setSorted("title")}>
+          <button onClick={() => sorting("title")}>
             <p>Title</p>
             {sorted == "title" ? (
               <RadioButtonChecked />
@@ -68,9 +115,41 @@ export default function PlaylistNavbar({ response, setData, display }) {
               <RadioButtonUncheckedOutlined />
             )}
           </button>
-          <button onClick={() => setSorted("release_date")}>
+          <button onClick={() => sorting("artist")}>
+            <p>Artist</p>
+            {sorted == "artist" ? (
+              <RadioButtonChecked />
+            ) : (
+              <RadioButtonUncheckedOutlined />
+            )}
+          </button>
+          <button onClick={() => sorting("album")}>
+            <p>Album</p>
+            {sorted == "album" ? (
+              <RadioButtonChecked />
+            ) : (
+              <RadioButtonUncheckedOutlined />
+            )}
+          </button>
+          <button onClick={() => sorting("release_date")}>
             <p>Release Date</p>
             {sorted == "release_date" ? (
+              <RadioButtonChecked />
+            ) : (
+              <RadioButtonUncheckedOutlined />
+            )}
+          </button>
+          <button onClick={() => sorting("play_count")}>
+            <p>Most Played</p>
+            {sorted == "play_count" ? (
+              <RadioButtonChecked />
+            ) : (
+              <RadioButtonUncheckedOutlined />
+            )}
+          </button>
+          <button onClick={() => sorting("duration")}>
+            <p>Duration</p>
+            {sorted == "duration" ? (
               <RadioButtonChecked />
             ) : (
               <RadioButtonUncheckedOutlined />
