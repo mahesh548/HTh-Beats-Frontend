@@ -23,6 +23,13 @@ body {
   --rsbs-max-w: auto;
   --rsbs-overlay-rounded: 16px;
 }
+.rsbs-backdrop {
+  z-index: 50 !important;
+}
+
+.rsbs-root {
+  z-index: 51 !important;
+}
 #root {
   height: 100dvh;
   width: 100vw;

@@ -8,12 +8,14 @@ import {
 import utils from "../../../utils";
 import OffCanvas from "./BottomSheet";
 import { HashContext } from "./Hash";
+import { useNavigate } from "react-router";
 
 export default function PlaylistNavbar({ response, setData, display }) {
   const [bg, setBg] = useState("#8d8d8d");
   const [isOn, setIsOn] = useState(false);
   const [sorted, setSorted] = useState("default");
   const { open, close, openElements } = useContext(HashContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const setColor = async () => {
@@ -33,7 +35,7 @@ export default function PlaylistNavbar({ response, setData, display }) {
           sensitivity: "base",
         });
       });
-      console.log(sortedData);
+
       setData({ ...response, list: sortedData });
     }
     if (type == "album") {
@@ -46,7 +48,7 @@ export default function PlaylistNavbar({ response, setData, display }) {
           }
         );
       });
-      console.log(sortedData);
+
       setData({ ...response, list: sortedData });
     }
     if (type == "artist") {
@@ -59,21 +61,21 @@ export default function PlaylistNavbar({ response, setData, display }) {
           }
         );
       });
-      console.log(sortedData);
+
       setData({ ...response, list: sortedData });
     }
     if (type == "duration") {
       const sortedData = response.list.sort((a, b) => {
         return b.more_info.duration - a.more_info.duration;
       });
-      console.log(sortedData);
+
       setData({ ...response, list: sortedData });
     }
     if (type == "play_count") {
       const sortedData = response.list.sort((a, b) => {
         return b?.play_count - a?.play_count;
       });
-      console.log(sortedData);
+
       setData({ ...response, list: sortedData });
     }
     if (type == "release_date") {
@@ -83,7 +85,7 @@ export default function PlaylistNavbar({ response, setData, display }) {
           new Date(a.more_info?.release_date)
         );
       });
-      console.log(sortedData);
+
       setData({ ...response, list: sortedData });
     }
     setSorted(type);
@@ -100,7 +102,7 @@ export default function PlaylistNavbar({ response, setData, display }) {
     });
     setData({ ...response, list: filterData });
   };
-  console.log(openElements);
+
   const isCanvasOpen = openElements.includes("sort");
 
   return (
@@ -161,10 +163,14 @@ export default function PlaylistNavbar({ response, setData, display }) {
         className="playlistNavbar"
         style={{
           backgroundColor: bg,
-          display: !display || isOn ? "grid" : "none",
+          display:
+            !display ||
+            document.getElementById("playlistSearchBar")?.value?.length > 0
+              ? "grid"
+              : "none",
         }}
       >
-        <button className="iconButton">
+        <button className="iconButton" onClick={() => navigate(-1)}>
           <ArrowBack />
         </button>
         {isOn ? (
@@ -173,6 +179,7 @@ export default function PlaylistNavbar({ response, setData, display }) {
               type="text"
               placeholder="Search this playlist"
               onInput={(e) => searchPlaylist(e)}
+              id="playlistSearchBar"
             />
             <button onClick={() => open("sort")}>Sort</button>
           </div>
