@@ -20,6 +20,7 @@ import playlistOutlined from "../../assets/icons/playlistOutlined.svg";
 import Like from "./Like";
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
+
   const navigate = useNavigate();
   const location = useLocation();
   const closePlayer = () => {
@@ -46,6 +47,24 @@ export default function Player() {
     () => utils.getItemFromId(Queue.song, Queue.playlist.list),
     [Queue.song, Queue.playlist]
   );
+
+  useMemo(() => {
+    console.log("song changes");
+    console.log(Queue.song);
+  }, [Queue.song]);
+
+  const likeData = useMemo(() => {
+    console.log(".......");
+    const playlistPreference = localStorage?.preferedPlaylist;
+    if (playlistPreference) {
+      return {
+        type: "song",
+        id: [Queue.song], // This will now update properly
+        playlistIds: JSON.parse(playlistPreference),
+      };
+    }
+    return null;
+  }, [Queue.song]);
 
   return (
     <div className="playerCont">
@@ -98,6 +117,8 @@ export default function Player() {
               isLiked={false}
               outlinedSrc={likeOutlined}
               filledSrc={likeFilled}
+              likeData={likeData}
+              depend={Queue.song}
             />
 
             <button className="lyricsLine">

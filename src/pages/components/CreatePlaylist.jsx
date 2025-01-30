@@ -45,6 +45,7 @@ export default function CreatePlaylist({ response }) {
     id: response?.id,
     type: "entity",
   };
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>

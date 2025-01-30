@@ -8,12 +8,16 @@ export default function Like({
   outlinedSrc,
   filledSrc,
   likeData,
+  depend,
 }) {
   const [likeIt, setLikeIt] = useState();
 
-  useEffect(() => {
-    setLikeIt(isLiked);
-  }, []);
+  useEffect(
+    () => {
+      setLikeIt(isLiked);
+    },
+    depend ? [depend] : []
+  );
 
   const save = async () => {
     setLikeIt(true);
@@ -47,7 +51,7 @@ export default function Like({
       };
       req();
     }, 500),
-    []
+    [likeData]
   );
 
   return likeIt ? (
