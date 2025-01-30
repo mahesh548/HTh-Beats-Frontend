@@ -48,18 +48,12 @@ export default function Player() {
     [Queue.song, Queue.playlist]
   );
 
-  useMemo(() => {
-    console.log("song changes");
-    console.log(Queue.song);
-  }, [Queue.song]);
-
   const likeData = useMemo(() => {
-    console.log(".......");
     const playlistPreference = localStorage?.preferedPlaylist;
     if (playlistPreference) {
       return {
         type: "song",
-        id: [Queue.song], // This will now update properly
+        id: [Queue.song],
         playlistIds: JSON.parse(playlistPreference),
       };
     }
@@ -114,7 +108,7 @@ export default function Player() {
 
             <Like
               styleClass=""
-              isLiked={false}
+              isLiked={data.savedIn.length > 0}
               outlinedSrc={likeOutlined}
               filledSrc={likeFilled}
               likeData={likeData}

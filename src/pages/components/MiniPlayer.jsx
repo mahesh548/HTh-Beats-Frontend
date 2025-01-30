@@ -1,10 +1,11 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { songContext } from "./Song";
 import utils from "../../../utils";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
-import likeOutlinedPlayer from "../../assets/icons/likeOutlinedPlayer.svg";
-import likeFilled from "../../assets/icons/likeFilled.svg";
+
 import { HashContext } from "./Hash";
+import likeFilled from "../../assets/icons/likeFilled.svg";
+import likeOutlined from "../../assets/icons/likeOutlinedPlayer.svg";
 import Like from "./Like";
 
 export default function MiniPlayer() {
@@ -30,6 +31,18 @@ export default function MiniPlayer() {
   const data = utils.getItemFromId(Queue.song, Queue.playlist.list);
   setColor(data.image);
 
+  const likeData = useMemo(() => {
+    const playlistPreference = localStorage?.preferedPlaylist;
+    if (playlistPreference) {
+      return {
+        type: "song",
+        id: [Queue.song],
+        playlistIds: JSON.parse(playlistPreference),
+      };
+    }
+    return null;
+  }, [Queue.song]);
+
   return (
     <div className="playlistSong miniPlayer" id="miniPlayer">
       <div className="miniRange RANGE"></div>
@@ -54,9 +67,11 @@ export default function MiniPlayer() {
       <div>
         <Like
           styleClass="miniPlayerButton"
-          isLiked={false}
-          outlinedSrc={likeOutlinedPlayer}
+          isLiked={data.savedIn.length > 0}
+          outlinedSrc={likeOutlined}
           filledSrc={likeFilled}
+          likeData={likeData}
+          depend={Queue.song}
         />
       </div>
       <div>
