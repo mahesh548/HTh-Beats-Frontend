@@ -22,9 +22,15 @@ const playPrev = (Queue) => {
 };
 
 const songReducer = (state, action) => {
+  let liked = [];
   switch (action.type) {
     case "PLAYLIST":
-      return { ...state, playlist: action.value };
+      action.value.list.forEach((item) => {
+        if (item.savedIn.length > 0) {
+          liked.push(item.id);
+        }
+      });
+      return { ...state, playlist: action.value, saved: liked };
 
     case "SONG":
       return { ...state, song: action.value };
@@ -33,7 +39,12 @@ const songReducer = (state, action) => {
       return { ...state, status: action.value };
 
     case "NEW":
-      return { ...action.value };
+      action.value.playlist.list.forEach((item) => {
+        if (item.savedIn.length > 0) {
+          liked.push(item.id);
+        }
+      });
+      return { ...action.value, saved: liked };
     case "NEXT":
       return { ...state, song: playNext(state), status: "play" };
     case "PREV":

@@ -233,6 +233,7 @@ p {
   gap: 5px;
   transform: translateZ(0);
   padding-top: 35px;
+  z-index: 1;
 }
 .navBOTTOM a {
   text-decoration: none;
@@ -568,6 +569,9 @@ p {
   color: black;
   border-radius: 100%;
   border: 0px;
+}
+.playlistSongLike {
+  scale: 0.7;
 }
 .playlistButton svg {
   height: 30px;

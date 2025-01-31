@@ -1,23 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import utils from "../../../utils";
 import { debounce } from "lodash";
+import likeOutlined from "../../assets/icons/likeOutlined.svg";
+import likeFilled from "../../assets/icons/likeFilled.svg";
 
-export default function Like({
-  isLiked,
-  styleClass,
-  outlinedSrc,
-  filledSrc,
-  likeData,
-  depend,
-}) {
-  const [likeIt, setLikeIt] = useState();
+export default function LikeEntity({ isLiked, styleClass, likeData }) {
+  const [likeIt, setLikeIt] = useState(false);
 
-  useEffect(
-    () => {
-      setLikeIt(isLiked);
-    },
-    depend ? [depend] : []
-  );
+  useEffect(() => {
+    setLikeIt(isLiked);
+  }, []);
 
   const save = async () => {
     setLikeIt(true);
@@ -56,11 +48,11 @@ export default function Like({
 
   return likeIt ? (
     <button className={styleClass} onClick={() => unSave()}>
-      <img src={filledSrc} />
+      <img src={likeFilled} />
     </button>
   ) : (
     <button className={styleClass} onClick={() => save()}>
-      <img src={outlinedSrc} />
+      <img src={likeOutlined} />
     </button>
   );
 }

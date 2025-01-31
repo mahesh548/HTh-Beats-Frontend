@@ -1,8 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import utils from "../../../utils";
 import BackButton from "./BackButton";
-import likeOutlined from "../../assets/icons/likeOutlined.svg";
-import likeFilled from "../../assets/icons/likeFilled.svg";
 
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
@@ -11,7 +9,7 @@ import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
 import PlaylistNavbar from "./PlaylistNavbar";
-import Like from "./Like";
+import LikeEntity from "./LikeEntity";
 
 export default function CreatePlaylist({ response }) {
   const [data, setData] = useState(response);
@@ -78,11 +76,9 @@ export default function CreatePlaylist({ response }) {
         </div>
         <div className="playlistButtonCont">
           <div>
-            <Like
+            <LikeEntity
               isLiked={data.isLiked}
               styleClass="playlistButtonSecondary"
-              outlinedSrc={likeOutlined}
-              filledSrc={likeFilled}
               likeData={likeData}
             />
             <button className="playlistButtonSecondary">
@@ -113,6 +109,7 @@ export default function CreatePlaylist({ response }) {
       </div>
       <div className="songList">
         {data.list.map((item) => {
+          const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
           return (
             <PlaylistSong
               data={item}
@@ -120,6 +117,7 @@ export default function CreatePlaylist({ response }) {
               more_opt={more_opt}
               key={item.id}
               isPlaying={item.id == Queue.song}
+              isLiked={item.savedIn.length > 0 || isLiked}
             />
           );
         })}

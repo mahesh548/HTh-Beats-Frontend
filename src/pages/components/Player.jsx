@@ -13,18 +13,20 @@ import {
 } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router";
 import utils from "../../../utils";
-import likeOutlined from "../../assets/icons/likeOutlinedPlayer.svg";
-import likeFilled from "../../assets/icons/likeFilled.svg";
+
 import downloadOutlined from "../../assets/icons/downloadOutlinedPlayer.svg";
 import playlistOutlined from "../../assets/icons/playlistOutlined.svg";
-import Like from "./Like";
+import LikeSong from "./LikeSong";
+import { HashContext } from "./Hash";
+
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
+  const { close } = useContext(HashContext);
 
   const navigate = useNavigate();
   const location = useLocation();
   const closePlayer = () => {
-    navigate(location.pathname);
+    close("player");
   };
   if (Queue?.song?.length == undefined) {
     closePlayer();
@@ -106,13 +108,10 @@ export default function Player() {
               </p>
             </div>
 
-            <Like
+            <LikeSong
               styleClass=""
               isLiked={data.savedIn.length > 0}
-              outlinedSrc={likeOutlined}
-              filledSrc={likeFilled}
               likeData={likeData}
-              depend={Queue.song}
             />
 
             <button className="lyricsLine">

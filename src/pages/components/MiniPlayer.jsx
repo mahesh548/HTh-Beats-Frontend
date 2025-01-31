@@ -4,9 +4,7 @@ import utils from "../../../utils";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
 
 import { HashContext } from "./Hash";
-import likeFilled from "../../assets/icons/likeFilled.svg";
-import likeOutlined from "../../assets/icons/likeOutlinedPlayer.svg";
-import Like from "./Like";
+import LikeSong from "./LikeSong";
 
 export default function MiniPlayer() {
   const { Queue, setQueue } = useContext(songContext);
@@ -65,13 +63,10 @@ export default function MiniPlayer() {
         </p>
       </div>
       <div>
-        <Like
+        <LikeSong
           styleClass="miniPlayerButton"
           isLiked={data.savedIn.length > 0}
-          outlinedSrc={likeOutlined}
-          filledSrc={likeFilled}
           likeData={likeData}
-          depend={Queue.song}
         />
       </div>
       <div>

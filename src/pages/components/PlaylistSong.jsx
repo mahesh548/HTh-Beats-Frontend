@@ -1,7 +1,25 @@
 import { MoreVertRounded } from "@mui/icons-material";
 import utils from "../../../utils";
-import likeFilled from "../../assets/icons/likeFilled.svg";
-export default function PlaylistSong({ data, play, more_opt, isPlaying }) {
+import LikeSong from "./LikeSong";
+import { useMemo } from "react";
+export default function PlaylistSong({
+  data,
+  play,
+  more_opt,
+  isPlaying,
+  isLiked,
+}) {
+  const likeData = useMemo(() => {
+    const playlistPreference = localStorage?.preferedPlaylist;
+    if (playlistPreference) {
+      return {
+        type: "song",
+        id: [data.id],
+        playlistIds: JSON.parse(playlistPreference),
+      };
+    }
+    return null;
+  }, []);
   return (
     <div className="playlistSong">
       <img
@@ -30,9 +48,15 @@ export default function PlaylistSong({ data, play, more_opt, isPlaying }) {
         </p>
       </div>
       <div>
-        {/* <button className="playlistSongButton">
-          <img src={likeFilled} alt="" />
-        </button> */}
+        {isLiked ? (
+          <LikeSong
+            styleClass="playlistSongButton playlistSongLike"
+            isLiked={isLiked}
+            likeData={likeData}
+          />
+        ) : (
+          <></>
+        )}
       </div>
       <div>
         <button className="playlistSongButton">
