@@ -11,7 +11,6 @@ import {
   SkipNextRounded,
   SkipPreviousRounded,
 } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router";
 import utils from "../../../utils";
 
 import downloadOutlined from "../../assets/icons/downloadOutlinedPlayer.svg";
@@ -23,8 +22,6 @@ export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
   const { close } = useContext(HashContext);
 
-  const navigate = useNavigate();
-  const location = useLocation();
   const closePlayer = () => {
     close("player");
   };

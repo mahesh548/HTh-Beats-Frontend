@@ -1,5 +1,5 @@
 import { BottomSheet } from "react-spring-bottom-sheet";
-import "react-spring-bottom-sheet/dist/style.css";
+import "../../BottomSheet.css";
 export default function OffCanvas({ children, open, dismiss }) {
   return (
     <BottomSheet
