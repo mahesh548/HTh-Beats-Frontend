@@ -16,6 +16,7 @@ body {
 :root {
   --thin-text-color: #c1c1c1;
   --thin-text-line-height: 1.2;
+  --light-dark-bg: #1e1e1e;
 
   --rsbs-backdrop-bg: #00000099;
   --rsbs-bg: #3c3c3c;
@@ -834,4 +835,42 @@ p {
 .blurPage img {
   height: 100dvh;
   width: 100%;
+}
+/* FLOATING PAGE */
+.floatingPage {
+  height: 100dvh;
+  width: 100%;
+  position: fixed;
+  z-index: 101;
+  top: 0;
+  left: 0;
+  background-color: black;
+}
+.navbarFloating {
+  display: grid;
+  grid-template-columns: 50px auto;
+  align-items: center;
+  justify-items: center;
+  background-color: var(--light-dark-bg);
+  p {
+    color: white;
+    font-size: 20px;
+  }
+}
+.plCont {
+  display: grid;
+  background-color: transparent;
+  border: none;
+  display: grid;
+  grid-template-columns: auto 40px;
+  color: white;
+  width: 100%;
+  justify-items: start;
+  align-items: center;
+  margin-top: 15px;
+  font-size: 20px;
+  padding: 10px;
+  img {
+    height: 30px;
+  }
 }

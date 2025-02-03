@@ -5,10 +5,13 @@ import { debounce } from "lodash";
 import likeOutlined from "../../assets/icons/likeOutlinedPlayer.svg";
 import likeFilled from "../../assets/icons/likeFilled.svg";
 import { songContext } from "./Song";
+import { HashContext } from "./Hash";
+import AddToPlaylist from "./AddToPlaylist";
 
 export default function LikeSong({ isLiked, styleClass, likeData }) {
   const { Queue, setQueue } = useContext(songContext);
   const [likeIt, setLikeIt] = useState(false);
+  const { openElements, open } = useContext(HashContext);
   useEffect(() => {
     setLikeIt(isLiked);
   }, [isLiked]);
@@ -38,7 +41,7 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
     setLikeIt(false);
 
     /* callApi("dislike"); */
-    console.log("initialize dislike");
+    open("addToPlaylist");
   };
 
   const callApi = useCallback(
@@ -65,13 +68,20 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
     [likeData]
   );
 
-  return likeIt ? (
-    <button className={styleClass} onClick={() => unSave()}>
-      <img src={likeFilled} />
-    </button>
-  ) : (
-    <button className={styleClass} onClick={() => save()}>
-      <img src={likeOutlined} />
-    </button>
+  return (
+    <>
+      {likeIt ? (
+        <button className={styleClass} onClick={() => unSave()}>
+          <img src={likeFilled} />
+        </button>
+      ) : (
+        <button className={styleClass} onClick={() => save()}>
+          <img src={likeOutlined} />
+        </button>
+      )}
+      {openElements.includes("addToPlaylist") && (
+        <AddToPlaylist playlistIds={likeData.playlistIds} />
+      )}
+    </>
   );
 }

@@ -39,6 +39,7 @@ export default function Navbar() {
   return (
     <>
       <Audio />
+
       {openElements.includes("player") && <Player />}
       <MiniPlayer />
 
