@@ -11,56 +11,55 @@ import AddToPlaylist from "./AddToPlaylist";
 export default function LikeSong({ isLiked, styleClass, likeData }) {
   const { Queue, setQueue } = useContext(songContext);
   const [likeIt, setLikeIt] = useState(false);
-  const { openElements, open } = useContext(HashContext);
+  const { openElements, open, close } = useContext(HashContext);
   useEffect(() => {
+    console.log("changing is liked");
     setLikeIt(isLiked);
   }, [isLiked]);
-  const setStatus = (status) => {
-    if (status) {
-      const newList = Queue.playlist.list.map((item) => {
-        if (likeData.id.includes(item.id)) {
-          item.savedIn = likeData.playlistIds;
-        }
-        return item;
-      });
+  const setStatus = (ids) => {
+    if (!Queue.playlist) return;
+    const newList = Queue.playlist.list.map((item) => {
+      if (likeData.id.includes(item.id)) {
+        item.savedIn = ids;
+      }
+      return item;
+    });
 
-      setQueue({
-        type: "PLAYLIST",
-        value: { ...Queue.playlist, list: newList },
-      });
+    setQueue({
+      type: "PLAYLIST",
+      value: { ...Queue.playlist, list: newList },
+    });
+  };
+  const makeChanges = async (obj) => {
+    const { savedTo, removedFrom } = obj;
+    close("addToPlaylist");
+
+    if (savedTo.length > 0) {
+      setLikeIt(true);
     } else {
-      console.log("initalize dislike");
+      setLikeIt(false);
     }
+    if (removedFrom.length > 0) {
+    }
+    const original = likeData.playlistIds.filter(
+      (item) => !removedFrom.includes(item)
+    );
+    setStatus([...savedTo, ...original]);
   };
 
   const save = async () => {
     setLikeIt(true);
-    callApi("like");
-  };
-  const unSave = async () => {
-    setLikeIt(false);
-
-    /* callApi("dislike"); */
-    open("addToPlaylist");
+    callApi();
   };
 
   const callApi = useCallback(
-    debounce((action) => {
+    debounce(() => {
       const req = async () => {
-        if (action == "like") {
-          const response = await utils.BACKEND("/save", "POST", {
-            savedData: likeData,
-          });
-          if (response?.status == true) {
-            setStatus(true);
-          }
-        } else {
-          const response = await utils.BACKEND("/save", "DELETE", {
-            savedData: likeData,
-          });
-          if (response?.status == true) {
-            setStatus(false);
-          }
+        const response = await utils.BACKEND("/save", "POST", {
+          savedData: likeData,
+        });
+        if (response?.status == true) {
+          setStatus(likeData.playlistIds);
         }
       };
       req();
@@ -68,10 +67,14 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
     [likeData]
   );
 
+  useEffect(() => {
+    console.log(likeIt);
+  }, [likeIt]);
+
   return (
     <>
       {likeIt ? (
-        <button className={styleClass} onClick={() => unSave()}>
+        <button className={styleClass} onClick={() => open("addToPlaylist")}>
           <img src={likeFilled} />
         </button>
       ) : (
@@ -79,8 +82,12 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
           <img src={likeOutlined} />
         </button>
       )}
+
       {openElements.includes("addToPlaylist") && (
-        <AddToPlaylist playlistIds={likeData.playlistIds} />
+        <AddToPlaylist
+          playlistIds={likeData.playlistIds}
+          makeChanges={(obj) => makeChanges(obj)}
+        />
       )}
     </>
   );
