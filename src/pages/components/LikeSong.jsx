@@ -13,7 +13,6 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
   const { openElements, open, close } = useContext(HashContext);
 
   useEffect(() => {
-    console.log(`${likeData.id[0]} is liked: ${isLiked}`);
     setLikeIt(isLiked);
   }, [isLiked]);
 
@@ -43,10 +42,16 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
         close(`add_${likeData.id[0]}`);
 
         if (savedTo.length > 0) {
-          console.log("added to playlist");
+          const dataTosend = { ...likeData, playlistIds: savedTo };
+          await utils.BACKEND("/save", "POST", {
+            savedData: dataTosend,
+          });
         }
         if (removedFrom.length > 0) {
-          console.log("removed from playlist");
+          const dataTosend = { ...likeData, playlistIds: removedFrom };
+          await utils.BACKEND("/save", "DELETE", {
+            savedData: dataTosend,
+          });
         }
 
         setStatus(original);
