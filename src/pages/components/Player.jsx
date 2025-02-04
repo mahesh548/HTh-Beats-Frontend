@@ -17,10 +17,11 @@ import downloadOutlined from "../../assets/icons/downloadOutlinedPlayer.svg";
 import playlistOutlined from "../../assets/icons/playlistOutlined.svg";
 import LikeSong from "./LikeSong";
 import { HashContext } from "./Hash";
+import QueuePage from "./QueuePage";
 
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
-  const { close } = useContext(HashContext);
+  const { openElements, open, close } = useContext(HashContext);
 
   const closePlayer = () => {
     close("player");
@@ -65,6 +66,7 @@ export default function Player() {
         <div></div>
         <img src={data.image} alt="" />
       </div>
+      {openElements.includes("queue") && <QueuePage />}
       <div className="player">
         <div className="playerNav">
           <button onClick={() => closePlayer()}>
@@ -147,7 +149,10 @@ export default function Player() {
             <button onClick={() => setQueue({ type: "NEXT" })}>
               <SkipNextRounded style={{ fontSize: "60px" }} />
             </button>
-            <button style={{ justifyContent: "end" }}>
+            <button
+              style={{ justifyContent: "end" }}
+              onClick={() => open("queue")}
+            >
               <img src={playlistOutlined} width={"30px"} />
             </button>
           </div>

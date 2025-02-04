@@ -889,3 +889,21 @@ p {
   font-weight: 500;
   background-color: wheat;
 }
+
+/* QUEUE PAGE */
+
+.chips {
+  background-color: var(--light-dark-bg);
+  color: white;
+  padding: 5px 20px;
+  border-radius: 40px;
+  border: none;
+  margin-left: 10px;
+  font-size: 15px;
+}
+.chipsActive {
+  background-color: wheat;
+  color: black;
+}
+.upNextCont {
+}

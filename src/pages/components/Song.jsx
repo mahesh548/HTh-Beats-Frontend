@@ -38,6 +38,9 @@ const songReducer = (state, action) => {
     case "STATUS":
       return { ...state, status: action.value };
 
+    case "ADDPREV":
+      return { ...state, prev: action.value };
+
     case "NEW":
       action.value.playlist.list.forEach((item) => {
         if (item.savedIn.length > 0) {
