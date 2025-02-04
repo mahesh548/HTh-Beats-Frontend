@@ -53,6 +53,7 @@ export default function PlaylistSong({
             styleClass="playlistSongButton playlistSongLike"
             isLiked={isLiked}
             likeData={likeData}
+            key={data.id}
           />
         ) : (
           <></>
