@@ -891,7 +891,12 @@ p {
 }
 
 /* QUEUE PAGE */
-
+.queuePageLayout {
+  display: grid;
+  row-gap: 10px;
+  height: 100dvh;
+  grid-template-rows: max-content max-content auto;
+}
 .chips {
   background-color: var(--light-dark-bg);
   color: white;
@@ -905,5 +910,25 @@ p {
   background-color: wheat;
   color: black;
 }
+.sortPlaylistSong {
+  display: grid;
+  grid-template-columns: 25px auto;
+  column-gap: 5px;
+  align-items: center;
+}
 .upNextCont {
+  height: 100%;
+  overflow: scroll;
+  padding-bottom: 50px;
+}
+.dragHand {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  align-items: center;
+  color: var(--thin-text-color);
+  opacity: 0.5;
+}
+.sortableHelper {
+  z-index: 10000000001;
 }
