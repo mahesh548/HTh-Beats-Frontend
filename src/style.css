@@ -911,8 +911,8 @@ p {
   font-size: 15px;
 }
 .chipsActive {
-  background-color: wheat;
-  color: black;
+  background-color: #f5deb347;
+  color: wheat;
 }
 .sortPlaylistSong {
   display: grid;
