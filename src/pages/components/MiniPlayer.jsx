@@ -6,6 +6,8 @@ import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
 import { HashContext } from "./Hash";
 import LikeSong from "./LikeSong";
 
+import SwipeableViews from "react-swipeable-views";
+
 export default function MiniPlayer() {
   const { Queue, setQueue } = useContext(songContext);
   const { open } = useContext(HashContext);
@@ -50,18 +52,43 @@ export default function MiniPlayer() {
         className="playlistSongImg miniPlayerPoster"
         onClick={() => open("player")}
       />
-      <div onClick={() => open("player")}>
-        <p className="thinOneLineText playlistSongTitle">
-          {utils.refineText(data.title)}
-        </p>
-        <p className="thinOneLineText playlistSongSubTitle">
-          {data.subtitle?.length != 0
-            ? utils.refineText(data.subtitle)
-            : utils.refineText(
-                `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
-              )}
-        </p>
-      </div>
+
+      <SwipeableViews
+        resistance
+        index={(() => {
+          return Queue.playlist.list.indexOf(
+            utils.getItemFromId(Queue.song, Queue.playlist.list)
+          );
+        })()}
+        onChangeIndex={(index) => {
+          const currentIndex = Queue.playlist.list.indexOf(
+            utils.getItemFromId(Queue.song, Queue.playlist.list)
+          );
+          if (index > currentIndex) {
+            setQueue({ type: "NEXT" });
+          }
+          if (index < currentIndex) {
+            setQueue({ type: "PREV" });
+          }
+        }}
+      >
+        {Queue.playlist.list.map((item) => {
+          return (
+            <div onClick={() => open("player")}>
+              <p className="thinOneLineText playlistSongTitle">
+                {utils.refineText(item.title)}
+              </p>
+              <p className="thinOneLineText playlistSongSubTitle">
+                {data.subtitle?.length != 0
+                  ? utils.refineText(item.subtitle)
+                  : utils.refineText(
+                      `${item.more_info?.music}, ${item.more_info?.album}, ${item.more_info?.label}`
+                    )}
+              </p>
+            </div>
+          );
+        })}
+      </SwipeableViews>
       <div>
         <LikeSong
           styleClass="miniPlayerButton"
