@@ -87,12 +87,14 @@ export default function QueuePage() {
           >
             Next
           </button>
-          <button
-            className={`chips ${chips == "prev" ? "chipsActive" : ""}`}
-            onClick={() => setChips("prev")}
-          >
-            Previous
-          </button>
+          {Queue?.previous?.length > 0 && (
+            <button
+              className={`chips ${chips == "prev" ? "chipsActive" : ""}`}
+              onClick={() => setChips("prev")}
+            >
+              Previous
+            </button>
+          )}
         </div>
         {chips == "all" && (
           <div className="upNextCont hiddenScrollbar">
@@ -122,6 +124,26 @@ export default function QueuePage() {
               helperClass="sortableHelper"
               lockAxis="y"
             />
+          </div>
+        )}
+        {chips == "prev" && (
+          <div className="upNextCont hiddenScrollbar prevCont">
+            {Queue.playlist.list
+              .filter((item) => Queue.previous.includes(item.id))
+              .reverse()
+              .map((item) => {
+                const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
+                return (
+                  <PlaylistSong
+                    data={item}
+                    play={play}
+                    more_opt={more_opt}
+                    key={`song_${item.id}`}
+                    isPlaying={item.id == Queue.song}
+                    isLiked={item.savedIn.length > 0 || isLiked}
+                  />
+                );
+              })}
           </div>
         )}
       </div>

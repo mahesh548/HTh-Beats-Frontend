@@ -932,3 +932,6 @@ p {
 .sortableHelper {
   z-index: 10000000001;
 }
+.prevCont {
+  padding: 0px 10px;
+}

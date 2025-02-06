@@ -33,13 +33,16 @@ const songReducer = (state, action) => {
       return { ...state, playlist: action.value, saved: liked };
 
     case "SONG":
-      return { ...state, song: action.value, status: "play" };
+      const songId = action.value;
+      return {
+        ...state,
+        song: songId,
+        status: "play",
+        previous: [...new Set([...state.previous, songId])],
+      };
 
     case "STATUS":
       return { ...state, status: action.value };
-
-    case "ADDPREV":
-      return { ...state, prev: action.value };
 
     case "NEW":
       action.value.playlist.list.forEach((item) => {
@@ -47,11 +50,23 @@ const songReducer = (state, action) => {
           liked.push(item.id);
         }
       });
-      return { ...action.value, saved: liked };
+      return { ...action.value, saved: liked, previous: [action.value.song] };
     case "NEXT":
-      return { ...state, song: playNext(state), status: "play" };
+      const nextId = playNext(state);
+      return {
+        ...state,
+        song: nextId,
+        status: "play",
+        previous: [...new Set([...state.previous, nextId])],
+      };
     case "PREV":
-      return { ...state, song: playPrev(state), status: "play" };
+      const prevId = playPrev(state);
+      return {
+        ...state,
+        song: prevId,
+        status: "play",
+        previous: [...new Set([...state.previous, prevId])],
+      };
     default:
       return { ...state };
   }
