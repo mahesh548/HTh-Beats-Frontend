@@ -33,7 +33,7 @@ const songReducer = (state, action) => {
       return { ...state, playlist: action.value, saved: liked };
 
     case "SONG":
-      return { ...state, song: action.value };
+      return { ...state, song: action.value, status: "play" };
 
     case "STATUS":
       return { ...state, status: action.value };

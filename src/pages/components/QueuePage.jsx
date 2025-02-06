@@ -7,13 +7,22 @@ import {
   SortableElement,
   SortableHandle,
 } from "react-sortable-hoc";
+
 import { arrayMoveImmutable } from "array-move";
 import PlaylistSong from "./PlaylistSong";
+import utils from "../../../utils";
 export default function QueuePage() {
-  const [chips, setChips] = useState("next");
+  const [chips, setChips] = useState("all");
   const { Queue, setQueue } = useContext(songContext);
-  const play = () => {};
-  const more_opt = () => {};
+  const play = (id) => {
+    setQueue({
+      type: "SONG",
+      value: id,
+    });
+  };
+  const more_opt = (id) => {
+    console.log("more");
+  };
 
   const DragHand = SortableHandle(() => {
     return (
@@ -67,6 +76,12 @@ export default function QueuePage() {
         </div>
         <div>
           <button
+            className={`chips ${chips == "all" ? "chipsActive" : ""}`}
+            onClick={() => setChips("all")}
+          >
+            All
+          </button>
+          <button
             className={`chips ${chips == "next" ? "chipsActive" : ""}`}
             onClick={() => setChips("next")}
           >
@@ -79,10 +94,29 @@ export default function QueuePage() {
             Previous
           </button>
         </div>
-        {chips == "next" && (
+        {chips == "all" && (
           <div className="upNextCont hiddenScrollbar">
             <SortableList
               items={Queue.playlist.list}
+              onSortEnd={onSortEnd}
+              useDragHandle={true}
+              helperClass="sortableHelper"
+              lockAxis="y"
+            />
+          </div>
+        )}
+        {chips == "next" && (
+          <div className="upNextCont hiddenScrollbar">
+            <SortableList
+              items={(() => {
+                const list = Queue.playlist.list;
+                const currentIndex = list.indexOf(
+                  utils.getItemFromId(Queue.song, list)
+                );
+                return list.filter((item) => {
+                  return list.indexOf(item) > currentIndex;
+                });
+              })()}
               onSortEnd={onSortEnd}
               useDragHandle={true}
               helperClass="sortableHelper"
