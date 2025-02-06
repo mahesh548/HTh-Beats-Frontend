@@ -65,7 +65,7 @@ export default function QueuePage() {
     });
   };
   return (
-    <div className="floatingPage">
+    <div className="queuePage">
       <div className="queuePageLayout">
         <div className="navbarAddTo">
           <BackButton />

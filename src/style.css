@@ -891,6 +891,10 @@ p {
 }
 
 /* QUEUE PAGE */
+.queuePage {
+  height: 100dvh;
+  width: 100%;
+}
 .queuePageLayout {
   display: grid;
   row-gap: 10px;
