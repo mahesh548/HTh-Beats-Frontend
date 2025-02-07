@@ -1,10 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import searchOutlined from "../../assets/icons/searchSvgOutlined.svg";
-import {
-  ArrowBack,
-  RadioButtonChecked,
-  RadioButtonUncheckedOutlined,
-} from "@mui/icons-material";
+import { ArrowBack, Check } from "@mui/icons-material";
 import utils from "../../../utils";
 import OffCanvas from "./BottomSheet";
 import { HashContext } from "./Hash";
@@ -111,51 +107,27 @@ export default function PlaylistNavbar({ response, setData, display }) {
         <div className="sortCont">
           <button onClick={() => sorting("title")}>
             <p>Title</p>
-            {sorted == "title" ? (
-              <RadioButtonChecked />
-            ) : (
-              <RadioButtonUncheckedOutlined />
-            )}
+            {sorted == "title" ? <Check /> : <></>}
           </button>
           <button onClick={() => sorting("artist")}>
             <p>Artist</p>
-            {sorted == "artist" ? (
-              <RadioButtonChecked />
-            ) : (
-              <RadioButtonUncheckedOutlined />
-            )}
+            {sorted == "artist" ? <Check /> : <></>}
           </button>
           <button onClick={() => sorting("album")}>
             <p>Album</p>
-            {sorted == "album" ? (
-              <RadioButtonChecked />
-            ) : (
-              <RadioButtonUncheckedOutlined />
-            )}
+            {sorted == "album" ? <Check /> : <></>}
           </button>
           <button onClick={() => sorting("release_date")}>
             <p>Release Date</p>
-            {sorted == "release_date" ? (
-              <RadioButtonChecked />
-            ) : (
-              <RadioButtonUncheckedOutlined />
-            )}
+            {sorted == "release_date" ? <Check /> : <></>}
           </button>
           <button onClick={() => sorting("play_count")}>
             <p>Most Played</p>
-            {sorted == "play_count" ? (
-              <RadioButtonChecked />
-            ) : (
-              <RadioButtonUncheckedOutlined />
-            )}
+            {sorted == "play_count" ? <Check /> : <></>}
           </button>
           <button onClick={() => sorting("duration")}>
             <p>Duration</p>
-            {sorted == "duration" ? (
-              <RadioButtonChecked />
-            ) : (
-              <RadioButtonUncheckedOutlined />
-            )}
+            {sorted == "duration" ? <Check /> : <></>}
           </button>
         </div>
       </OffCanvas>
