@@ -48,7 +48,7 @@ export default function MiniPlayer() {
       <div className="miniRange RANGE"></div>
       <img
         src={data.image}
-        alt=""
+        alt={data.title}
         className="playlistSongImg miniPlayerPoster"
         onClick={() => open("player")}
       />
@@ -74,7 +74,7 @@ export default function MiniPlayer() {
       >
         {Queue.playlist.list.map((item) => {
           return (
-            <div onClick={() => open("player")}>
+            <div onClick={() => open("player")} key={`miniPlayer_${item.id}`}>
               <p className="thinOneLineText playlistSongTitle">
                 {utils.refineText(item.title)}
               </p>
