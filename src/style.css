@@ -19,8 +19,9 @@ body {
   --light-dark-bg: #1e1e1e;
 
   --rsbs-backdrop-bg: #00000099;
-  --rsbs-bg: #3c3c3c;
-  --rsbs-handle-bg: #ffffffd3;
+
+  --rsbs-bg: #1f1f1f;
+  --rsbs-handle-bg: #636363;
   --rsbs-max-w: auto;
   --rsbs-overlay-rounded: 16px;
 }

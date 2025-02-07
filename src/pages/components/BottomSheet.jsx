@@ -15,8 +15,12 @@ export default function OffCanvas({ children, open, dismiss }) {
     <BottomSheet
       open={open}
       onDismiss={() => handleDismiss()}
-      snapPoints={({ minHeight, maxHeight }) => [minHeight, maxHeight * 0.5]}
-      defaultSnap={({ snapPoints }) => Math.min(...snapPoints)}
+      snapPoints={({ minHeight, maxHeight }) => {
+        return [minHeight + 50, maxHeight];
+      }}
+      defaultSnap={({ snapPoints }) => {
+        return Math.min(...snapPoints);
+      }}
     >
       {children}
     </BottomSheet>
