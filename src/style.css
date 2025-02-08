@@ -718,13 +718,13 @@ p {
   width: 100%;
   margin: auto;
   margin-bottom: 15px;
-  button {
-    background-color: transparent;
-    border: none;
-    padding: 0px;
-    img {
-      width: 35px;
-    }
+}
+.playerDetailsButton {
+  background-color: transparent;
+  border: none;
+  padding: 0px;
+  img {
+    width: 35px;
   }
 }
 .playerTitle {

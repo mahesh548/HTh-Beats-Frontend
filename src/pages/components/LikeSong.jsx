@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import utils from "../../../utils";
 
 import likeOutlined from "../../assets/icons/likeOutlinedPlayer.svg";
@@ -74,13 +74,14 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
     req();
   }, [likeData.id]);
 
+  const eleId = useMemo(() => {
+    return `add_${likeData.id[0]}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [likeData]);
+
   return (
     <>
       {likeIt ? (
-        <button
-          className={styleClass}
-          onClick={() => open(`add_${likeData.id[0]}`)}
-        >
+        <button className={styleClass} onClick={() => open(eleId)}>
           <img src={likeFilled} />
         </button>
       ) : (
@@ -89,7 +90,7 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
         </button>
       )}
 
-      {openElements.includes(`add_${likeData.id[0]}`) && (
+      {openElements.includes(eleId) && (
         <AddToPlaylist
           playlistIds={likeData.playlistIds}
           makeChanges={(obj) => makeChanges(obj)}

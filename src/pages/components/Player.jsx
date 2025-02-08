@@ -115,12 +115,12 @@ export default function Player() {
               </div>
 
               <LikeSong
-                styleClass=""
+                styleClass="playerDetailsButton"
                 isLiked={data.savedIn.length > 0}
                 likeData={likeData}
               />
 
-              <button className="lyricsLine">
+              <button className="lyricsLine playerDetailsButton">
                 <FormatQuoteRounded />
                 <p>{data.more_info?.lyrics_snippet || "No Lyrics"}</p>
               </button>
