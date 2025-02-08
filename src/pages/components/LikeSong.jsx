@@ -6,6 +6,7 @@ import likeFilled from "../../assets/icons/likeFilled.svg";
 import { songContext } from "./Song";
 import { HashContext } from "./Hash";
 import AddToPlaylist from "./AddToPlaylist";
+import { createPortal } from "react-dom";
 
 export default function LikeSong({ isLiked, styleClass, likeData }) {
   const { Queue, setQueue } = useContext(songContext);
@@ -77,11 +78,16 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
   const eleId = useMemo(() => {
     return `add_${likeData.id[0]}_${Math.random().toString(36).substr(2, 9)}`;
   }, [likeData]);
-
   return (
     <>
       {likeIt ? (
-        <button className={styleClass} onClick={() => open(eleId)}>
+        <button
+          className={styleClass}
+          onClick={() => {
+            console.log(eleId);
+            open(eleId);
+          }}
+        >
           <img src={likeFilled} />
         </button>
       ) : (
@@ -90,12 +96,14 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
         </button>
       )}
 
-      {openElements.includes(eleId) && (
-        <AddToPlaylist
-          playlistIds={likeData.playlistIds}
-          makeChanges={(obj) => makeChanges(obj)}
-        />
-      )}
+      {openElements.includes(eleId) &&
+        createPortal(
+          <AddToPlaylist
+            playlistIds={likeData.playlistIds}
+            makeChanges={(obj) => makeChanges(obj)}
+          />,
+          document.body
+        )}
     </>
   );
 }
