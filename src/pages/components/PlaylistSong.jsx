@@ -1,7 +1,7 @@
-import { MoreVertRounded } from "@mui/icons-material";
 import utils from "../../../utils";
 import LikeSong from "./LikeSong";
 import { useMemo } from "react";
+import OptionSong from "./OptionSong";
 export default function PlaylistSong({
   data,
   play,
@@ -60,9 +60,7 @@ export default function PlaylistSong({
         )}
       </div>
       <div>
-        <button className="playlistSongButton">
-          <MoreVertRounded />
-        </button>
+        <OptionSong styleClass="playlistSongButton" data={data} />
       </div>
     </div>
   );
