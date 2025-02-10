@@ -94,6 +94,7 @@ export default function MiniPlayer() {
           styleClass="miniPlayerButton"
           isLiked={data.savedIn.length > 0}
           likeData={likeData}
+          savedIn={data.savedIn.map((item) => item.id) || data.savedIn || []}
         />
       </div>
       <div>

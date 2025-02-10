@@ -53,7 +53,8 @@ export default function PlaylistSong({
             styleClass="playlistSongButton playlistSongLike"
             isLiked={isLiked}
             likeData={likeData}
-            savedIn={data.savedIn.map((item) => item.id)}
+            savedIn={data.savedIn.map((item) => item.id) || data.savedIn || []}
+            test={data.savedIn}
             key={data.id}
           />
         ) : (

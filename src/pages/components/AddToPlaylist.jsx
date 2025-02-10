@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from "react";
+import { useContext, useState, useCallback, useEffect } from "react";
 import BackButton from "./BackButton";
 import { AuthContext } from "./Auth";
 import likeOutlined from "../../assets/icons/likeOutlinedPlayer.svg";
@@ -78,7 +78,6 @@ export default function AddToPlaylist({
     },
     [likeData]
   );
-
   return (
     <div className="floatingPage">
       <div className="addToCont">
