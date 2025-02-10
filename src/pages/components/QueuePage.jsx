@@ -1,6 +1,6 @@
 import BackButton from "./BackButton";
 import { DragIndicator, SortRounded } from "@mui/icons-material";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { songContext } from "./Song";
 import {
   SortableContainer,
@@ -48,15 +48,17 @@ export default function QueuePage() {
     );
   });
 
-  const SortableList = SortableContainer(({ items }) => {
-    return (
-      <div>
-        {items.map((item, index) => (
-          <SortableSong key={item.id} index={index} item={item} />
-        ))}
-      </div>
-    );
-  });
+  const SortableList = useMemo(() => {
+    return SortableContainer(({ items }) => {
+      return (
+        <div>
+          {items.map((item, index) => (
+            <SortableSong key={item.id} index={index} item={item} />
+          ))}
+        </div>
+      );
+    });
+  }, [Queue.playlist.list, Queue.song, Queue.saved]);
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const newList = arrayMoveImmutable(Queue.playlist.list, oldIndex, newIndex);
     setQueue({
