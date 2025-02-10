@@ -8,10 +8,10 @@ import { HashContext } from "./Hash";
 import AddToPlaylist from "./AddToPlaylist";
 import { createPortal } from "react-dom";
 
-export default function LikeSong({ isLiked, styleClass, likeData }) {
+export default function LikeSong({ isLiked, styleClass, likeData, savedIn }) {
   const { Queue, setQueue } = useContext(songContext);
   const [likeIt, setLikeIt] = useState(false);
-  const { openElements, open, close } = useContext(HashContext);
+  const { openElements, open } = useContext(HashContext);
 
   const eleId = useMemo(() => {
     return `add_${likeData.id[0]}_${Math.random().toString(36).substr(2, 9)}`;
@@ -34,36 +34,9 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
       value: { ...Queue.playlist, list: newList },
     });
   };
-  const makeChanges = useCallback(
-    (obj) => {
-      const foo = async (obj) => {
-        const { savedTo, removedFrom } = obj;
-        const original = [
-          ...savedTo,
-          ...likeData.playlistIds.filter((item) => !removedFrom.includes(item)),
-        ];
-        setLikeIt(original.length > 0);
-        close(eleId);
-
-        if (savedTo.length > 0) {
-          const dataTosend = { ...likeData, playlistIds: savedTo };
-          await utils.BACKEND("/save", "POST", {
-            savedData: dataTosend,
-          });
-        }
-        if (removedFrom.length > 0) {
-          const dataTosend = { ...likeData, playlistIds: removedFrom };
-          await utils.BACKEND("/save", "DELETE", {
-            savedData: dataTosend,
-          });
-        }
-
-        setStatus(original);
-      };
-      foo(obj);
-    },
-    [likeData, close]
-  );
+  const results = (original) => {
+    setLikeIt(original.length > 0);
+  };
 
   const save = useCallback(() => {
     const req = async () => {
@@ -99,8 +72,10 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
       {openElements.includes(eleId) &&
         createPortal(
           <AddToPlaylist
-            playlistIds={likeData.playlistIds}
-            makeChanges={(obj) => makeChanges(obj)}
+            likeData={likeData}
+            playlistIds={savedIn}
+            results={(obj) => results(obj)}
+            eleId={eleId}
           />,
           document.body
         )}

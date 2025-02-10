@@ -11,7 +11,7 @@ import OffCanvas from "./BottomSheet";
 import utils from "../../../utils";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
-export default function OptionSong({ styleClass, data }) {
+export default function OptionSong({ styleClass, data, addId }) {
   const eleId = useMemo(() => {
     return `more_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
@@ -56,7 +56,7 @@ export default function OptionSong({ styleClass, data }) {
             <div></div>
             <div></div>
           </div>
-          <button className="icoTextBut">
+          <button className="icoTextBut" onClick={() => open(addId)}>
             <img src={likeOutlined} />
             <p>Add to playlists</p>
           </button>
