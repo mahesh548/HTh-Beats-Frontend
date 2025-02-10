@@ -941,3 +941,24 @@ p {
   padding: 0px 10px;
 }
 /* MORE OPTION SONG - CSS */
+.icoTextBut {
+  display: grid;
+  grid-template-columns: 30px auto;
+  column-gap: 15px;
+  align-items: center;
+  padding: 8px;
+  color: white;
+  font-size: 17px;
+  margin-top: 15px;
+  background: transparent;
+  border: none;
+  svg {
+    color: #c1c1c1;
+
+    font-size: 30px;
+  }
+  img {
+    height: 30px;
+    width: 30px;
+  }
+}
