@@ -13,6 +13,9 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
   const [likeIt, setLikeIt] = useState(false);
   const { openElements, open, close } = useContext(HashContext);
 
+  const eleId = useMemo(() => {
+    return `add_${likeData.id[0]}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [likeData]);
   useEffect(() => {
     setLikeIt(isLiked);
   }, [isLiked]);
@@ -40,7 +43,7 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
           ...likeData.playlistIds.filter((item) => !removedFrom.includes(item)),
         ];
         setLikeIt(original.length > 0);
-        close(`add_${likeData.id[0]}`);
+        close(eleId);
 
         if (savedTo.length > 0) {
           const dataTosend = { ...likeData, playlistIds: savedTo };
@@ -75,9 +78,6 @@ export default function LikeSong({ isLiked, styleClass, likeData }) {
     req();
   }, [likeData.id]);
 
-  const eleId = useMemo(() => {
-    return `add_${likeData.id[0]}_${Math.random().toString(36).substr(2, 9)}`;
-  }, [likeData]);
   return (
     <>
       {likeIt ? (
