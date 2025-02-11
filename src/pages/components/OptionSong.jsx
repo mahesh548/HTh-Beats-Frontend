@@ -11,11 +11,19 @@ import OffCanvas from "./BottomSheet";
 import utils from "../../../utils";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
-export default function OptionSong({ styleClass, data, addId }) {
+import { createPortal } from "react-dom";
+import AddToPlaylist from "./AddToPlaylist";
+export default function OptionSong({ styleClass, data, likeData, savedIn }) {
+  const { openElements, open, close, openOne } = useContext(HashContext);
+
   const eleId = useMemo(() => {
     return `more_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
-  const { openElements, open, close } = useContext(HashContext);
+
+  const addId = useMemo(() => {
+    return `add_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [data.id]);
+
   return (
     <>
       <button className={styleClass} onClick={() => open(eleId)}>
@@ -56,7 +64,15 @@ export default function OptionSong({ styleClass, data, addId }) {
             <div></div>
             <div></div>
           </div>
-          <button className="icoTextBut" onClick={() => open(addId)}>
+          <button
+            className="icoTextBut"
+            onClick={() => {
+              close(eleId);
+              setTimeout(() => {
+                openOne(addId);
+              }, 500);
+            }}
+          >
             <img src={likeOutlined} />
             <p>Add to playlists</p>
           </button>
@@ -82,6 +98,17 @@ export default function OptionSong({ styleClass, data, addId }) {
           </button>
         </div>
       </OffCanvas>
+
+      {openElements.includes(addId) &&
+        createPortal(
+          <AddToPlaylist
+            likeData={likeData}
+            playlistIds={savedIn}
+            results={(obj) => {}}
+            eleId={addId}
+          />,
+          document.body
+        )}
     </>
   );
 }

@@ -13,6 +13,13 @@ export default function HashProvider({ children }) {
     setOpenElements([...opens]);
   }, [location.search]);
 
+  const openOne = (id) => {
+    if (!openElements.includes(id)) {
+      const url = `${location.pathname}?open=${id}`;
+      navigate(url, { replace: false });
+    }
+  };
+
   const open = (id) => {
     if (!openElements.includes(id)) {
       const newOpenElements = [...openElements, id];
@@ -36,7 +43,7 @@ export default function HashProvider({ children }) {
     }
   };
   return (
-    <HashContext.Provider value={{ openElements, open, close }}>
+    <HashContext.Provider value={{ openElements, open, close, openOne }}>
       {children}
     </HashContext.Provider>
   );

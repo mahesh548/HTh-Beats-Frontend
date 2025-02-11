@@ -61,7 +61,12 @@ export default function PlaylistSong({
         )}
       </div>
       <div>
-        <OptionSong styleClass="playlistSongButton" data={data} />
+        <OptionSong
+          styleClass="playlistSongButton"
+          data={data}
+          likeData={likeData}
+          savedIn={data.savedIn || []}
+        />
       </div>
     </div>
   );
