@@ -118,7 +118,7 @@ export default function Player() {
                 styleClass="playerDetailsButton"
                 isLiked={data.savedIn.length > 0}
                 likeData={likeData}
-                savedIn={data.savedIn.map((item) => item.id)}
+                savedIn={data.savedIn || []}
               />
 
               <button className="lyricsLine playerDetailsButton">

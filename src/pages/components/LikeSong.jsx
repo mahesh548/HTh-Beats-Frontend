@@ -60,7 +60,6 @@ export default function LikeSong({ isLiked, styleClass, likeData, savedIn }) {
         <button
           className={styleClass}
           onClick={() => {
-            console.log(eleId);
             open(eleId);
           }}
         >
