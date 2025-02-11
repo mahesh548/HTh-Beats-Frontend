@@ -1,14 +1,16 @@
 import utils from "../../../utils";
 import LikeSong from "./LikeSong";
-import { useMemo } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import OptionSong from "./OptionSong";
-export default function PlaylistSong({
-  data,
-  play,
-  more_opt,
-  isPlaying,
-  isLiked,
-}) {
+import AddToPlaylist from "./AddToPlaylist";
+import { createPortal } from "react-dom";
+import { HashContext } from "./Hash";
+
+export default function PlaylistSong({ data, play, isPlaying, isLiked }) {
+  const { openElements } = useContext(HashContext);
+  const [localLike, setLocalLike] = useState(isLiked);
+
+  //memoizing the like data
   const likeData = useMemo(() => {
     const playlistPreference = localStorage?.preferedPlaylist;
     if (playlistPreference) {
@@ -20,6 +22,21 @@ export default function PlaylistSong({
     }
     return null;
   }, []);
+
+  //setting local like to the value of isLiked
+  useEffect(() => {
+    setLocalLike(isLiked);
+  }, [isLiked]);
+
+  //unique id for the add to playlist element
+  const addId = useMemo(() => {
+    return `add_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [data.id]);
+
+  //setting the local like value base on result of the add to playlist
+  const addResult = (obj) => {
+    setLocalLike(obj.length > 0);
+  };
   return (
     <div className="playlistSong">
       <img
@@ -48,12 +65,12 @@ export default function PlaylistSong({
         </p>
       </div>
       <div>
-        {isLiked ? (
+        {isLiked && localLike ? (
           <LikeSong
             styleClass="playlistSongButton playlistSongLike"
             isLiked={isLiked}
             likeData={likeData}
-            savedIn={data.savedIn || []}
+            addId={addId}
             key={data.id}
           />
         ) : (
@@ -65,9 +82,19 @@ export default function PlaylistSong({
           styleClass="playlistSongButton"
           data={data}
           likeData={likeData}
-          savedIn={data.savedIn || []}
+          addId={addId}
         />
       </div>
+      {openElements.includes(addId) &&
+        createPortal(
+          <AddToPlaylist
+            likeData={likeData}
+            playlistIds={data.savedIn || []}
+            results={(obj) => addResult(obj)}
+            eleId={addId}
+          />,
+          document.body
+        )}
     </div>
   );
 }

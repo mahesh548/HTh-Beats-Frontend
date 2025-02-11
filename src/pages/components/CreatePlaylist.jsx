@@ -36,9 +36,7 @@ export default function CreatePlaylist({ response }) {
       value: { playlist: { ...data }, song: id, status: "play" },
     });
   };
-  const more_opt = (id) => {
-    console.log("more");
-  };
+
   const likeData = {
     id: response?.id,
     type: "entity",
@@ -114,7 +112,6 @@ export default function CreatePlaylist({ response }) {
             <PlaylistSong
               data={item}
               play={play}
-              more_opt={more_opt}
               key={item.id}
               isPlaying={item.id == Queue.song}
               isLiked={item.savedIn.length > 0 || isLiked}

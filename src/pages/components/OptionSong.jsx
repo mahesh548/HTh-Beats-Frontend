@@ -11,17 +11,12 @@ import OffCanvas from "./BottomSheet";
 import utils from "../../../utils";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
-import { createPortal } from "react-dom";
-import AddToPlaylist from "./AddToPlaylist";
-export default function OptionSong({ styleClass, data, likeData, savedIn }) {
+
+export default function OptionSong({ styleClass, data, addId }) {
   const { openElements, open, close, openOne } = useContext(HashContext);
 
   const eleId = useMemo(() => {
     return `more_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
-  }, [data.id]);
-
-  const addId = useMemo(() => {
-    return `add_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
 
   return (
@@ -98,17 +93,6 @@ export default function OptionSong({ styleClass, data, likeData, savedIn }) {
           </button>
         </div>
       </OffCanvas>
-
-      {openElements.includes(addId) &&
-        createPortal(
-          <AddToPlaylist
-            likeData={likeData}
-            playlistIds={savedIn}
-            results={(obj) => {}}
-            eleId={addId}
-          />,
-          document.body
-        )}
     </>
   );
 }
