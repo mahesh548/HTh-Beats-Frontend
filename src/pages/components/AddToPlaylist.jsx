@@ -73,7 +73,6 @@ export default function AddToPlaylist({
 
         results(original);
         close(eleId);
-        console.log("trying to close", eleId);
 
         if (savedTo.length > 0) {
           const dataTosend = { ...likeData, playlistIds: savedTo };
