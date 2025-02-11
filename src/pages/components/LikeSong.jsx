@@ -8,20 +8,11 @@ import { HashContext } from "./Hash";
 import AddToPlaylist from "./AddToPlaylist";
 import { createPortal } from "react-dom";
 
-export default function LikeSong({
-  isLiked,
-  styleClass,
-  likeData,
-  savedIn,
-  test,
-}) {
+export default function LikeSong({ isLiked, styleClass, likeData, savedIn }) {
   const { Queue, setQueue } = useContext(songContext);
   const [likeIt, setLikeIt] = useState(false);
   const { openElements, open } = useContext(HashContext);
-  useEffect(() => {
-    console.log("saved in ids", savedIn);
-    console.log("test", test);
-  }, [savedIn]);
+
   const eleId = useMemo(() => {
     return `add_${likeData.id[0]}_${Math.random().toString(36).substr(2, 9)}`;
   }, [likeData]);
@@ -51,7 +42,10 @@ export default function LikeSong({
     const req = async () => {
       setLikeIt(true);
       const response = await utils.BACKEND("/save", "POST", {
-        savedData: likeData,
+        savedData: {
+          ...likeData,
+          playlistIds: likeData.playlistIds.map((item) => item.id),
+        },
       });
       if (response?.status == true) {
         setStatus(likeData.playlistIds);

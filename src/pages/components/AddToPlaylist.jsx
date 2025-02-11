@@ -14,7 +14,9 @@ export default function AddToPlaylist({
   eleId,
 }) {
   const { user } = useContext(AuthContext);
-  const [addedTo, setAddedTo] = useState(playlistIds);
+  const [addedTo, setAddedTo] = useState(
+    playlistIds.map((item) => item.id) || []
+  );
   const { close } = useContext(HashContext);
   const { Queue, setQueue } = useContext(songContext);
   const toggleList = (id) => {
@@ -24,8 +26,12 @@ export default function AddToPlaylist({
     setAddedTo(newList);
   };
   const saveChanges = () => {
-    const savedTo = addedTo.filter((item) => !playlistIds.includes(item));
-    const removedFrom = playlistIds.filter((item) => !addedTo.includes(item));
+    const savedTo = addedTo.filter(
+      (item) => !playlistIds.map((item) => item.id).includes(item)
+    );
+    const removedFrom = playlistIds
+      .map((item) => item.id)
+      .filter((item) => !addedTo.includes(item));
 
     makeChanges({
       savedTo,
@@ -52,9 +58,12 @@ export default function AddToPlaylist({
       const foo = async (obj) => {
         const { savedTo, removedFrom } = obj;
         const original = [
-          ...savedTo,
-          ...playlistIds.filter((item) => !removedFrom.includes(item)),
+          ...savedTo.map((item) => {
+            return playlistIds.find((item2) => item2.id == item);
+          }),
+          ...playlistIds.filter((item) => !removedFrom.includes(item.id)),
         ];
+        console.log(original);
 
         results(original);
         close(eleId);
