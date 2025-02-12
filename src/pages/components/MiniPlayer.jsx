@@ -12,8 +12,7 @@ import AddToPlaylist from "./AddToPlaylist";
 
 export default function MiniPlayer() {
   const { Queue, setQueue } = useContext(songContext);
-  const { open } = useContext(HashContext);
-  const [localLike, setLocalLike] = useState(false);
+  const { open, openElements } = useContext(HashContext);
 
   const setColor = async (url) => {
     const color = await utils.getAverageColor(url, 0.5);
@@ -32,9 +31,7 @@ export default function MiniPlayer() {
   }
 
   const data = utils.getItemFromId(Queue.song, Queue.playlist.list);
-  useEffect(() => {
-    setColor(data.image);
-  }, [data.image]);
+  setColor(data.image);
 
   const likeData = useMemo(() => {
     const playlistPreference = localStorage?.preferedPlaylist;
@@ -46,18 +43,22 @@ export default function MiniPlayer() {
       };
     }
     return null;
-  }, [Queue.song]);
-
-  useEffect(() => {
-    setLocalLike(data.savedIn.length > 0);
-  }, [data.savedIn]);
+  }, []);
 
   const addId = useMemo(() => {
     return `add_${Queue.song}_${Math.random().toString(36).substr(2, 9)}`;
-  }, [Queue.song]);
+  }, []);
 
+  const [localLike, setLocalLike] = useState(false);
+  useEffect(() => {
+    if (data.savedIn.length > 0) {
+      setLocalLike(true);
+    } else {
+      setLocalLike(false);
+    }
+  }, [data.savedIn]);
   const addResult = (obj) => {
-    setLocalLike(obj.length > 0);
+    setLocalLike(obj.savedIn.length > 0);
   };
 
   return (
