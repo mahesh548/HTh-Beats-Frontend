@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useState, useEffect } from "react";
 import { songContext } from "./Song";
 import utils from "../../../utils";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
@@ -7,10 +7,13 @@ import { HashContext } from "./Hash";
 import LikeSong from "./LikeSong";
 
 import SwipeableViews from "react-swipeable-views";
+import { createPortal } from "react-dom";
+import AddToPlaylist from "./AddToPlaylist";
 
 export default function MiniPlayer() {
   const { Queue, setQueue } = useContext(songContext);
   const { open } = useContext(HashContext);
+  const [localLike, setLocalLike] = useState(false);
 
   const setColor = async (url) => {
     const color = await utils.getAverageColor(url, 0.5);
@@ -29,7 +32,9 @@ export default function MiniPlayer() {
   }
 
   const data = utils.getItemFromId(Queue.song, Queue.playlist.list);
-  setColor(data.image);
+  useEffect(() => {
+    setColor(data.image);
+  }, [data.image]);
 
   const likeData = useMemo(() => {
     const playlistPreference = localStorage?.preferedPlaylist;
@@ -42,6 +47,18 @@ export default function MiniPlayer() {
     }
     return null;
   }, [Queue.song]);
+
+  useEffect(() => {
+    setLocalLike(data.savedIn.length > 0);
+  }, [data.savedIn]);
+
+  const addId = useMemo(() => {
+    return `add_${Queue.song}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [Queue.song]);
+
+  const addResult = (obj) => {
+    setLocalLike(obj.length > 0);
+  };
 
   return (
     <div className="playlistSong miniPlayer" id="miniPlayer">
@@ -92,9 +109,9 @@ export default function MiniPlayer() {
       <div>
         <LikeSong
           styleClass="miniPlayerButton"
-          isLiked={data.savedIn.length > 0}
+          isLiked={localLike}
           likeData={likeData}
-          savedIn={data.savedIn || []}
+          addId={addId}
         />
       </div>
       <div>
@@ -102,6 +119,16 @@ export default function MiniPlayer() {
           {Queue.status == "pause" ? <PlayArrowRounded /> : <PauseRounded />}
         </button>
       </div>
+      {openElements.includes(addId) &&
+        createPortal(
+          <AddToPlaylist
+            likeData={likeData}
+            playlistIds={data.savedIn || []}
+            results={(obj) => addResult(obj)}
+            eleId={addId}
+          />,
+          document.body
+        )}
     </div>
   );
 }
