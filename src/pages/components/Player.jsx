@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useState, useEffect } from "react";
 import { songContext } from "./Song";
 import {
   ChevronLeftRounded,
@@ -19,11 +19,14 @@ import LikeSong from "./LikeSong";
 import { HashContext } from "./Hash";
 import QueuePage from "./QueuePage";
 import SwipeableViews from "react-swipeable-views";
+import { createPortal } from "react-dom";
+import AddToPlaylist from "./AddToPlaylist";
 
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
   const { openElements, open, close } = useContext(HashContext);
   const [isSliding, setIsSliding] = useState(false);
+  const [localLike, setLocalLike] = useState(false);
 
   const closePlayer = () => {
     close("player");
@@ -42,9 +45,6 @@ export default function Player() {
     document.getElementById("audio").currentTime = event.target.value;
   };
 
-  if (Queue.song == undefined) {
-    return <></>;
-  }
   const data = useMemo(
     () => utils.getItemFromId(Queue.song, Queue.playlist.list),
     [Queue.song, Queue.playlist]
@@ -61,6 +61,24 @@ export default function Player() {
     }
     return null;
   }, [Queue.song]);
+
+  const addId = useMemo(() => {
+    return Queue.song
+      ? `add_${Queue.song}_${Math.random().toString(36).substr(2, 9)}`
+      : "";
+  }, [Queue?.song]);
+
+  useEffect(() => {
+    if (data.savedIn.length > 0) {
+      setLocalLike(true);
+    } else {
+      setLocalLike(false);
+    }
+  }, [data.savedIn]);
+
+  if (Queue.song == undefined) {
+    return <></>;
+  }
 
   return (
     <div className="playerCont">
@@ -116,9 +134,10 @@ export default function Player() {
 
               <LikeSong
                 styleClass="playerDetailsButton"
-                isLiked={data.savedIn.length > 0}
+                isLiked={localLike}
                 likeData={likeData}
                 savedIn={data.savedIn || []}
+                addId={addId}
               />
 
               <button className="lyricsLine playerDetailsButton">
@@ -180,6 +199,17 @@ export default function Player() {
         </div>
         <QueuePage />
       </SwipeableViews>
+
+      {openElements.includes(addId) &&
+        createPortal(
+          <AddToPlaylist
+            likeData={likeData}
+            playlistIds={data.savedIn || []}
+            results={(obj) => setLocalLike(obj.length > 0)}
+            eleId={addId}
+          />,
+          document.body
+        )}
     </div>
   );
 }
