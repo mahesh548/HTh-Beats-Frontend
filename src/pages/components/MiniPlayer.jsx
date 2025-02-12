@@ -12,55 +12,61 @@ import AddToPlaylist from "./AddToPlaylist";
 
 export default function MiniPlayer() {
   const { Queue, setQueue } = useContext(songContext);
+
   const { open, openElements } = useContext(HashContext);
+
+  const [localLike, setLocalLike] = useState(false);
+
+  const data = useMemo(() => {
+    if (!Queue.song) return null;
+    return utils.getItemFromId(Queue.song, Queue.playlist.list);
+  }, [Queue?.song, Queue?.playlist?.list]);
+
+  useEffect(() => {
+    if (data && data.image) {
+      setColor(data.image);
+    }
+  }, [data?.image]);
+
+  const likeData = useMemo(() => {
+    if (!Queue.song) return null;
+    const playlistPreference = localStorage?.preferedPlaylist;
+    return playlistPreference
+      ? {
+          type: "song",
+          id: [Queue.song],
+          playlistIds: JSON.parse(playlistPreference),
+        }
+      : null;
+  }, [Queue?.song]);
+
+  const addId = useMemo(() => {
+    return Queue.song
+      ? `add_${Queue.song}_${Math.random().toString(36).substr(2, 9)}`
+      : "";
+  }, [Queue?.song]);
+
+  useEffect(() => {
+    if (data?.savedIn?.length > 0) {
+      setLocalLike(true);
+    } else {
+      setLocalLike(false);
+    }
+  }, [data?.savedIn]);
 
   const setColor = async (url) => {
     const color = await utils.getAverageColor(url, 0.5);
     document.getElementById("miniPlayer").style.backgroundColor = color;
   };
+
   const togglePlay = () => {
-    if (Queue.status == "play" || Queue.status == "resume") {
+    if (Queue.status === "play" || Queue.status === "resume") {
       setQueue({ type: "STATUS", value: "pause" });
     } else {
       setQueue({ type: "STATUS", value: "resume" });
     }
   };
-
-  if (Queue.song == undefined) {
-    return <></>;
-  }
-
-  const data = utils.getItemFromId(Queue.song, Queue.playlist.list);
-  setColor(data.image);
-
-  const likeData = useMemo(() => {
-    const playlistPreference = localStorage?.preferedPlaylist;
-    if (playlistPreference) {
-      return {
-        type: "song",
-        id: [Queue.song],
-        playlistIds: JSON.parse(playlistPreference),
-      };
-    }
-    return null;
-  }, []);
-
-  const addId = useMemo(() => {
-    return `add_${Queue.song}_${Math.random().toString(36).substr(2, 9)}`;
-  }, []);
-
-  const [localLike, setLocalLike] = useState(false);
-  useEffect(() => {
-    if (data.savedIn.length > 0) {
-      setLocalLike(true);
-    } else {
-      setLocalLike(false);
-    }
-  }, [data.savedIn]);
-  const addResult = (obj) => {
-    setLocalLike(obj.savedIn.length > 0);
-  };
-
+  if (!Queue.song) return <></>;
   return (
     <div className="playlistSong miniPlayer" id="miniPlayer">
       <div className="miniRange RANGE"></div>
@@ -73,15 +79,9 @@ export default function MiniPlayer() {
 
       <SwipeableViews
         resistance
-        index={(() => {
-          return Queue.playlist.list.indexOf(
-            utils.getItemFromId(Queue.song, Queue.playlist.list)
-          );
-        })()}
+        index={Queue.playlist.list.indexOf(data)}
         onChangeIndex={(index) => {
-          const currentIndex = Queue.playlist.list.indexOf(
-            utils.getItemFromId(Queue.song, Queue.playlist.list)
-          );
+          const currentIndex = Queue.playlist.list.indexOf(data);
           if (index > currentIndex) {
             setQueue({ type: "NEXT" });
           }
@@ -90,22 +90,20 @@ export default function MiniPlayer() {
           }
         }}
       >
-        {Queue.playlist.list.map((item) => {
-          return (
-            <div onClick={() => open("player")} key={`miniPlayer_${item.id}`}>
-              <p className="thinOneLineText playlistSongTitle">
-                {utils.refineText(item.title)}
-              </p>
-              <p className="thinOneLineText playlistSongSubTitle">
-                {data.subtitle?.length != 0
-                  ? utils.refineText(item.subtitle)
-                  : utils.refineText(
-                      `${item.more_info?.music}, ${item.more_info?.album}, ${item.more_info?.label}`
-                    )}
-              </p>
-            </div>
-          );
-        })}
+        {Queue.playlist.list.map((item) => (
+          <div onClick={() => open("player")} key={`miniPlayer_${item.id}`}>
+            <p className="thinOneLineText playlistSongTitle">
+              {utils.refineText(item.title)}
+            </p>
+            <p className="thinOneLineText playlistSongSubTitle">
+              {data.subtitle?.length !== 0
+                ? utils.refineText(item.subtitle)
+                : utils.refineText(
+                    `${item.more_info?.music}, ${item.more_info?.album}, ${item.more_info?.label}`
+                  )}
+            </p>
+          </div>
+        ))}
       </SwipeableViews>
       <div>
         <LikeSong
@@ -116,8 +114,8 @@ export default function MiniPlayer() {
         />
       </div>
       <div>
-        <button className="miniPlayerButton" onClick={() => togglePlay()}>
-          {Queue.status == "pause" ? <PlayArrowRounded /> : <PauseRounded />}
+        <button className="miniPlayerButton" onClick={togglePlay}>
+          {Queue.status === "pause" ? <PlayArrowRounded /> : <PauseRounded />}
         </button>
       </div>
       {openElements.includes(addId) &&
@@ -125,7 +123,7 @@ export default function MiniPlayer() {
           <AddToPlaylist
             likeData={likeData}
             playlistIds={data.savedIn || []}
-            results={(obj) => addResult(obj)}
+            results={(obj) => setLocalLike(obj.length > 0)}
             eleId={addId}
           />,
           document.body
