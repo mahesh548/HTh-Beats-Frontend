@@ -11,13 +11,35 @@ import OffCanvas from "./BottomSheet";
 import utils from "../../../utils";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
+import { songContext } from "./Song";
 
 export default function OptionSong({ styleClass, data, addId }) {
+  const { Queue, setQueue } = useContext(songContext);
   const { openElements, open, close, openOne } = useContext(HashContext);
 
   const eleId = useMemo(() => {
     return `more_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
+
+  const playNext = () => {
+    close(eleId);
+    if (!Queue.song) return;
+    const currentIndex = Queue.playlist.list.indexOf(
+      utils.getItemFromId(Queue.song, Queue.playlist.list)
+    );
+    if (
+      Queue.playlist.list.indexOf(data) != currentIndex + 1 &&
+      Queue.playlist.list.indexOf(data) != currentIndex
+    ) {
+      let newList = [...Queue.playlist.list];
+      newList.splice(currentIndex + 1, 0, data);
+      console.log(newList);
+      setQueue({
+        type: "PLAYLIST",
+        value: { ...Queue.playlist, list: newList },
+      });
+    }
+  };
 
   return (
     <>
@@ -71,7 +93,7 @@ export default function OptionSong({ styleClass, data, addId }) {
             <img src={likeOutlined} />
             <p>Add to playlists</p>
           </button>
-          <button className="icoTextBut">
+          <button className="icoTextBut" onClick={() => playNext()}>
             <NextPlanOutlined />
             <p>Play next</p>
           </button>
