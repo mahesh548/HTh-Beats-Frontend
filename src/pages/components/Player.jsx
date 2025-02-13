@@ -70,7 +70,7 @@ export default function Player() {
   }, [Queue?.song]);
 
   useEffect(() => {
-    if (data.savedIn.length > 0) {
+    if (data?.savedIn && data.savedIn.length > 0) {
       setLocalLike(true);
     } else {
       setLocalLike(false);

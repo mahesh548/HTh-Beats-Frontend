@@ -135,7 +135,6 @@ export default function QueuePage() {
                   <PlaylistSong
                     data={item}
                     play={play}
-                    more_opt={more_opt}
                     key={`song_${item.id}`}
                     isPlaying={item.id == Queue.song}
                     isLiked={item.savedIn.length > 0 || isLiked}
