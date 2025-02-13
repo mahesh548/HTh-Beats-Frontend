@@ -12,6 +12,7 @@ import utils from "../../../utils";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import { songContext } from "./Song";
+import { arrayMoveImmutable } from "array-move";
 
 export default function OptionSong({ styleClass, data, addId }) {
   const { Queue, setQueue } = useContext(songContext);
@@ -27,13 +28,25 @@ export default function OptionSong({ styleClass, data, addId }) {
     const currentIndex = Queue.playlist.list.indexOf(
       utils.getItemFromId(Queue.song, Queue.playlist.list)
     );
+    if (Queue.playlist.list.indexOf(data) != -1) {
+      const newList = arrayMoveImmutable(
+        Queue.playlist.list,
+        Queue.playlist.list.indexOf(data),
+        currentIndex + 1
+      );
+      setQueue({
+        type: "PLAYLIST",
+        value: { ...Queue.playlist, list: newList },
+      });
+      return;
+    }
     if (
       Queue.playlist.list.indexOf(data) != currentIndex + 1 &&
       Queue.playlist.list.indexOf(data) != currentIndex
     ) {
       let newList = [...Queue.playlist.list];
       newList.splice(currentIndex + 1, 0, data);
-      console.log(newList);
+
       setQueue({
         type: "PLAYLIST",
         value: { ...Queue.playlist, list: newList },

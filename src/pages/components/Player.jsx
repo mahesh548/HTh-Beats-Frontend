@@ -45,10 +45,11 @@ export default function Player() {
     document.getElementById("audio").currentTime = event.target.value;
   };
 
-  const data = useMemo(
-    () => utils.getItemFromId(Queue.song, Queue.playlist.list),
-    [Queue.song, Queue.playlist]
-  );
+  const data = useMemo(() => {
+    if (Queue.song && Queue.playlist) {
+      return utils.getItemFromId(Queue?.song, Queue?.playlist?.list);
+    }
+  }, [Queue?.song, Queue?.playlist]);
 
   const likeData = useMemo(() => {
     const playlistPreference = localStorage?.preferedPlaylist;
@@ -60,11 +61,11 @@ export default function Player() {
       };
     }
     return null;
-  }, [Queue.song]);
+  }, [Queue?.song]);
 
   const addId = useMemo(() => {
     return Queue.song
-      ? `add_${Queue.song}_${Math.random().toString(36).substr(2, 9)}`
+      ? `add_${Queue?.song}_${Math.random().toString(36).substr(2, 9)}`
       : "";
   }, [Queue?.song]);
 
@@ -74,7 +75,7 @@ export default function Player() {
     } else {
       setLocalLike(false);
     }
-  }, [data.savedIn]);
+  }, [data?.savedIn]);
 
   if (Queue.song == undefined) {
     return <></>;
