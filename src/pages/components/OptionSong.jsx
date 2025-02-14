@@ -1,7 +1,6 @@
 import {
   AlbumOutlined,
   GroupOutlined,
-  MoreVertRounded,
   NextPlanOutlined,
   PlaylistAddOutlined,
   PlaylistRemoveOutlined,
@@ -16,7 +15,7 @@ import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import { songContext } from "./Song";
 import { arrayMoveImmutable } from "array-move";
 
-export default function OptionSong({ styleClass, data, addId }) {
+export default function OptionSong({ children, styleClass, data, addId }) {
   const { Queue, setQueue } = useContext(songContext);
   const { openElements, open, close, closeOpen } = useContext(HashContext);
 
@@ -85,7 +84,7 @@ export default function OptionSong({ styleClass, data, addId }) {
   return (
     <>
       <button className={styleClass} onClick={() => open(eleId)}>
-        <MoreVertRounded />
+        {children}
       </button>
 
       <OffCanvas

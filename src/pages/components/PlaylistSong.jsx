@@ -5,6 +5,7 @@ import OptionSong from "./OptionSong";
 import AddToPlaylist from "./AddToPlaylist";
 import { createPortal } from "react-dom";
 import { HashContext } from "./Hash";
+import { MoreVertOutlined } from "@mui/icons-material";
 
 export default function PlaylistSong({ data, play, isPlaying, isLiked }) {
   const { openElements } = useContext(HashContext);
@@ -83,7 +84,9 @@ export default function PlaylistSong({ data, play, isPlaying, isLiked }) {
           data={data}
           likeData={likeData}
           addId={addId}
-        />
+        >
+          <MoreVertOutlined />
+        </OptionSong>
       </div>
       {openElements.includes(addId) &&
         createPortal(

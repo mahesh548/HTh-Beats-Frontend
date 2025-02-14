@@ -21,6 +21,7 @@ import QueuePage from "./QueuePage";
 import SwipeableViews from "react-swipeable-views";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
+import OptionSong from "./OptionSong";
 
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
@@ -52,6 +53,7 @@ export default function Player() {
   }, [Queue?.song, Queue?.playlist]);
 
   const likeData = useMemo(() => {
+    if (!Queue.song) return null;
     const playlistPreference = localStorage?.preferedPlaylist;
     if (playlistPreference) {
       return {
@@ -75,7 +77,7 @@ export default function Player() {
     } else {
       setLocalLike(false);
     }
-  }, [data?.savedIn]);
+  }, [data?.savedIn, Queue?.song]);
 
   if (Queue.song == undefined) {
     return <></>;
@@ -107,9 +109,14 @@ export default function Player() {
                 {Queue.playlist.title}
               </b>
             </div>
-            <button>
+            <OptionSong
+              styleClass=""
+              data={data}
+              likeData={likeData}
+              addId={addId}
+            >
               <MoreHorizRounded />
-            </button>
+            </OptionSong>
           </div>
           <img
             src={utils
@@ -137,8 +144,8 @@ export default function Player() {
                 styleClass="playerDetailsButton"
                 isLiked={localLike}
                 likeData={likeData}
-                savedIn={data.savedIn || []}
                 addId={addId}
+                key={`playerLike_${data.id}`}
               />
 
               <button className="lyricsLine playerDetailsButton">
