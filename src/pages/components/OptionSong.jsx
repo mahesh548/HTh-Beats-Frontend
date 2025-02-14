@@ -3,6 +3,7 @@ import {
   MoreVertRounded,
   NextPlanOutlined,
   PlaylistAddOutlined,
+  PlaylistRemoveOutlined,
   ShareOutlined,
 } from "@mui/icons-material";
 import { useContext, useMemo } from "react";
@@ -64,7 +65,7 @@ export default function OptionSong({ styleClass, data, addId }) {
 
   const toggleQueue = () => {
     close(eleId);
-    if (!Queue.song) return;
+    if (!Queue.song || data.id == Queue.song) return;
     const newList =
       Queue.playlist.list.indexOf(data) != -1
         ? Queue.playlist.list.filter((item) => item.id != data.id)
@@ -136,15 +137,20 @@ export default function OptionSong({ styleClass, data, addId }) {
             <NextPlanOutlined />
             <p>Play next</p>
           </button>
-          <button className="icoTextBut" onClick={() => toggleQueue()}>
-            <PlaylistAddOutlined />
-            <p>
-              {Queue?.playlist &&
-              Queue.playlist.list.some((item) => item.id == data.id)
-                ? "Remove from queue"
-                : "Add to queue"}
-            </p>
-          </button>
+
+          {Queue?.playlist &&
+          Queue.playlist.list.some((item) => item.id == data.id) ? (
+            <button className="icoTextBut" onClick={() => toggleQueue()}>
+              <PlaylistRemoveOutlined />
+              <p>Remove from queue</p>
+            </button>
+          ) : (
+            <button className="icoTextBut" onClick={() => toggleQueue()}>
+              <PlaylistAddOutlined />
+              <p>Add to queue</p>
+            </button>
+          )}
+
           <button
             className="icoTextBut"
             onClick={() => {
