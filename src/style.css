@@ -962,3 +962,10 @@ p {
     width: 30px;
   }
 }
+.offCanvasTitle {
+  text-align: center;
+  color: white;
+  width: 100%;
+  display: block;
+  margin-bottom: 20px;
+}

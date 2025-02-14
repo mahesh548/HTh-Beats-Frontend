@@ -21,6 +21,9 @@ export default function OptionSong({ styleClass, data, addId }) {
   const eleId = useMemo(() => {
     return `more_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
+  const artId = useMemo(() => {
+    return `art_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [data.id]);
 
   const playNext = () => {
     close(eleId);
@@ -71,6 +74,11 @@ export default function OptionSong({ styleClass, data, addId }) {
       value: { ...Queue.playlist, list: newList },
     });
   };
+  const artists = [
+    ...new Map(
+      data.more_info.artistMap.artists.map((item) => [item["id"], item])
+    ).values(),
+  ];
 
   return (
     <>
@@ -137,7 +145,15 @@ export default function OptionSong({ styleClass, data, addId }) {
                 : "Add to queue"}
             </p>
           </button>
-          <button className="icoTextBut">
+          <button
+            className="icoTextBut"
+            onClick={() => {
+              close(eleId);
+              setTimeout(() => {
+                closeOpen(eleId, artId);
+              }, 500);
+            }}
+          >
             <GroupOutlined />
             <p>Listen to artist</p>
           </button>
@@ -149,6 +165,44 @@ export default function OptionSong({ styleClass, data, addId }) {
             <img src={downloadOutlined} />
             <p>Download</p>
           </button>
+        </div>
+      </OffCanvas>
+
+      <OffCanvas
+        open={openElements.includes(artId)}
+        dismiss={() => close(artId)}
+      >
+        <div className="prevCont">
+          <b className="offCanvasTitle">Artists</b>
+          {artists.map((item) => {
+            return (
+              <div
+                className="playlistSong"
+                style={{
+                  width: "95%",
+                  margin: "auto",
+                  marginTop: "10px",
+                  marginBottom: "25px",
+                }}
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="playlistSongImg"
+                />
+                <div>
+                  <p className="thinOneLineText playlistSongTitle">
+                    {utils.refineText(item.name)}
+                  </p>
+                  <p className="thinOneLineText playlistSongSubTitle">
+                    {item.role || "artist"}
+                  </p>
+                </div>
+                <div></div>
+                <div></div>
+              </div>
+            );
+          })}
         </div>
       </OffCanvas>
     </>
