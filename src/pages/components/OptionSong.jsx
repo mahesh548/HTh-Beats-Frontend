@@ -24,11 +24,15 @@ export default function OptionSong({ styleClass, data, addId }) {
 
   const playNext = () => {
     close(eleId);
+    //if no song is playing then return
     if (!Queue.song) return;
+
+    //get current song index
     const currentIndex = Queue.playlist.list.indexOf(
       utils.getItemFromId(Queue.song, Queue.playlist.list)
     );
-    if (Queue.playlist.list.indexOf(data) != -1) {
+    // if song already in queue then move it to next
+    if (Queue.playlist.list.some((item) => item.id == data.id)) {
       const newList = arrayMoveImmutable(
         Queue.playlist.list,
         Queue.playlist.list.indexOf(data),
@@ -40,6 +44,7 @@ export default function OptionSong({ styleClass, data, addId }) {
       });
       return;
     }
+    // if song is not in queue then add it to next
     if (
       Queue.playlist.list.indexOf(data) != currentIndex + 1 &&
       Queue.playlist.list.indexOf(data) != currentIndex
@@ -52,6 +57,19 @@ export default function OptionSong({ styleClass, data, addId }) {
         value: { ...Queue.playlist, list: newList },
       });
     }
+  };
+
+  const toggleQueue = () => {
+    close(eleId);
+    if (!Queue.song) return;
+    const newList =
+      Queue.playlist.list.indexOf(data) != -1
+        ? Queue.playlist.list.filter((item) => item.id != data.id)
+        : [...Queue.playlist.list, data];
+    setQueue({
+      type: "PLAYLIST",
+      value: { ...Queue.playlist, list: newList },
+    });
   };
 
   return (
@@ -110,9 +128,14 @@ export default function OptionSong({ styleClass, data, addId }) {
             <NextPlanOutlined />
             <p>Play next</p>
           </button>
-          <button className="icoTextBut">
+          <button className="icoTextBut" onClick={() => toggleQueue()}>
             <PlaylistAddOutlined />
-            <p>Add to queue</p>
+            <p>
+              {Queue?.playlist &&
+              Queue.playlist.list.some((item) => item.id == data.id)
+                ? "Remove from queue"
+                : "Add to queue"}
+            </p>
           </button>
           <button className="icoTextBut">
             <GroupOutlined />
