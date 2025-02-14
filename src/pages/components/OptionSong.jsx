@@ -16,7 +16,7 @@ import { arrayMoveImmutable } from "array-move";
 
 export default function OptionSong({ styleClass, data, addId }) {
   const { Queue, setQueue } = useContext(songContext);
-  const { openElements, open, close, openOne } = useContext(HashContext);
+  const { openElements, open, close, closeOpen } = useContext(HashContext);
 
   const eleId = useMemo(() => {
     return `more_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
@@ -99,7 +99,7 @@ export default function OptionSong({ styleClass, data, addId }) {
             onClick={() => {
               close(eleId);
               setTimeout(() => {
-                openOne(addId);
+                closeOpen(eleId, addId);
               }, 500);
             }}
           >

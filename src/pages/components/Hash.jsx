@@ -13,9 +13,13 @@ export default function HashProvider({ children }) {
     setOpenElements([...opens]);
   }, [location.search]);
 
-  const openOne = (id) => {
-    if (!openElements.includes(id)) {
-      const url = `${location.pathname}?open=${id}`;
+  const closeOpen = (closeId, openId) => {
+    if (!openElements.includes(openId)) {
+      const newOpenElements = [
+        ...openElements.filter((item) => item != closeId),
+        openId,
+      ];
+      const url = `${location.pathname}?open=${newOpenElements.join("&open=")}`;
       navigate(url, { replace: false });
     }
   };
@@ -43,7 +47,7 @@ export default function HashProvider({ children }) {
     }
   };
   return (
-    <HashContext.Provider value={{ openElements, open, close, openOne }}>
+    <HashContext.Provider value={{ openElements, open, close, closeOpen }}>
       {children}
     </HashContext.Provider>
   );
