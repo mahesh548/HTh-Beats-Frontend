@@ -1,4 +1,5 @@
 import {
+  AlbumOutlined,
   GroupOutlined,
   MoreVertRounded,
   NextPlanOutlined,
@@ -163,6 +164,12 @@ export default function OptionSong({ styleClass, data, addId }) {
             <GroupOutlined />
             <p>Listen to artist</p>
           </button>
+          {data?.more_info?.album_url && (
+            <button className="icoTextBut">
+              <AlbumOutlined />
+              <p>View album</p>
+            </button>
+          )}
           <button className="icoTextBut">
             <ShareOutlined />
             <p>Share</p>
@@ -190,6 +197,7 @@ export default function OptionSong({ styleClass, data, addId }) {
                   marginTop: "10px",
                   marginBottom: "25px",
                 }}
+                key={`${item.name}_${item.id}`}
               >
                 <img
                   src={item.image}
