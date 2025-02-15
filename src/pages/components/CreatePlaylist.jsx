@@ -74,11 +74,27 @@ export default function CreatePlaylist({ response }) {
   }, [data.list]);
 
   const handleLocalLike = (obj) => {
-    console.log(obj);
-    /*  const newList = data.list.map((item) => {
-     
-    });
-    setData({ ...data, list: newList }); */
+    if (obj.length == 0 && playlistInCommon.length > 0) {
+      const newList = data.list.map((item) => {
+        item.savedIn = item.savedIn.filter(
+          (playlist) =>
+            !playlistInCommon.map((item2) => item2.id).includes(playlist.id)
+        );
+        return item;
+      });
+      setData({ ...data, list: newList });
+    }
+    if (obj.length > 0) {
+      const newList = data.list.map((item) => {
+        item.savedIn = [
+          ...new Map(
+            [...item.savedIn, ...obj].map((item2) => [item2.id, item2])
+          ).values(),
+        ];
+        return item;
+      });
+      setData({ ...data, list: newList });
+    }
   };
 
   return (

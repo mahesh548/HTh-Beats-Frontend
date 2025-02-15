@@ -31,11 +31,11 @@ export default function AddToPlaylist({
   const saveChanges = () => {
     //filtering the playlist in which the song is saved
     const savedTo = addedTo.filter(
-      (item) => !playlistIds.map((item) => item.id).includes(item)
+      (item) => !playlistIds.map((item2) => item2.id).includes(item)
     );
     //filtering the playlist from which the song is removed
     const removedFrom = playlistIds
-      .map((item) => item.id)
+      .map((item2) => item2.id)
       .filter((item) => !addedTo.includes(item));
 
     makeChanges({
@@ -49,7 +49,11 @@ export default function AddToPlaylist({
     if (!Queue.playlist) return;
     const newList = Queue.playlist.list.map((item) => {
       if (likeData.id.includes(item.id)) {
-        item.savedIn = ids;
+        item.savedIn = [
+          ...new Map(
+            [...item.savedIn, ...ids].map((item2) => [item2.id, item2])
+          ).values(),
+        ];
       }
       return item;
     });
@@ -66,12 +70,15 @@ export default function AddToPlaylist({
         //making new array of object with playlist data
         const original = [
           ...savedTo.map((item) => {
-            return playlistIds.find((item2) => item2.id == item);
+            return user.users_playlists.find((item2) => item2.id == item);
           }),
           ...playlistIds.filter((item) => !removedFrom.includes(item.id)),
         ];
 
-        results(original);
+        if (savedTo.length > 0 || removedFrom.length > 0) {
+          results(original);
+          setStatus(original);
+        }
         close(eleId);
 
         if (savedTo.length > 0) {
@@ -86,8 +93,6 @@ export default function AddToPlaylist({
             savedData: dataTosend,
           });
         }
-
-        setStatus(original);
       };
       foo(obj);
     },
