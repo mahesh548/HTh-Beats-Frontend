@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import utils from "../../../utils";
 import BackButton from "./BackButton";
 
@@ -10,8 +10,13 @@ import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
 import PlaylistNavbar from "./PlaylistNavbar";
 import LikeEntity from "./LikeEntity";
+import OptionEntity from "./OptionEntity";
+import { createPortal } from "react-dom";
+import AddToPlaylist from "./AddToPlaylist";
+import { HashContext } from "./Hash";
 
 export default function CreatePlaylist({ response }) {
+  const { openElements } = useContext(HashContext);
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
@@ -40,6 +45,40 @@ export default function CreatePlaylist({ response }) {
   const likeData = {
     id: response?.id,
     type: "entity",
+  };
+
+  const addId = useMemo(() => {
+    return `add_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [data.id]);
+
+  const songsLikeData = {
+    id: data.list.map((item) => item.id),
+    type: "song",
+  };
+
+  const playlistInCommon = useMemo(() => {
+    const idArray = data.list[0].savedIn
+      .map((item) => item.id)
+      .filter((item) => {
+        let isIncluded = true;
+        data.list.forEach((song) => {
+          if (!song.savedIn.some((playlist) => playlist.id == item)) {
+            isIncluded = false;
+          }
+        });
+        return isIncluded;
+      });
+    return idArray.map((id) =>
+      data.list[0].savedIn.find((item) => item.id == id)
+    );
+  }, [data.list]);
+
+  const handleLocalLike = (obj) => {
+    console.log(obj);
+    /*  const newList = data.list.map((item) => {
+     
+    });
+    setData({ ...data, list: newList }); */
   };
 
   return (
@@ -82,9 +121,19 @@ export default function CreatePlaylist({ response }) {
             <button className="playlistButtonSecondary">
               <img src={downloadOutlined} />
             </button>
-            <button className="playlistButtonSecondary">
+
+            <OptionEntity
+              styleClass="playlistButtonSecondary"
+              data={{
+                id: data.id,
+                title: data.title,
+                subtitle: data.header_desc,
+                image: data.image,
+              }}
+              addId={addId}
+            >
               <img src={moreOutlined} />
-            </button>
+            </OptionEntity>
           </div>
           <div>
             {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (
@@ -119,6 +168,16 @@ export default function CreatePlaylist({ response }) {
           );
         })}
       </div>
+      {openElements.includes(addId) &&
+        createPortal(
+          <AddToPlaylist
+            likeData={songsLikeData}
+            playlistIds={playlistInCommon}
+            results={(obj) => handleLocalLike(obj)}
+            eleId={addId}
+          />,
+          document.body
+        )}
     </div>
   );
 }
