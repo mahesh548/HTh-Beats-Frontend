@@ -47,11 +47,8 @@ export default function MiniPlayer() {
   }, [Queue?.song]);
 
   useEffect(() => {
-    if (data?.savedIn?.length > 0) {
-      setLocalLike(true);
-    } else {
-      setLocalLike(false);
-    }
+    if (!data?.savedIn) return;
+    setLocalLike(data.savedIn.length > 0);
   }, [data?.savedIn]);
 
   const setColor = async (url) => {

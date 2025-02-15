@@ -54,6 +54,7 @@ export default function AddToPlaylist({
             [...item.savedIn, ...ids].map((item2) => [item2.id, item2])
           ).values(),
         ];
+        console.log(item.savedIn);
       }
       return item;
     });
@@ -77,7 +78,6 @@ export default function AddToPlaylist({
 
         if (savedTo.length > 0 || removedFrom.length > 0) {
           results(original);
-          setStatus(original);
         }
         close(eleId);
 
@@ -92,6 +92,9 @@ export default function AddToPlaylist({
           await utils.BACKEND("/save", "DELETE", {
             savedData: dataTosend,
           });
+        }
+        if (savedTo.length > 0 || removedFrom.length > 0) {
+          setStatus(original);
         }
       };
       foo(obj);
