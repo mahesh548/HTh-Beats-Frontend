@@ -66,10 +66,10 @@ export default function PlaylistSong({ data, play, isPlaying, isLiked }) {
         </p>
       </div>
       <div>
-        {isLiked && localLike ? (
+        {localLike ? (
           <LikeSong
             styleClass="playlistSongButton playlistSongLike"
-            isLiked={isLiked}
+            isLiked={localLike}
             likeData={likeData}
             addId={addId}
             key={data.id}
