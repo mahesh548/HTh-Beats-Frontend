@@ -129,6 +129,7 @@ export default function CreatePlaylist({ response }) {
                 title: data.title,
                 subtitle: data.header_desc,
                 image: data.image,
+                list: data.list,
               }}
               addId={addId}
             >

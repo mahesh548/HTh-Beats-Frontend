@@ -47,7 +47,6 @@ export default function AddToPlaylist({
         item.savedIn = [...new Set([...item.savedIn, ...savedTo])].filter(
           (item) => !removedFrom.includes(item)
         );
-        console.log(item.savedIn);
       }
       return item;
     });

@@ -17,11 +17,13 @@ export default function OptionEntity({ children, styleClass, data, addId }) {
 
   const toggleQueue = () => {
     close(eleId);
-    if (!Queue.song || data.id == Queue.song) return;
-    const newList =
-      Queue.playlist.list.indexOf(data) != -1
-        ? Queue.playlist.list.filter((item) => item.id != data.id)
-        : [...Queue.playlist.list, data];
+    if (!Queue.song || !Queue.playlist) return;
+    const newList = [
+      ...new Map(
+        [...Queue.playlist.list, ...data.list].map((item) => [item.id, item])
+      ).values(),
+    ];
+    console.log(newList);
     setQueue({
       type: "PLAYLIST",
       value: { ...Queue.playlist, list: newList },
@@ -76,12 +78,12 @@ export default function OptionEntity({ children, styleClass, data, addId }) {
             }}
           >
             <img src={likeOutlined} />
-            <p>Add to playlists</p>
+            <p>Add songs to other playlists</p>
           </button>
 
           <button className="icoTextBut" onClick={() => toggleQueue()}>
             <PlaylistAddOutlined />
-            <p>Add to queue</p>
+            <p>Add songs to queue</p>
           </button>
 
           <button className="icoTextBut">
