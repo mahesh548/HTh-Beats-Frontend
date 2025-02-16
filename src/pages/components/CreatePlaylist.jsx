@@ -17,7 +17,7 @@ import { HashContext } from "./Hash";
 import PlaylistOwner from "./PlaylistOwner";
 
 export default function CreatePlaylist({ response }) {
-  const { openElements } = useContext(HashContext);
+  const { openElements, open } = useContext(HashContext);
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
@@ -50,6 +50,9 @@ export default function CreatePlaylist({ response }) {
 
   const addId = useMemo(() => {
     return `add_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [data.id]);
+  const artId = useMemo(() => {
+    return `art_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
 
   const songsLikeData = {
@@ -105,8 +108,6 @@ export default function CreatePlaylist({ response }) {
             {utils.refineText(data.header_desc)}
           </p>
 
-          {/*  <img src="../logo.png" alt="playlist owner" />
-            <p>Beats</p> */}
           <PlaylistOwner
             srcArray={data?.more_info?.artists
               .slice(0, 3)
@@ -114,6 +115,7 @@ export default function CreatePlaylist({ response }) {
             label={"Featured artists:"}
             name={data?.more_info?.artists[0].name}
             totalOwner={data?.more_info?.artists.length - 1}
+            action={() => open(artId)}
           />
 
           <p className="thinTwoLineText">
@@ -140,7 +142,9 @@ export default function CreatePlaylist({ response }) {
                 image: data.image,
                 list: data.list,
               }}
+              artists={data.more_info.artists || []}
               addId={addId}
+              artId={artId}
             >
               <img src={moreOutlined} />
             </OptionEntity>
