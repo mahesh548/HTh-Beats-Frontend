@@ -14,6 +14,7 @@ import OptionEntity from "./OptionEntity";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import { HashContext } from "./Hash";
+import PlaylistOwner from "./PlaylistOwner";
 
 export default function CreatePlaylist({ response }) {
   const { openElements } = useContext(HashContext);
@@ -103,10 +104,18 @@ export default function CreatePlaylist({ response }) {
           <p className="thinTwoLineText">
             {utils.refineText(data.header_desc)}
           </p>
-          <div className="playlistOwnersDetails">
-            <img src="../logo.png" alt="playlist owner" />
-            <p>Beats</p>
-          </div>
+
+          {/*  <img src="../logo.png" alt="playlist owner" />
+            <p>Beats</p> */}
+          <PlaylistOwner
+            srcArray={data?.more_info?.artists
+              .slice(0, 3)
+              .map((item) => item.image)}
+            label={"Featured artists:"}
+            name={data?.more_info?.artists[0].name}
+            totalOwner={data?.more_info?.artists.length - 1}
+          />
+
           <p className="thinTwoLineText">
             {utils.refineText(data.more_info?.subtitle_desc.join(" • "))}
           </p>
@@ -169,6 +178,7 @@ export default function CreatePlaylist({ response }) {
           );
         })}
       </div>
+
       {openElements.includes(addId) &&
         createPortal(
           <AddToPlaylist

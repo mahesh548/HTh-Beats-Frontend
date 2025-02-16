@@ -12,7 +12,7 @@ export default function TimelineSlider({ data, label, style = "" }) {
 
             return (
               <TimelineSquare
-                key={id}
+                key={`${id}_${Math.random().toString(36).substr(2, 9)}`}
                 img={image}
                 text={title}
                 type={type}
