@@ -19,7 +19,7 @@ export default function LikeSong({ isLiked, styleClass, likeData, addId }) {
     if (!Queue.playlist) return;
     const newList = Queue.playlist.list.map((item) => {
       if (likeData.id.includes(item.id)) {
-        item.savedIn = ids;
+        item.savedIn = [...new Set([...item.savedIn, ...ids])];
       }
       return item;
     });
@@ -36,7 +36,7 @@ export default function LikeSong({ isLiked, styleClass, likeData, addId }) {
       const response = await utils.BACKEND("/save", "POST", {
         savedData: {
           ...likeData,
-          playlistIds: likeData.playlistIds.map((item) => item.id),
+          playlistIds: likeData.playlistIds,
         },
       });
       if (response?.status == true) {

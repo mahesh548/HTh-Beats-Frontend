@@ -36,7 +36,8 @@ export default function PlaylistSong({ data, play, isPlaying, isLiked }) {
 
   //setting the local like value base on result of the add to playlist
   const addResult = (obj) => {
-    setLocalLike(obj.length > 0);
+    const { savedTo } = obj;
+    setLocalLike(savedTo.length > 0);
   };
   return (
     <div className="playlistSong">

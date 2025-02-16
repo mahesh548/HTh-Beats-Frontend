@@ -30,12 +30,7 @@ export default function Auth({ children }) {
   };
   const saveUserData = (data) => {
     if (!localStorage.preferedPlaylist) {
-      localStorage.setItem(
-        "preferedPlaylist",
-        JSON.stringify([
-          { id: data.id, perma_url: data.id, title: "Liked Songs" },
-        ])
-      );
+      localStorage.setItem("preferedPlaylist", JSON.stringify([data.id]));
     }
   };
 

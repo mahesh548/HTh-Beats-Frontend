@@ -213,7 +213,7 @@ export default function Player() {
           <AddToPlaylist
             likeData={likeData}
             playlistIds={data.savedIn || []}
-            results={(obj) => setLocalLike(obj.length > 0)}
+            results={(obj) => setLocalLike(obj.savedTo.length > 0)}
             eleId={addId}
           />,
           document.body

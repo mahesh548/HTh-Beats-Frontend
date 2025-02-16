@@ -57,44 +57,28 @@ export default function CreatePlaylist({ response }) {
   };
 
   const playlistInCommon = useMemo(() => {
-    const idArray = data.list[0].savedIn
-      .map((item) => item.id)
-      .filter((item) => {
-        let isIncluded = true;
-        data.list.forEach((song) => {
-          if (!song.savedIn.some((playlist) => playlist.id == item)) {
-            isIncluded = false;
-          }
-        });
-        return isIncluded;
+    const idArray = data.list[0].savedIn.filter((item) => {
+      let isIncluded = true;
+      data.list.forEach((song) => {
+        if (!song.savedIn.includes(item)) {
+          isIncluded = false;
+        }
       });
-    return idArray.map((id) =>
-      data.list[0].savedIn.find((item) => item.id == id)
-    );
+      return isIncluded;
+    });
+    return idArray;
   }, [data.list]);
 
   const handleLocalLike = (obj) => {
-    if (obj.length == 0 && playlistInCommon.length > 0) {
-      const newList = data.list.map((item) => {
-        item.savedIn = item.savedIn.filter(
-          (playlist) =>
-            !playlistInCommon.map((item2) => item2.id).includes(playlist.id)
-        );
-        return item;
-      });
-      setData({ ...data, list: newList });
-    }
-    if (obj.length > 0) {
-      const newList = data.list.map((item) => {
-        item.savedIn = [
-          ...new Map(
-            [...item.savedIn, ...obj].map((item2) => [item2.id, item2])
-          ).values(),
-        ];
-        return item;
-      });
-      setData({ ...data, list: newList });
-    }
+    const { savedTo, removedFrom } = obj;
+    if (savedTo.length == 0 && removedFrom.length == 0) return;
+    const newList = data.list.map((item) => {
+      item.savedIn = [...new Set([...item.savedIn, ...savedTo])].filter(
+        (item2) => !removedFrom.includes(item2)
+      );
+      return item;
+    });
+    setData({ ...data, list: newList });
   };
 
   return (

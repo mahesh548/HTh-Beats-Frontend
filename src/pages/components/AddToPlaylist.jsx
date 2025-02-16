@@ -16,9 +16,7 @@ export default function AddToPlaylist({
   const { user } = useContext(AuthContext);
 
   //storing the id of the playlist in which the song is saved
-  const [addedTo, setAddedTo] = useState(
-    playlistIds.map((item) => item.id) || []
-  );
+  const [addedTo, setAddedTo] = useState(playlistIds || []);
   const { close } = useContext(HashContext);
   const { Queue, setQueue } = useContext(songContext);
   const toggleList = (id) => {
@@ -30,13 +28,9 @@ export default function AddToPlaylist({
   };
   const saveChanges = () => {
     //filtering the playlist in which the song is saved
-    const savedTo = addedTo.filter(
-      (item) => !playlistIds.map((item2) => item2.id).includes(item)
-    );
+    const savedTo = addedTo.filter((item) => !playlistIds.includes(item));
     //filtering the playlist from which the song is removed
-    const removedFrom = playlistIds
-      .map((item2) => item2.id)
-      .filter((item) => !addedTo.includes(item));
+    const removedFrom = playlistIds.filter((item) => !addedTo.includes(item));
 
     makeChanges({
       savedTo,
@@ -44,16 +38,15 @@ export default function AddToPlaylist({
     });
   };
 
-  const setStatus = (ids) => {
+  const setStatus = (obj) => {
     //updating the Queue with the new playlist
     if (!Queue.playlist) return;
+    const { savedTo, removedFrom } = obj;
     const newList = Queue.playlist.list.map((item) => {
       if (likeData.id.includes(item.id)) {
-        item.savedIn = [
-          ...new Map(
-            [...item.savedIn, ...ids].map((item2) => [item2.id, item2])
-          ).values(),
-        ];
+        item.savedIn = [...new Set([...item.savedIn, ...savedTo])].filter(
+          (item) => !removedFrom.includes(item)
+        );
         console.log(item.savedIn);
       }
       return item;
@@ -68,16 +61,9 @@ export default function AddToPlaylist({
     (obj) => {
       const foo = async (obj) => {
         const { savedTo, removedFrom } = obj;
-        //making new array of object with playlist data
-        const original = [
-          ...savedTo.map((item) => {
-            return user.users_playlists.find((item2) => item2.id == item);
-          }),
-          ...playlistIds.filter((item) => !removedFrom.includes(item.id)),
-        ];
 
         if (savedTo.length > 0 || removedFrom.length > 0) {
-          results(original);
+          results(obj);
         }
         close(eleId);
 
@@ -94,7 +80,7 @@ export default function AddToPlaylist({
           });
         }
         if (savedTo.length > 0 || removedFrom.length > 0) {
-          setStatus(original);
+          setStatus(obj);
         }
       };
       foo(obj);
