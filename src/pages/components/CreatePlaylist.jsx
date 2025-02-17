@@ -203,7 +203,7 @@ export default function CreatePlaylist({ response }) {
           );
         })}
       </div>
-      <div className="ps-1" ref={relatedPlaylistRef}>
+      <div className="ps-1 mt-4" ref={relatedPlaylistRef}>
         {relatedPlaylist ? (
           <>
             <TimelineSlider label="Related playlists" data={relatedPlaylist} />
