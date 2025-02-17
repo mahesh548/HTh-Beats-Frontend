@@ -15,12 +15,17 @@ import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import { HashContext } from "./Hash";
 import PlaylistOwner from "./PlaylistOwner";
+import TimelineSlider from "./TimelineSlider";
 
 export default function CreatePlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
+  const [relatedPlaylist, setRelatedPlaylist] = useState(false);
   const [bg, setBg] = useState("#8d8d8d");
+  useEffect(() => {
+    setData(response);
+  }, [response]);
   useEffect(() => {
     const setColor = async () => {
       const color = await utils.getAverageColor(data.image);
@@ -35,6 +40,10 @@ export default function CreatePlaylist({ response }) {
   const { ref, inView, entry } = useInView({
     threshold: 0,
   });
+  const [relatedPlaylistRef, relatedPlaylistinView, relatedPlaylistEntry] =
+    useInView({
+      threshold: 0,
+    });
 
   const play = (id) => {
     setQueue({
@@ -85,6 +94,18 @@ export default function CreatePlaylist({ response }) {
     setData({ ...data, list: newList });
   };
 
+  useEffect(() => {
+    const getRelated = async () => {
+      const response = await utils.API(
+        `/related?id=${data.id}&entity=${data.type}`,
+        "GET"
+      );
+      setRelatedPlaylist(response || false);
+    };
+    if (!relatedPlaylist && relatedPlaylistEntry) {
+      getRelated();
+    }
+  }, [relatedPlaylistinView]);
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
@@ -181,6 +202,13 @@ export default function CreatePlaylist({ response }) {
             />
           );
         })}
+      </div>
+      <div className="ps-1" ref={relatedPlaylistRef}>
+        {relatedPlaylist ? (
+          <TimelineSlider label="Related playlists" data={relatedPlaylist} />
+        ) : (
+          <div>Loading..</div>
+        )}
       </div>
 
       {openElements.includes(addId) &&

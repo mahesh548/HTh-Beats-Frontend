@@ -11,6 +11,7 @@ export default function playlist() {
   const [playlistData, setplaylistData] = useState(false);
 
   useEffect(() => {
+    setplaylistData(false);
     const getPlaylist = async () => {
       const response = await utils.API(`/entity/playlist?id=${id}`, "GET");
 
@@ -21,7 +22,7 @@ export default function playlist() {
     if (auth.user?.verified) {
       getPlaylist();
     }
-  }, [auth.user]);
+  }, [auth.user, id]);
 
   return playlistData == false ? (
     <PageLoader />
