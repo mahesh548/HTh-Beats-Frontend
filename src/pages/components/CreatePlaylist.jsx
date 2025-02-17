@@ -205,7 +205,10 @@ export default function CreatePlaylist({ response }) {
       </div>
       <div className="ps-1" ref={relatedPlaylistRef}>
         {relatedPlaylist ? (
-          <TimelineSlider label="Related playlists" data={relatedPlaylist} />
+          <>
+            <TimelineSlider label="Related playlists" data={relatedPlaylist} />
+            <div>Trending in language</div>
+          </>
         ) : (
           <div>Loading..</div>
         )}
