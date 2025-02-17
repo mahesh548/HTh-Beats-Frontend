@@ -33,6 +33,7 @@ export default function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/search" element={<Search />} />
         <Route path="/playlist/:id" element={<Playlist />} />
+        <Route path="/album/:id" element={<Playlist />} />
       </Route>
 
       {/* ERROR PAGES */}

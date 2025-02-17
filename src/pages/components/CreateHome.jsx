@@ -1,10 +1,7 @@
-import { useContext } from "react";
-import { AuthContext } from "./Auth";
 import TimelineSlider from "./TimelineSlider";
 import TimelinePromo from "./TimelinePromo";
 
 export default function CreateHome() {
-  const auth = useContext(AuthContext);
   const homeCache = JSON.parse(localStorage.homeCache);
   const {
     charts,

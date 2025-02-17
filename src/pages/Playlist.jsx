@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useLocation, useParams } from "react-router";
 import PageLoader from "./components/PageLoader";
 import utils from "../../utils";
 import { AuthContext } from "./components/Auth";
@@ -9,14 +9,38 @@ export default function playlist() {
   const auth = useContext(AuthContext);
   const { id } = useParams();
   const [playlistData, setplaylistData] = useState(false);
+  const location = useLocation();
+
+  const pathMap = {
+    playlist: "/entity/playlist",
+    album: "/entity/album",
+  };
+  const getUrl = () => {
+    const pathname = location.pathname.split("/")[1];
+    if (!pathname) return pathMap["playlist"];
+    return pathMap[pathname];
+  };
+
+  const refineResponse = (response, url) => {
+    if (url == pathMap["album"]) {
+      response.more_info.artists = response.more_info.artistMap.artists;
+      response.more_info.subtitle_desc = [
+        "Album",
+        response?.year || "",
+        `${response.list_count} songs`,
+      ];
+    }
+    return response;
+  };
 
   useEffect(() => {
     setplaylistData(false);
     const getPlaylist = async () => {
-      const response = await utils.API(`/entity/playlist?id=${id}`, "GET");
+      const url = getUrl();
+      const response = await utils.API(`${url}?id=${id}`, "GET");
 
       if (response.hasOwnProperty("list")) {
-        setplaylistData(response);
+        setplaylistData(refineResponse(response, url));
       }
     };
     if (auth.user?.verified) {
