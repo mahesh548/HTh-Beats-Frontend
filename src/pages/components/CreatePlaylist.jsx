@@ -26,6 +26,7 @@ export default function CreatePlaylist({ response }) {
   useEffect(() => {
     setData(response);
   }, [response]);
+
   useEffect(() => {
     const setColor = async () => {
       const color = await utils.getAverageColor(data.image);
@@ -85,12 +86,14 @@ export default function CreatePlaylist({ response }) {
   const handleLocalLike = (obj) => {
     const { savedTo, removedFrom } = obj;
     if (savedTo.length == 0 && removedFrom.length == 0) return;
+
     const newList = data.list.map((item) => {
       item.savedIn = [...new Set([...item.savedIn, ...savedTo])].filter(
         (item2) => !removedFrom.includes(item2)
       );
       return item;
     });
+
     setData({ ...data, list: newList });
   };
 
@@ -106,6 +109,7 @@ export default function CreatePlaylist({ response }) {
       getRelated();
     }
   }, [relatedPlaylistinView]);
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
@@ -135,7 +139,7 @@ export default function CreatePlaylist({ response }) {
               .map((item) => item.image)}
             label={"Featured artists:"}
             name={data?.more_info?.artists[0].name}
-            totalOwner={data?.more_info?.artists.length - 1}
+            totalOwner={data?.more_info?.artists.length}
             action={() => open(artId)}
           />
 

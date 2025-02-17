@@ -8,7 +8,11 @@ export default function PlaylistOwner({
   totalOwner,
 }) {
   return (
-    <button className="playlistOwner" onClick={() => action()}>
+    <button
+      className="playlistOwner"
+      onClick={() => action()}
+      style={{ gridTemplateColumns: `${srcArray.length * 20}px auto` }}
+    >
       <div className="ownerAvt">
         {srcArray.map((src) => (
           <img
@@ -23,7 +27,7 @@ export default function PlaylistOwner({
           <p className="thinOneLineText">{utils.refineText(name)}...</p>
         </div>
 
-        <span>+{totalOwner} more</span>
+        {totalOwner != 1 && <span>+{totalOwner - 1} more</span>}
       </div>
     </button>
   );
