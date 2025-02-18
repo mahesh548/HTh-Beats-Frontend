@@ -7,9 +7,15 @@ import { createPortal } from "react-dom";
 import { HashContext } from "./Hash";
 import { MoreVertOutlined } from "@mui/icons-material";
 
-export default function PlaylistSong({ data, play, isPlaying, isLiked }) {
+export default function PlaylistSong({
+  data,
+  play,
+  isPlaying,
+  isLiked,
+  setGlobalLike,
+}) {
   const { openElements } = useContext(HashContext);
-  const [localLike, setLocalLike] = useState(isLiked);
+  const [localLike, setLocalLike] = useState();
 
   //memoizing the like data
   const likeData = useMemo(() => {
@@ -36,8 +42,9 @@ export default function PlaylistSong({ data, play, isPlaying, isLiked }) {
 
   //setting the local like value base on result of the add to playlist
   const addResult = (obj) => {
-    const { savedTo } = obj;
+    const { savedTo, removedFrom } = obj;
     setLocalLike(savedTo.length > 0);
+    setGlobalLike?.(obj, data.id);
   };
   return (
     <div className="playlistSong">

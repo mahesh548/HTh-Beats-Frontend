@@ -83,16 +83,26 @@ export default function CreatePlaylist({ response }) {
     return idArray;
   }, [data.list]);
 
-  const handleLocalLike = (obj) => {
+  const handleLocalLike = (obj, id = "all") => {
     const { savedTo, removedFrom } = obj;
     if (savedTo.length == 0 && removedFrom.length == 0) return;
-
-    const newList = data.list.map((item) => {
-      item.savedIn = [...new Set([...item.savedIn, ...savedTo])].filter(
-        (item2) => !removedFrom.includes(item2)
-      );
-      return item;
-    });
+    let newList = [];
+    if (id == "all") {
+      newList = data.list.map((item) => {
+        item.savedIn = [...new Set([...item.savedIn, ...savedTo])].filter(
+          (item2) => !removedFrom.includes(item2)
+        );
+        return item;
+      });
+    } else {
+      newList = data.list.map((item) => {
+        if (item.id != id) return item;
+        item.savedIn = [...new Set([...item.savedIn, ...savedTo])].filter(
+          (item2) => !removedFrom.includes(item2)
+        );
+        return item;
+      });
+    }
 
     setData({ ...data, list: newList });
   };
@@ -203,6 +213,7 @@ export default function CreatePlaylist({ response }) {
               key={item.id}
               isPlaying={item.id == Queue.song}
               isLiked={item.savedIn.length > 0 || isLiked}
+              setGlobalLike={handleLocalLike}
             />
           );
         })}
