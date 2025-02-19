@@ -45,7 +45,10 @@ export default function CreateHome() {
       {artist_recos && (
         <TimelineSlider
           label="Artist you may like"
-          data={artist_recos}
+          data={artist_recos.map((item) => {
+            item.type = "artist";
+            return item;
+          })}
           style="round"
         />
       )}

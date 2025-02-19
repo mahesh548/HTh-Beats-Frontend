@@ -13,7 +13,7 @@ export default function Artist() {
   useEffect(() => {
     setplaylistData(false);
     const getArtist = async () => {
-      const response = await utils.API(`/artist/${id}`, "GET");
+      const response = await utils.API(`/artist?id=${id}`, "GET");
 
       /* if (response.hasOwnProperty("list")) {
         setplaylistData(refineResponse(response, url));
