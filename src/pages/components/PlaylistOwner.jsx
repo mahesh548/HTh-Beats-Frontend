@@ -24,7 +24,7 @@ export default function PlaylistOwner({
       <div className="ownerTxt">
         <b>{label}</b>
         <div>
-          <p className="thinOneLineText">{utils.refineText(name)}...</p>
+          <p className="thinOneLineText">{utils.refineText(name)}</p>
         </div>
 
         {totalOwner != 1 && <span>+{totalOwner - 1} more</span>}

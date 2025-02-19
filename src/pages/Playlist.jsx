@@ -14,6 +14,7 @@ export default function playlist() {
   const pathMap = {
     playlist: "/entity/playlist",
     album: "/entity/album",
+    mix: "/entity/mix",
   };
   const getUrl = () => {
     const pathname = location.pathname.split("/")[1];
@@ -26,6 +27,22 @@ export default function playlist() {
       response.more_info.artists = response.more_info.artistMap.artists;
       response.more_info.subtitle_desc = [
         "Album",
+        response?.year || "",
+        `${response.list_count} songs`,
+      ];
+    }
+    if (url == pathMap["mix"]) {
+      let allArtist = response.list
+        .map((item) => item.more_info.artistMap.artists)
+        .flat()
+        .filter((item) => item.image);
+
+      response.more_info.artists = [
+        ...new Map(allArtist.map((item2) => [item2.id, item2])).values(),
+      ];
+
+      response.more_info.subtitle_desc = [
+        "Mix",
         response?.year || "",
         `${response.list_count} songs`,
       ];

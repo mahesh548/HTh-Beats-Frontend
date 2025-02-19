@@ -12,6 +12,9 @@ export default function TimelineSquare({ img, text, id, type, style = "" }) {
     if (type == "album") {
       navigate(`/album/${id}`);
     }
+    if (type == "mix") {
+      navigate(`/mix/${id}`);
+    }
   };
 
   return (
