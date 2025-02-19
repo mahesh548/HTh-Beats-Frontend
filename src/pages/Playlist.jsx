@@ -43,7 +43,7 @@ export default function playlist() {
 
       response.more_info.subtitle_desc = [
         "Mix",
-        response?.year || "",
+        response?.year || response.list.find((item) => item?.year).year,
         `${response.list_count} songs`,
       ];
     }

@@ -115,7 +115,7 @@ export default function CreatePlaylist({ response }) {
       );
       setRelatedPlaylist(response || false);
     };
-    if (!relatedPlaylist && relatedPlaylistEntry) {
+    if (!relatedPlaylist && relatedPlaylistEntry && data.type != "mix") {
       getRelated();
     }
   }, [relatedPlaylistinView]);
@@ -225,7 +225,7 @@ export default function CreatePlaylist({ response }) {
             <div>Trending in language</div>
           </>
         ) : (
-          <div>Loading..</div>
+          data.type != "mix" && <div>Loading..</div>
         )}
       </div>
 
