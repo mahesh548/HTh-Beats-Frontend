@@ -20,7 +20,6 @@ export default function CreateArtist({ response }) {
   const { openElements, open } = useContext(HashContext);
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
-  const [relatedPlaylist, setRelatedPlaylist] = useState(false);
   const [bg, setBg] = useState("#8d8d8d");
   useEffect(() => {
     setData(response);
@@ -40,10 +39,6 @@ export default function CreateArtist({ response }) {
   const { ref, inView, entry } = useInView({
     threshold: 0,
   });
-  const [relatedPlaylistRef, relatedPlaylistinView, relatedPlaylistEntry] =
-    useInView({
-      threshold: 0,
-    });
 
   const play = (id) => {
     setQueue({
@@ -105,19 +100,6 @@ export default function CreateArtist({ response }) {
 
     setData({ ...data, list: newList });
   };
-
-  useEffect(() => {
-    const getRelated = async () => {
-      const response = await utils.API(
-        `/related?id=${data.id}&entity=${data.type}`,
-        "GET"
-      );
-      setRelatedPlaylist(response || false);
-    };
-    if (!relatedPlaylist && relatedPlaylistEntry && data.type != "mix") {
-      getRelated();
-    }
-  }, [relatedPlaylistinView]);
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
@@ -217,16 +199,6 @@ export default function CreateArtist({ response }) {
             />
           );
         })}
-      </div>
-      <div className="ps-1 mt-4" ref={relatedPlaylistRef}>
-        {relatedPlaylist ? (
-          <>
-            <TimelineSlider label="Related playlists" data={relatedPlaylist} />
-            <div>Trending in language</div>
-          </>
-        ) : (
-          data.type != "mix" && <div>Loading..</div>
-        )}
       </div>
 
       {openElements.includes(addId) &&

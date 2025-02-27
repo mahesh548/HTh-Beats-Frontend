@@ -18,6 +18,7 @@ export default function Artist() {
     response.subtitle_desc = response?.subtitle
       ? `${response.subtitle}`
       : `Artist • ${data?.follower_count || data?.fan_count} Followers`;
+    response.title = response.name;
 
     delete response.artistId;
     delete response.topSongs;
