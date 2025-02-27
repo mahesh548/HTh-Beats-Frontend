@@ -1010,3 +1010,17 @@ p {
     font-weight: 100;
   }
 }
+/* ARTIST's CSS START FROM HERE */
+
+.artistCover {
+  position: fixed;
+  z-index: -1;
+  width: 100%;
+  img {
+    width: 100%;
+    aspect-ratio: 4/9;
+    filter: brightness(0.8);
+    border-radius: 0;
+    object-fit: cover;
+  }
+}

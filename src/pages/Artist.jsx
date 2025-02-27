@@ -11,14 +11,13 @@ export default function Artist() {
   const [playlistData, setplaylistData] = useState(false);
 
   const refineResponse = (response) => {
+    response.image = response.image.replace("150x150.jpg", "500x500.jpg");
     response.list = response.topSongs;
     response.id = response.artistId;
     response.bio = JSON.parse(response?.bio || "[]");
-    response.header_desc = response?.bio[0]?.text || response.name;
     response.subtitle_desc = response?.subtitle
       ? `${response.subtitle}`
       : `Artist • ${data?.follower_count || data?.fan_count} Followers`;
-    response.title = response.name;
 
     delete response.artistId;
     delete response.topSongs;

@@ -36,10 +36,6 @@ export default function CreateArtist({ response }) {
     }
   }, [data]);
 
-  const { ref, inView, entry } = useInView({
-    threshold: 0,
-  });
-
   const play = (id) => {
     setQueue({
       type: "NEW",
@@ -103,89 +99,78 @@ export default function CreateArtist({ response }) {
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
-      <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
+      <div className="artistCover">
+        <img src={data.image} alt={data.name} className="playlistMainImg" />
+        <p>{data.name}</p>
+      </div>
 
-      <div className="playlistMain">
-        <PlaylistNavbar
-          response={response}
-          setData={setData}
-          display={inView}
-        />
-
+      <div className="playlistMain mt-0">
         <BackButton />
-        <img
-          src={data.image}
-          alt={data.title}
-          className="playlistMainImg"
-          ref={ref}
-        />
-        <div className="playlistDetails">
-          <p className="thinTwoLineText">
-            {utils.refineText(data.header_desc)}
-          </p>
-
-          <p className="thinTwoLineText">
-            {utils.refineText(data?.subtitle_desc)}
-          </p>
-        </div>
-        <div className="playlistButtonCont">
-          <div>
-            <LikeEntity
-              isLiked={data.isLiked}
-              styleClass="playlistButtonSecondary"
-              likeData={likeData}
-            />
-            <button className="playlistButtonSecondary">
-              <img src={downloadOutlined} />
-            </button>
-
-            <OptionEntity
-              styleClass="playlistButtonSecondary"
-              data={{
-                id: data.id,
-                title: data.title,
-                subtitle: data.header_desc,
-                image: data.image,
-                list: data.list,
-              }}
-              artists={
-                [
-                  {
-                    id: data.id,
-                    image: data.image,
-                    name: data.name,
-                    perma_url: data.perma_url,
-                    role: data?.dominantType || "singer",
-                    type: "artist",
-                  },
-                ] || []
-              }
-              addId={addId}
-              artId={artId}
-            >
-              <img src={moreOutlined} />
-            </OptionEntity>
+        <div className="bg-black">
+          <div className="playlistDetails " style={{ marginTop: "44.44%" }}>
+            <p className="thinTwoLineText">
+              {utils.refineText(data?.subtitle_desc)}
+            </p>
           </div>
-          <div>
-            {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (
-              <button
-                className="playlistButton"
-                onClick={() => setQueue({ type: "STATUS", value: "pause" })}
-              >
-                <PauseRounded />
+          <div className="playlistButtonCont">
+            <div>
+              <LikeEntity
+                isLiked={data.isLiked}
+                styleClass="playlistButtonSecondary"
+                likeData={likeData}
+              />
+              <button className="playlistButtonSecondary">
+                <img src={downloadOutlined} />
               </button>
-            ) : (
-              <button
-                className="playlistButton"
-                onClick={() => play(data.list[0].id)}
+
+              <OptionEntity
+                styleClass="playlistButtonSecondary"
+                data={{
+                  id: data.id,
+                  title: data.name,
+                  subtitle: data.header_desc,
+                  image: data.image,
+                  list: data.list,
+                }}
+                artists={
+                  [
+                    {
+                      id: data.id,
+                      image: data.image,
+                      name: data.name,
+                      perma_url: data.perma_url,
+                      role: data?.dominantType || "singer",
+                      type: "artist",
+                    },
+                  ] || []
+                }
+                addId={addId}
+                artId={artId}
               >
-                <PlayArrowRounded />
-              </button>
-            )}
+                <img src={moreOutlined} />
+              </OptionEntity>
+            </div>
+            <div>
+              {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (
+                <button
+                  className="playlistButton"
+                  onClick={() => setQueue({ type: "STATUS", value: "pause" })}
+                >
+                  <PauseRounded />
+                </button>
+              ) : (
+                <button
+                  className="playlistButton"
+                  onClick={() => play(data.list[0].id)}
+                >
+                  <PlayArrowRounded />
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
-      <div className="songList">
+      <div className="songList pt-4 bg-black" style={{ marginTop: "-11px" }}>
         {data.list.map((item) => {
           const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
           return (
