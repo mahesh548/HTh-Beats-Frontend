@@ -1022,5 +1022,14 @@ p {
     filter: brightness(0.8);
     border-radius: 0;
     object-fit: cover;
+    position: absolute;
+    z-index: -1;
+  }
+  p {
+    margin-top: 43%;
+    color: white;
+    text-align: left;
+    font-size: 35px;
+    padding-left: 10px;
   }
 }

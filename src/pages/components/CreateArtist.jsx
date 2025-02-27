@@ -107,7 +107,7 @@ export default function CreateArtist({ response }) {
       <div className="playlistMain mt-0">
         <BackButton />
         <div className="bg-black">
-          <div className="playlistDetails " style={{ marginTop: "44.44%" }}>
+          <div className="playlistDetails py-1" style={{ marginTop: "44.44%" }}>
             <p className="thinTwoLineText">
               {utils.refineText(data?.subtitle_desc)}
             </p>
