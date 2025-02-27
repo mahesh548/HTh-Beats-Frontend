@@ -143,7 +143,7 @@ export default function CreateArtist({ response }) {
           </p>
 
           <p className="thinTwoLineText">
-            {utils.refineText(data.more_info?.subtitle_desc.join(" • "))}
+            {utils.refineText(data?.subtitle_desc)}
           </p>
         </div>
         <div className="playlistButtonCont">
