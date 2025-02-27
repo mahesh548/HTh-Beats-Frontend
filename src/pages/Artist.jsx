@@ -3,21 +3,30 @@ import { useParams } from "react-router";
 import PageLoader from "./components/PageLoader";
 import utils from "../../utils";
 import { AuthContext } from "./components/Auth";
-import CreatePlaylist from "./components/CreatePlaylist";
+import CreateArtist from "./components/CreateArtist";
 
 export default function Artist() {
   const auth = useContext(AuthContext);
   const { id } = useParams();
   const [playlistData, setplaylistData] = useState(false);
 
+  const refineResponse = (response) => {
+    response.list = response.topSongs;
+    response.id = response.artistId;
+
+    delete response.artistId;
+    delete response.topSongs;
+    return response;
+  };
+
   useEffect(() => {
     setplaylistData(false);
     const getArtist = async () => {
       const response = await utils.API(`/artist?id=${id}`, "GET");
 
-      /* if (response.hasOwnProperty("list")) {
-        setplaylistData(refineResponse(response, url));
-      } */
+      if (response.hasOwnProperty("topSongs")) {
+        setplaylistData(refineResponse(response));
+      }
     };
     if (auth.user?.verified) {
       getArtist();
@@ -27,6 +36,6 @@ export default function Artist() {
   return playlistData == false ? (
     <PageLoader />
   ) : (
-    <CreatePlaylist response={playlistData} />
+    <CreateArtist response={playlistData} />
   );
 }
