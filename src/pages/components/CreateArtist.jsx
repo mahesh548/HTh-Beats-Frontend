@@ -4,7 +4,7 @@ import BackButton from "./BackButton";
 
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
-import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
+import { PauseRounded, PlayArrowRounded, ArrowBack } from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
@@ -35,6 +35,10 @@ export default function CreateArtist({ response }) {
       setColor();
     }
   }, [data]);
+
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+  });
 
   const play = (id) => {
     setQueue({
@@ -105,9 +109,28 @@ export default function CreateArtist({ response }) {
       </div>
 
       <div className="playlistMain mt-0">
+        <div
+          className="playlistNavbar"
+          style={{
+            backgroundColor: bg,
+            display: !inView ? "grid" : "none",
+          }}
+        >
+          <button className="iconButton" onClick={() => navigate(-1)}>
+            <ArrowBack />
+          </button>
+
+          <div className="playlistNavbarInfo">
+            <p className="thinOneLineText playlistTitle">{data?.name}</p>
+          </div>
+        </div>
         <BackButton />
         <div className="bg-black">
-          <div className="playlistDetails py-1" style={{ marginTop: "44.44%" }}>
+          <div
+            className="playlistDetails py-1"
+            style={{ marginTop: "40%" }}
+            ref={ref}
+          >
             <p className="thinTwoLineText">
               {utils.refineText(data?.subtitle_desc)}
             </p>

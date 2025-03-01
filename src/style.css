@@ -1016,20 +1016,24 @@ p {
   position: fixed;
   z-index: -1;
   width: 100%;
+  aspect-ratio: 9/5;
+  padding: 0;
   img {
     width: 100%;
-    aspect-ratio: 4/9;
+    height: 100%;
     filter: brightness(0.8);
     border-radius: 0;
     object-fit: cover;
     position: absolute;
     z-index: -1;
+    margin: 0;
   }
   p {
-    margin-top: 43%;
     color: white;
     text-align: left;
     font-size: 35px;
     padding-left: 10px;
+    position: absolute;
+    bottom: 0px;
   }
 }
