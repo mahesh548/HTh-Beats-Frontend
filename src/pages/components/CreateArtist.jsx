@@ -199,12 +199,12 @@ export default function CreateArtist({ response }) {
           </div>
         </div>
       </div>
-      <div className="songList pt-4 bg-black" style={{ marginTop: "-11px" }}>
+      <div className="songList pt-2 bg-black" style={{ marginTop: "-11px" }}>
         <p className="labelText ps-1 mb-1">Popular songs</p>
         {data.list.map((item) => {
           const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
           return (
-            <div className="sortPlaylistSong">
+            <div className="sortPlaylistSong" key={"wrap-" + item.id}>
               <p className="text-white ps-1 fw-light">
                 {data.list.indexOf(item) + 1}
               </p>
@@ -220,6 +220,21 @@ export default function CreateArtist({ response }) {
           );
         })}
       </div>
+      <div className="bg-black pt-4" style={{ marginTop: "-21px" }}>
+        {data?.singles && (
+          <TimelineSlider label="Popular releases" data={data.singles} />
+        )}
+        {data?.latest_release && (
+          <TimelineSlider label="Latest releases" data={data.latest_release} />
+        )}
+        {data?.featured_artist_playlist && (
+          <TimelineSlider
+            label={`Featuring ${data.name}`}
+            data={data.featured_artist_playlist}
+          />
+        )}
+      </div>
+
       {openElements.includes(addId) &&
         createPortal(
           <AddToPlaylist
