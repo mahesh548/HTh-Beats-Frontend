@@ -1070,9 +1070,9 @@ p {
   max-width: 100%;
   padding: 5px;
   border-radius: 8px;
-  font-size: 12px;
+  font-size: 10px;
   img {
-    width: 16px;
+    width: 25px;
     margin-right: 2px;
   }
 }

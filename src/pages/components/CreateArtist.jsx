@@ -21,7 +21,7 @@ import { HashContext } from "./Hash";
 import TimelineSlider from "./TimelineSlider";
 //icons
 import fb from "../../assets/icons/fb.svg";
-import insta from "../../assets/icons/insta.svg";
+import twitter from "../../assets/icons/twitter.svg";
 import wiki from "../../assets/icons/wiki.svg";
 
 export default function CreateArtist({ response }) {
@@ -265,19 +265,20 @@ export default function CreateArtist({ response }) {
               <div className="socCont">
                 {data?.fb && (
                   <button className="iconButton">
-                    <img src={fb} /> <span>{data.fb.split("/").at(-1)}</span>
+                    <img src={fb} />
+                    <span>Facebook</span>
                   </button>
                 )}
                 {data?.twitter && (
                   <button className="iconButton">
-                    <img src={insta} />
-                    <span>{data.twitter.split("/").at(-1)}</span>
+                    <img src={twitter} />
+                    <span>Twitter</span>
                   </button>
                 )}
                 {data?.wiki && (
                   <button className="iconButton">
                     <img src={wiki} />
-                    <span>{data.wiki.split("/").at(-1)}</span>
+                    <span>Wikipedia</span>
                   </button>
                 )}
               </div>
