@@ -1016,7 +1016,7 @@ p {
   position: fixed;
   z-index: -1;
   width: 100%;
-  aspect-ratio: 9/5;
+  aspect-ratio: 9/6;
   padding: 0;
   img {
     width: 100%;
@@ -1031,9 +1031,10 @@ p {
   p {
     color: white;
     text-align: left;
-    font-size: 35px;
+    font-size: 45px;
     padding-left: 10px;
     position: absolute;
     bottom: 0px;
+    font-weight: bolder;
   }
 }

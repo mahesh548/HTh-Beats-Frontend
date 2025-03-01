@@ -8,7 +8,6 @@ import { PauseRounded, PlayArrowRounded, ArrowBack } from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
-import PlaylistNavbar from "./PlaylistNavbar";
 import LikeEntity from "./LikeEntity";
 import OptionEntity from "./OptionEntity";
 import { createPortal } from "react-dom";
@@ -107,7 +106,6 @@ export default function CreateArtist({ response }) {
         <img src={data.image} alt={data.name} className="playlistMainImg" />
         <p>{data.name}</p>
       </div>
-
       <div className="playlistMain mt-0">
         <div
           className="playlistNavbar"
@@ -125,10 +123,18 @@ export default function CreateArtist({ response }) {
           </div>
         </div>
         <BackButton />
-        <div className="bg-black">
+        <div
+          className="bg-black"
+          style={{
+            backgroundImage: `linear-gradient(180deg, ${bg.replace(
+              ")",
+              ",0.3)"
+            )} 0% 35%, transparent 100%)`,
+          }}
+        >
           <div
             className="playlistDetails py-1"
-            style={{ marginTop: "40%" }}
+            style={{ marginTop: "50%" }}
             ref={ref}
           >
             <p className="thinTwoLineText">
@@ -194,21 +200,26 @@ export default function CreateArtist({ response }) {
         </div>
       </div>
       <div className="songList pt-4 bg-black" style={{ marginTop: "-11px" }}>
+        <p className="labelText ps-1 mb-1">Popular songs</p>
         {data.list.map((item) => {
           const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
           return (
-            <PlaylistSong
-              data={item}
-              play={play}
-              key={item.id}
-              isPlaying={item.id == Queue.song}
-              isLiked={item.savedIn.length > 0 || isLiked}
-              setGlobalLike={handleLocalLike}
-            />
+            <div className="sortPlaylistSong">
+              <p className="text-white ps-1 fw-light">
+                {data.list.indexOf(item) + 1}
+              </p>
+              <PlaylistSong
+                data={item}
+                play={play}
+                key={item.id}
+                isPlaying={item.id == Queue.song}
+                isLiked={item.savedIn.length > 0 || isLiked}
+                setGlobalLike={handleLocalLike}
+              />
+            </div>
           );
         })}
       </div>
-
       {openElements.includes(addId) &&
         createPortal(
           <AddToPlaylist
