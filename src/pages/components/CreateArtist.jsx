@@ -19,6 +19,10 @@ import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import { HashContext } from "./Hash";
 import TimelineSlider from "./TimelineSlider";
+//icons
+import fb from "../../assets/icons/fb.svg";
+import insta from "../../assets/icons/insta.svg";
+import wiki from "../../assets/icons/wiki.svg";
 
 export default function CreateArtist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -240,12 +244,12 @@ export default function CreateArtist({ response }) {
           />
         )}
         <div
-          class="card bg-dark text-white mx-auto mt-5"
+          className="card bg-dark text-white mx-auto mt-5"
           style={{ width: "95%" }}
         >
-          <img src={data.image} class="card-img artC" alt={data.name} />
-          <div class="card-img-overlay" style={{ background: "#00000078" }}>
-            <h5 class="card-title">
+          <img src={data.image} className="card-img artC" alt={data.name} />
+          <div className="card-img-overlay" style={{ background: "#00000078" }}>
+            <h5 className="card-title">
               {data.name}{" "}
               {data?.isVerified == "true" && (
                 <VerifiedRounded className="fs-5 text-wheat" />
@@ -258,6 +262,25 @@ export default function CreateArtist({ response }) {
               <p className="thinThreeLineText text-white mt-1">
                 {data?.bio[0]?.text || ""}
               </p>
+              <div className="socCont">
+                {data?.fb && (
+                  <button className="iconButton">
+                    <img src={fb} /> <span>{data.fb.split("/").at(-1)}</span>
+                  </button>
+                )}
+                {data?.twitter && (
+                  <button className="iconButton">
+                    <img src={insta} />
+                    <span>{data.twitter.split("/").at(-1)}</span>
+                  </button>
+                )}
+                {data?.wiki && (
+                  <button className="iconButton">
+                    <img src={wiki} />
+                    <span>{data.wiki.split("/").at(-1)}</span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>

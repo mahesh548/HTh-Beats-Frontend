@@ -1063,3 +1063,16 @@ p {
   position: absolute;
   bottom: 10px;
 }
+.socCont {
+  margin-top: 10px;
+  background-color: rgba(0, 0, 0, 0.425);
+  width: max-content;
+  max-width: 100%;
+  padding: 5px;
+  border-radius: 8px;
+  font-size: 12px;
+  img {
+    width: 16px;
+    margin-right: 2px;
+  }
+}
