@@ -4,7 +4,12 @@ import BackButton from "./BackButton";
 
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
-import { PauseRounded, PlayArrowRounded, ArrowBack } from "@mui/icons-material";
+import {
+  PauseRounded,
+  PlayArrowRounded,
+  ArrowBack,
+  VerifiedRounded,
+} from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
@@ -99,6 +104,7 @@ export default function CreateArtist({ response }) {
 
     setData({ ...data, list: newList });
   };
+  console.log(data.bio);
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
@@ -233,6 +239,28 @@ export default function CreateArtist({ response }) {
             data={data.featured_artist_playlist}
           />
         )}
+        <div
+          class="card bg-dark text-white mx-auto mt-5"
+          style={{ width: "95%" }}
+        >
+          <img src={data.image} class="card-img artC" alt={data.name} />
+          <div class="card-img-overlay" style={{ background: "#00000078" }}>
+            <h5 class="card-title">
+              {data.name}{" "}
+              {data?.isVerified == "true" && (
+                <VerifiedRounded className="fs-5 text-wheat" />
+              )}
+            </h5>
+            <div className="artCovContent">
+              <p className="fs-5">{`${utils.formatMetric(
+                data?.fan_count || data?.follower_count
+              )} Fans`}</p>
+              <p className="thinThreeLineText text-white mt-1">
+                {data?.bio[0]?.text || ""}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {openElements.includes(addId) &&
