@@ -216,13 +216,11 @@ export default function CreateArtist({ response }) {
           style={{ height: showAll.songs ? "" : "500px" }}
         >
           <p className="labelText ps-1 mb-1">Popular songs</p>
-          {data.list.map((item) => {
+          {data.list.map((item, index) => {
             const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
             return (
               <div className="sortPlaylistSong" key={"wrap-" + item.id}>
-                <p className="text-white ps-1 fw-light">
-                  {data.list.indexOf(item) + 1}
-                </p>
+                <p className="text-white ps-1 fw-light">{index + 1}</p>
                 <PlaylistSong
                   data={item}
                   play={play}
@@ -244,6 +242,45 @@ export default function CreateArtist({ response }) {
             >
               Show more
             </button>
+          </>
+        )}
+        {data?.topAlbums && (
+          <>
+            <div
+              className="overflow-hidden "
+              style={{ height: showAll.albums ? "" : "500px" }}
+            >
+              <p className="labelText ps-1 mb-1">Popular albums</p>
+              {data.topAlbums.map((album, index) => {
+                return (
+                  <div className="sortPlaylistSong" key={"wrap-" + album.id}>
+                    <p className="text-white ps-1 fw-light">{index + 1}</p>
+                    <div className="playlistSong">
+                      <img src={album.image} className="playlistSongImg" />
+                      <div>
+                        <p className="thinOneLineText playlistSongTitle">
+                          {utils.refineText(album.title)}
+                        </p>
+                        <p className="thinOneLineText playlistSongSubTitle">
+                          {utils.refineText(album.subtitle)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {!showAll.albums && (
+              <>
+                <div className="fade-shadow"></div>
+                <button
+                  className="iconButton outlineBut"
+                  onClick={() => setShowAll({ ...showAll, albums: true })}
+                >
+                  Show more
+                </button>
+              </>
+            )}
           </>
         )}
       </div>
