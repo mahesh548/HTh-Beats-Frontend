@@ -64,7 +64,7 @@ export default function CreateArtist({ response }) {
 
   const likeData = {
     id: response?.id,
-    type: "entity",
+    type: "artist",
   };
 
   const addId = useMemo(() => {
