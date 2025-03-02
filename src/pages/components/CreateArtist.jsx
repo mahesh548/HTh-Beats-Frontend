@@ -30,6 +30,7 @@ export default function CreateArtist({ response }) {
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
+  const [showAll, setShowAll] = useState({ songs: false, albums: false });
   useEffect(() => {
     setData(response);
   }, [response]);
@@ -210,7 +211,10 @@ export default function CreateArtist({ response }) {
         </div>
       </div>
       <div className="songList pt-2 bg-black" style={{ marginTop: "-11px" }}>
-        <div className="overflow-hidden " style={{ height: "500px" }}>
+        <div
+          className="overflow-hidden "
+          style={{ height: showAll.songs ? "" : "500px" }}
+        >
           <p className="labelText ps-1 mb-1">Popular songs</p>
           {data.list.map((item) => {
             const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
@@ -231,8 +235,17 @@ export default function CreateArtist({ response }) {
             );
           })}
         </div>
-        <div className="fade-shadow"></div>
-        <button className="iconButton outlineBut">Show more</button>
+        {!showAll.songs && (
+          <>
+            <div className="fade-shadow"></div>
+            <button
+              className="iconButton outlineBut"
+              onClick={() => setShowAll({ ...showAll, songs: true })}
+            >
+              Show more
+            </button>
+          </>
+        )}
       </div>
       <div className="bg-black pt-4">
         {data?.singles && (
