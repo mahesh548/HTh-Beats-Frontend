@@ -23,6 +23,7 @@ import TimelineSlider from "./TimelineSlider";
 import fb from "../../assets/icons/fb.svg";
 import twitter from "../../assets/icons/twitter.svg";
 import wiki from "../../assets/icons/wiki.svg";
+import { Link } from "react-router";
 
 export default function CreateArtist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -108,7 +109,6 @@ export default function CreateArtist({ response }) {
 
     setData({ ...data, list: newList });
   };
-  console.log(data.bio);
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
@@ -265,20 +265,26 @@ export default function CreateArtist({ response }) {
               <div className="socCont">
                 {data?.fb && (
                   <button className="iconButton">
-                    <img src={fb} />
-                    <span>Facebook</span>
+                    <Link to={data.fb} target="_">
+                      <img src={fb} />
+                      <span>Facebook</span>
+                    </Link>
                   </button>
                 )}
                 {data?.twitter && (
                   <button className="iconButton">
-                    <img src={twitter} />
-                    <span>Twitter</span>
+                    <Link to={data.twitter} target="_">
+                      <img src={twitter} />
+                      <span>Twitter</span>
+                    </Link>
                   </button>
                 )}
                 {data?.wiki && (
                   <button className="iconButton">
-                    <img src={wiki} />
-                    <span>Wikipedia</span>
+                    <Link to={data.twitter} target="_">
+                      <img src={wiki} />
+                      <span>Wikipedia</span>
+                    </Link>
                   </button>
                 )}
               </div>
