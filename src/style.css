@@ -1074,12 +1074,30 @@ p {
     margin-right: 5px;
     border-radius: 8px;
   }
-  a {
-    text-decoration: none;
-    color: white;
-  }
   img {
     width: 20px;
     margin-right: 4px;
   }
+}
+
+.outlineBut {
+  display: block;
+  border: 2px solid var(--rsbs-handle-bg);
+  border-radius: 40px;
+  padding: 5px 10px;
+  margin: auto;
+  margin-top: 5px;
+  font-size: small;
+  translate: 0 -15px;
+}
+.fade-shadow {
+  height: 50px;
+  width: 100%;
+  translate: 0 -99%;
+  background-image: linear-gradient(
+    180deg,
+    #00000000 0% 5%,
+    #000000c9,
+    #000000e8
+  );
 }

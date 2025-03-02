@@ -210,27 +210,31 @@ export default function CreateArtist({ response }) {
         </div>
       </div>
       <div className="songList pt-2 bg-black" style={{ marginTop: "-11px" }}>
-        <p className="labelText ps-1 mb-1">Popular songs</p>
-        {data.list.map((item) => {
-          const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
-          return (
-            <div className="sortPlaylistSong" key={"wrap-" + item.id}>
-              <p className="text-white ps-1 fw-light">
-                {data.list.indexOf(item) + 1}
-              </p>
-              <PlaylistSong
-                data={item}
-                play={play}
-                key={item.id}
-                isPlaying={item.id == Queue.song}
-                isLiked={item.savedIn.length > 0 || isLiked}
-                setGlobalLike={handleLocalLike}
-              />
-            </div>
-          );
-        })}
+        <div className="overflow-hidden " style={{ height: "500px" }}>
+          <p className="labelText ps-1 mb-1">Popular songs</p>
+          {data.list.map((item) => {
+            const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
+            return (
+              <div className="sortPlaylistSong" key={"wrap-" + item.id}>
+                <p className="text-white ps-1 fw-light">
+                  {data.list.indexOf(item) + 1}
+                </p>
+                <PlaylistSong
+                  data={item}
+                  play={play}
+                  key={item.id}
+                  isPlaying={item.id == Queue.song}
+                  isLiked={item.savedIn.length > 0 || isLiked}
+                  setGlobalLike={handleLocalLike}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <div className="fade-shadow"></div>
+        <button className="iconButton outlineBut">Show more</button>
       </div>
-      <div className="bg-black pt-4" style={{ marginTop: "-21px" }}>
+      <div className="bg-black pt-4">
         {data?.singles && (
           <TimelineSlider label="Popular releases" data={data.singles} />
         )}
@@ -265,7 +269,11 @@ export default function CreateArtist({ response }) {
               <div className="socCont">
                 {data?.fb && (
                   <button className="iconButton">
-                    <Link to={data.fb} target="_">
+                    <Link
+                      to={data.fb}
+                      target="_"
+                      className="text-white text-decoration-none"
+                    >
                       <img src={fb} />
                       <span>Facebook</span>
                     </Link>
@@ -273,7 +281,11 @@ export default function CreateArtist({ response }) {
                 )}
                 {data?.twitter && (
                   <button className="iconButton">
-                    <Link to={data.twitter} target="_">
+                    <Link
+                      to={data.twitter}
+                      target="_"
+                      className="text-white text-decoration-none"
+                    >
                       <img src={twitter} />
                       <span>Twitter</span>
                     </Link>
@@ -281,7 +293,11 @@ export default function CreateArtist({ response }) {
                 )}
                 {data?.wiki && (
                   <button className="iconButton">
-                    <Link to={data.twitter} target="_">
+                    <Link
+                      to={data.twitter}
+                      target="_"
+                      className="text-white text-decoration-none"
+                    >
                       <img src={wiki} />
                       <span>Wikipedia</span>
                     </Link>
