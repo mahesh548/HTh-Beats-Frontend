@@ -147,7 +147,7 @@ export default function CreatePlaylist({ response }) {
             srcArray={data?.more_info?.artists
               .slice(0, 3)
               .map((item) => item.image)}
-            label={"Featured artists:"}
+            label={"Artists:"}
             name={data?.more_info?.artists[0].name}
             totalOwner={data?.more_info?.artists.length}
             action={() => open(artId)}

@@ -1101,3 +1101,11 @@ p {
     #000000e8
   );
 }
+.albumList {
+  grid-template-columns: 80px auto 40px 40px;
+  img {
+    height: 80px;
+    width: 80px;
+    border-radius: 4px;
+  }
+}

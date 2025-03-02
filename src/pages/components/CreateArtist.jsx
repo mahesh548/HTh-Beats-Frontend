@@ -23,14 +23,19 @@ import TimelineSlider from "./TimelineSlider";
 import fb from "../../assets/icons/fb.svg";
 import twitter from "../../assets/icons/twitter.svg";
 import wiki from "../../assets/icons/wiki.svg";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function CreateArtist({ response }) {
+  const navigate = useNavigate();
   const { openElements, open } = useContext(HashContext);
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
-  const [showAll, setShowAll] = useState({ songs: false, albums: false });
+
+  const [showAll, setShowAll] = useState({
+    songs: data?.list?.length < 10,
+    albums: data?.topAlbums?.length < 10,
+  });
   useEffect(() => {
     setData(response);
   }, [response]);
@@ -255,7 +260,12 @@ export default function CreateArtist({ response }) {
                 return (
                   <div className="sortPlaylistSong" key={"wrap-" + album.id}>
                     <p className="text-white ps-1 fw-light">{index + 1}</p>
-                    <div className="playlistSong">
+                    <div
+                      className="playlistSong albumList"
+                      onClick={() =>
+                        navigate(`/album/${album.perma_url.split("/").at(-1)}`)
+                      }
+                    >
                       <img src={album.image} className="playlistSongImg" />
                       <div>
                         <p className="thinOneLineText playlistSongTitle">
@@ -284,7 +294,7 @@ export default function CreateArtist({ response }) {
           </>
         )}
       </div>
-      <div className="bg-black pt-4">
+      <div className="bg-black pt-4" style={{ marginTop: "-5px" }}>
         {data?.singles && (
           <TimelineSlider label="Popular releases" data={data.singles} />
         )}
