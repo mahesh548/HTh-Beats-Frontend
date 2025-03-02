@@ -261,7 +261,7 @@ export default function CreateArtist({ response }) {
           />
         )}
         <div
-          className="card bg-dark text-white mx-auto mt-5"
+          className="card bg-dark text-white mx-auto mt-5 mb-5"
           style={{ width: "95%" }}
         >
           <img src={data.image} className="card-img artC" alt={data.name} />
@@ -320,6 +320,12 @@ export default function CreateArtist({ response }) {
             </div>
           </div>
         </div>
+        {data?.dedicated_artist_playlist && (
+          <TimelineSlider
+            label="Artist's dedicated playlist"
+            data={data.dedicated_artist_playlist}
+          />
+        )}
       </div>
 
       {openElements.includes(addId) &&
