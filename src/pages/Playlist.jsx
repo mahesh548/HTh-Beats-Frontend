@@ -47,6 +47,7 @@ export default function playlist() {
         `${response.list_count} songs`,
       ];
     }
+    response.image.replace("150x150.jpg", "500x500.jpg");
     return response;
   };
 

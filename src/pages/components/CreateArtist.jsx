@@ -19,11 +19,11 @@ import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import { HashContext } from "./Hash";
 import TimelineSlider from "./TimelineSlider";
+import { Link, useNavigate } from "react-router";
 //icons
 import fb from "../../assets/icons/fb.svg";
 import twitter from "../../assets/icons/twitter.svg";
 import wiki from "../../assets/icons/wiki.svg";
-import { Link, useNavigate } from "react-router";
 
 export default function CreateArtist({ response }) {
   const navigate = useNavigate();
