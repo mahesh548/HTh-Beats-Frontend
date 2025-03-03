@@ -173,7 +173,7 @@ export default function CreateArtist({ response }) {
                 data={{
                   id: data.id,
                   title: data.name,
-                  subtitle: data.header_desc,
+                  subtitle: data?.subtitle || "",
                   image: data.image,
                   list: data.list,
                 }}
