@@ -1109,13 +1109,16 @@ p {
     border-radius: 4px;
   }
 }
+/* SONGS PAGE CSS */
 .songsCard {
   display: grid;
   grid-template-columns: 100px auto;
+  column-gap: 4px;
 }
 .songsCardImg {
   width: 100px;
-  height: 120px;
+  height: 100%;
+  min-height: 120px;
   object-fit: cover;
   border-radius: 8px;
 }

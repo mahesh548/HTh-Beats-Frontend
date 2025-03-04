@@ -62,7 +62,10 @@ export default function CreatePlaylist({ response }) {
           <img src={data.image} alt={data.title} className="songsCardImg" />
           <div>
             <div className="playlistDetails mt-2">
-              <p className="thinTwoLineText text-white mt-0">
+              <p
+                className="thinTwoLineText text-white mt-2"
+                style={{ fontSize: "18px", fontWeight: "bold" }}
+              >
                 {utils.refineText(data.title)}
               </p>
               <p className="thinTwoLineText mt-1">
@@ -116,7 +119,7 @@ export default function CreatePlaylist({ response }) {
             </div>
           </div>
         </div>
-        <p className="labelText ps-2">Featured artist</p>
+        <p className="labelText ps-2 mt-4 mb-2">Featured artist</p>
         <div className="songArtCont">
           {data.more_info.artistMap.artists.map((item) => {
             return (
