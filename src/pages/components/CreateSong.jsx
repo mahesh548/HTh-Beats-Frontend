@@ -5,7 +5,6 @@ import BackButton from "./BackButton";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
-import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import LikeEntity from "./LikeEntity";
 import OptionEntity from "./OptionEntity";
@@ -59,67 +58,73 @@ export default function CreatePlaylist({ response }) {
 
       <div className="playlistMain">
         <BackButton />
-        <img src={data.image} alt={data.title} className="playlistMainImg" />
-        <div className="playlistDetails">
-          <p className="thinTwoLineText">{utils.refineText(data.subtitle)}</p>
-
-          <PlaylistOwner
-            srcArray={data.more_info?.artistMap?.artists
-              .slice(0, 3)
-              .map((item) => item.image)}
-            label={"Artists:"}
-            name={data?.more_info?.artistMap?.artists[0].name}
-            totalOwner={data?.more_info?.artistMap?.artists.length}
-            action={() => open(artId)}
-          />
-
-          <p className="thinTwoLineText">{utils.refineText(data?.subtitle)}</p>
-        </div>
-        <div className="playlistButtonCont">
+        <div className="songsCard px-3 mt-4">
+          <img src={data.image} alt={data.title} className="songsCardImg" />
           <div>
-            <LikeEntity
-              isLiked={data.isLiked}
-              styleClass="playlistButtonSecondary"
-              likeData={likeData}
-            />
-            <button className="playlistButtonSecondary">
-              <img src={downloadOutlined} />
-            </button>
+            <div className="playlistDetails mt-2">
+              <p className="thinTwoLineText text-white mt-0">
+                {utils.refineText(data.title)}
+              </p>
+              <p className="thinTwoLineText mt-1">
+                {utils.refineText(data?.subtitle)}
+              </p>
+            </div>
+            <div className="playlistButtonCont">
+              <div>
+                <LikeEntity
+                  isLiked={data.isLiked}
+                  styleClass="playlistButtonSecondary"
+                  likeData={likeData}
+                />
+                <button className="playlistButtonSecondary">
+                  <img src={downloadOutlined} />
+                </button>
 
-            <OptionEntity
-              styleClass="playlistButtonSecondary"
-              data={{
-                id: data.id,
-                title: data.title,
-                subtitle: data.header_desc,
-                image: data.image,
-                list: data.list,
-              }}
-              artists={data.more_info.artistMap.artists || []}
-              addId={addId}
-              artId={artId}
-            >
-              <img src={moreOutlined} />
-            </OptionEntity>
-          </div>
-          <div>
-            {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (
-              <button
-                className="playlistButton"
-                onClick={() => setQueue({ type: "STATUS", value: "pause" })}
-              >
-                <PauseRounded />
-              </button>
-            ) : (
-              <button
-                className="playlistButton"
-                onClick={() => play(data.list[0].id)}
-              >
-                <PlayArrowRounded />
-              </button>
-            )}
+                <OptionEntity
+                  styleClass="playlistButtonSecondary"
+                  data={{
+                    id: data.id,
+                    title: data.title,
+                    subtitle: data.header_desc,
+                    image: data.image,
+                    list: data.list,
+                  }}
+                  artists={data.more_info.artistMap.artists || []}
+                  addId={addId}
+                  artId={artId}
+                >
+                  <img src={moreOutlined} />
+                </OptionEntity>
+              </div>
+              <div>
+                {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (
+                  <button
+                    className="playlistButton"
+                    onClick={() => setQueue({ type: "STATUS", value: "pause" })}
+                  >
+                    <PauseRounded />
+                  </button>
+                ) : (
+                  <button
+                    className="playlistButton"
+                    onClick={() => play(data.list[0].id)}
+                  >
+                    <PlayArrowRounded />
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
+        <PlaylistOwner
+          srcArray={data.more_info?.artistMap?.artists
+            .slice(0, 3)
+            .map((item) => item.image)}
+          label={"Artists:"}
+          name={data?.more_info?.artistMap?.artists[0].name}
+          totalOwner={data?.more_info?.artistMap?.artists.length}
+          action={() => open(artId)}
+        />
       </div>
 
       {openElements.includes(addId) &&

@@ -11,6 +11,7 @@ export default function Song() {
   const [playlistData, setplaylistData] = useState(false);
 
   const refineResponse = (response) => {
+    response.image.replace("150x150.jpg", "500x500.jpg");
     return response;
   };
 
