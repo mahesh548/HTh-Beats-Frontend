@@ -116,15 +116,17 @@ export default function CreatePlaylist({ response }) {
             </div>
           </div>
         </div>
-        <PlaylistOwner
-          srcArray={data.more_info?.artistMap?.artists
-            .slice(0, 3)
-            .map((item) => item.image)}
-          label={"Artists:"}
-          name={data?.more_info?.artistMap?.artists[0].name}
-          totalOwner={data?.more_info?.artistMap?.artists.length}
-          action={() => open(artId)}
-        />
+        <p className="labelText ps-2">Featured artist</p>
+        <div className="songArtCont">
+          {data.more_info.artistMap.artists.map((item) => {
+            return (
+              <div>
+                <img src={item.image} />
+                <p className="thinTwoLineText">{item.name}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {openElements.includes(addId) &&
