@@ -9,14 +9,15 @@ import Verify from "./pages/Verify";
 import Playlist from "./pages/Playlist";
 import ChooseUsername from "./pages/ChooseUsername";
 import Loader from "./pages/Loader";
+import Search from "./pages/Search";
+import Artist from "./pages/Artist";
+import Song from "./pages/Song";
 
 //components
 import Navbar from "./pages/components/Navbar";
 
 //css
 import "./style.css";
-import Search from "./pages/Search";
-import Artist from "./pages/Artist";
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/playlist/:id" element={<Playlist />} />
         <Route path="/album/:id" element={<Playlist />} />
+        <Route path="/song/:id" element={<Song />} />
         <Route path="/mix/:id" element={<Playlist />} />
         <Route path="/artist/:id" element={<Artist />} />
       </Route>
