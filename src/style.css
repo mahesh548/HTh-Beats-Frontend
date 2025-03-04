@@ -1126,6 +1126,8 @@ p {
   display: grid;
   grid-template-columns: auto auto;
   color: var(--thin-text-color);
+  width: 98%;
+  margin: auto;
   div {
     display: grid;
     grid-template-columns: auto auto;

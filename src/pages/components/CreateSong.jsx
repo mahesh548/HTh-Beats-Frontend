@@ -119,11 +119,11 @@ export default function CreatePlaylist({ response }) {
             </div>
           </div>
         </div>
-        <p className="labelText ps-2 mt-4 mb-2">Featured artist</p>
+        <p className="labelText ps-2 mt-4 mb-2 fw-normal">Featured artist</p>
         <div className="songArtCont">
           {data.more_info.artistMap.artists.map((item) => {
             return (
-              <div>
+              <div key={item.id}>
                 <img src={item.image} />
                 <p className="thinTwoLineText">{item.name}</p>
               </div>

@@ -12,6 +12,13 @@ export default function Song() {
 
   const refineResponse = (response) => {
     response.image.replace("150x150.jpg", "500x500.jpg");
+    response.more_info.artistMap.artists = [
+      ...new Map(
+        response.more_info.artistMap.artists
+          .filter((item) => item.image.length > 0)
+          .map((obj) => [obj.id, obj])
+      ).values(),
+    ];
     return response;
   };
 
