@@ -6,17 +6,18 @@ import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
 import { songContext } from "./Song";
-import LikeEntity from "./LikeEntity";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import { HashContext } from "./Hash";
 import OptionSong from "./OptionSong";
+import LikeSong from "./LikeSong";
 
 export default function CreatePlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
+
   useEffect(() => {
     setData(response);
   }, [response]);
@@ -56,6 +57,13 @@ export default function CreatePlaylist({ response }) {
     return `add_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
 
+  const handleLocalLike = (obj) => {
+    const { savedTo, removedFrom } = obj;
+    const newSavedIn = [...new Set([...data.savedIn, ...savedTo])].filter(
+      (item2) => !removedFrom.includes(item2)
+    );
+    setData({ ...data, savedIn: newSavedIn });
+  };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
@@ -78,10 +86,11 @@ export default function CreatePlaylist({ response }) {
             </div>
             <div className="playlistButtonCont">
               <div>
-                <LikeEntity
-                  isLiked={data.isLiked}
+                <LikeSong
                   styleClass="playlistButtonSecondary"
+                  isLiked={data.savedIn.length > 0}
                   likeData={likeData}
+                  addId={addId}
                 />
                 <button className="playlistButtonSecondary">
                   <img src={downloadOutlined} />
