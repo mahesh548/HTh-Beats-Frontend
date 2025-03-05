@@ -42,7 +42,7 @@ export default function PlaylistSong({
 
   //setting the local like value base on result of the add to playlist
   const addResult = (obj) => {
-    const { savedTo, removedFrom } = obj;
+    const { savedTo } = obj;
     setLocalLike(savedTo.length > 0);
     setGlobalLike?.(obj, data.id);
   };

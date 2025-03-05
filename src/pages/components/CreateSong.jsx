@@ -39,16 +39,21 @@ export default function CreatePlaylist({ response }) {
     });
   };
 
-  const likeData = {
-    id: [response?.id],
-    type: "song",
-  };
+  //memoizing the like data
+  const likeData = useMemo(() => {
+    const playlistPreference = localStorage?.preferedPlaylist;
+    if (playlistPreference) {
+      return {
+        type: "song",
+        id: [data.id],
+        playlistIds: JSON.parse(playlistPreference),
+      };
+    }
+    return null;
+  }, []);
 
   const addId = useMemo(() => {
     return `add_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
-  }, [data.id]);
-  const artId = useMemo(() => {
-    return `art_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
 
   return (
@@ -127,8 +132,8 @@ export default function CreatePlaylist({ response }) {
       {openElements.includes(addId) &&
         createPortal(
           <AddToPlaylist
-            likeData={songsLikeData}
-            playlistIds={playlistInCommon}
+            likeData={likeData}
+            playlistIds={data.savedIn || []}
             results={(obj) => handleLocalLike(obj)}
             eleId={addId}
           />,
