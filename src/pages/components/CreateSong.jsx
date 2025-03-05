@@ -7,11 +7,10 @@ import moreOutlined from "../../assets/icons/moreOutlined.svg";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
 import { songContext } from "./Song";
 import LikeEntity from "./LikeEntity";
-import OptionEntity from "./OptionEntity";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import { HashContext } from "./Hash";
-import PlaylistOwner from "./PlaylistOwner";
+import OptionSong from "./OptionSong";
 
 export default function CreatePlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -83,21 +82,14 @@ export default function CreatePlaylist({ response }) {
                   <img src={downloadOutlined} />
                 </button>
 
-                <OptionEntity
+                <OptionSong
                   styleClass="playlistButtonSecondary"
-                  data={{
-                    id: data.id,
-                    title: data.title,
-                    subtitle: data.header_desc,
-                    image: data.image,
-                    list: data.list,
-                  }}
-                  artists={data.more_info.artistMap.artists || []}
+                  data={data}
+                  likeData={likeData}
                   addId={addId}
-                  artId={artId}
                 >
                   <img src={moreOutlined} />
-                </OptionEntity>
+                </OptionSong>
               </div>
               <div>
                 {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (
