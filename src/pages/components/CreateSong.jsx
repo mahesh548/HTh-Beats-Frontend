@@ -91,6 +91,7 @@ export default function CreatePlaylist({ response }) {
                   isLiked={data.savedIn.length > 0}
                   likeData={likeData}
                   addId={addId}
+                  likeClicked={(obj) => handleLocalLike(obj)}
                 />
                 <button className="playlistButtonSecondary">
                   <img src={downloadOutlined} />

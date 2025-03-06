@@ -6,7 +6,13 @@ import likeFilled from "../../assets/icons/likeFilled.svg";
 import { songContext } from "./Song";
 import { HashContext } from "./Hash";
 
-export default function LikeSong({ isLiked, styleClass, likeData, addId }) {
+export default function LikeSong({
+  isLiked,
+  styleClass,
+  likeData,
+  addId,
+  likeClicked,
+}) {
   const { Queue, setQueue } = useContext(songContext);
   const [likeIt, setLikeIt] = useState(false);
   const { open } = useContext(HashContext);
@@ -41,6 +47,8 @@ export default function LikeSong({ isLiked, styleClass, likeData, addId }) {
       });
       if (response?.status == true) {
         setStatus(likeData.playlistIds);
+        const obj = { savedTo: likeData.playlistIds, removedFrom: [] };
+        likeClicked?.(obj);
       }
     };
     req();
