@@ -33,10 +33,16 @@ export default function CreatePlaylist({ response }) {
     }
   }, [data]);
 
-  const play = (id) => {
+  const play = () => {
+    const playlistEcho = {
+      title: data.title,
+      list: [data],
+      type: "song",
+    };
+    console.log(playlistEcho);
     setQueue({
       type: "NEW",
-      value: { playlist: { ...data }, song: id, status: "play" },
+      value: { playlist: playlistEcho, song: data.id, status: "play" },
     });
   };
 
@@ -115,10 +121,7 @@ export default function CreatePlaylist({ response }) {
                     <PauseRounded />
                   </button>
                 ) : (
-                  <button
-                    className="playlistButton"
-                    onClick={() => play(data.list[0].id)}
-                  >
+                  <button className="playlistButton" onClick={() => play()}>
                     <PlayArrowRounded />
                   </button>
                 )}
