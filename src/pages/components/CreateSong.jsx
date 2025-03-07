@@ -35,9 +35,10 @@ export default function CreatePlaylist({ response }) {
 
   const play = () => {
     const playlistEcho = {
+      id: data.id,
       title: data.title,
-      list: [data],
       type: "song",
+      list: [data],
     };
     console.log(playlistEcho);
     setQueue({
