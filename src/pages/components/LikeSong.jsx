@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import utils from "../../../utils";
 
 import likeOutlined from "../../assets/icons/likeOutlinedPlayer.svg";
@@ -17,31 +17,29 @@ export default function LikeSong({
   const [likeIt, setLikeIt] = useState(false);
   const { open } = useContext(HashContext);
 
+  const queueRef = useRef(Queue);
+
   useEffect(() => {
     setLikeIt(isLiked);
   }, [isLiked]);
   useEffect(() => {
-    console.log("queue is updated", Queue);
+    queueRef.current = Queue;
   }, [Queue]);
 
-  const setStatus = useCallback(
-    (ids) => {
-      console.log("queue", Queue);
-      if (!Queue.playlist) return;
-      const newList = Queue.playlist.list.map((item) => {
-        if (likeData.id.includes(item.id)) {
-          item.savedIn = [...new Set([...item.savedIn, ...ids])];
-        }
-        return item;
-      });
+  const setStatus = (ids) => {
+    if (!queueRef.current.playlist) return;
+    const newList = queueRef.current.playlist.list.map((item) => {
+      if (likeData.id.includes(item.id)) {
+        item.savedIn = [...new Set([...item.savedIn, ...ids])];
+      }
+      return item;
+    });
 
-      setQueue({
-        type: "PLAYLIST",
-        value: { ...Queue.playlist, list: newList },
-      });
-    },
-    [Queue, likeData.id, setQueue]
-  );
+    setQueue({
+      type: "PLAYLIST",
+      value: { ...queueRef.current.playlist, list: newList },
+    });
+  };
 
   const save = useCallback(() => {
     const req = async () => {
