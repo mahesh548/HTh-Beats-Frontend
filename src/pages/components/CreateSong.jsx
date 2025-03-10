@@ -95,7 +95,10 @@ export default function CreatePlaylist({ response }) {
               <div>
                 <LikeSong
                   styleClass="playlistButtonSecondary"
-                  isLiked={data.savedIn.length > 0}
+                  isLiked={
+                    data.savedIn.length > 0 ||
+                    (Queue?.saved && Queue?.saved.includes(data.id))
+                  }
                   likeData={likeData}
                   addId={addId}
                   likeClicked={(obj) => handleLocalLike(obj)}
