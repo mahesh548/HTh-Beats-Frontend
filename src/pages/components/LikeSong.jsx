@@ -20,21 +20,28 @@ export default function LikeSong({
   useEffect(() => {
     setLikeIt(isLiked);
   }, [isLiked]);
+  useEffect(() => {
+    console.log("queue is updated", Queue);
+  }, [Queue]);
 
-  const setStatus = (ids) => {
-    if (!Queue.playlist) return;
-    const newList = Queue.playlist.list.map((item) => {
-      if (likeData.id.includes(item.id)) {
-        item.savedIn = [...new Set([...item.savedIn, ...ids])];
-      }
-      return item;
-    });
+  const setStatus = useCallback(
+    (ids) => {
+      console.log("queue", Queue);
+      if (!Queue.playlist) return;
+      const newList = Queue.playlist.list.map((item) => {
+        if (likeData.id.includes(item.id)) {
+          item.savedIn = [...new Set([...item.savedIn, ...ids])];
+        }
+        return item;
+      });
 
-    setQueue({
-      type: "PLAYLIST",
-      value: { ...Queue.playlist, list: newList },
-    });
-  };
+      setQueue({
+        type: "PLAYLIST",
+        value: { ...Queue.playlist, list: newList },
+      });
+    },
+    [Queue, likeData.id, setQueue]
+  );
 
   const save = useCallback(() => {
     const req = async () => {
