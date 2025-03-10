@@ -136,7 +136,8 @@ export default function CreatePlaylist({ response }) {
             return (
               <div key={item.id}>
                 <img src={item.image} />
-                <p className="thinTwoLineText">{item.name}</p>
+
+                <p className="thinTwoLineText">{utils.refineText(item.name)}</p>
               </div>
             );
           })}
