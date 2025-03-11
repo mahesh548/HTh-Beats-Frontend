@@ -3,6 +3,7 @@ import { useParams } from "react-router";
 import PageLoader from "./components/PageLoader";
 import utils from "../../utils";
 import { AuthContext } from "./components/Auth";
+import CreateLibrary from "./components/CreateLibrary";
 export default function Library() {
   const auth = useContext(AuthContext);
   const { id } = useParams();
@@ -25,5 +26,9 @@ export default function Library() {
     }
   }, [auth.user, id]);
 
-  return LibraryData == false ? <PageLoader /> : <></>;
+  return LibraryData == false ? (
+    <PageLoader />
+  ) : (
+    <CreateLibrary response={LibraryData} />
+  );
 }
