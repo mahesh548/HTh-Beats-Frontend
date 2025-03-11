@@ -13,6 +13,7 @@ export default function Library() {
     let newResponse = [
       response.find((item) => item.type == "liked"),
       ...response
+        .filter((item) => item.data != null)
         .sort((a, b) => new Date(b.data.updatedAt) - new Date(a.data.updatedAt))
         .filter((item) => item.type != "liked"),
     ].map((item) => {

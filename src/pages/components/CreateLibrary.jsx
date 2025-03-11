@@ -10,14 +10,14 @@ export default function CreateLibrary({ response }) {
         <div className="libraryList px-2">
           {response.map((item) => {
             return (
-              <div className="playlistSong albumList">
+              <div className="playlistSong libraryList">
                 <img src={item.image} className="playlistSongImg" />
                 <div>
                   <p className="thinOneLineText playlistSongTitle">
                     {utils.refineText(item.title || item.name)}
                   </p>
                   <p className="thinOneLineText playlistSongSubTitle">
-                    {utils.refineText(`${item.type} `)}
+                    {utils.refineText(`${utils.capitalLetter(item.type)} `)}
                   </p>
                 </div>
               </div>
