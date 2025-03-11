@@ -10,7 +10,17 @@ export default function Library() {
   const [LibraryData, setLibraryData] = useState(false);
 
   const refineResponse = (response) => {
-    return response;
+    let newResponse = [
+      response.find((item) => item.type == "liked"),
+      ...response
+        .sort((a, b) => new Date(b.data.updatedAt) - new Date(a.data.updatedAt))
+        .filter((item) => item.type != "liked"),
+    ].map((item) => {
+      item.data.libraryType = item.type;
+      item.data.libraryUserId = item.userId;
+      return item.data;
+    });
+    return newResponse;
   };
 
   useEffect(() => {
@@ -18,7 +28,8 @@ export default function Library() {
     const getLibraryData = async () => {
       const response = await utils.BACKEND("/save", "GET");
       if (response.hasOwnProperty("data") && response.data.length > 0) {
-        setLibraryData(refineResponse(response));
+        setLibraryData(refineResponse(response.data));
+        console.log(refineResponse(response.data));
       }
     };
     if (auth.user?.verified) {
