@@ -1,6 +1,23 @@
 import utils from "../../../utils";
 
 export default function CreateLibrary({ response }) {
+  const getSubtitle = (item) => {
+    let restText = "";
+    if (item.type == "playlist") {
+      restText = ` · HTh-Beats`;
+    }
+    if (item.type == "album" || item.type == "mix") {
+      restText = ` · ${item.list_count} songs`;
+    }
+    if (item.libraryType == "liked" || item.libraryType == "private") {
+      restText = ` · Mahesh`;
+    }
+    if (item.libraryType == "collab") {
+      restText = ` · ${item.libraryUserId.length} collab`;
+    }
+
+    return utils.refineText(`${utils.capitalLetter(item.type)} ${restText}`);
+  };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryCont ">
@@ -17,7 +34,7 @@ export default function CreateLibrary({ response }) {
                     {utils.refineText(item.title || item.name)}
                   </p>
                   <p className="thinOneLineText playlistSongSubTitle">
-                    {utils.refineText(`${utils.capitalLetter(item.type)} `)}
+                    {getSubtitle(item)}
                   </p>
                 </div>
               </div>
