@@ -28,7 +28,13 @@ export default function CreateLibrary({ response }) {
           {response.map((item) => {
             return (
               <div className="playlistSong libraryList">
-                <img src={item.image} className="playlistSongImg" />
+                <img
+                  src={item.image}
+                  className="playlistSongImg"
+                  style={{
+                    borderRadius: item.type == "artist" ? "100%" : "0px",
+                  }}
+                />
                 <div>
                   <p className="thinOneLineText playlistSongTitle">
                     {utils.refineText(item.title || item.name)}
