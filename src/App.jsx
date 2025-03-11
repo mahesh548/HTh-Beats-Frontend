@@ -18,6 +18,7 @@ import Navbar from "./pages/components/Navbar";
 
 //css
 import "./style.css";
+import Library from "./pages/Library";
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
       {/* LOGIN REQUIRED */}
       <Route element={<Navbar />}>
         <Route path="/home" element={<Home />} />
+        <Route path="/library" element={<Library />} />
         <Route path="/search" element={<Search />} />
         <Route path="/playlist/:id" element={<Playlist />} />
         <Route path="/album/:id" element={<Playlist />} />
