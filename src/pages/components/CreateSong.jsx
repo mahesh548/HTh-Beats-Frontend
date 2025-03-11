@@ -17,9 +17,11 @@ export default function CreatePlaylist({ response }) {
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
+  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     setData(response);
+    setIsLiked(response.savedIn.length > 0);
   }, [response]);
 
   useEffect(() => {
@@ -40,7 +42,6 @@ export default function CreatePlaylist({ response }) {
       type: "song",
       list: [data],
     };
-    console.log(playlistEcho);
     setQueue({
       type: "NEW",
       value: { playlist: playlistEcho, song: data.id, status: "play" },
@@ -70,7 +71,14 @@ export default function CreatePlaylist({ response }) {
       (item2) => !removedFrom.includes(item2)
     );
     setData({ ...data, savedIn: newSavedIn });
+    setIsLiked(newSavedIn.length > 0);
   };
+  useEffect(() => {
+    if (!Queue?.playlist?.list) return;
+    if (Queue.playlist.list.some((item) => item.id == data.id)) {
+      setIsLiked(Queue.saved.includes(data.id));
+    }
+  }, [Queue, Queue?.saved, Queue?.playlist?.list]);
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
@@ -95,10 +103,7 @@ export default function CreatePlaylist({ response }) {
               <div>
                 <LikeSong
                   styleClass="playlistButtonSecondary"
-                  isLiked={
-                    data.savedIn.length > 0 ||
-                    (Queue?.saved && Queue?.saved.includes(data.id))
-                  }
+                  isLiked={isLiked}
                   likeData={likeData}
                   addId={addId}
                   likeClicked={(obj) => handleLocalLike(obj)}
