@@ -11,13 +11,15 @@ import AddToPlaylist from "./AddToPlaylist";
 import { HashContext } from "./Hash";
 import OptionSong from "./OptionSong";
 import LikeSong from "./LikeSong";
+import TimelineSlider from "./TimelineSlider";
 
 export default function CreatePlaylist({ response }) {
-  const { openElements, open } = useContext(HashContext);
+  const { openElements } = useContext(HashContext);
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
   const [isLiked, setIsLiked] = useState(false);
+  const [relatedPlaylist, setRelatedPlaylist] = useState(false);
 
   useEffect(() => {
     setData(response);
@@ -79,6 +81,18 @@ export default function CreatePlaylist({ response }) {
       setIsLiked(Queue.saved.includes(data.id));
     }
   }, [Queue, Queue?.saved, Queue?.playlist?.list]);
+
+  useEffect(() => {
+    const getRelated = async () => {
+      const response = await utils.API(
+        `/related?id=${data.id}&entity=${data.type}`,
+        "GET"
+      );
+      setRelatedPlaylist(response || false);
+    };
+
+    getRelated();
+  }, [data?.id]);
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
@@ -150,6 +164,19 @@ export default function CreatePlaylist({ response }) {
               </div>
             );
           })}
+        </div>
+        <div className="ps-2 mt-4">
+          {relatedPlaylist ? (
+            <>
+              <TimelineSlider
+                label="Related playlists"
+                data={relatedPlaylist}
+              />
+              <div>Trending in language</div>
+            </>
+          ) : (
+            <div>Loading..</div>
+          )}
         </div>
       </div>
 
