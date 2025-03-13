@@ -1,6 +1,6 @@
 import axios from "axios";
-const apiUrl = "https://92rrp2s6-5000.inc1.devtunnels.ms/api";
-const backendUrl = "https://92rrp2s6-8080.inc1.devtunnels.ms";
+const apiUrl = "https://m8b5chhv-5000.inc1.devtunnels.ms/api";
+const backendUrl = "https://m8b5chhv-8080.inc1.devtunnels.ms";
 
 const utils = {
   BACKEND: async (path = "/", methods = "POST", payload = {}) => {
