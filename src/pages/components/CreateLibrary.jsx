@@ -1,16 +1,24 @@
+import { useContext } from "react";
 import utils from "../../../utils";
+import { AuthContext } from "./Auth";
 
 export default function CreateLibrary({ response }) {
+  const auth = useContext(AuthContext);
   const getSubtitle = (item) => {
     let restText = "";
+    const username = auth?.user?.username;
     if (item.type == "playlist") {
       restText = ` · HTh-Beats`;
     }
-    if (item.type == "album" || item.type == "mix") {
+    if (
+      item.type == "album" ||
+      item.type == "mix" ||
+      item.libraryType == "liked"
+    ) {
       restText = ` · ${item.list_count} songs`;
     }
-    if (item.libraryType == "liked" || item.libraryType == "private") {
-      restText = ` · Mahesh`;
+    if (item.libraryType == "private") {
+      restText = ` · ${username}`;
     }
     if (item.libraryType == "collab") {
       restText = ` · ${item.libraryUserId.length} collab`;
