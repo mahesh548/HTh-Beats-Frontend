@@ -35,7 +35,7 @@ export default function CreateLibrary({ response }) {
         <div className="libraryList px-2">
           {response.map((item) => {
             return (
-              <div className="playlistSong libraryList">
+              <div className="playlistSong libraryList" key={item.id}>
                 <img
                   src={item.image}
                   className="playlistSongImg"

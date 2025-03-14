@@ -295,18 +295,24 @@ export default function CreateArtist({ response }) {
         )}
       </div>
       <div className="bg-black pt-4" style={{ marginTop: "-5px" }}>
-        {data?.singles && (
-          <TimelineSlider label="Popular releases" data={data.singles} />
-        )}
-        {data?.latest_release && (
-          <TimelineSlider label="Latest releases" data={data.latest_release} />
-        )}
-        {data?.featured_artist_playlist && (
-          <TimelineSlider
-            label={`Featuring ${data.name}`}
-            data={data.featured_artist_playlist}
-          />
-        )}
+        <div className="ps-2">
+          {data?.singles && (
+            <TimelineSlider label="Popular releases" data={data.singles} />
+          )}
+          {data?.latest_release && (
+            <TimelineSlider
+              label="Latest releases"
+              data={data.latest_release}
+            />
+          )}
+          {data?.featured_artist_playlist && (
+            <TimelineSlider
+              label={`Featuring ${data.name}`}
+              data={data.featured_artist_playlist}
+            />
+          )}
+        </div>
+
         <div
           className="card bg-dark text-white mx-auto mt-5 mb-5"
           style={{ width: "95%" }}
@@ -367,12 +373,14 @@ export default function CreateArtist({ response }) {
             </div>
           </div>
         </div>
-        {data?.dedicated_artist_playlist && (
-          <TimelineSlider
-            label="Artist's dedicated playlist"
-            data={data.dedicated_artist_playlist}
-          />
-        )}
+        <div className="ps-2">
+          {data?.dedicated_artist_playlist && (
+            <TimelineSlider
+              label="Artist's dedicated playlist"
+              data={data.dedicated_artist_playlist}
+            />
+          )}
+        </div>
       </div>
 
       {openElements.includes(addId) &&
