@@ -21,7 +21,7 @@ export default function CreateLibrary({ response }) {
       restText = ` · ${username}`;
     }
     if (item.libraryType == "collab") {
-      restText = ` · ${item.libraryUserId.length} collab`;
+      restText = ` · ${item.libraryUserId.length} users collab`;
     }
 
     return utils.refineText(`${utils.capitalLetter(item.type)} ${restText}`);

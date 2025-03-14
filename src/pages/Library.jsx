@@ -8,6 +8,15 @@ export default function Library() {
   const auth = useContext(AuthContext);
   const { id } = useParams();
   const [LibraryData, setLibraryData] = useState(false);
+  const [originalResponse, setOriginalResponse] = useState(false);
+
+  const filter = (field, value) => {
+    if (value == "all") {
+      setLibraryData(refineResponse(originalResponse));
+    } else {
+      setLibraryData(LibraryData.filter((item) => item[field] == value));
+    }
+  };
 
   const refineResponse = (response) => {
     let newResponse = [
@@ -36,7 +45,8 @@ export default function Library() {
     const getLibraryData = async () => {
       const response = await utils.BACKEND("/save", "GET");
       if (response.hasOwnProperty("data") && response.data.length > 0) {
-        setLibraryData(refineResponse(response.data));
+        setOriginalResponse(response.data);
+        filter("any", "all");
       }
     };
     if (auth.user?.verified) {
@@ -47,6 +57,6 @@ export default function Library() {
   return LibraryData == false ? (
     <PageLoader />
   ) : (
-    <CreateLibrary response={LibraryData} />
+    <CreateLibrary response={LibraryData} filter={filter} />
   );
 }
