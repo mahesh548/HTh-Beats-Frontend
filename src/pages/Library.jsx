@@ -39,7 +39,6 @@ export default function Library() {
       item.data.libraryUserId = item.userId;
       return item.data;
     });
-    console.log(newResponse);
     let newFilterData = [];
     idealFilterData.forEach((item) => {
       if (item.value == "private" || item.value == "collab") {
@@ -57,7 +56,6 @@ export default function Library() {
       }
     });
     setFilterData(newFilterData);
-    console.log(newFilterData);
 
     return newResponse;
   };

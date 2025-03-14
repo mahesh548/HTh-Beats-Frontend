@@ -1154,8 +1154,7 @@ p {
   }
 }
 /* LIBRARY CSS  */
-.libraryNav {
-}
+
 .libraryList {
   grid-template-columns: 65px auto 40px;
   img {
