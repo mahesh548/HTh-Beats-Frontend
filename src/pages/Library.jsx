@@ -9,6 +9,17 @@ export default function Library() {
   const { id } = useParams();
   const [LibraryData, setLibraryData] = useState(false);
   const [originalResponse, setOriginalResponse] = useState(false);
+  const [filterData, setFilterData] = useState({});
+
+  const idealFilterData = [
+    { value: "playlist", parent: "all", label: "Playlists" },
+    { value: "album", parent: "all", label: "Albums" },
+    { value: "mix", parent: "all", label: "Mixes" },
+    { value: "artist", parent: "all", label: "Artists" },
+    { value: "private", parent: "playlist", label: "By You" },
+    { value: "hth", parent: "playlist", label: "By HTh-Beats" },
+    { value: "collab", parent: "playlist", label: "Collabs" },
+  ];
 
   const refineResponse = (response) => {
     let newResponse = [
@@ -29,6 +40,25 @@ export default function Library() {
       return item.data;
     });
     console.log(newResponse);
+    let newFilterData = [];
+    idealFilterData.forEach((item) => {
+      if (item.value == "private" || item.value == "collab") {
+        if (newResponse.some((response) => response.libraryType == item.value))
+          newFilterData.push(item);
+        return;
+      }
+      if (item.value == "hth") {
+        if (newResponse.some((response) => !response.hasOwnProperty("userId")))
+          newFilterData.push(item);
+        return;
+      }
+      if (newResponse.some((response) => response.type == item.value)) {
+        newFilterData.push(item);
+      }
+    });
+    setFilterData(newFilterData);
+    console.log(newFilterData);
+
     return newResponse;
   };
   const filter = (field, value) => {
@@ -56,6 +86,10 @@ export default function Library() {
   return LibraryData == false ? (
     <PageLoader />
   ) : (
-    <CreateLibrary response={LibraryData} filter={filter} />
+    <CreateLibrary
+      response={LibraryData}
+      filter={filter}
+      filterData={filterData}
+    />
   );
 }

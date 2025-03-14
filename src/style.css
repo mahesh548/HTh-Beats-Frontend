@@ -1157,7 +1157,7 @@ p {
 .libraryNav {
 }
 .libraryList {
-  grid-template-columns: 65px auto 40px 40px;
+  grid-template-columns: 65px auto 40px;
   img {
     height: 65px;
     width: 65px;
