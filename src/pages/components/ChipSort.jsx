@@ -1,7 +1,16 @@
 import { useState } from "react";
 
 export default function ChipSort({ filterData, filter }) {
-  const [active, setActive] = useState({ parent: "all", value: false });
+  const [active, setActive] = useState("/all");
+
+  const toggle = (value) => {
+    setActive((prev) => {
+      const newFilter = { ...prev.filter((item) => item.value != value) };
+      filter(newFilter.map((item) => item.value));
+      return newFilter;
+    });
+  };
+
   return (
     <div className="ps-1 mt-2">
       <div className="chipActive">
