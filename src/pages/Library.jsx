@@ -14,6 +14,12 @@ export default function Library() {
       response.find((item) => item.type == "liked"),
       ...response
         .filter((item) => item.data != null)
+        .map((item) => {
+          if (item.type != "private" || item.type != "collab") {
+            item.data.updatedAt = item?.updatedAt || "";
+          }
+          return item;
+        })
         .sort((a, b) => new Date(b.data.updatedAt) - new Date(a.data.updatedAt))
         .filter((item) => item.type != "liked"),
     ].map((item) => {
@@ -21,6 +27,7 @@ export default function Library() {
       item.data.libraryUserId = item.userId;
       return item.data;
     });
+    console.log(newResponse);
     return newResponse;
   };
 
@@ -30,7 +37,6 @@ export default function Library() {
       const response = await utils.BACKEND("/save", "GET");
       if (response.hasOwnProperty("data") && response.data.length > 0) {
         setLibraryData(refineResponse(response.data));
-        console.log(refineResponse(response.data));
       }
     };
     if (auth.user?.verified) {

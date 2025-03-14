@@ -35,7 +35,10 @@ export default function CreateLibrary({ response }) {
         <div className="libraryList px-2">
           {response.map((item) => {
             return (
-              <div className="playlistSong libraryList" key={item.id}>
+              <div
+                className="playlistSong libraryList"
+                key={`liked-list-${item.id}`}
+              >
                 <img
                   src={item.image}
                   className="playlistSongImg"
