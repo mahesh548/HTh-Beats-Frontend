@@ -1,8 +1,9 @@
 import { useContext } from "react";
 import utils from "../../../utils";
 import { AuthContext } from "./Auth";
+import ChipSort from "./ChipSort";
 
-export default function CreateLibrary({ response }) {
+export default function CreateLibrary({ response, filter }) {
   const auth = useContext(AuthContext);
   const getSubtitle = (item) => {
     let restText = "";
@@ -31,6 +32,10 @@ export default function CreateLibrary({ response }) {
       <div className="libraryCont ">
         <div className="libraryNav">
           <p className="labelText">Your library</p>
+          <ChipSort
+            filterData={["all", "playlist", "album", "mix"]}
+            filter={filter}
+          />
         </div>
         <div className="libraryList px-2">
           {response.map((item) => {

@@ -10,14 +10,6 @@ export default function Library() {
   const [LibraryData, setLibraryData] = useState(false);
   const [originalResponse, setOriginalResponse] = useState(false);
 
-  const filter = (field, value) => {
-    if (value == "all") {
-      setLibraryData(refineResponse(originalResponse));
-    } else {
-      setLibraryData(LibraryData.filter((item) => item[field] == value));
-    }
-  };
-
   const refineResponse = (response) => {
     let newResponse = [
       response.find((item) => item.type == "liked"),
@@ -39,6 +31,13 @@ export default function Library() {
     console.log(newResponse);
     return newResponse;
   };
+  const filter = (field, value) => {
+    if (value == "all") {
+      setLibraryData(refineResponse(originalResponse));
+    } else {
+      setLibraryData(LibraryData.filter((item) => item[field] == value));
+    }
+  };
 
   useEffect(() => {
     setLibraryData(false);
@@ -46,7 +45,7 @@ export default function Library() {
       const response = await utils.BACKEND("/save", "GET");
       if (response.hasOwnProperty("data") && response.data.length > 0) {
         setOriginalResponse(response.data);
-        filter("any", "all");
+        setLibraryData(refineResponse(response.data));
       }
     };
     if (auth.user?.verified) {
