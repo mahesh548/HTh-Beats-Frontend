@@ -3,7 +3,7 @@ import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
 
-export default function CreateLibrary({ response, filter }) {
+export default function CreateLibrary({ response, filter, filterData }) {
   const auth = useContext(AuthContext);
   const getSubtitle = (item) => {
     let restText = "";
@@ -32,10 +32,7 @@ export default function CreateLibrary({ response, filter }) {
       <div className="libraryCont ">
         <div className="libraryNav">
           <p className="labelText">Your library</p>
-          <ChipSort
-            filterData={["all", "playlist", "album", "mix"]}
-            filter={filter}
-          />
+          <ChipSort filterData={filterData} filter={filter} />
         </div>
         <div className="libraryList px-2">
           {response.map((item) => {
