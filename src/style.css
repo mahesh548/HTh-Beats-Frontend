@@ -1163,3 +1163,30 @@ p {
     border-radius: 0px;
   }
 }
+
+/* CHIP SORT CSS */
+.chipActive {
+  background: wheat;
+  color: black;
+  width: fit-content;
+  display: inline-block;
+  border-radius: 40px;
+  button {
+    background: transparent;
+    border: none;
+    border-radius: 40px;
+    box-shadow: 2px -1px 0px black, 2px 1px 0px black;
+  }
+}
+.inActiveChip {
+  background-color: transparent;
+  width: fit-content;
+  display: inline-block;
+  button {
+    background: var(--light-dark-bg);
+    border: none;
+    border-radius: 40px;
+    color: white;
+    margin-right: 5px;
+  }
+}
