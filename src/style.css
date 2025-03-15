@@ -1155,15 +1155,30 @@ p {
   }
 }
 /* LIBRARY CSS  */
+.libraryCont {
+  padding-top: 120px;
+}
+.libraryNavCont {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding-bottom: 5px;
+  background-color: black;
+  box-shadow: 0px 5px 5px #000000cf;
+}
 .libraryNav {
   display: grid;
-  grid-template-columns: 40px auto 40px 40px;
+  grid-template-columns: 40px auto 40px;
   align-items: center;
-  column-gap: 5px;
+  column-gap: 8px;
   img,
   svg {
     height: 30px;
     width: 30px;
+  }
+  p {
+    font-size: 25px;
   }
 }
 .libraryList {
@@ -1187,7 +1202,7 @@ p {
     border: none;
     border-radius: 40px;
     box-shadow: 2px -1px 0px black, 2px 1px 0px black;
-    font-size: 13px;
+    font-size: 14px;
   }
 }
 .inActiveChip {
@@ -1200,6 +1215,6 @@ p {
     border-radius: 40px;
     color: white;
     margin-right: 5px;
-    font-size: 13px;
+    font-size: 14px;
   }
 }

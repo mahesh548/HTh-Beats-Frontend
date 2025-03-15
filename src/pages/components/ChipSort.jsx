@@ -15,7 +15,7 @@ export default function ChipSort({ filterData, filter }) {
   };
   const current = active.split("/").slice(1, active.split("/").length);
   return (
-    <div className="ps-1 mt-2">
+    <div>
       <div className="chipActive">
         {current.map((item) => {
           const filterItem = filterData.find(

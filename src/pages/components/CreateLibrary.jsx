@@ -34,16 +34,13 @@ export default function CreateLibrary({ response, filter, filterData }) {
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryCont ">
-        <div className="libraryNavCont">
-          <div className="libraryNav px-2 mt-3 mb-3">
+        <div className="libraryNavCont px-2">
+          <div className="libraryNav mt-4 mb-3">
             <img
               src={auth?.user?.pic || "logo.png"}
               className="rounded-circle"
             />
             <p className="labelText mt-0">Your library</p>
-            <button className="iconButton">
-              <img src={searchSvgOutlined} />
-            </button>
             <button className="iconButton">
               <Add />
             </button>
