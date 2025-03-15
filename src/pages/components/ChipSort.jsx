@@ -1,3 +1,4 @@
+import { Close } from "@mui/icons-material";
 import { useState } from "react";
 
 export default function ChipSort({ filterData, filter }) {
@@ -16,6 +17,17 @@ export default function ChipSort({ filterData, filter }) {
   const current = active.split("/").slice(1, active.split("/").length);
   return (
     <div>
+      {active.split("/").at(-1) != "all" && (
+        <div className="inActiveChip">
+          <button
+            style={{ height: "30px", width: "30px" }}
+            className="p-0"
+            onClick={() => setActive("/all")}
+          >
+            <Close />
+          </button>
+        </div>
+      )}
       <div className="chipActive">
         {current.map((item) => {
           const filterItem = filterData.find(
