@@ -26,6 +26,7 @@ export default function CreatePlaylist({ response }) {
   useEffect(() => {
     setData(response);
   }, [response]);
+  console.log(response.entityType);
 
   useEffect(() => {
     const setColor = async () => {
