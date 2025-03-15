@@ -24,7 +24,11 @@ export default function ChipSort({ filterData, filter }) {
           if (!filterItem) return null;
 
           return (
-            <button className="px-3 py-1 " onClick={() => toggle(item)}>
+            <button
+              className="px-3 py-1 "
+              onClick={() => toggle(filterItem.value)}
+              key={`sort_${filterItem.value}`}
+            >
               {filterItem.label}
             </button>
           );
@@ -35,7 +39,11 @@ export default function ChipSort({ filterData, filter }) {
           const current = active.split("/").at(-1);
           if (current == item.parent) {
             return (
-              <button className="px-3 py-1 " onClick={() => toggle(item.value)}>
+              <button
+                className="px-3 py-1 "
+                onClick={() => toggle(item.value)}
+                key={`sort_${item.value}`}
+              >
                 {item.label}
               </button>
             );
