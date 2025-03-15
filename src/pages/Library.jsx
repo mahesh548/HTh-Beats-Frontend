@@ -59,13 +59,26 @@ export default function Library() {
 
     return newResponse;
   };
-  const filter = (field, value) => {
-    console.log(field, value);
-    /*    if (value == "all") {
+  const filter = (value) => {
+    if (value == "all") {
       setLibraryData(refineResponse(originalResponse));
+    } else if (value == "private" || value == "collab") {
+      setLibraryData(
+        refineResponse(originalResponse).filter(
+          (item) => item.libraryType == value
+        )
+      );
+    } else if (value == "hth") {
+      setLibraryData(
+        refineResponse(originalResponse).filter(
+          (item) => item.type == "playlist" && !item.hasOwnProperty("userId")
+        )
+      );
     } else {
-      setLibraryData(LibraryData.filter((item) => item[field] == value));
-    } */
+      setLibraryData(
+        refineResponse(originalResponse).filter((item) => item.type == value)
+      );
+    }
   };
 
   useEffect(() => {
