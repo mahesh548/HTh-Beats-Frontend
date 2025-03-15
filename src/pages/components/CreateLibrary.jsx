@@ -3,12 +3,12 @@ import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
 
-//icons
-import searchSvgOutlined from "../../assets/icons/searchSvgOutlined.svg";
 import { Add } from "@mui/icons-material";
+import { useNavigate } from "react-router";
 
 export default function CreateLibrary({ response, filter, filterData }) {
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
   const getSubtitle = (item) => {
     let restText = "";
     const username = auth?.user?.username;
@@ -30,6 +30,9 @@ export default function CreateLibrary({ response, filter, filterData }) {
     }
 
     return utils.refineText(`${utils.capitalLetter(item.type)} ${restText}`);
+  };
+  const handleClick = (type, id) => {
+    navigate(`/${type}/${id}`);
   };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
@@ -53,6 +56,7 @@ export default function CreateLibrary({ response, filter, filterData }) {
               <div
                 className="playlistSong libraryList"
                 key={`liked-list-${item.id}`}
+                onClick={() => handleClick(item.type, item?.perma_url)}
               >
                 <img
                   src={item.image}

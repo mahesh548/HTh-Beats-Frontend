@@ -1209,6 +1209,7 @@ p {
   background-color: transparent;
   width: fit-content;
   display: inline-block;
+  margin-left: 8px;
   button {
     background: var(--dark-grey-bg);
     border: none;

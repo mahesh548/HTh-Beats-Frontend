@@ -5,6 +5,11 @@ export default function ChipSort({ filterData, filter }) {
   const [active, setActive] = useState("/all");
 
   const toggle = (value) => {
+    if (value == "all") {
+      setActive("/all");
+      filter("all");
+      return;
+    }
     const newFilter = active.includes(value)
       ? active
           .split("/")
@@ -18,11 +23,11 @@ export default function ChipSort({ filterData, filter }) {
   return (
     <div>
       {active.split("/").at(-1) != "all" && (
-        <div className="inActiveChip">
+        <div className="inActiveChip ms-0">
           <button
             style={{ height: "30px", width: "30px" }}
             className="p-0"
-            onClick={() => setActive("/all")}
+            onClick={() => toggle("all")}
           >
             <Close />
           </button>
@@ -46,7 +51,11 @@ export default function ChipSort({ filterData, filter }) {
           );
         })}
       </div>
-      <div className="inActiveChip">
+      <div
+        className={`inActiveChip ${
+          active.split("/").at(-1) != "all" ? "" : "ms-0"
+        }`}
+      >
         {filterData.map((item) => {
           const current = active.split("/").at(-1);
           if (current == item.parent) {
