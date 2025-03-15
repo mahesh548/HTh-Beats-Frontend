@@ -60,11 +60,12 @@ export default function Library() {
     return newResponse;
   };
   const filter = (field, value) => {
-    if (value == "all") {
+    console.log(field, value);
+    /*    if (value == "all") {
       setLibraryData(refineResponse(originalResponse));
     } else {
       setLibraryData(LibraryData.filter((item) => item[field] == value));
-    }
+    } */
   };
 
   useEffect(() => {
