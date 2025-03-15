@@ -25,7 +25,7 @@ export default function ChipSort({ filterData, filter }) {
 
           return (
             <button
-              className="px-3 py-1 "
+              className="px-2 py-1 "
               onClick={() => toggle(filterItem.value)}
               key={`sort_${filterItem.value}`}
             >
@@ -40,7 +40,7 @@ export default function ChipSort({ filterData, filter }) {
           if (current == item.parent) {
             return (
               <button
-                className="px-3 py-1 "
+                className="px-2 py-1 "
                 onClick={() => toggle(item.value)}
                 key={`sort_${item.value}`}
               >

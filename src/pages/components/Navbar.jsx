@@ -87,7 +87,7 @@ export default function Navbar() {
           <div className="navBTN">
             <button className="pop">
               <img
-                src={auth?.user?.pic ? auth?.user?.pic : "logo.png"}
+                src={auth?.user?.pic || "logo.png"}
                 className="navBottomProfilePicture pop"
                 alt="porfile picture"
               />

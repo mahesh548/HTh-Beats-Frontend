@@ -17,6 +17,7 @@ body {
   --thin-text-color: #c1c1c1;
   --thin-text-line-height: 1.2;
   --light-dark-bg: #1e1e1e;
+  --dark-grey-bg: #3f3f3f;
 
   --rsbs-backdrop-bg: #00000099;
 
@@ -1154,7 +1155,17 @@ p {
   }
 }
 /* LIBRARY CSS  */
-
+.libraryNav {
+  display: grid;
+  grid-template-columns: 40px auto 40px 40px;
+  align-items: center;
+  column-gap: 5px;
+  img,
+  svg {
+    height: 30px;
+    width: 30px;
+  }
+}
 .libraryList {
   grid-template-columns: 65px auto 40px;
   img {
@@ -1176,6 +1187,7 @@ p {
     border: none;
     border-radius: 40px;
     box-shadow: 2px -1px 0px black, 2px 1px 0px black;
+    font-size: 13px;
   }
 }
 .inActiveChip {
@@ -1183,10 +1195,11 @@ p {
   width: fit-content;
   display: inline-block;
   button {
-    background: var(--light-dark-bg);
+    background: var(--dark-grey-bg);
     border: none;
     border-radius: 40px;
     color: white;
     margin-right: 5px;
+    font-size: 13px;
   }
 }

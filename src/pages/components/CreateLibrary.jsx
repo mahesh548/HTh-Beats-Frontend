@@ -3,6 +3,10 @@ import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
 
+//icons
+import searchSvgOutlined from "../../assets/icons/searchSvgOutlined.svg";
+import { Add } from "@mui/icons-material";
+
 export default function CreateLibrary({ response, filter, filterData }) {
   const auth = useContext(AuthContext);
   const getSubtitle = (item) => {
@@ -30,8 +34,20 @@ export default function CreateLibrary({ response, filter, filterData }) {
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryCont ">
-        <div className="libraryNav">
-          <p className="labelText">Your library</p>
+        <div className="libraryNavCont">
+          <div className="libraryNav px-2 mt-3 mb-3">
+            <img
+              src={auth?.user?.pic || "logo.png"}
+              className="rounded-circle"
+            />
+            <p className="labelText mt-0">Your library</p>
+            <button className="iconButton">
+              <img src={searchSvgOutlined} />
+            </button>
+            <button className="iconButton">
+              <Add />
+            </button>
+          </div>
           <ChipSort filterData={filterData} filter={filter} />
         </div>
         <div className="libraryList px-2">
