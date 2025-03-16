@@ -1219,3 +1219,20 @@ p {
     font-size: 14px;
   }
 }
+.createButtons {
+  grid-template-columns: 40px auto;
+  margin-top: 20px;
+  margin-bottom: 15px;
+  svg {
+    margin: auto;
+    color: gray;
+  }
+  img {
+    height: 30px;
+    width: 30px;
+    margin: auto;
+  }
+  p {
+    overflow: visible;
+  }
+}

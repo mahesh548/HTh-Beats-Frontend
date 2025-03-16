@@ -5,8 +5,10 @@ import ChipSort from "./ChipSort";
 
 import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router";
+import { HashContext } from "./Hash";
 
 export default function CreateLibrary({ response, filter, filterData }) {
+  const { open } = useContext(HashContext);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const getSubtitle = (item) => {
@@ -44,7 +46,7 @@ export default function CreateLibrary({ response, filter, filterData }) {
               className="rounded-circle"
             />
             <p className="labelText mt-0">Your library</p>
-            <button className="iconButton">
+            <button className="iconButton" onClick={() => open("createOption")}>
               <Add />
             </button>
           </div>
