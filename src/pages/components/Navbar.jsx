@@ -1,5 +1,5 @@
 import { useNavigate, Outlet, Link, useLocation } from "react-router";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./Auth";
 
 //icons
@@ -11,23 +11,20 @@ import librarySvgFilled from "../../assets/icons/librarySvgFilled.svg";
 import librarySvgOutlined from "../../assets/icons/librarySvgOutlined.svg";
 import roomFilled from "../../assets/icons/roomFilled.svg";
 
-import {
-  Add,
-  FeaturedPlayList,
-  JoinFull,
-  MusicNote,
-} from "@mui/icons-material";
+import { Add, MusicNote } from "@mui/icons-material";
 import Audio from "./Audio";
 import MiniPlayer from "./MiniPlayer";
 import Player from "./Player";
 import { HashContext } from "./Hash";
 import OffCanvas from "./BottomSheet";
+import { createPortal } from "react-dom";
+import MakePlaylist from "./MakePlaylist";
 
 export default function Navbar() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const { openElements, close, open } = useContext(HashContext);
+  const { openElements, close, open, closeOpen } = useContext(HashContext);
   useEffect(() => {
     const checkAuth = async () => {
       const isAuth = await auth.authentication();
@@ -52,29 +49,25 @@ export default function Navbar() {
         dismiss={() => close("createOption")}
       >
         <button className="iconButton playlistSong createButtons">
-          <MusicNote />
-          <div>
-            <p className="text-start">Playlist</p>
-            <p className="thinOneLineText">
-              Build a playlist with your favorite songs.
-            </p>
-          </div>
-        </button>
-        <button className="iconButton playlistSong createButtons">
-          <JoinFull />
-          <div>
-            <p className="text-start">Collab</p>
-            <p className="thinOneLineText">
-              Collab with your friends and build a playlist.
-            </p>
-          </div>
-        </button>
-        <button className="iconButton playlistSong createButtons">
           <img src={roomFilled} />
           <div>
             <p className="text-start">Music Room</p>
             <p className="thinOneLineText">
               Create a room and enjoy music with your friends.
+            </p>
+          </div>
+        </button>
+        <button className="iconButton playlistSong createButtons">
+          <MusicNote />
+          <div>
+            <p
+              className="text-start"
+              onClick={() => closeOpen("createOption", "createPlaylist")}
+            >
+              Playlist
+            </p>
+            <p className="thinOneLineText">
+              Build a playlist with your favorite songs.
             </p>
           </div>
         </button>
@@ -134,6 +127,8 @@ export default function Navbar() {
           </div>
         </Link>
       </div>
+      {openElements.includes("createPlaylist") &&
+        createPortal(<MakePlaylist type={"viewOnly"} />, document.body)}
 
       <Outlet />
     </>

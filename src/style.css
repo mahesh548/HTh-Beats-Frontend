@@ -1236,3 +1236,26 @@ p {
     overflow: visible;
   }
 }
+/* MAKE PLAYLIST CSS */
+
+.makePCont {
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  row-gap: 35px;
+  margin-top: 45%;
+}
+.mpInput {
+  height: 50px;
+  width: 80%;
+  border-bottom: 2px solid #ffffff69;
+  text-align: center;
+  font-size: 28px;
+  outline: none;
+  box-shadow: none;
+  text-decoration: none;
+}
+.mpBut {
+  display: inline-block;
+  margin-right: 10px;
+}
