@@ -1,9 +1,22 @@
 import { useContext, useState } from "react";
 import { HashContext } from "./Hash";
+import utils from "../../../utils";
 
 export default function MakePlaylist() {
   const { close } = useContext(HashContext);
   const [playlistName, setPlaylistName] = useState("My playlist");
+
+  const handleCreate = async () => {
+    if (playlistName.length > 0) {
+      const response = await utils.BACKEND("/create_playlist", "POST", {
+        playlistData: {
+          title: playlistName,
+          song: [],
+        },
+      });
+      console.log(response);
+    }
+  };
   return (
     <div
       className="floatingPage"
@@ -32,7 +45,10 @@ export default function MakePlaylist() {
           >
             Cancel
           </button>
-          <button className="addToBut mpBut px-5" onClick={() => alert()}>
+          <button
+            className="addToBut mpBut px-5"
+            onClick={() => handleCreate()}
+          >
             Create
           </button>
         </div>
