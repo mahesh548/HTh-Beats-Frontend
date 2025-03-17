@@ -23,22 +23,27 @@ export default function Library() {
 
   const refineResponse = (response) => {
     let newResponse = [
-      response.find((item) => item.type == "liked"),
+      response.find((item) => item.type == "liked").data,
       ...response
         .filter((item) => item.data != null)
         .map((item) => {
-          if (item.type != "private" || item.type != "collab") {
-            item.data.updatedAt = item?.updatedAt || "";
-          }
-          return item;
+          item.data.libraryType = utils.checkPlaylistType(
+            item.data,
+            auth?.user?.id
+          );
+          item.data.libraryUserId = item.userId;
+          if (
+            item.data.libraryType == "private" ||
+            item.data.libraryType == "collab"
+          )
+            return item.data;
+          item.data.updatedAt = item?.updatedAt || "";
+
+          return item.data;
         })
-        .sort((a, b) => new Date(b.data.updatedAt) - new Date(a.data.updatedAt))
-        .filter((item) => item.type != "liked"),
-    ].map((item) => {
-      item.data.libraryType = item.type;
-      item.data.libraryUserId = item.userId;
-      return item.data;
-    });
+        .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+        .filter((item) => item.libraryType != "liked"),
+    ];
     let newFilterData = [];
     idealFilterData.forEach((item) => {
       if (item.value == "private" || item.value == "collab") {
@@ -71,7 +76,11 @@ export default function Library() {
     } else if (value == "hth") {
       setLibraryData(
         refineResponse(originalResponse).filter(
-          (item) => item.type == "playlist" && !item.hasOwnProperty("userId")
+          (item) =>
+            item.type == "playlist" &&
+            item.libraryType != "private" &&
+            item.libraryType != "collab" &&
+            item.libraryType != "liked"
         )
       );
     } else {

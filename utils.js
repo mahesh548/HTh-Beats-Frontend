@@ -218,6 +218,18 @@ const utils = {
 
     return num.toFixed(1).replace(/\.0$/, "") + units[unitIndex];
   },
+  checkPlaylistType: (response, userId) => {
+    if (response?.type == "playlist") {
+      if (response.hasOwnProperty("userId") && response.userId.length > 0) {
+        return response.userId.filter((item) => item != "viewOnly").length > 1
+          ? "collab"
+          : response.userId.length == 1 && response.userId[0] == userId
+          ? "liked"
+          : "private";
+      }
+    }
+    return response.type;
+  },
 };
 
 export default utils;
