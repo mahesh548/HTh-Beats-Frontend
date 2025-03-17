@@ -53,6 +53,9 @@ export default function playlist() {
       ];
     }
     response.image.replace("150x150.jpg", "500x500.jpg");
+    if (response.image == "Like.png" || response.image == "Playlist.png") {
+      response.image = `https://${window.location.host}/${response.image}`;
+    }
     return response;
   };
 
