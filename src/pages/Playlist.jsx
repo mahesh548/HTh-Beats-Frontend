@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import { useLocation, useParams } from "react-router";
 import PageLoader from "./components/PageLoader";
 import utils from "../../utils";
 import { AuthContext } from "./components/Auth";
 import CreatePlaylist from "./components/CreatePlaylist";
+import CreateLikePlaylist from "./components/CreateLikePlaylist";
 
 export default function playlist() {
   const auth = useContext(AuthContext);
@@ -68,7 +69,13 @@ export default function playlist() {
 
   return playlistData == false ? (
     <PageLoader />
-  ) : (
+  ) : playlistData.entityType === "entity" ? (
     <CreatePlaylist response={playlistData} />
-  );
+  ) : playlistData.entityType === "liked" ? (
+    <CreateLikePlaylist response={playlistData} />
+  ) : playlistData.entityType === "private" ? (
+    <PrivatePlaylist response={playlistData} />
+  ) : playlistData.entityType === "collab" ? (
+    <CollabPlaylist response={playlistData} />
+  ) : null;
 }
