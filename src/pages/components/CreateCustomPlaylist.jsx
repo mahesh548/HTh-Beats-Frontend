@@ -27,7 +27,6 @@ export default function CreateCustomPlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
-  const [relatedPlaylist, setRelatedPlaylist] = useState(false);
   const [bg, setBg] = useState("#8d8d8d");
   useEffect(() => {
     setData(response);
@@ -85,7 +84,6 @@ export default function CreateCustomPlaylist({ response }) {
 
     setData({ ...data, list: newList });
   };
-  const allTheArtists = [];
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
@@ -113,15 +111,13 @@ export default function CreateCustomPlaylist({ response }) {
             {utils.refineText(data.title)}
           </p>
 
-          {/* <PlaylistOwner
-            srcArray={data?.more_info?.artists
-              .slice(0, 3)
-              .map((item) => item.image)}
-            label={"Artists:"}
-            name={data?.more_info?.artists[0].name}
-            totalOwner={data?.more_info?.artists.length}
+          <PlaylistOwner
+            srcArray={data?.ownerInfo.slice(0, 3).map((item) => item.pic)}
+            label={"Owners:"}
+            name={data?.ownerInfo[0].username}
+            totalOwner={data?.ownerInfo.length}
             action={() => open(artId)}
-          /> */}
+          />
 
           <p className="thinTwoLineText">
             {utils.refineText(`${data.list_count} songs`)}
@@ -134,13 +130,14 @@ export default function CreateCustomPlaylist({ response }) {
               data={{
                 id: data.id,
                 title: data.title,
-                subtitle: data.header_desc,
+                subtitle: `${data.list_count} songs`,
                 image: data.image,
                 list: data.list,
               }}
-              artists={allTheArtists || []}
+              artists={data.ownerInfo || []}
               addId={addId}
               artId={artId}
+              entityType={data.entityType}
             >
               <img src={moreOutlined} />
             </OptionEntity>

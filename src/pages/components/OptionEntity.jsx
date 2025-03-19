@@ -14,6 +14,7 @@ export default function OptionEntity({
   addId,
   artId,
   artists,
+  entityType = "entity",
 }) {
   const { Queue, setQueue } = useContext(songContext);
   const { openElements, open, close, closeOpen } = useContext(HashContext);
@@ -104,44 +105,82 @@ export default function OptionEntity({
         </div>
       </OffCanvas>
 
-      <OffCanvas
-        open={openElements.includes(artId)}
-        dismiss={() => close(artId)}
-      >
-        <div className="prevCont">
-          <b className="offCanvasTitle">Artists</b>
-          {artists.map((item) => {
-            return (
-              <div
-                className="playlistSong"
-                style={{
-                  width: "95%",
-                  margin: "auto",
-                  marginTop: "10px",
-                  marginBottom: "25px",
-                }}
-                key={`${item.name}_${item.id}`}
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className="playlistSongImg"
-                />
-                <div>
-                  <p className="thinOneLineText playlistSongTitle">
-                    {utils.refineText(item.name)}
-                  </p>
-                  <p className="thinOneLineText playlistSongSubTitle">
-                    {item.role || "artist"}
-                  </p>
+      {(entityType != "private" || entityType != "collab") && (
+        <OffCanvas
+          open={openElements.includes(artId)}
+          dismiss={() => close(artId)}
+        >
+          <div className="prevCont">
+            <b className="offCanvasTitle">Artists</b>
+            {artists.map((item) => {
+              return (
+                <div
+                  className="playlistSong"
+                  style={{
+                    width: "95%",
+                    margin: "auto",
+                    marginTop: "10px",
+                    marginBottom: "25px",
+                  }}
+                  key={`${item.name}_${item.id}`}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="playlistSongImg"
+                  />
+                  <div>
+                    <p className="thinOneLineText playlistSongTitle">
+                      {utils.refineText(item.name)}
+                    </p>
+                    <p className="thinOneLineText playlistSongSubTitle">
+                      {item.role || "artist"}
+                    </p>
+                  </div>
+                  <div></div>
+                  <div></div>
                 </div>
-                <div></div>
-                <div></div>
-              </div>
-            );
-          })}
-        </div>
-      </OffCanvas>
+              );
+            })}
+          </div>
+        </OffCanvas>
+      )}
+      {(entityType == "private" || entityType == "collab") && (
+        <OffCanvas
+          open={openElements.includes(artId)}
+          dismiss={() => close(artId)}
+        >
+          <div className="prevCont">
+            <b className="offCanvasTitle">Owners</b>
+            {artists.map((item) => {
+              return (
+                <div
+                  className="playlistSong"
+                  style={{
+                    width: "95%",
+                    margin: "auto",
+                    marginTop: "10px",
+                    marginBottom: "25px",
+                  }}
+                  key={`${item.username}_playlistOwner`}
+                >
+                  <img src={item.pic} className="playlistSongImg rounded" />
+                  <div>
+                    <p className="thinOneLineText playlistSongTitle">
+                      {utils.refineText(item.username)}
+                    </p>
+                    <p className="thinOneLineText playlistSongSubTitle">
+                      {"Playlist member"}
+                    </p>
+                  </div>
+                  <div></div>
+                  <div></div>
+                </div>
+              );
+            })}
+          </div>
+        </OffCanvas>
+      )}
     </>
   );
 }
