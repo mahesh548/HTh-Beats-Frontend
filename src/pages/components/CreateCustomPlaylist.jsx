@@ -5,26 +5,21 @@ import BackButton from "./BackButton";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import addCollab from "../../assets/icons/addCollab.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
-import {
-  PauseRounded,
-  PersonAdd,
-  PersonAddOutlined,
-  PlayArrowRounded,
-} from "@mui/icons-material";
+import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
 import PlaylistNavbar from "./PlaylistNavbar";
-import LikeEntity from "./LikeEntity";
 import OptionEntity from "./OptionEntity";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import { HashContext } from "./Hash";
 import PlaylistOwner from "./PlaylistOwner";
-import TimelineSlider from "./TimelineSlider";
+import { AuthContext } from "./Auth";
 
 export default function CreateCustomPlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
+  const auth = useContext(AuthContext);
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
@@ -138,6 +133,8 @@ export default function CreateCustomPlaylist({ response }) {
               addId={addId}
               artId={artId}
               entityType={data.entityType}
+              privacy={data.userId.includes("viewOnly")}
+              owner={data.owner == auth?.user?.id}
             >
               <img src={moreOutlined} />
             </OptionEntity>
@@ -145,9 +142,11 @@ export default function CreateCustomPlaylist({ response }) {
               <img src={downloadOutlined} />
             </button>
 
-            <button className="playlistButtonSecondary">
-              <img src={addCollab} />
-            </button>
+            {data.owner == auth?.user?.id && (
+              <button className="playlistButtonSecondary">
+                <img src={addCollab} />
+              </button>
+            )}
           </div>
           <div>
             {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (

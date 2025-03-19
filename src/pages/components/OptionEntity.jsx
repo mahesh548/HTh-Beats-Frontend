@@ -1,4 +1,13 @@
-import { PlaylistAddOutlined, ShareOutlined } from "@mui/icons-material";
+import {
+  Delete,
+  DeleteOutline,
+  Edit,
+  Lock,
+  LockOpenOutlined,
+  LockOutlined,
+  PlaylistAddOutlined,
+  ShareOutlined,
+} from "@mui/icons-material";
 import { useContext, useMemo } from "react";
 import { HashContext } from "./Hash";
 import OffCanvas from "./BottomSheet";
@@ -15,6 +24,8 @@ export default function OptionEntity({
   artId,
   artists,
   entityType = "entity",
+  owner = "none",
+  privacy = false,
 }) {
   const { Queue, setQueue } = useContext(songContext);
   const { openElements, open, close, closeOpen } = useContext(HashContext);
@@ -31,7 +42,7 @@ export default function OptionEntity({
         [...Queue.playlist.list, ...data.list].map((item) => [item.id, item])
       ).values(),
     ];
-    console.log(newList);
+
     setQueue({
       type: "PLAYLIST",
       value: { ...Queue.playlist, list: newList },
@@ -93,6 +104,24 @@ export default function OptionEntity({
             <PlaylistAddOutlined />
             <p>Add songs to queue</p>
           </button>
+
+          {owner != "none" && (
+            <>
+              <button className="icoTextBut">
+                <DeleteOutline />
+                <p>Delete playlist</p>
+              </button>
+              <button className="icoTextBut">
+                <Edit />
+                <p>Edit playlist</p>
+              </button>
+              <button className="icoTextBut">
+                {privacy ? <LockOutlined /> : <LockOpenOutlined />}
+
+                <p>Make it {privacy ? "private" : "public"}</p>
+              </button>
+            </>
+          )}
 
           <button className="icoTextBut">
             <ShareOutlined />
