@@ -18,6 +18,7 @@ import PlaylistOwner from "./PlaylistOwner";
 import { AuthContext } from "./Auth";
 import ConfirmPrompt from "./ConfirmPrompt";
 import { useNavigate } from "react-router";
+import EditPlaylist from "./EditPlaylist";
 
 export default function CreateCustomPlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -60,6 +61,9 @@ export default function CreateCustomPlaylist({ response }) {
   }, [data.id]);
   const delId = useMemo(() => {
     return `del_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [data.id]);
+  const editId = useMemo(() => {
+    return `edit_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
 
   const handleLocalLike = (obj, id = "all") => {
@@ -209,16 +213,19 @@ export default function CreateCustomPlaylist({ response }) {
           />,
           document.body
         )}
-      {createPortal(
-        <ConfirmPrompt
-          id={delId}
-          title="Are you sure?"
-          body={`You want to delete "${data.title}" playlist.`}
-          butText="Delete playlist"
-          onConfirm={deletePlaylist}
-        />,
-        document.body
-      )}
+      {openElements.includes(editId) &&
+        createPortal(<EditPlaylist />, document.body)}
+      {openElements.includes(delId) &&
+        createPortal(
+          <ConfirmPrompt
+            id={delId}
+            title="Are you sure?"
+            body={`You want to delete "${data.title}" playlist.`}
+            butText="Delete playlist"
+            onConfirm={deletePlaylist}
+          />,
+          document.body
+        )}
     </div>
   );
 }
