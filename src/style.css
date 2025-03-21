@@ -44,7 +44,7 @@ p {
 }
 
 .text-wheat {
-  color: #f5deb3;
+  color: #f5deb3 !important;
 }
 .hiddenScrollbar {
   overflow: auto;

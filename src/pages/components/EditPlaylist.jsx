@@ -1,6 +1,6 @@
 import BackButton from "./BackButton";
 
-export default function EditPlaylist({ data }) {
+export default function EditPlaylist({ id }) {
   return (
     <div className="floatingPage">
       <div className="editCont">

@@ -53,15 +53,22 @@ export default function CreateCustomPlaylist({ response }) {
     });
   };
 
+  // id to show addToPlaylist container
   const addId = useMemo(() => {
     return `add_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
+
+  // id to show artist/owner bottom sheet
   const artId = useMemo(() => {
     return `art_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
+
+  // id to show confirm prompt for deleting playlist
   const delId = useMemo(() => {
     return `del_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
+
+  // id to show edit playlist container
   const editId = useMemo(() => {
     return `edit_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
@@ -155,6 +162,7 @@ export default function CreateCustomPlaylist({ response }) {
               privacy={data.userId.includes("viewOnly")}
               owner={data.owner == auth?.user?.id}
               delId={delId}
+              editId={editId}
             >
               <img src={moreOutlined} />
             </OptionEntity>
@@ -214,7 +222,7 @@ export default function CreateCustomPlaylist({ response }) {
           document.body
         )}
       {openElements.includes(editId) &&
-        createPortal(<EditPlaylist />, document.body)}
+        createPortal(<EditPlaylist id={editId} />, document.body)}
       {openElements.includes(delId) &&
         createPortal(
           <ConfirmPrompt

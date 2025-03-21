@@ -26,6 +26,7 @@ export default function OptionEntity({
   entityType = "entity",
   owner = "none",
   delId = "none",
+  editId = "none",
   privacy = false,
 }) {
   const { Queue, setQueue } = useContext(songContext);
@@ -115,7 +116,10 @@ export default function OptionEntity({
                 <DeleteOutline />
                 <p>Delete playlist</p>
               </button>
-              <button className="icoTextBut">
+              <button
+                className="icoTextBut"
+                onClick={() => closeOpen(eleId, editId)}
+              >
                 <Edit />
                 <p>Edit playlist</p>
               </button>
