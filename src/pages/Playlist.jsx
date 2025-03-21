@@ -67,6 +67,8 @@ export default function playlist() {
 
       if (response.hasOwnProperty("list")) {
         setplaylistData(refineResponse(response, url));
+      } else {
+        setplaylistData({ entityType: "unavailable" });
       }
     };
     if (auth.user?.verified) {
