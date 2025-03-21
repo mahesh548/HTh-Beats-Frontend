@@ -1,10 +1,12 @@
 import { useContext, useState } from "react";
 import { HashContext } from "./Hash";
 import utils from "../../../utils";
+import { useNavigate } from "react-router";
 
 export default function MakePlaylist() {
   const { close } = useContext(HashContext);
   const [playlistName, setPlaylistName] = useState("My playlist");
+  const navigate = useNavigate();
 
   const handleCreate = async () => {
     if (playlistName.length > 0) {
@@ -15,6 +17,9 @@ export default function MakePlaylist() {
         },
       });
       console.log(response);
+      if (response.status) {
+        navigate("/library");
+      }
     }
   };
   return (
