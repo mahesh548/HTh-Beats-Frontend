@@ -15,6 +15,8 @@ import utils from "../../../utils";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import { songContext } from "./Song";
+import { createPortal } from "react-dom";
+import ConfirmPrompt from "./ConfirmPrompt";
 
 export default function OptionEntity({
   children,
@@ -32,6 +34,9 @@ export default function OptionEntity({
 
   const eleId = useMemo(() => {
     return `more_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [data.id]);
+  const delId = useMemo(() => {
+    return `del_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
 
   const toggleQueue = () => {
@@ -107,7 +112,10 @@ export default function OptionEntity({
 
           {owner != "none" && (
             <>
-              <button className="icoTextBut">
+              <button
+                className="icoTextBut"
+                onClick={() => closeOpen(eleId, delId)}
+              >
                 <DeleteOutline />
                 <p>Delete playlist</p>
               </button>
@@ -120,6 +128,15 @@ export default function OptionEntity({
 
                 <p>Make it {privacy ? "private" : "public"}</p>
               </button>
+              {createPortal(
+                <ConfirmPrompt
+                  id={delId}
+                  title="Are you sure?"
+                  body={`you want to delete "${data.title}" playlist.`}
+                  butText="Delete"
+                />,
+                document.body
+              )}
             </>
           )}
 

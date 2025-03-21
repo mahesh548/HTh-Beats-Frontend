@@ -1259,3 +1259,26 @@ p {
   display: inline-block;
   margin-right: 10px;
 }
+/* CONFIRM PROMPT CSS */
+.confirmPromptCont {
+  height: 100dvh;
+  width: 100vw;
+  background-color: #00000061;
+  position: fixed;
+  z-index: 10001;
+  top: 0;
+  left: 0;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+}
+.confirmCard {
+  background-color: white;
+  color: black;
+  display: grid;
+  justify-items: center;
+  width: 90%;
+  padding: 8px;
+  row-gap: 8px;
+  border-radius: 12px;
+}
