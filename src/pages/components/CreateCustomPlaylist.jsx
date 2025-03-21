@@ -17,6 +17,7 @@ import { HashContext } from "./Hash";
 import PlaylistOwner from "./PlaylistOwner";
 import { AuthContext } from "./Auth";
 import ConfirmPrompt from "./ConfirmPrompt";
+import { useNavigate } from "react-router";
 
 export default function CreateCustomPlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -24,6 +25,7 @@ export default function CreateCustomPlaylist({ response }) {
   const [data, setData] = useState(response);
   const { Queue, setQueue } = useContext(songContext);
   const [bg, setBg] = useState("#8d8d8d");
+  const navigate = useNavigate();
   useEffect(() => {
     setData(response);
   }, [response.id]);
@@ -82,6 +84,15 @@ export default function CreateCustomPlaylist({ response }) {
     }
 
     setData({ ...data, list: newList });
+  };
+  const deletePlaylist = async () => {
+    const likeData = { id: data.id, type: "entity" };
+    const response = await utils.BACKEND("/save", "DELETE", {
+      savedData: likeData,
+    });
+    if (response.delete) {
+      navigate("/library");
+    }
   };
 
   return (
@@ -204,6 +215,7 @@ export default function CreateCustomPlaylist({ response }) {
           title="Are you sure?"
           body={`You want to delete "${data.title}" playlist.`}
           butText="Delete playlist"
+          onConfirm={deletePlaylist}
         />,
         document.body
       )}

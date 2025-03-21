@@ -5,7 +5,8 @@ export default function ConfirmPrompt({ id, title, body, butText, onConfirm }) {
   const { openElements, close } = useContext(HashContext);
 
   const handleClick = () => {
-    alert();
+    onConfirm();
+    close(id);
   };
   if (!openElements.includes(id)) return <></>;
   return (
