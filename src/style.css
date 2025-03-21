@@ -1278,7 +1278,7 @@ p {
   display: grid;
   justify-items: center;
   width: 90%;
-  padding: 8px;
-  row-gap: 8px;
+  padding: 20px;
+  row-gap: 15px;
   border-radius: 12px;
 }

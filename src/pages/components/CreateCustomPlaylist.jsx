@@ -16,6 +16,7 @@ import AddToPlaylist from "./AddToPlaylist";
 import { HashContext } from "./Hash";
 import PlaylistOwner from "./PlaylistOwner";
 import { AuthContext } from "./Auth";
+import ConfirmPrompt from "./ConfirmPrompt";
 
 export default function CreateCustomPlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -54,6 +55,9 @@ export default function CreateCustomPlaylist({ response }) {
   }, [data.id]);
   const artId = useMemo(() => {
     return `art_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [data.id]);
+  const delId = useMemo(() => {
+    return `del_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
 
   const handleLocalLike = (obj, id = "all") => {
@@ -135,6 +139,7 @@ export default function CreateCustomPlaylist({ response }) {
               entityType={data.entityType}
               privacy={data.userId.includes("viewOnly")}
               owner={data.owner == auth?.user?.id}
+              delId={delId}
             >
               <img src={moreOutlined} />
             </OptionEntity>
@@ -193,6 +198,15 @@ export default function CreateCustomPlaylist({ response }) {
           />,
           document.body
         )}
+      {createPortal(
+        <ConfirmPrompt
+          id={delId}
+          title="Are you sure?"
+          body={`You want to delete "${data.title}" playlist.`}
+          butText="Delete playlist"
+        />,
+        document.body
+      )}
     </div>
   );
 }
