@@ -106,8 +106,11 @@ export default function CreateCustomPlaylist({ response }) {
     }
   };
 
-  const saveEdit = (changedData) => {
-    console.log(changedData);
+  const saveEdit = async (changedData) => {
+    changedData.id = data.id;
+    const response = await utils.BACKEND("/edit_playlist", "POST", {
+      editData: changedData,
+    });
   };
 
   return (
