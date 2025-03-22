@@ -207,7 +207,7 @@ export default function OptionEntity({
                       {utils.refineText(item.username)}
                     </p>
                     <p className="thinOneLineText playlistSongSubTitle">
-                      {"Playlist member"}
+                      {`Playlist ${item.role}`}
                     </p>
                   </div>
                   <div></div>

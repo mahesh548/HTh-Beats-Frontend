@@ -1,5 +1,6 @@
 import { useReducer } from "react";
 import BackButton from "./BackButton";
+import utils from "../../../utils";
 
 const editReducer = (state, action) => {
   switch (action.type) {
@@ -27,27 +28,50 @@ export default function EditPlaylist({ title, img, list, members }) {
           <p>Edit playlist</p>
           <button className="iconButton text-wheat">Save</button>
         </div>
-        <div>
+        <div className="text-center">
           <img
             src={editData.img}
-            style={{ height: "235px", width: "235px" }}
-            className="d-block"
+            style={{ height: "150px", width: "150px" }}
+            className="d-block m-auto"
           />
-          <button>Change cover</button>
+          <button className="iconButton mt-2">Change cover</button>
         </div>
         <input
           type="text"
           value={editData.title}
-          className="iconButton mpInput"
+          className="iconButton mpInput m-auto"
           onInput={(e) => {}}
           id="playlistEditName"
         />
         <div>
-          <p className="labelText">Members</p>
+          {editData.members.map((member) => {
+            return (
+              <div
+                className="playlistSong"
+                style={{
+                  width: "98%",
+                  margin: "auto",
+                  marginTop: "5px",
+                  marginBottom: "5px",
+                }}
+                key={`${member.username}_editOwner`}
+              >
+                <img src={member.pic} className="playlistSongImg rounded" />
+                <div>
+                  <p className="thinOneLineText playlistSongTitle">
+                    {utils.refineText(member.username)}
+                  </p>
+                  <p className="thinOneLineText playlistSongSubTitle">
+                    {`Playlist ${member.role}`}
+                  </p>
+                </div>
+                <div></div>
+                <div></div>
+              </div>
+            );
+          })}
         </div>
-        <div>
-          <p className="labelText">Songs</p>
-        </div>
+        <div></div>
       </div>
     </div>
   );

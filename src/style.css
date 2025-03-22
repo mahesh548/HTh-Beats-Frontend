@@ -1285,4 +1285,6 @@ p {
 /* EDIT PLAYLIST CSS */
 .editCont {
   display: grid;
+  row-gap: 20px;
+  padding: 5px;
 }
