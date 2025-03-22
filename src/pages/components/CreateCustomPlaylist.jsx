@@ -222,7 +222,15 @@ export default function CreateCustomPlaylist({ response }) {
           document.body
         )}
       {openElements.includes(editId) &&
-        createPortal(<EditPlaylist id={editId} />, document.body)}
+        createPortal(
+          <EditPlaylist
+            title={data.title}
+            list={data.list}
+            img={data.image}
+            members={data.ownerInfo}
+          />,
+          document.body
+        )}
       {openElements.includes(delId) &&
         createPortal(
           <ConfirmPrompt

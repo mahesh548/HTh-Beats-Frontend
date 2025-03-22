@@ -1282,3 +1282,7 @@ p {
   row-gap: 15px;
   border-radius: 12px;
 }
+/* EDIT PLAYLIST CSS */
+.editCont {
+  display: grid;
+}
