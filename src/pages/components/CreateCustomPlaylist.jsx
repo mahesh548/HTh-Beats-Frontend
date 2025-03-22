@@ -223,12 +223,7 @@ export default function CreateCustomPlaylist({ response }) {
         )}
       {openElements.includes(editId) &&
         createPortal(
-          <EditPlaylist
-            title={data.title}
-            list={data.list}
-            img={data.image}
-            members={data.ownerInfo}
-          />,
+          <EditPlaylist title={data.title} list={data.list} img={data.image} />,
           document.body
         )}
       {openElements.includes(delId) &&
