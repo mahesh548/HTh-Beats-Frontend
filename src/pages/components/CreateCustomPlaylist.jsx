@@ -111,6 +111,17 @@ export default function CreateCustomPlaylist({ response }) {
     const response = await utils.BACKEND("/edit_playlist", "POST", {
       editData: changedData,
     });
+    if (response?.status) {
+      let newData = data;
+      if (changedData?.title) newData.title = changedData.title;
+      if (changedData?.img) newData.image = changedData.img;
+      if (changedData?.list)
+        newData.list = newData.list.filter((item) =>
+          changedData.list.includes(item.id)
+        );
+
+      setData(newData);
+    }
   };
 
   return (
@@ -235,6 +246,7 @@ export default function CreateCustomPlaylist({ response }) {
             list={data.list}
             img={data.image}
             saveEdit={saveEdit}
+            editId={editId}
           />,
           document.body
         )}

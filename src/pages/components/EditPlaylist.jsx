@@ -1,8 +1,9 @@
-import { useEffect, useReducer, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import BackButton from "./BackButton";
 
 import utils from "../../../utils";
 import { DoNotDisturbOnOutlined } from "@mui/icons-material";
+import { HashContext } from "./Hash";
 const editReducer = (state, action) => {
   switch (action.type) {
     case "song":
@@ -19,13 +20,14 @@ const editReducer = (state, action) => {
   }
 };
 
-export default function EditPlaylist({ title, img, list, saveEdit }) {
+export default function EditPlaylist({ editId, title, img, list, saveEdit }) {
   const [editData, setEditData] = useReducer(editReducer, {
     title,
     img,
     list,
   });
   const [changes, setChanges] = useState([]);
+  const { close } = useContext(HashContext);
 
   const getIdFromList = (songList) => {
     return songList.map((item) => item.id);
@@ -39,6 +41,7 @@ export default function EditPlaylist({ title, img, list, saveEdit }) {
       }
     });
     saveEdit(changedData);
+    close(editId);
   };
 
   useEffect(() => {
