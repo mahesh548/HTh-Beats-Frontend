@@ -19,6 +19,7 @@ import { AuthContext } from "./Auth";
 import ConfirmPrompt from "./ConfirmPrompt";
 import { useNavigate } from "react-router";
 import EditPlaylist from "./EditPlaylist";
+import ManageOwner from "./ManageOwner";
 
 export default function CreateCustomPlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -71,6 +72,10 @@ export default function CreateCustomPlaylist({ response }) {
   // id to show edit playlist container
   const editId = useMemo(() => {
     return `edit_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [data.id]);
+  // id to show manage playlist owner container
+  const ownerId = useMemo(() => {
+    return `owners_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
   }, [data.id]);
 
   const handleLocalLike = (obj, id = "all") => {
@@ -189,7 +194,10 @@ export default function CreateCustomPlaylist({ response }) {
             </button>
 
             {data.owner == auth?.user?.id && (
-              <button className="playlistButtonSecondary">
+              <button
+                className="playlistButtonSecondary"
+                onClick={() => open(ownerId)}
+              >
                 <img src={addCollab} />
               </button>
             )}
@@ -248,6 +256,11 @@ export default function CreateCustomPlaylist({ response }) {
             saveEdit={saveEdit}
             editId={editId}
           />,
+          document.body
+        )}
+      {openElements.includes(ownerId) &&
+        createPortal(
+          <ManageOwner ownerInfo={data.ownerInfo} editId={ownerId} />,
           document.body
         )}
       {openElements.includes(delId) &&

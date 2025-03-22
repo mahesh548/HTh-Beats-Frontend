@@ -93,9 +93,7 @@ export default function EditPlaylist({ editId, title, img, list, saveEdit }) {
                 className="playlistSong"
                 style={{
                   width: "98%",
-                  margin: "auto",
-                  marginTop: "15px",
-                  marginBottom: "15px",
+                  margin: "15px auto",
                 }}
                 key={`${item.id}_editList`}
               >
