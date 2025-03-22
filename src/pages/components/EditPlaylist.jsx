@@ -1,10 +1,8 @@
-import { useContext, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import BackButton from "./BackButton";
 
 import utils from "../../../utils";
 import { DoNotDisturbOnOutlined } from "@mui/icons-material";
-import { AuthContext } from "./Auth";
-
 const editReducer = (state, action) => {
   switch (action.type) {
     case "song":
@@ -21,13 +19,35 @@ const editReducer = (state, action) => {
   }
 };
 
-export default function EditPlaylist({ title, img, list }) {
+export default function EditPlaylist({ title, img, list, saveEdit }) {
   const [editData, setEditData] = useReducer(editReducer, {
     title,
     img,
     list,
   });
-  const auth = useContext(AuthContext);
+  const [changes, setChanges] = useState([]);
+
+  const getIdFromList = (songList) => {
+    return songList.map((item) => item.id);
+  };
+  const sendBackData = () => {
+    const changedData = {};
+    changes.forEach((item) => {
+      changedData[item] = editData[item];
+      if (item == "list") {
+        changedData.list = getIdFromList(editData.list);
+      }
+    });
+    saveEdit(changedData);
+  };
+
+  useEffect(() => {
+    let localChanges = [];
+    if (editData.title != title) localChanges.push("title");
+    if (editData.img != img) localChanges.push("img");
+    if (editData.list.length != list.length) localChanges.push("list");
+    setChanges(localChanges);
+  }, [editData]);
 
   return (
     <div className="floatingPage">
@@ -35,7 +55,15 @@ export default function EditPlaylist({ title, img, list }) {
         <div className="navbarAddTo editNav">
           <BackButton />
           <p>Edit playlist</p>
-          <button className="iconButton text-wheat">Save</button>
+          <button
+            className={`iconButton ${
+              changes.length > 0 ? "text-wheat" : "text-white-50"
+            }`}
+            disabled={changes.length == 0}
+            onClick={() => sendBackData()}
+          >
+            Save
+          </button>
         </div>
         <div className="text-center" style={{ marginTop: "100px" }}>
           <img

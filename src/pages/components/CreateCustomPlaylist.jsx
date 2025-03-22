@@ -106,6 +106,10 @@ export default function CreateCustomPlaylist({ response }) {
     }
   };
 
+  const saveEdit = (changedData) => {
+    console.log(changedData);
+  };
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
@@ -223,7 +227,12 @@ export default function CreateCustomPlaylist({ response }) {
         )}
       {openElements.includes(editId) &&
         createPortal(
-          <EditPlaylist title={data.title} list={data.list} img={data.image} />,
+          <EditPlaylist
+            title={data.title}
+            list={data.list}
+            img={data.image}
+            saveEdit={saveEdit}
+          />,
           document.body
         )}
       {openElements.includes(delId) &&
