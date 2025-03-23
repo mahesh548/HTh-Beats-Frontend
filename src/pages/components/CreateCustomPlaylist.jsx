@@ -129,6 +129,13 @@ export default function CreateCustomPlaylist({ response }) {
           changedData.members.includes(item.id)
         );
 
+      if (changedData?.invite) {
+        navigator.clipboard.writeText(
+          `https://${location.host}/collab?token=${response.token}`
+        );
+        alert("Link Copied");
+      }
+
       setData(newData);
     }
   };

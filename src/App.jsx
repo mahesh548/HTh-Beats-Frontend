@@ -12,13 +12,14 @@ import Loader from "./pages/Loader";
 import Search from "./pages/Search";
 import Artist from "./pages/Artist";
 import Song from "./pages/Song";
+import Collab from "./pages/Collab";
+import Library from "./pages/Library";
 
 //components
 import Navbar from "./pages/components/Navbar";
 
 //css
 import "./style.css";
-import Library from "./pages/Library";
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
       <Route element={<Navbar />}>
         <Route path="/home" element={<Home />} />
         <Route path="/library" element={<Library />} />
+        <Route path="/collab/:token" element={<Collab />} />
         <Route path="/search" element={<Search />} />
         <Route path="/playlist/:id" element={<Playlist />} />
         <Route path="/album/:id" element={<Playlist />} />
