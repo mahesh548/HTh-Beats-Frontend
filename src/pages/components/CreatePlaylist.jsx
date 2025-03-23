@@ -140,7 +140,7 @@ export default function CreatePlaylist({ response }) {
         />
         <div className="playlistDetails">
           <p className="thinTwoLineText">
-            {utils.refineText(data.header_desc)}
+            {utils.refineText(data.header_desc || data.title)}
           </p>
 
           <PlaylistOwner
@@ -218,16 +218,21 @@ export default function CreatePlaylist({ response }) {
           );
         })}
       </div>
-      <div className="ps-1 mt-4" ref={relatedPlaylistRef}>
-        {relatedPlaylist ? (
-          <>
-            <TimelineSlider label="Related playlists" data={relatedPlaylist} />
-            <div>Trending in language</div>
-          </>
-        ) : (
-          data.type != "mix" && <div>Loading..</div>
-        )}
-      </div>
+      {data.entityType != "viewOnly" && (
+        <div className="ps-1 mt-4" ref={relatedPlaylistRef}>
+          {relatedPlaylist ? (
+            <>
+              <TimelineSlider
+                label="Related playlists"
+                data={relatedPlaylist}
+              />
+              <div>Trending in language</div>
+            </>
+          ) : (
+            data.type != "mix" && <div>Loading..</div>
+          )}
+        </div>
+      )}
 
       {openElements.includes(addId) &&
         createPortal(

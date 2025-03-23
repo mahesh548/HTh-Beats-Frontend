@@ -26,6 +26,7 @@ export default function OptionEntity({
   entityType = "entity",
   delId = "none",
   editId = "none",
+  saveEdit = () => {},
   owner = false,
   privacy = false,
 }) {
@@ -123,7 +124,12 @@ export default function OptionEntity({
                 <Edit />
                 <p>Edit playlist</p>
               </button>
-              <button className="icoTextBut">
+              <button
+                className="icoTextBut"
+                onClick={() =>
+                  saveEdit({ privacy: privacy ? "private" : "public" })
+                }
+              >
                 {privacy ? <LockOutlined /> : <LockOpenOutlined />}
 
                 <p>Make it {privacy ? "private" : "public"}</p>

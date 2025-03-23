@@ -28,6 +28,26 @@ export default function playlist() {
   };
 
   const refineResponse = (response, url) => {
+    if (response?.entityType == "viewOnly") {
+      response.more_info = {};
+
+      let allArtist = response.list
+        .map((item) => item.more_info.artistMap.artists)
+        .flat()
+        .filter((item) => item.image);
+
+      response.more_info.artists = [
+        ...new Map(allArtist.map((item2) => [item2.id, item2])).values(),
+      ];
+      response.more_info.subtitle_desc = [
+        "Public",
+        `${response.list_count} songs`,
+        `${
+          response.userId.filter((item) => item != "viewOnly").length
+        } members`,
+      ];
+    }
+
     if (url == pathMap["album"]) {
       response.more_info.artists = response.more_info.artistMap.artists;
       response.more_info.subtitle_desc = [
@@ -78,7 +98,8 @@ export default function playlist() {
 
   return playlistData == false ? (
     <PageLoader />
-  ) : playlistData.entityType === "entity" ? (
+  ) : playlistData.entityType === "entity" ||
+    playlistData.entityType === "viewOnly" ? (
     <CreatePlaylist response={playlistData} />
   ) : playlistData.entityType === "liked" ? (
     <CreateLikePlaylist response={playlistData} />
