@@ -14,10 +14,22 @@ export default function ConfirmPrompt({ id, title, body, butText, onConfirm }) {
       <div className="confirmCard">
         <b className="text-center fs-4">{title}</b>
         <p className="text-center">{body}</p>
-        <button onClick={handleClick} className="addToBut">
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevents backdrop's onClick from firing
+            handleClick();
+          }}
+          className="addToBut"
+        >
           {butText}
         </button>
-        <button onClick={() => close(id)} className="iconButton text-black">
+        <button
+          onClick={(e) => {
+            e.stopPropagation(); // Prevents backdrop's onClick from firing
+            close(id);
+          }}
+          className="iconButton text-black"
+        >
           Cancel
         </button>
       </div>
