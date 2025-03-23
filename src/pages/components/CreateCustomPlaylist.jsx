@@ -5,7 +5,11 @@ import BackButton from "./BackButton";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import addCollab from "../../assets/icons/addCollab.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
-import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
+import {
+  LogoutOutlined,
+  PauseRounded,
+  PlayArrowRounded,
+} from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
@@ -140,6 +144,17 @@ export default function CreateCustomPlaylist({ response }) {
     }
   };
 
+  const delText =
+    data.owner == auth?.user?.id
+      ? {
+          body: `You want to delete "${data.title}" playlist.`,
+          butText: "Delete playlist",
+        }
+      : {
+          body: `You want to leave ${data.title}" playlist collab.`,
+          butText: "Leave collab",
+        };
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
@@ -204,12 +219,19 @@ export default function CreateCustomPlaylist({ response }) {
               <img src={downloadOutlined} />
             </button>
 
-            {data.owner == auth?.user?.id && (
+            {data.owner == auth?.user?.id ? (
               <button
                 className="playlistButtonSecondary"
                 onClick={() => open(ownerId)}
               >
                 <img src={addCollab} />
+              </button>
+            ) : (
+              <button
+                className="playlistButtonSecondary leaveCollab"
+                onClick={() => open(delId)}
+              >
+                <LogoutOutlined />
               </button>
             )}
           </div>
@@ -279,8 +301,8 @@ export default function CreateCustomPlaylist({ response }) {
           <ConfirmPrompt
             id={delId}
             title="Are you sure?"
-            body={`You want to delete "${data.title}" playlist.`}
-            butText="Delete playlist"
+            body={delText.body}
+            butText={delText.butText}
             onConfirm={deletePlaylist}
           />,
           document.body
