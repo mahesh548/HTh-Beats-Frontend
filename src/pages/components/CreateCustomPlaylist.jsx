@@ -124,6 +124,10 @@ export default function CreateCustomPlaylist({ response }) {
         newData.list = newData.list.filter((item) =>
           changedData.list.includes(item.id)
         );
+      if (changedData?.members)
+        newData.ownerInfo = newData.ownerInfo.filter((item) =>
+          changedData.members.includes(item.id)
+        );
 
       setData(newData);
     }
@@ -260,7 +264,7 @@ export default function CreateCustomPlaylist({ response }) {
         )}
       {openElements.includes(ownerId) &&
         createPortal(
-          <ManageOwner ownerInfo={data.ownerInfo} editId={ownerId} />,
+          <ManageOwner ownerInfo={data.ownerInfo} saveEdit={saveEdit} />,
           document.body
         )}
       {openElements.includes(delId) &&
