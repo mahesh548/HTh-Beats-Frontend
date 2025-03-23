@@ -24,9 +24,9 @@ export default function OptionEntity({
   artId,
   artists,
   entityType = "entity",
-  owner = "none",
   delId = "none",
   editId = "none",
+  owner = false,
   privacy = false,
 }) {
   const { Queue, setQueue } = useContext(songContext);
@@ -107,7 +107,7 @@ export default function OptionEntity({
             <p>Add songs to queue</p>
           </button>
 
-          {owner != "none" && (
+          {owner && (
             <>
               <button
                 className="icoTextBut"

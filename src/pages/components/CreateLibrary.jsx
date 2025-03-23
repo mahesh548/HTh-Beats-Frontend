@@ -28,7 +28,9 @@ export default function CreateLibrary({ response, filter, filterData }) {
       restText = ` · ${username}`;
     }
     if (item.libraryType == "collab") {
-      restText = ` · ${item.libraryUserId.length} users collab`;
+      restText = ` · ${
+        item.libraryUserId.filter((item) => item != "viewOnly").length
+      } users collab`;
     }
 
     return utils.refineText(`${utils.capitalLetter(item.type)} ${restText}`);

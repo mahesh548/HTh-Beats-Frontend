@@ -47,7 +47,7 @@ export default function Collab() {
       }
       if (response.role == "viewer") {
         //if user is viewing the collab before joining
-        if (playlistData.image == "Playlist.png") {
+        if (response.image == "Playlist.png") {
           // create complete link for default cover
           response.image = `https://${location.host}/Playlist.png`;
         }
@@ -87,7 +87,7 @@ export default function Collab() {
             <p className="text-center text-white-50">
               You are invited to join this collab playlist.
             </p>
-            <button className="addToBut" onClick={() => getCollab(true)}>
+            <button className="addToBut mt-4" onClick={() => getCollab(true)}>
               Join collab playlist
             </button>
           </div>
