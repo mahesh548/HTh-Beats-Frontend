@@ -14,6 +14,7 @@ export default function CreateLibrary({ response, filter, filterData }) {
   const getSubtitle = (item) => {
     let restText = "";
     const username = auth?.user?.username;
+    const myUserId = auth?.user?.id;
     if (item.type == "playlist") {
       restText = ` · HTh-Beats`;
     }
@@ -25,7 +26,7 @@ export default function CreateLibrary({ response, filter, filterData }) {
       restText = ` · ${item.list_count} songs`;
     }
     if (item.libraryType == "private") {
-      restText = ` · ${username}`;
+      restText = ` · ${item.userId.includes(myUserId) ? username : "Public"}`;
     }
     if (item.libraryType == "collab") {
       restText = ` · ${
