@@ -94,7 +94,7 @@ export default function Library() {
     setLibraryData(false);
     const getLibraryData = async () => {
       const response = await utils.BACKEND("/save", "GET");
-      if (response.hasOwnProperty("data") && response.data.length > 0) {
+      if (response?.data && response.data.length > 0) {
         setOriginalResponse(response.data);
         setLibraryData(refineResponse(response.data));
       }

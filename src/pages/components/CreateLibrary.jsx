@@ -38,6 +38,7 @@ export default function CreateLibrary({ response, filter, filterData }) {
   const handleClick = (type, id) => {
     navigate(`/${type}/${id}`);
   };
+  console.log(response);
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryCont ">

@@ -142,10 +142,10 @@ export default function CreateCustomPlaylist({ response }) {
       if (changedData?.privacy && changedData.privacy == "private")
         newData.userId = newData.userId.filter((item) => item != "viewOnly");
 
-      if (changedData?.privacy && changedData.privacy == "public")
-        newData.userId = newData.userId
-          .filter((item) => item != "viewOnly")
-          .push("viewOnly");
+      if (changedData?.privacy && changedData.privacy == "public") {
+        newData.userId = newData.userId.filter((item) => item != "viewOnly");
+        newData.userId.push("viewOnly");
+      }
 
       setData(newData);
     }
