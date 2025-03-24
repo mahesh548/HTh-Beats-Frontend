@@ -1303,3 +1303,22 @@ p {
   left: 0;
   background: black;
 }
+/* SEARCH CSS */
+.srchOpenBut {
+  display: grid;
+  background-color: white;
+  color: var(--light-dark-bg);
+  border: none;
+  grid-template-columns: 40px auto;
+  width: 98%;
+  margin: 20px auto;
+  font-size: 20px;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  img {
+    height: 30px;
+    width: 30px;
+    filter: brightness(0);
+  }
+}

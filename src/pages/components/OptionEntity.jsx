@@ -126,9 +126,10 @@ export default function OptionEntity({
               </button>
               <button
                 className="icoTextBut"
-                onClick={() =>
-                  saveEdit({ privacy: privacy ? "private" : "public" })
-                }
+                onClick={() => {
+                  saveEdit({ privacy: privacy ? "private" : "public" });
+                  close(eleId);
+                }}
               >
                 {privacy ? <LockOutlined /> : <LockOpenOutlined />}
 

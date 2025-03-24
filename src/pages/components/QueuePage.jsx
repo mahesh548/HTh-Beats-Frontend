@@ -68,9 +68,6 @@ export default function QueuePage() {
         <div className="navbarAddTo">
           <BackButton />
           <p>Queue</p>
-          <button className="iconButton">
-            <SortRounded />
-          </button>
         </div>
         <div>
           <button
