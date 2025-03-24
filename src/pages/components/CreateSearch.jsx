@@ -5,6 +5,9 @@ import searchSvgOutlined from "../../assets/icons/searchSvgOutlined.svg";
 
 export default function CreateSearch() {
   const auth = useContext(AuthContext);
+  const discover = localStorage?.homeCache
+    ? JSON.parse(localStorage.homeCache).radio
+    : false;
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryNavCont px-2 position-relative">
@@ -17,6 +20,27 @@ export default function CreateSearch() {
         <img src={searchSvgOutlined} />
         <p className="text-start">Hey, what do you want to listen ?</p>
       </button>
+      {discover && (
+        <>
+          <p className="labelText">Browse all</p>
+          <div className="browseCont mt-3">
+            {discover.map((item) => {
+              return (
+                <button
+                  className="browseCard"
+                  key={`dicover_${Math.random().toString(36).substr(2, 9)}`}
+                  style={{ background: item?.more_info?.color }}
+                >
+                  <p className="text-white text-start fw-bold p-1">
+                    {item?.title}
+                  </p>
+                  <img src={item.image} />
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 }

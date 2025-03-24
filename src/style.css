@@ -1322,3 +1322,28 @@ p {
     filter: brightness(0);
   }
 }
+.browseCont {
+  display: grid;
+  width: 100vw;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 15px;
+  row-gap: 15px;
+}
+.browseCard {
+  display: grid;
+  grid-template-columns: auto 50px;
+  height: 100px;
+  width: 100%;
+  background-color: var(--dark-grey-bg);
+  border: none;
+  overflow: hidden;
+  border-radius: 6px;
+  font-size: 18px;
+  img {
+    height: 80px;
+    width: 80px;
+    transform: translate(0, 30px) rotate(30deg);
+    border-radius: 8px;
+    box-shadow: 0 0 20px #0000009d;
+  }
+}

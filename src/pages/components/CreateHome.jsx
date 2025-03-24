@@ -37,7 +37,7 @@ export default function CreateHome() {
       {new_trending && (
         <TimelineSlider label="Trending right now" data={new_trending} />
       )}
-      {radio && <TimelineSlider label="Featured radio stations" data={radio} />}
+      {/* {radio && <TimelineSlider label="Featured radio stations" data={radio} />} */}
       {city_mod && <TimelineSlider label="Fresh new music" data={city_mod} />}
       {top_playlists && (
         <TimelineSlider label="Most played playlists" data={top_playlists} />
