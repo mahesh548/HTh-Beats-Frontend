@@ -1347,3 +1347,35 @@ p {
     box-shadow: 0 0 20px #0000009d;
   }
 }
+.searchCont {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: black;
+  height: 100%;
+  width: 100%;
+}
+.srchBox {
+  display: grid;
+  grid-template-columns: 30px auto 30px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  left: 0;
+  background-color: var(--dark-grey-bg);
+  height: 60px;
+  column-gap: 8px;
+  padding: 4px;
+}
+.srchInput {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  color: white;
+  caret-color: wheat;
+}
+.srchInput::placeholder {
+  color: var(--thin-text-color);
+}
