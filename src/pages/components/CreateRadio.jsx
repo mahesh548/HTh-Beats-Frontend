@@ -2,9 +2,41 @@ import { useContext } from "react";
 import OffCanvas from "./BottomSheet";
 import { HashContext } from "./Hash";
 import utils from "../../../utils";
+import { songContext } from "./Song";
 
 export default function CreateRadio({ data }) {
   const { openElements, open, close } = useContext(HashContext);
+
+  const { setQueue } = useContext(songContext);
+  const playRadio = async (data) => {
+    close(data.id);
+    if (
+      !data?.more_info?.language &&
+      !data?.more_info?.station_display_text &&
+      data?.more_info?.featured_station_type != "featured"
+    )
+      return;
+
+    const response = await utils.API(
+      `/radio?entity=featured&name=${data.more_info.station_display_text}&lang=${data.more_info.language}`,
+      "GET"
+    );
+    if (response.status && response.data) {
+      const playlist = {
+        title: data.title,
+        type: "radio",
+        list: response.data,
+      };
+      setQueue({
+        type: "NEW",
+        value: {
+          playlist: playlist,
+          song: response.data[0].id,
+          status: "play",
+        },
+      });
+    }
+  };
   return (
     <>
       <button
@@ -37,6 +69,7 @@ export default function CreateRadio({ data }) {
           <button
             className="addToBut text-white w-100"
             style={{ background: data?.more_info?.color }}
+            onClick={() => playRadio(data)}
           >
             Play this radio
           </button>
