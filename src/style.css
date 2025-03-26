@@ -1380,3 +1380,6 @@ p {
 .srchInput::placeholder {
   color: var(--thin-text-color);
 }
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}

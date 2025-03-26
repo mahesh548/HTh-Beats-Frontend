@@ -5,6 +5,7 @@ import searchSvgOutlined from "../../assets/icons/searchSvgOutlined.svg";
 import { HashContext } from "./Hash";
 import CreateRadio from "./CreateRadio";
 import { ArrowBack, Close } from "@mui/icons-material";
+import utils from "../../../utils";
 
 export default function CreateSearch() {
   const auth = useContext(AuthContext);
@@ -20,9 +21,15 @@ export default function CreateSearch() {
     if (searchInput.length == 0) return;
     clearTimeout(searchTimeOut.current);
     searchTimeOut.current = setTimeout(() => {
-      console.log(`making request for: ${searchInput}`);
+      search(searchInput);
     }, 1000);
   }, [searchInput]);
+
+  const search = async (query) => {
+    const response = await utils.API(`/search?q=${query}`);
+    console.log(response);
+  };
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryNavCont px-2 position-relative">
@@ -59,7 +66,7 @@ export default function CreateSearch() {
             <ArrowBack />
           </button>
           <input
-            type="text"
+            type="search"
             placeholder="Hey, what do you want to listen ?"
             className="srchInput"
             value={searchInput}
