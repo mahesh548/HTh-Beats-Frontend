@@ -1375,6 +1375,7 @@ p {
   box-shadow: none;
   color: white;
   caret-color: wheat;
+  text-decoration: none;
 }
 .srchInput::placeholder {
   color: var(--thin-text-color);
