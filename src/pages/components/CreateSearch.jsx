@@ -7,6 +7,7 @@ import CreateRadio from "./CreateRadio";
 import { ArrowBack, Close } from "@mui/icons-material";
 import utils from "../../../utils";
 import PageLoader from "./PageLoader";
+import SearchCard from "./SearchCard";
 
 export default function CreateSearch() {
   const auth = useContext(AuthContext);
@@ -159,32 +160,11 @@ export default function CreateSearch() {
             >
               {acResult.map((item) => {
                 return (
-                  <div
-                    className="playlistSong mt-4"
+                  <SearchCard
+                    data={item}
+                    ac={true}
                     key={`${Math.random().toString(36).substr(2, 9)}`}
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className={`playlistSongImg rounded ${
-                        item.type == "artist" ? "rounded-circle" : ""
-                      }`}
-                    />
-                    <div className="extendedGrid">
-                      <p
-                        className="thinOneLineText playlistSongTitle"
-                        style={{ color: false ? "wheat" : "#ffffff" }}
-                      >
-                        {utils.refineText(item.title)}
-                      </p>
-                      <p className="thinOneLineText playlistSongSubTitle">
-                        {utils.capitalLetter(item.type)}
-                        {item.subtitle
-                          ? ` · ${utils.refineText(item.subtitle)}`
-                          : ""}
-                      </p>
-                    </div>
-                  </div>
+                  />
                 );
               })}
               <button className="iconButton p-0">
@@ -201,32 +181,11 @@ export default function CreateSearch() {
             >
               {searchResult.map((item) => {
                 return (
-                  <div
-                    className="playlistSong mt-4"
+                  <SearchCard
+                    data={item}
+                    ac={false}
                     key={`${Math.random().toString(36).substr(2, 9)}`}
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className={`playlistSongImg rounded ${
-                        item.type == "artist" ? "rounded-circle" : ""
-                      }`}
-                    />
-                    <div>
-                      <p
-                        className="thinOneLineText playlistSongTitle"
-                        style={{ color: false ? "wheat" : "#ffffff" }}
-                      >
-                        {utils.refineText(item.title)}
-                      </p>
-                      <p className="thinOneLineText playlistSongSubTitle">
-                        {utils.capitalLetter(item.type)}
-                        {item.subtitle
-                          ? ` · ${utils.refineText(item.subtitle)}`
-                          : ""}
-                      </p>
-                    </div>
-                  </div>
+                  />
                 );
               })}
             </div>
