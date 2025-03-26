@@ -16,6 +16,7 @@ export default function CreateSearch() {
     localStorage.history ? "history" : "default"
   );
   const [acResult, setAcResult] = useState();
+  const [searchResult, setSearchResult] = useState();
 
   const discover = localStorage?.homeCache
     ? JSON.parse(localStorage.homeCache).radio
@@ -23,8 +24,12 @@ export default function CreateSearch() {
 
   let searchTimeOut = useRef(null);
   useEffect(() => {
-    if (searchInput.length == 0) return;
     clearTimeout(searchTimeOut.current);
+    if (searchInput.length == 0) {
+      setView(localStorage.history ? "history" : "default");
+      return;
+    }
+
     searchTimeOut.current = setTimeout(() => {
       autoComplete(searchInput);
     }, 1000);
@@ -36,6 +41,14 @@ export default function CreateSearch() {
     if (response.status && response.data) {
       setAcResult(sortResponse(response.data, query));
       setView("autocomplete");
+    }
+  };
+  const search = async (query) => {
+    setView("loading");
+    const response = await utils.API(`/search?q=${query}&autocomplete=false`);
+    if (response.status && response.data) {
+      setSearchResult(sortResponse(response.data, query));
+      setView("search");
     }
   };
 
@@ -116,6 +129,11 @@ export default function CreateSearch() {
             value={searchInput}
             onInput={(e) => processInput(e.target.value)}
             spellCheck={false}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                search(e.target.value);
+              }
+            }}
           />
           {searchInput.length > 0 && (
             <button className="iconButton" onClick={() => setSearchInput("")}>
@@ -141,7 +159,10 @@ export default function CreateSearch() {
             >
               {acResult.map((item) => {
                 return (
-                  <div className="playlistSong mt-4">
+                  <div
+                    className="playlistSong mt-4"
+                    key={`${Math.random().toString(36).substr(2, 9)}`}
+                  >
                     <img
                       src={item.image}
                       alt={item.title}
@@ -150,6 +171,48 @@ export default function CreateSearch() {
                       }`}
                     />
                     <div className="extendedGrid">
+                      <p
+                        className="thinOneLineText playlistSongTitle"
+                        style={{ color: false ? "wheat" : "#ffffff" }}
+                      >
+                        {utils.refineText(item.title)}
+                      </p>
+                      <p className="thinOneLineText playlistSongSubTitle">
+                        {utils.capitalLetter(item.type)}
+                        {item.subtitle
+                          ? ` · ${utils.refineText(item.subtitle)}`
+                          : ""}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+              <button className="iconButton p-0">
+                <p className="labelText text-wheat fs-6 mt-2 fw-normal">
+                  {`See more results for "${searchInput}"`}
+                </p>
+              </button>
+            </div>
+          )}
+          {view == "search" && (
+            <div
+              className="overflow-scroll px-2 pe-4"
+              style={{ paddingBottom: "150px" }}
+            >
+              {searchResult.map((item) => {
+                return (
+                  <div
+                    className="playlistSong mt-4"
+                    key={`${Math.random().toString(36).substr(2, 9)}`}
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className={`playlistSongImg rounded ${
+                        item.type == "artist" ? "rounded-circle" : ""
+                      }`}
+                    />
+                    <div>
                       <p
                         className="thinOneLineText playlistSongTitle"
                         style={{ color: false ? "wheat" : "#ffffff" }}
