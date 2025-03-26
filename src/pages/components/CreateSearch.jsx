@@ -34,7 +34,7 @@ export default function CreateSearch() {
     setView("loading");
     const response = await utils.API(`/search?q=${query}&autocomplete=true`);
     if (response.status && response.data) {
-      setAcResult(response.data);
+      setAcResult(sortResponse(response.data, query));
       setView("autocomplete");
     }
   };
@@ -43,6 +43,35 @@ export default function CreateSearch() {
     setSearchInput(value);
     if (value.length == 0)
       setView(localStorage.history ? "history" : "default");
+  };
+
+  const sortResponse = (data, query) => {
+    return data
+      .map((item) => {
+        const titleIndex = item.title
+          .toLowerCase()
+          .indexOf(query.toLowerCase());
+        const subTitleIndex = item.title
+          .toLowerCase()
+          .indexOf(query.toLowerCase());
+
+        return {
+          ...item,
+          titleMatch: titleIndex !== -1 ? 1 : 0,
+          subtitleMatch: subTitleIndex !== -1 ? 1 : 0,
+          titleScore: titleIndex === -1 ? Infinity : titleIndex,
+          subtitleScore: subTitleIndex === -1 ? Infinity : subTitleIndex,
+        };
+      })
+      .sort((a, b) => {
+        if (b.titleMatch !== a.titleMatch) return b.titleMatch - a.titleMatch;
+        if (a.titleScore !== b.titleScore) return a.titleScore - b.titleScore;
+
+        if (b.subtitleMatch !== a.subtitleMatch)
+          return b.subtitleMatch - a.subtitleMatch;
+
+        return a.subtitleScore - b.subtitleScore;
+      });
   };
 
   return (
