@@ -1376,10 +1376,23 @@ p {
   color: white;
   caret-color: wheat;
   text-decoration: none;
+  text-transform: lowercase;
 }
 .srchInput::placeholder {
   color: var(--thin-text-color);
 }
 input[type="search"]::-webkit-search-cancel-button {
   display: none;
+}
+.searchMain {
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
+  padding-top: 60px;
+}
+.defaultCont {
+  display: block;
+  margin: auto;
+  text-align: center;
+  margin-top: 50%;
 }

@@ -6,11 +6,16 @@ import { HashContext } from "./Hash";
 import CreateRadio from "./CreateRadio";
 import { ArrowBack, Close } from "@mui/icons-material";
 import utils from "../../../utils";
+import PageLoader from "./PageLoader";
 
 export default function CreateSearch() {
   const auth = useContext(AuthContext);
   const { openElements, open, close } = useContext(HashContext);
   const [searchInput, setSearchInput] = useState("");
+  const [view, setView] = useState(
+    localStorage.history ? "history" : "default"
+  );
+  const [acResult, setAcResult] = useState();
 
   const discover = localStorage?.homeCache
     ? JSON.parse(localStorage.homeCache).radio
@@ -21,13 +26,23 @@ export default function CreateSearch() {
     if (searchInput.length == 0) return;
     clearTimeout(searchTimeOut.current);
     searchTimeOut.current = setTimeout(() => {
-      search(searchInput);
+      autoComplete(searchInput);
     }, 1000);
   }, [searchInput]);
 
-  const search = async (query) => {
-    const response = await utils.API(`/search?q=${query}`);
-    console.log(response);
+  const autoComplete = async (query) => {
+    setView("loading");
+    const response = await utils.API(`/search?q=${query}&autocomplete=true`);
+    if (response.status && response.data) {
+      setAcResult(response.data);
+      setView("autocomplete");
+    }
+  };
+
+  const processInput = (value) => {
+    setSearchInput(value);
+    if (value.length == 0)
+      setView(localStorage.history ? "history" : "default");
   };
 
   return (
@@ -58,7 +73,7 @@ export default function CreateSearch() {
         </>
       )}
       <div
-        className="searchCont"
+        className="searchCont hiddenScrollbar"
         style={{ display: openElements.includes("search") ? "block" : "none" }}
       >
         <div className="srchBox pe-3">
@@ -70,13 +85,59 @@ export default function CreateSearch() {
             placeholder="Hey, what do you want to listen ?"
             className="srchInput"
             value={searchInput}
-            onInput={(e) => setSearchInput(e.target.value)}
+            onInput={(e) => processInput(e.target.value)}
             spellCheck={false}
           />
           {searchInput.length > 0 && (
             <button className="iconButton" onClick={() => setSearchInput("")}>
               <Close />
             </button>
+          )}
+        </div>
+        <div className="searchMain hiddenScrollbar">
+          {view == "default" && (
+            <div className="defaultCont">
+              <p className="text-white fs-5">Search what you like</p>
+              <p className="text-white-50 fs-6">
+                Search for artists, songs, playlist and more.
+              </p>
+            </div>
+          )}
+          {view == "loading" && <PageLoader />}
+          {view == "history" && <div className="historyCont"></div>}
+          {view == "autocomplete" && (
+            <div
+              className="overflow-scroll px-2 pe-4"
+              style={{ paddingBottom: "150px" }}
+            >
+              {acResult.map((item) => {
+                return (
+                  <div className="playlistSong mt-4">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className={`playlistSongImg rounded ${
+                        item.type == "artist" ? "rounded-circle" : ""
+                      }`}
+                    />
+                    <div className="extendedGrid">
+                      <p
+                        className="thinOneLineText playlistSongTitle"
+                        style={{ color: false ? "wheat" : "#ffffff" }}
+                      >
+                        {utils.refineText(item.title)}
+                      </p>
+                      <p className="thinOneLineText playlistSongSubTitle">
+                        {utils.capitalLetter(item.type)}
+                        {item.subtitle
+                          ? ` · ${utils.refineText(item.subtitle)}`
+                          : ""}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </div>
       </div>
