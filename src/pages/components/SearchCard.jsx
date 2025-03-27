@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router";
 import utils from "../../../utils";
+import { useContext } from "react";
+import { songContext } from "./Song";
 export default function SearchCard({ data, ac }) {
+  const { Queue, setQueue } = useContext(songContext);
   const navigate = useNavigate();
   const showResult = (type, id) => {
     navigate(`/${type}/${id}`);
@@ -21,7 +24,7 @@ export default function SearchCard({ data, ac }) {
       >
         <p
           className="thinOneLineText playlistSongTitle"
-          style={{ color: false ? "wheat" : "#ffffff" }}
+          style={{ color: data.id == Queue.song ? "wheat" : "#ffffff" }}
         >
           {utils.refineText(data?.title || data?.name)}
         </p>
