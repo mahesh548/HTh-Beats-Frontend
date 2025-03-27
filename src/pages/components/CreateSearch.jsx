@@ -62,10 +62,10 @@ export default function CreateSearch() {
   const sortResponse = (data, query) => {
     return data
       .map((item) => {
-        const titleIndex = item.title
-          .toLowerCase()
-          .indexOf(query.toLowerCase());
-        const subTitleIndex = item.title
+        const title = item?.title || item?.name;
+        const subtitle = item?.subtitle || "";
+        const titleIndex = title.toLowerCase().indexOf(query.toLowerCase());
+        const subTitleIndex = subtitle
           .toLowerCase()
           .indexOf(query.toLowerCase());
 

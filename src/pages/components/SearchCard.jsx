@@ -4,7 +4,7 @@ export default function SearchCard({ data, ac }) {
     <div className="playlistSong mt-4">
       <img
         src={data.image}
-        alt={data.title}
+        alt={`${data?.title || data?.name}`}
         className={`playlistSongImg rounded ${
           data.type == "artist" ? "rounded-circle" : ""
         }`}
@@ -14,7 +14,7 @@ export default function SearchCard({ data, ac }) {
           className="thinOneLineText playlistSongTitle"
           style={{ color: false ? "wheat" : "#ffffff" }}
         >
-          {utils.refineText(data.title)}
+          {utils.refineText(data?.title || data?.name)}
         </p>
         <p className="thinOneLineText playlistSongSubTitle">
           {utils.capitalLetter(data.type)}
