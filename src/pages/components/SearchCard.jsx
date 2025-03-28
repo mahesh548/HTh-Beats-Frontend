@@ -1,21 +1,29 @@
 import { useNavigate } from "react-router";
 import utils from "../../../utils";
-import { useContext } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { songContext } from "./Song";
-export default function SearchCard({ data, ac }) {
+import LikeEntity from "./LikeEntity";
+import LikeSong from "./LikeSong";
+import { HashContext } from "./Hash";
+import { createPortal } from "react-dom";
+import AddToPlaylist from "./AddToPlaylist";
+
+export default function SearchCard({ cardData, ac }) {
   const { Queue, setQueue } = useContext(songContext);
+  const { openElements } = useContext(HashContext);
+  const [data, setData] = useState(cardData);
+
   const navigate = useNavigate();
   const showResult = (type, id) => {
     navigate(`/${type}/${id}`);
   };
 
   //detecting if song is playable or not
-  const typeEntity =
-    data.type != "song"
-      ? "entity"
-      : !data?.more_info
-      ? "unplayable"
-      : "playable";
+  const typeEntity = data.hasOwnProperty("isLiked")
+    ? "entity"
+    : data.hasOwnProperty("savedIn")
+    ? "playable"
+    : "unplayable";
 
   //likeData to save
   const likeData =
@@ -26,6 +34,12 @@ export default function SearchCard({ data, ac }) {
           id: [data.id],
           playlistIds: JSON.parse(localStorage?.preferedPlaylist),
         };
+
+  const addId = useMemo(() => {
+    return `add_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
+  }, [data.id]);
+
+  const isLiked = Queue?.saved && Queue?.saved.includes(data.id);
 
   return (
     <div className="playlistSong mt-4">
@@ -52,8 +66,45 @@ export default function SearchCard({ data, ac }) {
           {data.subtitle ? ` · ${utils.refineText(data.subtitle)}` : ""}
         </p>
       </div>
-      {!ac && <div>{typeEntity == "playable" && <button>=</button>}</div>}
-      {!ac && <div>{typeEntity != "unplayable" && <button>+</button>}</div>}
+      {!ac && typeEntity == "entity" && <div></div>}
+      {!ac && typeEntity == "entity" && (
+        <div>
+          {
+            <LikeEntity
+              isLiked={data.isLiked}
+              likeData={likeData}
+              styleClass="playlistButtonSecondary"
+            />
+          }
+        </div>
+      )}
+
+      {!ac && typeEntity == "playable" && <div>{<button>=</button>}</div>}
+      {!ac && typeEntity == "playable" && (
+        <div>
+          {
+            <LikeSong
+              styleClass="playlistSongButton playlistSongLike"
+              isLiked={data.savedIn.length > 0 || isLiked}
+              likeData={likeData}
+              addId={addId}
+              key={data.id}
+            />
+          }
+        </div>
+      )}
+      {openElements.includes(addId) &&
+        createPortal(
+          <AddToPlaylist
+            likeData={likeData}
+            playlistIds={data.savedIn || []}
+            results={(obj) => {
+              setData({ ...data, savedIn: obj?.savedTo });
+            }}
+            eleId={addId}
+          />,
+          document.body
+        )}
     </div>
   );
 }

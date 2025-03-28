@@ -161,7 +161,7 @@ export default function CreateSearch() {
               {acResult.map((item) => {
                 return (
                   <SearchCard
-                    data={item}
+                    cardData={item}
                     ac={true}
                     key={`${Math.random().toString(36).substr(2, 9)}`}
                   />
@@ -182,7 +182,7 @@ export default function CreateSearch() {
               {searchResult.map((item) => {
                 return (
                   <SearchCard
-                    data={item}
+                    cardData={item}
                     ac={false}
                     key={`${Math.random().toString(36).substr(2, 9)}`}
                   />
