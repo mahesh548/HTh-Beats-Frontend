@@ -26,7 +26,7 @@ export default function CreateSearch() {
   let searchTimeOut = useRef(null);
   useEffect(() => {
     clearTimeout(searchTimeOut.current);
-    if (searchInput.length == 0) {
+    if (searchInput.length === 0) {
       setView(localStorage.history ? "history" : "default");
       return;
     }
@@ -55,7 +55,7 @@ export default function CreateSearch() {
 
   const processInput = (value) => {
     setSearchInput(value);
-    if (value.length == 0)
+    if (value.length === 0)
       setView(localStorage.history ? "history" : "default");
   };
 
@@ -80,10 +80,8 @@ export default function CreateSearch() {
       .sort((a, b) => {
         if (b.titleMatch !== a.titleMatch) return b.titleMatch - a.titleMatch;
         if (a.titleScore !== b.titleScore) return a.titleScore - b.titleScore;
-
         if (b.subtitleMatch !== a.subtitleMatch)
           return b.subtitleMatch - a.subtitleMatch;
-
         return a.subtitleScore - b.subtitleScore;
       });
   };
@@ -98,19 +96,14 @@ export default function CreateSearch() {
       </div>
       <button className="srchOpenBut" onClick={() => open("search")}>
         <img src={searchSvgOutlined} />
-        <p className="text-start">Hey, what do you want to listen ?</p>
+        <p className="text-start">Hey, what do you want to listen?</p>
       </button>
       {discover && (
         <>
           <p className="labelText px-1">Browse all</p>
           <div className="browseCont mt-3 px-1">
             {discover.map((item) => {
-              return (
-                <CreateRadio
-                  data={item}
-                  key={`dicover_${Math.random().toString(36).substr(2, 9)}`}
-                />
-              );
+              return <CreateRadio data={item} key={`discover_${item.id}`} />;
             })}
           </div>
         </>
@@ -125,7 +118,7 @@ export default function CreateSearch() {
           </button>
           <input
             type="search"
-            placeholder="Hey, what do you want to listen ?"
+            placeholder="Hey, what do you want to listen?"
             className="srchInput"
             value={searchInput}
             onInput={(e) => processInput(e.target.value)}
@@ -143,30 +136,24 @@ export default function CreateSearch() {
           )}
         </div>
         <div className="searchMain hiddenScrollbar">
-          {view == "default" && (
+          {view === "default" && (
             <div className="defaultCont">
               <p className="text-white fs-5">Search what you like</p>
               <p className="text-white-50 fs-6">
-                Search for artists, songs, playlist and more.
+                Search for artists, songs, playlists, and more.
               </p>
             </div>
           )}
-          {view == "loading" && <PageLoader />}
-          {view == "history" && <div className="historyCont"></div>}
-          {view == "autocomplete" && (
+          {view === "loading" && <PageLoader />}
+          {view === "history" && <div className="historyCont"></div>}
+          {view === "autocomplete" && (
             <div
               className="overflow-scroll px-2 pe-4"
               style={{ paddingBottom: "150px" }}
             >
-              {acResult.map((item) => {
-                return (
-                  <SearchCard
-                    cardData={item}
-                    ac={true}
-                    key={`${Math.random().toString(36).substr(2, 9)}`}
-                  />
-                );
-              })}
+              {acResult?.map((item) => (
+                <SearchCard data={item} ac={true} key={item.id} />
+              ))}
               <button className="iconButton p-0">
                 <p className="labelText text-wheat fs-6 mt-2 fw-normal">
                   {`See more results for "${searchInput}"`}
@@ -174,20 +161,14 @@ export default function CreateSearch() {
               </button>
             </div>
           )}
-          {view == "search" && (
+          {view === "search" && (
             <div
               className="overflow-scroll px-2"
               style={{ paddingBottom: "150px" }}
             >
-              {searchResult.map((item) => {
-                return (
-                  <SearchCard
-                    cardData={item}
-                    ac={false}
-                    key={`${Math.random().toString(36).substr(2, 9)}`}
-                  />
-                );
-              })}
+              {searchResult?.map((item) => (
+                <SearchCard data={item} ac={false} key={item.id} />
+              ))}
             </div>
           )}
         </div>

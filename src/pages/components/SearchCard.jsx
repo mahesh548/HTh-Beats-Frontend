@@ -8,10 +8,9 @@ import { HashContext } from "./Hash";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 
-export default function SearchCard({ cardData, ac }) {
+export default function SearchCard({ data, ac }) {
   const { Queue, setQueue } = useContext(songContext);
   const { openElements } = useContext(HashContext);
-  const [data, setData] = useState(cardData);
 
   const navigate = useNavigate();
   const showResult = (type, id) => {
@@ -42,69 +41,69 @@ export default function SearchCard({ cardData, ac }) {
   const isLiked = Queue?.saved && Queue?.saved.includes(data.id);
 
   return (
-    <div className="playlistSong mt-4">
-      <img
-        src={data.image}
-        alt={`${data?.title || data?.name}`}
-        className={`playlistSongImg rounded ${
-          data.type == "artist" ? "rounded-circle" : ""
-        }`}
-        onClick={() => showResult(data.type, data?.perma_url || data?.url)}
-      />
-      <div
-        className={`${ac ? "extendedGrid" : ""}`}
-        onClick={() => showResult(data.type, data?.perma_url || data?.url)}
-      >
-        <p
-          className="thinOneLineText playlistSongTitle"
-          style={{ color: data.id == Queue.song ? "wheat" : "#ffffff" }}
+    <>
+      <div className="playlistSong mt-4">
+        <img
+          src={data.image}
+          alt={`${data?.title || data?.name}`}
+          className={`playlistSongImg rounded ${
+            data.type == "artist" ? "rounded-circle" : ""
+          }`}
+          onClick={() => showResult(data.type, data?.perma_url || data?.url)}
+        />
+        <div
+          className={`${ac ? "extendedGrid" : ""}`}
+          onClick={() => showResult(data.type, data?.perma_url || data?.url)}
         >
-          {utils.refineText(data?.title || data?.name)}
-        </p>
-        <p className="thinOneLineText playlistSongSubTitle">
-          {utils.capitalLetter(data.type)}
-          {data.subtitle ? ` · ${utils.refineText(data.subtitle)}` : ""}
-        </p>
-      </div>
-      {!ac && typeEntity == "entity" && <div></div>}
-      {!ac && typeEntity == "entity" && (
-        <div>
-          {
-            <LikeEntity
-              isLiked={data.isLiked}
-              likeData={likeData}
-              styleClass="playlistButtonSecondary"
-            />
-          }
+          <p
+            className="thinOneLineText playlistSongTitle"
+            style={{ color: data.id == Queue.song ? "wheat" : "#ffffff" }}
+          >
+            {utils.refineText(data?.title || data?.name)}
+          </p>
+          <p className="thinOneLineText playlistSongSubTitle">
+            {utils.capitalLetter(data.type)}
+            {data.subtitle ? ` · ${utils.refineText(data.subtitle)}` : ""}
+          </p>
         </div>
-      )}
+        {!ac && typeEntity == "entity" && <div></div>}
+        {!ac && typeEntity == "entity" && (
+          <div>
+            {
+              <LikeEntity
+                isLiked={data.isLiked}
+                likeData={likeData}
+                styleClass="playlistButtonSecondary"
+              />
+            }
+          </div>
+        )}
 
-      {!ac && typeEntity == "playable" && <div>{<button>=</button>}</div>}
-      {!ac && typeEntity == "playable" && (
-        <div>
-          {
-            <LikeSong
-              styleClass="playlistSongButton playlistSongLike"
-              isLiked={data.savedIn.length > 0 || isLiked}
-              likeData={likeData}
-              addId={addId}
-              key={data.id}
-            />
-          }
-        </div>
-      )}
+        {!ac && typeEntity == "playable" && <div>{<button>=</button>}</div>}
+        {!ac && typeEntity == "playable" && (
+          <div>
+            {
+              <LikeSong
+                styleClass="playlistSongButton playlistSongLike"
+                isLiked={data.savedIn.length > 0 || isLiked}
+                likeData={likeData}
+                addId={addId}
+                key={data.id}
+              />
+            }
+          </div>
+        )}
+      </div>
       {openElements.includes(addId) &&
         createPortal(
           <AddToPlaylist
             likeData={likeData}
             playlistIds={data.savedIn || []}
-            results={(obj) => {
-              setData({ ...data, savedIn: obj?.savedTo });
-            }}
+            results={(obj) => {}}
             eleId={addId}
           />,
           document.body
         )}
-    </div>
+    </>
   );
 }
