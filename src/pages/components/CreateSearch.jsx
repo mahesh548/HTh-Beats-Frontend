@@ -176,7 +176,7 @@ export default function CreateSearch() {
           )}
           {view == "search" && (
             <div
-              className="overflow-scroll px-2 pe-4"
+              className="overflow-scroll px-2"
               style={{ paddingBottom: "150px" }}
             >
               {searchResult.map((item) => {

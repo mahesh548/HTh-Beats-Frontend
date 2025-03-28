@@ -8,6 +8,25 @@ export default function SearchCard({ data, ac }) {
   const showResult = (type, id) => {
     navigate(`/${type}/${id}`);
   };
+
+  //detecting if song is playable or not
+  const typeEntity =
+    data.type != "song"
+      ? "entity"
+      : !data?.more_info
+      ? "unplayable"
+      : "playable";
+
+  //likeData to save
+  const likeData =
+    typeEntity == "entity"
+      ? { id: data.id, type: data.type == "artist" ? "artist" : "entity" }
+      : {
+          type: "song",
+          id: [data.id],
+          playlistIds: JSON.parse(localStorage?.preferedPlaylist),
+        };
+
   return (
     <div className="playlistSong mt-4">
       <img
@@ -33,7 +52,8 @@ export default function SearchCard({ data, ac }) {
           {data.subtitle ? ` · ${utils.refineText(data.subtitle)}` : ""}
         </p>
       </div>
-      <div></div>
+      {!ac && <div>{typeEntity == "playable" && <button>=</button>}</div>}
+      {!ac && <div>{typeEntity != "unplayable" && <button>+</button>}</div>}
     </div>
   );
 }
