@@ -12,7 +12,7 @@ import ChipSort from "./ChipSort";
 
 const idealFilterData = [
   { value: "playlist", parent: "all", label: "Playlists" },
-  { value: "songs", parent: "all", label: "Songs" },
+  { value: "song", parent: "all", label: "Songs" },
   { value: "album", parent: "all", label: "Albums" },
   { value: "mix", parent: "all", label: "Mixes" },
   { value: "artist", parent: "all", label: "Artists" },
@@ -55,6 +55,7 @@ export default function CreateSearch() {
       setView("autocomplete");
     }
   };
+
   const search = async (query) => {
     setView("loading");
     const response = await utils.API(`/search?q=${query}&autocomplete=false`);
@@ -63,6 +64,15 @@ export default function CreateSearch() {
 
       let newFilterData = [];
       idealFilterData.forEach((item) => {
+        if (item.value == "saved") {
+          if (
+            response.data.some(
+              (response) => response?.savedIn?.length > 0 || response?.isLiked
+            )
+          )
+            newFilterData.push(item);
+          return;
+        }
         if (response.data.some((response) => response.type == item.value)) {
           newFilterData.push(item);
         }
@@ -74,6 +84,26 @@ export default function CreateSearch() {
         filterData: newFilterData,
       });
       setView("search");
+    }
+  };
+
+  const filter = (value) => {
+    if (value == "all") {
+      setSearchResult(
+        sortResponse(originalResponse.data, originalResponse.query)
+      );
+    } else if (value == "saved") {
+      setSearchResult(
+        sortResponse(originalResponse.data, originalResponse.query).filter(
+          (item) => item?.savedIn?.length > 0 || item?.isLiked
+        )
+      );
+    } else {
+      setSearchResult(
+        sortResponse(originalResponse.data, originalResponse.query).filter(
+          (item) => item.type == value
+        )
+      );
     }
   };
 
@@ -176,6 +206,7 @@ export default function CreateSearch() {
           <div className="srchSort hiddenScrollbar">
             <ChipSort
               filterData={originalResponse?.filterData || []}
+              filter={filter}
               styleClass="srchSortChip"
             />
           </div>
