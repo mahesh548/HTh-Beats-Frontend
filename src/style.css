@@ -950,6 +950,9 @@ p {
 .prevCont {
   padding: 0px 10px;
 }
+.sortChipCont {
+  display: flex;
+}
 /* MORE OPTION SONG - CSS */
 .icoTextBut {
   display: grid;
@@ -1397,4 +1400,21 @@ input[type="search"]::-webkit-search-cancel-button {
   margin: auto;
   text-align: center;
   margin-top: 50%;
+}
+.srchSort {
+  width: 100%;
+  position: fixed;
+  background: black;
+  top: 60px;
+  left: 0;
+  padding: 5px;
+  width: 100vw;
+  overflow-x: scroll;
+  z-index: 1;
+}
+.srchSortChip {
+  white-space: nowrap;
+  button {
+    padding: 5px 10px !important;
+  }
 }

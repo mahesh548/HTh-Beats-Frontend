@@ -8,6 +8,16 @@ import { ArrowBack, Close } from "@mui/icons-material";
 import utils from "../../../utils";
 import PageLoader from "./PageLoader";
 import SearchCard from "./SearchCard";
+import ChipSort from "./ChipSort";
+
+const idealFilterData = [
+  { value: "playlist", parent: "all", label: "Playlists" },
+  { value: "songs", parent: "all", label: "Songs" },
+  { value: "album", parent: "all", label: "Albums" },
+  { value: "mix", parent: "all", label: "Mixes" },
+  { value: "artist", parent: "all", label: "Artists" },
+  { value: "saved", parent: "all", label: "Saved" },
+];
 
 export default function CreateSearch() {
   const auth = useContext(AuthContext);
@@ -148,6 +158,11 @@ export default function CreateSearch() {
             </button>
           )}
         </div>
+        {view === "search" && (
+          <div className="srchSort hiddenScrollbar">
+            <ChipSort filterData={idealFilterData} styleClass="srchSortChip" />
+          </div>
+        )}
         <div className="searchMain hiddenScrollbar">
           {view === "default" && (
             <div className="defaultCont">
@@ -181,7 +196,7 @@ export default function CreateSearch() {
           )}
           {view === "search" && (
             <div
-              className="overflow-scroll px-2"
+              className="overflow-scroll px-2 pt-4"
               style={{ paddingBottom: "150px" }}
             >
               {searchResult?.map((item) => (
