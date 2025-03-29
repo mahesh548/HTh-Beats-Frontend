@@ -86,6 +86,19 @@ export default function CreateSearch() {
       });
   };
 
+  const handleLocalLike = (obj, id) => {
+    const { savedTo, removedFrom } = obj;
+    if (savedTo.length == 0 && removedFrom.length == 0) return;
+    let newList = searchResult.map((item) => {
+      if (item.id != id) return item;
+      item.savedIn = [...new Set([...item.savedIn, ...savedTo])].filter(
+        (item2) => !removedFrom.includes(item2)
+      );
+      return item;
+    });
+    setSearchResult(newList);
+  };
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryNavCont px-2 position-relative">
@@ -152,7 +165,12 @@ export default function CreateSearch() {
               style={{ paddingBottom: "150px" }}
             >
               {acResult?.map((item) => (
-                <SearchCard data={item} ac={true} key={item.id} />
+                <SearchCard
+                  data={item}
+                  ac={true}
+                  key={item.id}
+                  setGlobalLike={handleLocalLike}
+                />
               ))}
               <button className="iconButton p-0">
                 <p className="labelText text-wheat fs-6 mt-2 fw-normal">
@@ -167,7 +185,12 @@ export default function CreateSearch() {
               style={{ paddingBottom: "150px" }}
             >
               {searchResult?.map((item) => (
-                <SearchCard data={item} ac={false} key={item.id} />
+                <SearchCard
+                  data={item}
+                  ac={false}
+                  key={item.id}
+                  setGlobalLike={handleLocalLike}
+                />
               ))}
             </div>
           )}

@@ -8,7 +8,9 @@ import { HashContext } from "./Hash";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 
-export default function SearchCard({ data, ac }) {
+import addTo from "../../assets/icons/addTo.svg";
+
+export default function SearchCard({ data, ac, setGlobalLike }) {
   const { Queue, setQueue } = useContext(songContext);
   const { openElements } = useContext(HashContext);
 
@@ -73,13 +75,21 @@ export default function SearchCard({ data, ac }) {
               <LikeEntity
                 isLiked={data.isLiked}
                 likeData={likeData}
-                styleClass="playlistButtonSecondary"
+                styleClass="playlistSongButton playlistSongLike"
               />
             }
           </div>
         )}
 
-        {!ac && typeEntity == "playable" && <div>{<button>=</button>}</div>}
+        {!ac && typeEntity == "playable" && (
+          <div>
+            {
+              <button className="playlistSongButton playlistSongLike">
+                <img src={addTo} />
+              </button>
+            }
+          </div>
+        )}
         {!ac && typeEntity == "playable" && (
           <div>
             {
@@ -99,7 +109,7 @@ export default function SearchCard({ data, ac }) {
           <AddToPlaylist
             likeData={likeData}
             playlistIds={data.savedIn || []}
-            results={(obj) => {}}
+            results={(obj) => setGlobalLike(obj, data.id)}
             eleId={addId}
           />,
           document.body

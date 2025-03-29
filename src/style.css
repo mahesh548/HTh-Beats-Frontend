@@ -1367,6 +1367,7 @@ p {
   height: 60px;
   column-gap: 8px;
   padding: 4px;
+  z-index: 1;
 }
 .srchInput {
   background-color: transparent;
@@ -1374,7 +1375,7 @@ p {
   outline: none;
   box-shadow: none;
   color: white;
-  caret-color: wheat;
+  caret-color: #f5deb3;
   text-decoration: none;
   text-transform: lowercase;
 }
