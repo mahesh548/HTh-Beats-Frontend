@@ -28,6 +28,7 @@ export default function CreateSearch() {
   );
   const [acResult, setAcResult] = useState();
   const [searchResult, setSearchResult] = useState();
+  const [originalResponse, setOriginalResponse] = useState({});
 
   const discover = localStorage?.homeCache
     ? JSON.parse(localStorage.homeCache).radio
@@ -59,6 +60,19 @@ export default function CreateSearch() {
     const response = await utils.API(`/search?q=${query}&autocomplete=false`);
     if (response.status && response.data) {
       setSearchResult(sortResponse(response.data, query));
+
+      let newFilterData = [];
+      idealFilterData.forEach((item) => {
+        if (response.data.some((response) => response.type == item.value)) {
+          newFilterData.push(item);
+        }
+      });
+
+      setOriginalResponse({
+        data: response.data,
+        query: query,
+        filterData: newFilterData,
+      });
       setView("search");
     }
   };
@@ -160,7 +174,10 @@ export default function CreateSearch() {
         </div>
         {view === "search" && (
           <div className="srchSort hiddenScrollbar">
-            <ChipSort filterData={idealFilterData} styleClass="srchSortChip" />
+            <ChipSort
+              filterData={originalResponse?.filterData || []}
+              styleClass="srchSortChip"
+            />
           </div>
         )}
         <div className="searchMain hiddenScrollbar">

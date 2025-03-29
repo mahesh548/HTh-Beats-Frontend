@@ -60,7 +60,7 @@ export default function CreateLibrary({ response, filter, filterData }) {
             return (
               <div
                 className="playlistSong libraryList"
-                key={`liked-list-${item.id}`}
+                key={`liked-list-${item?.id || item?.artistId}`}
                 onClick={() => handleClick(item.type, item?.perma_url)}
               >
                 <img
