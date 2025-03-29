@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router";
 import utils from "../../../utils";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo } from "react";
 import { songContext } from "./Song";
 import LikeEntity from "./LikeEntity";
 import LikeSong from "./LikeSong";
@@ -15,8 +15,13 @@ export default function SearchCard({ data, ac, setGlobalLike }) {
   const { openElements } = useContext(HashContext);
 
   const navigate = useNavigate();
-  const showResult = (type, id) => {
-    navigate(`/${type}/${id}`);
+  const showResult = (data, typeEntity) => {
+    if (typeEntity == "playable") {
+      playNow(data);
+      return;
+    }
+
+    navigate(`/${data.type}/${data?.url || data?.id}`);
   };
 
   //detecting if song is playable or not
@@ -42,6 +47,34 @@ export default function SearchCard({ data, ac, setGlobalLike }) {
 
   const isLiked = Queue?.saved && Queue?.saved.includes(data.id);
 
+  const playNow = (songData) => {
+    const playlist = {
+      title: songData.title,
+      type: "search",
+      list: [songData],
+    };
+    setQueue({
+      type: "NEW",
+      value: {
+        playlist: playlist,
+        song: songData.id,
+        status: "play",
+      },
+    });
+  };
+
+  const toggleQueue = (data) => {
+    if (!Queue.song || data.id == Queue.song) return;
+    const newList =
+      Queue.playlist.list.indexOf(data) != -1
+        ? Queue.playlist.list.filter((item) => item.id != data.id)
+        : [...Queue.playlist.list, data];
+    setQueue({
+      type: "PLAYLIST",
+      value: { ...Queue.playlist, list: newList },
+    });
+  };
+
   return (
     <>
       <div className="playlistSong mt-4">
@@ -51,11 +84,11 @@ export default function SearchCard({ data, ac, setGlobalLike }) {
           className={`playlistSongImg rounded ${
             data.type == "artist" ? "rounded-circle" : ""
           }`}
-          onClick={() => showResult(data.type, data?.perma_url || data?.url)}
+          onClick={() => showResult(data, typeEntity)}
         />
         <div
           className={`${ac ? "extendedGrid" : ""}`}
-          onClick={() => showResult(data.type, data?.perma_url || data?.url)}
+          onClick={() => showResult(data, typeEntity)}
         >
           <p
             className="thinOneLineText playlistSongTitle"
@@ -83,11 +116,15 @@ export default function SearchCard({ data, ac, setGlobalLike }) {
 
         {!ac && typeEntity == "playable" && (
           <div>
-            {
-              <button className="playlistSongButton playlistSongLike">
+            {Queue?.song && (
+              <button
+                className="playlistSongButton playlistSongLike"
+                onClick={() => toggleQueue(data)}
+                style={{ scale: "0.6" }}
+              >
                 <img src={addTo} />
               </button>
-            }
+            )}
           </div>
         )}
         {!ac && typeEntity == "playable" && (
