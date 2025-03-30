@@ -10,6 +10,8 @@ import PageLoader from "./PageLoader";
 import SearchCard from "./SearchCard";
 import ChipSort from "./ChipSort";
 
+import { useInView } from "react-intersection-observer";
+
 const idealFilterData = [
   { value: "playlist", parent: "all", label: "Playlists" },
   { value: "song", parent: "all", label: "Songs" },
@@ -27,14 +29,18 @@ export default function CreateSearch() {
     localStorage.history ? "history" : "default"
   );
   const [acResult, setAcResult] = useState();
-  const [searchResult, setSearchResult] = useState();
-  const [originalResponse, setOriginalResponse] = useState({});
+  const [searchResult, setSearchResult] = useState([]);
+  const [originalResponse, setOriginalResponse] = useState({ page: 1 });
 
   const discover = localStorage?.homeCache
     ? JSON.parse(localStorage.homeCache).radio
     : false;
 
   let searchTimeOut = useRef(null);
+  const [moreRef, askMore, entry] = useInView({
+    threshold: 1,
+  });
+
   useEffect(() => {
     clearTimeout(searchTimeOut.current);
     if (searchInput.length === 0) {
@@ -58,33 +64,46 @@ export default function CreateSearch() {
 
   const search = async (query) => {
     setView("loading");
-    const response = await utils.API(`/search?q=${query}&autocomplete=false`);
-    if (response.status && response.data) {
+    const response = await utils.API(
+      `/search?q=${query}&autocomplete=false&page=${originalResponse.page}`
+    );
+    if (response.status && response.data && response.page == 1) {
       setSearchResult(sortResponse(response.data, query));
-
-      let newFilterData = [];
-      idealFilterData.forEach((item) => {
-        if (item.value == "saved") {
-          if (
-            response.data.some(
-              (response) => response?.savedIn?.length > 0 || response?.isLiked
-            )
-          )
-            newFilterData.push(item);
-          return;
-        }
-        if (response.data.some((response) => response.type == item.value)) {
-          newFilterData.push(item);
-        }
-      });
-
-      setOriginalResponse({
-        data: response.data,
-        query: query,
-        filterData: newFilterData,
-      });
+      setupOriginal(response, query);
+      setView("search");
+    } else if (response.status && response.data && response.page > 1) {
+      const newData = [...searchResult, ...sortResponse(response.data, query)];
+      setSearchResult(newData);
+      response.data = newData;
+      setupOriginal(response, query);
       setView("search");
     }
+  };
+
+  const setupOriginal = (response, query) => {
+    let newFilterData = [];
+    idealFilterData.forEach((item) => {
+      if (item.value == "saved") {
+        if (
+          response.data.some(
+            (response) => response?.savedIn?.length > 0 || response?.isLiked
+          )
+        )
+          newFilterData.push(item);
+        return;
+      }
+      if (response.data.some((response) => response.type == item.value)) {
+        newFilterData.push(item);
+      }
+    });
+
+    setOriginalResponse({
+      data: response.data,
+      query: query,
+      filterData: newFilterData,
+      hasMore: response.hasMore,
+      page: response.page,
+    });
   };
 
   const filter = (value) => {
@@ -152,6 +171,11 @@ export default function CreateSearch() {
     });
     setSearchResult(newList);
   };
+
+  useEffect(() => {
+    if (!askMore) return;
+    console.log(`requesting page: ${originalResponse.page + 1}`);
+  }, [askMore]);
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
@@ -255,6 +279,11 @@ export default function CreateSearch() {
                   setGlobalLike={handleLocalLike}
                 />
               ))}
+              {originalResponse.hasMore && (
+                <div ref={moreRef}>
+                  <PageLoader />
+                </div>
+              )}
             </div>
           )}
         </div>
