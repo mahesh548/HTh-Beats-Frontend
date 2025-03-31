@@ -32,6 +32,7 @@ export default function CreateSearch() {
   const [searchResult, setSearchResult] = useState([]);
   const [originalResponse, setOriginalResponse] = useState({ page: 1 });
   const callAgain = useRef(false);
+  const filterActive = useRef(false);
 
   const discover = localStorage?.homeCache
     ? JSON.parse(localStorage.homeCache).radio
@@ -79,13 +80,11 @@ export default function CreateSearch() {
     } else if (response.status && response.data && response.page > 1) {
       const newData = [
         ...new Map(
-          [...searchResult, ...sortResponse(response.data, query)].map(
-            (item) => [item.id, item]
-          )
+          [...response.data, ...searchResult].map((item) => [item.id, item])
         ).values(),
       ];
-      setSearchResult(newData);
-      response.data = newData;
+      setSearchResult(sortResponse(newData, query));
+      response.data = sortResponse(newData, query);
       setupOriginal(response, query);
 
       callAgain.current = response.hasMore;
@@ -121,16 +120,19 @@ export default function CreateSearch() {
 
   const filter = (value) => {
     if (value == "all") {
+      filterActive.current = false;
       setSearchResult(
         sortResponse(originalResponse.data, originalResponse.query)
       );
     } else if (value == "saved") {
+      filterActive.current = true;
       setSearchResult(
         sortResponse(originalResponse.data, originalResponse.query).filter(
           (item) => item?.savedIn?.length > 0 || item?.isLiked
         )
       );
     } else {
+      filterActive.current = true;
       setSearchResult(
         sortResponse(originalResponse.data, originalResponse.query).filter(
           (item) => item.type == value
@@ -298,7 +300,7 @@ export default function CreateSearch() {
                   setGlobalLike={handleLocalLike}
                 />
               ))}
-              {originalResponse.hasMore && (
+              {originalResponse.hasMore && !filterActive.current && (
                 <div ref={moreRef}>
                   <PageLoader />
                 </div>
