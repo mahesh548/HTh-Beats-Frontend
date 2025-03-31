@@ -31,6 +31,7 @@ export default function CreateSearch() {
   const [acResult, setAcResult] = useState();
   const [searchResult, setSearchResult] = useState([]);
   const [originalResponse, setOriginalResponse] = useState({ page: 1 });
+  const callAgain = useRef(false);
 
   const discover = localStorage?.homeCache
     ? JSON.parse(localStorage.homeCache).radio
@@ -62,21 +63,33 @@ export default function CreateSearch() {
     }
   };
 
-  const search = async (query) => {
-    setView("loading");
+  const search = async (query, page = 1, loading = true) => {
+    if (loading) {
+      setView("loading");
+    }
+    const currentScroll = document.getElementById("searchPage").scrollTop;
     const response = await utils.API(
-      `/search?q=${query}&autocomplete=false&page=${originalResponse.page}`
+      `/search?q=${query}&autocomplete=false&page=${page}`
     );
     if (response.status && response.data && response.page == 1) {
       setSearchResult(sortResponse(response.data, query));
       setupOriginal(response, query);
       setView("search");
+      callAgain.current = response.hasMore;
     } else if (response.status && response.data && response.page > 1) {
-      const newData = [...searchResult, ...sortResponse(response.data, query)];
+      const newData = [
+        ...new Map(
+          [...searchResult, ...sortResponse(response.data, query)].map(
+            (item) => [item.id, item]
+          )
+        ).values(),
+      ];
       setSearchResult(newData);
       response.data = newData;
       setupOriginal(response, query);
-      setView("search");
+
+      callAgain.current = response.hasMore;
+      document.getElementById("searchPage").scrollTop = currentScroll;
     }
   };
 
@@ -173,12 +186,18 @@ export default function CreateSearch() {
   };
 
   useEffect(() => {
-    if (!askMore) return;
-    console.log(`requesting page: ${originalResponse.page + 1}`);
+    if (!askMore || !callAgain.current) return;
+    callAgain.current = false;
+
+    search(originalResponse.query, originalResponse.page + 1, false);
   }, [askMore]);
 
   return (
-    <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
+    <div
+      className="page hiddenScrollbar"
+      id="searchPage"
+      style={{ overflowY: "scroll" }}
+    >
       <div className="libraryNavCont px-2 position-relative">
         <div className="libraryNav mt-4 mb-3">
           <img src={auth?.user?.pic || "logo.png"} className="rounded-circle" />
