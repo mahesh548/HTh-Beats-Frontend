@@ -11,6 +11,7 @@ import SearchCard from "./SearchCard";
 import ChipSort from "./ChipSort";
 
 import { useInView } from "react-intersection-observer";
+import { useLocation, useNavigate } from "react-router";
 
 const idealFilterData = [
   { value: "playlist", parent: "all", label: "Playlists" },
@@ -33,66 +34,75 @@ export default function CreateSearch() {
   const [originalResponse, setOriginalResponse] = useState({ page: 1 });
   const callAgain = useRef(false);
   const filterActive = useRef(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const discover = localStorage?.homeCache
     ? JSON.parse(localStorage.homeCache).radio
     : false;
 
+  //to store time difference between key stroke and search
   let searchTimeOut = useRef(null);
+
+  //for infinite scrolling
   const [moreRef, askMore, entry] = useInView({
     threshold: 1,
   });
 
   useEffect(() => {
+    // clear old timeout
     clearTimeout(searchTimeOut.current);
     if (searchInput.length === 0) {
+      // show history if nothing searched
       setView(localStorage.history ? "history" : "default");
       return;
     }
 
+    //set new timeout for new stroke
     searchTimeOut.current = setTimeout(() => {
       autoComplete(searchInput);
     }, 1000);
   }, [searchInput]);
 
   const autoComplete = async (query) => {
-    setView("loading");
+    setView("loading"); //show loading
     const response = await utils.API(`/search?q=${query}&autocomplete=true`);
     if (response.status && response.data) {
-      setAcResult(sortResponse(response.data, query));
-      setView("autocomplete");
+      setAcResult(sortResponse(response.data, query)); // set autocomplete data
+      setView("autocomplete"); // set view to autocomplete
     }
   };
 
   const search = async (query, page = 1, loading = true) => {
     if (loading) {
-      setView("loading");
+      setView("loading"); // show loading only if page no 1
     }
-    const currentScroll = document.getElementById("searchPage").scrollTop;
+    // make api req
     const response = await utils.API(
       `/search?q=${query}&autocomplete=false&page=${page}`
     );
     if (response.status && response.data && response.page == 1) {
-      setSearchResult(sortResponse(response.data, query));
-      setupOriginal(response, query);
-      setView("search");
-      callAgain.current = response.hasMore;
+      setSearchResult(sortResponse(response.data, query)); // set search result after sort
+      setupOriginal(response, query); // set original response for sorting
+      setView("search"); // set view to search
+      callAgain.current = response.hasMore; // set call again to hasMore (true,false) for more result
     } else if (response.status && response.data && response.page > 1) {
+      // if page no is not 1 don't show loading and merge data
       const newData = [
         ...new Map(
           [...response.data, ...searchResult].map((item) => [item.id, item])
         ).values(),
       ];
-      setSearchResult(sortResponse(newData, query));
+      setSearchResult(sortResponse(newData, query)); // set result after merging with old
       response.data = sortResponse(newData, query);
-      setupOriginal(response, query);
+      setupOriginal(response, query); // set original data for sorting after merging
 
-      callAgain.current = response.hasMore;
-      document.getElementById("searchPage").scrollTop = currentScroll;
+      callAgain.current = response.hasMore; // set call again to hasMore (true,false) for more result
     }
   };
 
   const setupOriginal = (response, query) => {
+    // add filter data to show sort chip
     let newFilterData = [];
     idealFilterData.forEach((item) => {
       if (item.value == "saved") {
@@ -109,6 +119,7 @@ export default function CreateSearch() {
       }
     });
 
+    //set originalResponse state
     setOriginalResponse({
       data: response.data,
       query: query,
@@ -119,6 +130,7 @@ export default function CreateSearch() {
   };
 
   const filter = (value) => {
+    // sort chip fiter function
     if (value == "all") {
       filterActive.current = false;
       setSearchResult(
@@ -148,6 +160,7 @@ export default function CreateSearch() {
   };
 
   const sortResponse = (data, query) => {
+    // sort response in way that most matched title come first then least and then most matched subtitle.
     return data
       .map((item) => {
         const title = item?.title || item?.name;
@@ -175,6 +188,7 @@ export default function CreateSearch() {
   };
 
   const handleLocalLike = (obj, id) => {
+    // to show like and unlike
     const { savedTo, removedFrom } = obj;
     if (savedTo.length == 0 && removedFrom.length == 0) return;
     let newList = searchResult.map((item) => {
@@ -188,11 +202,34 @@ export default function CreateSearch() {
   };
 
   useEffect(() => {
+    // if loading more is in sight call api with page+1
     if (!askMore || !callAgain.current) return;
     callAgain.current = false;
 
     search(originalResponse.query, originalResponse.page + 1, false);
   }, [askMore]);
+
+  const updateUrl = (value) => {
+    // save search input into url
+    const param = new URLSearchParams(location.search);
+
+    if (value.length === 0) {
+      param.delete("q");
+    } else {
+      param.set("q", value);
+    }
+
+    navigate(`${location.pathname}?${param.toString()}`, { replace: true });
+  };
+
+  useEffect(() => {
+    // if query updated in url then search for query
+    const params = new URLSearchParams(location.search);
+    const query = params.get("q");
+    if (query && query.length > 0) {
+      search(query);
+    }
+  }, [location.search]);
 
   return (
     <div
@@ -237,7 +274,7 @@ export default function CreateSearch() {
             spellCheck={false}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                search(e.target.value);
+                updateUrl(e.target.value);
               }
             }}
           />
