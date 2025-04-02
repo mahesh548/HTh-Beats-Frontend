@@ -20,7 +20,14 @@ export default function History() {
     let newResponse = response.map((item) => {
       const originalType = item.type;
       item.entityType = originalType;
+      if (item.type == "search") {
+        item.data = {
+          title: "Search",
+          image: `https://${window.location.host}/Search.png`,
+        };
+      }
       let newItem = { ...item, ...item.data };
+
       delete newItem.data;
       return newItem;
     });
