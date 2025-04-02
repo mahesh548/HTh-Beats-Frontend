@@ -14,10 +14,13 @@ export default function History() {
     { value: "saved", parent: "all", label: "Saved" },
     { value: "created", parent: "all", label: "Created" },
     { value: "joined", parent: "all", label: "Joined" },
+    { value: "search", parent: "all", label: "Searched" },
   ];
   const refineResponse = (response) => {
     let newResponse = response.map((item) => {
-      let newItem = { ...item.data, ...item };
+      const originalType = item.type;
+      item.entityType = originalType;
+      let newItem = { ...item, ...item.data };
       delete newItem.data;
       return newItem;
     });

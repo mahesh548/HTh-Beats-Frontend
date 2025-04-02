@@ -3,13 +3,7 @@ import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
 
-import {
-  Add,
-  AutoDeleteOutlined,
-  Delete,
-  DeleteOutlineOutlined,
-  History,
-} from "@mui/icons-material";
+import { AutoDeleteOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { HashContext } from "./Hash";
 
@@ -19,28 +13,17 @@ export default function CreateHistory({ response, filter, filterData }) {
   const navigate = useNavigate();
   const getSubtitle = (item) => {
     let restText = "";
-    const username = auth?.user?.username;
-    const myUserId = auth?.user?.id;
-    if (item.type == "playlist") {
-      restText = ` · HTh-Beats`;
+    if (item.activity == "played") {
+      restText = `${item.list.length} songs played · ${utils.capitalLetter(
+        item.type
+      )}`;
     }
-    if (
-      item.type == "album" ||
-      item.type == "mix" ||
-      item.libraryType == "liked"
-    ) {
-      restText = ` · ${item.list_count} songs`;
+    if (item.activity == "saved") {
+      restText = `${item.list.length} songs saved`;
+      if (item.list.length == 0)
+        restText = `Saved · ${utils.capitalLetter(item.type)}`;
     }
-    if (item.libraryType == "private") {
-      restText = ` · ${item.userId.includes(myUserId) ? username : "Public"}`;
-    }
-    if (item.libraryType == "collab") {
-      restText = ` · ${
-        item.libraryUserId.filter((item) => item != "viewOnly").length
-      } users collab`;
-    }
-
-    return utils.refineText(`${utils.capitalLetter(item.type)} ${restText}`);
+    return utils.refineText(`${restText}`);
   };
   const handleClick = (type, id) => {
     navigate(`/${type}/${id}`);

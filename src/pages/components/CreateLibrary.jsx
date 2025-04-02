@@ -52,11 +52,12 @@ export default function CreateLibrary({ response, filter, filterData }) {
               className="rounded-circle"
             />
             <p className="labelText mt-0">Your library</p>
-            <button className="iconButton" onClick={() => navigate("/history")}>
-              <History />
-            </button>
+
             <button className="iconButton" onClick={() => open("createOption")}>
               <Add />
+            </button>
+            <button className="iconButton" onClick={() => navigate("/history")}>
+              <History />
             </button>
           </div>
           <ChipSort filterData={filterData} filter={filter} />
