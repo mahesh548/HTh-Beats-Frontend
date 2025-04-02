@@ -103,6 +103,44 @@ const utils = {
     const hrs = Math.floor(min / 60);
     return { mili, sec, min, hrs };
   },
+  isDifferentDay: (timestamp1, timestamp2) => {
+    const date1 = new Date(timestamp1);
+    const date2 = new Date(timestamp2);
+
+    return (
+      date1.getFullYear() !== date2.getFullYear() ||
+      date1.getMonth() !== date2.getMonth() ||
+      date1.getDate() !== date2.getDate()
+    );
+  },
+  formatTimestamp: (timestamp) => {
+    const date = new Date(timestamp);
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1); // Set yesterday's date
+
+    // Extract year, month, and date
+    const isSameDay = (d1, d2) =>
+      d1.getFullYear() === d2.getFullYear() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getDate() === d2.getDate();
+
+    if (isSameDay(date, today)) {
+      return "Today";
+    } else if (isSameDay(date, yesterday)) {
+      return "Yesterday";
+    } else {
+      // Format as "Tue, 24 Mar, 2025"
+      return date
+        .toLocaleDateString("en-US", {
+          weekday: "short",
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })
+        .replace(",", "");
+    }
+  },
   capitalLetter: (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1, str.length);
   },

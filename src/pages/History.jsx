@@ -17,20 +17,22 @@ export default function History() {
     { value: "search", parent: "all", label: "Searched" },
   ];
   const refineResponse = (response) => {
-    let newResponse = response.map((item) => {
-      const originalType = item.type;
-      item.entityType = originalType;
-      if (item.type == "search") {
-        item.data = {
-          title: "Search",
-          image: `https://${window.location.host}/Search.png`,
-        };
-      }
-      let newItem = { ...item, ...item.data };
+    let newResponse = response
+      .map((item) => {
+        const originalType = item.type;
+        item.entityType = originalType;
+        if (item.type == "search") {
+          item.data = {
+            title: "Search",
+            image: `https://${window.location.host}/Search.png`,
+          };
+        }
+        let newItem = { ...item, ...item.data };
 
-      delete newItem.data;
-      return newItem;
-    });
+        delete newItem.data;
+        return newItem;
+      })
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
     let newFilterData = [];
     idealFilterData.forEach((item) => {
       if (newResponse.some((response) => response.activity == item.value)) {

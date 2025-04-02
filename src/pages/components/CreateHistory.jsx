@@ -1,10 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
 
 import {
-  ArrowDropDownCircleOutlined,
   ArrowForwardIosOutlined,
   AutoDeleteOutlined,
   ExpandCircleDownOutlined,
@@ -40,6 +39,27 @@ export default function CreateHistory({ response, filter, filterData }) {
       : [...accordian, id];
     showAccordian(newAccordian);
   };
+  const lastDate = useRef(false);
+  const getLabel = (data) => {
+    if (lastDate.current == false) {
+      lastDate.current = data.updatedAt;
+      return (
+        <p className="labelText">{`${utils.formatTimestamp(
+          data.updatedAt
+        )}`}</p>
+      );
+    } else if (utils.isDifferentDay(lastDate.current, data.updatedAt)) {
+      lastDate.current = data.updatedAt;
+      return (
+        <p className="labelText">{`${utils.formatTimestamp(
+          data.updatedAt
+        )}`}</p>
+      );
+    } else {
+      lastDate.current = data.updatedAt;
+      return;
+    }
+  };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryCont ">
@@ -64,6 +84,7 @@ export default function CreateHistory({ response, filter, filterData }) {
           {response.map((item) => {
             return (
               <>
+                {getLabel(item)}
                 <div
                   className="playlistSong libraryList"
                   key={`liked-list-${item?.id || item?.artistId}`}
@@ -108,7 +129,7 @@ export default function CreateHistory({ response, filter, filterData }) {
                   <div className="histSongCont">
                     {item.list.map((data) => {
                       return (
-                        <div className="playlistSong">
+                        <div className="playlistSong" key={`hist_${data.id}`}>
                           <img
                             src={data.image}
                             alt={data.title}
