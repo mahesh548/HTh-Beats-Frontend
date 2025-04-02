@@ -1418,3 +1418,19 @@ input[type="search"]::-webkit-search-cancel-button {
     padding: 5px 10px !important;
   }
 }
+.svgBut {
+  svg {
+    color: var(--thin-text-color);
+  }
+}
+.histSongCont {
+  width: 100%;
+  display: block;
+  padding-left: 15px;
+  margin-bottom: 20px;
+  img {
+    height: 50px !important;
+    width: 50px !important;
+    border-radius: 8px;
+  }
+}

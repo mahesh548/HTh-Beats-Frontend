@@ -1,15 +1,21 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
 
-import { AutoDeleteOutlined } from "@mui/icons-material";
+import {
+  ArrowDropDownCircleOutlined,
+  ArrowForwardIosOutlined,
+  AutoDeleteOutlined,
+  ExpandCircleDownOutlined,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { HashContext } from "./Hash";
 
 export default function CreateHistory({ response, filter, filterData }) {
   const { open } = useContext(HashContext);
   const auth = useContext(AuthContext);
+  const [accordian, showAccordian] = useState([]);
   const navigate = useNavigate();
   const getSubtitle = (item) => {
     let restText = "";
@@ -26,7 +32,13 @@ export default function CreateHistory({ response, filter, filterData }) {
     return utils.refineText(`${restText}`);
   };
   const handleClick = (type, id) => {
-    navigate(`/${type}/${id}`);
+    /*  navigate(`/${type}/${id}`); */
+  };
+  const toggleAccordian = (id) => {
+    const newAccordian = accordian.includes(id)
+      ? accordian.filter((item) => item != id)
+      : [...accordian, id];
+    showAccordian(newAccordian);
   };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
@@ -51,27 +63,85 @@ export default function CreateHistory({ response, filter, filterData }) {
         <div className="libraryList px-2">
           {response.map((item) => {
             return (
-              <div
-                className="playlistSong libraryList"
-                key={`liked-list-${item?.id || item?.artistId}`}
-                onClick={() => handleClick(item.type, item?.perma_url)}
-              >
-                <img
-                  src={item.image}
-                  className="playlistSongImg"
-                  style={{
-                    borderRadius: item.type == "artist" ? "100%" : "0px",
-                  }}
-                />
-                <div>
-                  <p className="thinOneLineText playlistSongTitle">
-                    {utils.refineText(item.title || item.name)}
-                  </p>
-                  <p className="thinOneLineText playlistSongSubTitle">
-                    {getSubtitle(item)}
-                  </p>
+              <>
+                <div
+                  className="playlistSong libraryList"
+                  key={`liked-list-${item?.id || item?.artistId}`}
+                  onClick={() => handleClick(item.type, item?.perma_url)}
+                >
+                  <img
+                    src={item.image}
+                    className="playlistSongImg"
+                    style={{
+                      borderRadius: item.type == "artist" ? "100%" : "0px",
+                    }}
+                  />
+                  <div>
+                    <p className="thinOneLineText playlistSongTitle">
+                      {utils.refineText(item.title || item.name)}
+                    </p>
+                    <p className="thinOneLineText playlistSongSubTitle">
+                      {getSubtitle(item)}
+                    </p>
+                  </div>
+                  {item.list.length > 0 && (
+                    <button
+                      className="iconButton svgBut"
+                      onClick={() => toggleAccordian(item._id)}
+                    >
+                      {accordian.includes(item._id) ? (
+                        <ExpandCircleDownOutlined
+                          style={{ rotate: "180deg" }}
+                        />
+                      ) : (
+                        <ExpandCircleDownOutlined />
+                      )}
+                    </button>
+                  )}
+                  {item.list.length == 0 && (
+                    <button className="iconButton svgBut">
+                      <ArrowForwardIosOutlined />
+                    </button>
+                  )}
                 </div>
-              </div>
+                {item.list.length > 0 && accordian.includes(item._id) && (
+                  <div className="histSongCont">
+                    {item.list.map((data) => {
+                      return (
+                        <div className="playlistSong">
+                          <img
+                            src={data.image}
+                            alt={data.title}
+                            className="playlistSongImg"
+                            /* onClick={() => play(data.id)} */
+                          />
+                          <div className="extendedGrid">
+                            <p
+                              className="thinOneLineText playlistSongTitle"
+                              /* onClick={() => play(data.id)} */
+                              /* style={{ color: isPlaying ? "wheat" : "#ffffff" }} */
+                            >
+                              {utils.refineText(data.title)}
+                            </p>
+                            <p
+                              className="thinOneLineText playlistSongSubTitle"
+                              /* onClick={() => play(data.id)} */
+                            >
+                              {data.subtitle?.length != 0
+                                ? utils.refineText(data.subtitle)
+                                : utils.refineText(
+                                    `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
+                                  )}
+                            </p>
+                          </div>
+
+                          <div></div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
             );
           })}
         </div>
