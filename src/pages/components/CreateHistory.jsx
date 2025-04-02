@@ -3,11 +3,17 @@ import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
 
-import { Add, History } from "@mui/icons-material";
+import {
+  Add,
+  AutoDeleteOutlined,
+  Delete,
+  DeleteOutlineOutlined,
+  History,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { HashContext } from "./Hash";
 
-export default function CreateLibrary({ response, filter, filterData }) {
+export default function CreateHistory({ response, filter, filterData }) {
   const { open } = useContext(HashContext);
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
@@ -45,18 +51,16 @@ export default function CreateLibrary({ response, filter, filterData }) {
         <div className="libraryNavCont px-2">
           <div
             className="libraryNav mt-4 mb-3"
-            style={{ gridTemplateColumns: "40px auto 40px 40px" }}
+            style={{ gridTemplateColumns: "40px auto  40px" }}
           >
             <img
               src={auth?.user?.pic || "logo.png"}
               className="rounded-circle"
             />
-            <p className="labelText mt-0">Your library</p>
-            <button className="iconButton" onClick={() => navigate("/history")}>
-              <History />
-            </button>
-            <button className="iconButton" onClick={() => open("createOption")}>
-              <Add />
+            <p className="labelText mt-0">Recents</p>
+
+            <button className="iconButton">
+              <AutoDeleteOutlined />
             </button>
           </div>
           <ChipSort filterData={filterData} filter={filter} />

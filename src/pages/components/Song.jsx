@@ -20,7 +20,33 @@ const playPrev = (Queue) => {
     return list[currentIndex].id;
   }
 };
+let historyRequest = null;
+const createHistory = (Queue, songId) => {
+  clearTimeout(historyRequest);
+  const type =
+    Queue.playlist.type == "playlist" ||
+    Queue.playlist.type == "album" ||
+    Queue.playlist.type == "mix"
+      ? "entity"
+      : Queue.playlist.type;
+  const playedData = {
+    activity: "played",
+    playlistId: Queue.playlist.id,
+    idList: [songId],
+    type: type,
+  };
+  const timeDelay =
+    (parseInt(
+      Queue.playlist.list.find((item) => item.id == songId).more_info.duration
+    ) /
+      2) *
+    1000;
 
+  console.log("history will be created in: ", timeDelay);
+  historyRequest = setTimeout(() => {
+    utils.BACKEND("/song_played", "POST", { playedData: playedData });
+  }, 2000);
+};
 const songReducer = (state, action) => {
   let liked = [];
   switch (action.type) {
@@ -34,6 +60,7 @@ const songReducer = (state, action) => {
 
     case "SONG":
       const songId = action.value;
+      createHistory(state, songId);
       return {
         ...state,
         song: songId,
@@ -50,9 +77,11 @@ const songReducer = (state, action) => {
           liked.push(item.id);
         }
       });
+      createHistory(action.value, action.value.song);
       return { ...action.value, saved: liked, previous: [action.value.song] };
     case "NEXT":
       const nextId = playNext(state);
+      createHistory(state, nextId);
       return {
         ...state,
         song: nextId,
@@ -61,6 +90,7 @@ const songReducer = (state, action) => {
       };
     case "PREV":
       const prevId = playPrev(state);
+      createHistory(state, prevId);
       return {
         ...state,
         song: prevId,

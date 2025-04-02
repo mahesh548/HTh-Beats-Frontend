@@ -20,6 +20,7 @@ import Navbar from "./pages/components/Navbar";
 
 //css
 import "./style.css";
+import History from "./pages/History";
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
       <Route element={<Navbar />}>
         <Route path="/home" element={<Home />} />
         <Route path="/library" element={<Library />} />
+        <Route path="/history" element={<History />} />
         <Route path="/collab/:token" element={<Collab />} />
         <Route path="/search" element={<Search />} />
         <Route path="/playlist/:id" element={<Playlist />} />
