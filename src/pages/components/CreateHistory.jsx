@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
@@ -18,6 +18,7 @@ export default function CreateHistory({ response, filter, filterData }) {
   const navigate = useNavigate();
   const getSubtitle = (item) => {
     let restText = "";
+    const username = auth?.user?.username;
     if (item.activity == "played") {
       restText = `${item.list.length} songs played · ${utils.capitalLetter(
         item.type
@@ -28,10 +29,17 @@ export default function CreateHistory({ response, filter, filterData }) {
       if (item.list.length == 0)
         restText = `Saved · ${utils.capitalLetter(item.type)}`;
     }
+    if (item.activity == "created") {
+      restText = `Created · Playlist · ${username}`;
+    }
+    if (item.activity == "joined") {
+      restText = `Joined · Collab`;
+    }
     return utils.refineText(`${restText}`);
   };
   const handleClick = (type, id) => {
-    /*  navigate(`/${type}/${id}`); */
+    if (type == "search") return;
+    navigate(`/${type}/${id}`);
   };
   const toggleAccordian = (id) => {
     const newAccordian = accordian.includes(id)
@@ -83,11 +91,10 @@ export default function CreateHistory({ response, filter, filterData }) {
         <div className="libraryList px-2">
           {response.map((item) => {
             return (
-              <>
+              <React.Fragment key={`history-list-${item?._id}`}>
                 {getLabel(item)}
                 <div
                   className="playlistSong libraryList"
-                  key={`liked-list-${item?.id || item?.artistId}`}
                   onClick={() => handleClick(item.type, item?.perma_url)}
                 >
                   <img
@@ -108,7 +115,10 @@ export default function CreateHistory({ response, filter, filterData }) {
                   {item.list.length > 0 && (
                     <button
                       className="iconButton svgBut"
-                      onClick={() => toggleAccordian(item._id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleAccordian(item._id);
+                      }}
                     >
                       {accordian.includes(item._id) ? (
                         <ExpandCircleDownOutlined
@@ -129,24 +139,30 @@ export default function CreateHistory({ response, filter, filterData }) {
                   <div className="histSongCont">
                     {item.list.map((data) => {
                       return (
-                        <div className="playlistSong" key={`hist_${data.id}`}>
+                        <div
+                          className="playlistSong"
+                          key={`song_hist_${data.id}`}
+                        >
                           <img
                             src={data.image}
                             alt={data.title}
                             className="playlistSongImg"
-                            /* onClick={() => play(data.id)} */
+                            onClick={() => handleClick("song", data.perma_url)}
                           />
                           <div className="extendedGrid">
                             <p
                               className="thinOneLineText playlistSongTitle"
-                              /* onClick={() => play(data.id)} */
-                              /* style={{ color: isPlaying ? "wheat" : "#ffffff" }} */
+                              onClick={() =>
+                                handleClick("song", data.perma_url)
+                              }
                             >
                               {utils.refineText(data.title)}
                             </p>
                             <p
                               className="thinOneLineText playlistSongSubTitle"
-                              /* onClick={() => play(data.id)} */
+                              onClick={() =>
+                                handleClick("song", data.perma_url)
+                              }
                             >
                               {data.subtitle?.length != 0
                                 ? utils.refineText(data.subtitle)
@@ -162,7 +178,7 @@ export default function CreateHistory({ response, filter, filterData }) {
                     })}
                   </div>
                 )}
-              </>
+              </React.Fragment>
             );
           })}
         </div>

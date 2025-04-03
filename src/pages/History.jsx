@@ -20,6 +20,7 @@ export default function History() {
     let newResponse = response
       .map((item) => {
         const originalType = item.type;
+        const { _id } = item;
         item.entityType = originalType;
         if (item.type == "search") {
           item.data = {
@@ -27,11 +28,12 @@ export default function History() {
             image: `https://${window.location.host}/Search.png`,
           };
         }
-        let newItem = { ...item, ...item.data };
+        let newItem = { ...item, ...item.data, _id: _id };
 
         delete newItem.data;
         return newItem;
       })
+      .filter((item) => !item.data)
       .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
     let newFilterData = [];
     idealFilterData.forEach((item) => {
