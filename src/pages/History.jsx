@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import PageLoader from "./components/PageLoader";
 import utils from "../../utils";
 import { AuthContext } from "./components/Auth";
@@ -8,6 +8,7 @@ export default function History() {
   const [HistoryData, setHistoryData] = useState(false);
   const [originalResponse, setOriginalResponse] = useState(false);
   const [filterData, setFilterData] = useState({});
+  const callAgain = useRef(false);
 
   const idealFilterData = [
     { value: "played", parent: "all", label: "Played" },
@@ -48,27 +49,50 @@ export default function History() {
 
   const filter = (value) => {
     if (value == "all") {
-      setHistoryData(refineResponse(originalResponse));
+      setHistoryData(refineResponse(originalResponse.data));
     } else {
       setHistoryData(
-        refineResponse(originalResponse).filter((item) => item.type == value)
+        refineResponse(originalResponse.data).filter(
+          (item) => item.activity == value
+        )
       );
+    }
+  };
+
+  const getHistoryData = async (page = 1) => {
+    const response = await utils.BACKEND(`/activity?page=${page}`, "GET");
+    if (response?.data && response.data.length > 0 && response.page == 1) {
+      setOriginalResponse(response);
+      setHistoryData(refineResponse(response.data));
+      callAgain.current = response.hasMore; // set call again to hasMore (true,false) for more result
+    } else if (
+      response?.data &&
+      response.data.length > 0 &&
+      response.page > 1
+    ) {
+      setOriginalResponse({
+        ...response,
+        data: [...originalResponse.data, ...response.data],
+      });
+      setHistoryData([...HistoryData, ...refineResponse(response.data)]);
+      callAgain.current = response.hasMore; // set call again to hasMore (true,false) for more result
     }
   };
 
   useEffect(() => {
     setHistoryData(false);
-    const getHistoryData = async () => {
-      const response = await utils.BACKEND("/activity", "GET");
-      if (response?.data && response.data.length > 0) {
-        setOriginalResponse(response.data);
-        setHistoryData(refineResponse(response.data));
-      }
-    };
+
     if (auth.user?.verified) {
       getHistoryData();
     }
   }, [auth.user]);
+
+  const next = async () => {
+    if (!callAgain.current) return;
+    callAgain.current = false; // set call again to false to avoid multiple calls
+    const page = originalResponse.page + 1;
+    await getHistoryData(page);
+  };
 
   return HistoryData == false ? (
     <PageLoader />
@@ -77,6 +101,8 @@ export default function History() {
       response={HistoryData}
       filter={filter}
       filterData={filterData}
+      next={next}
+      hasMore={originalResponse?.hasMore}
     />
   );
 }

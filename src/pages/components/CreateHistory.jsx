@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
@@ -10,12 +10,22 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { HashContext } from "./Hash";
+import PageLoader from "./PageLoader";
 
-export default function CreateHistory({ response, filter, filterData }) {
+import { useInView } from "react-intersection-observer";
+
+export default function CreateHistory({
+  response,
+  filter,
+  filterData,
+  next,
+  hasMore,
+}) {
   const { open } = useContext(HashContext);
   const auth = useContext(AuthContext);
   const [accordian, showAccordian] = useState([]);
   const navigate = useNavigate();
+
   const getSubtitle = (item) => {
     let restText = "";
     const username = auth?.user?.username;
@@ -68,6 +78,15 @@ export default function CreateHistory({ response, filter, filterData }) {
       return;
     }
   };
+  const [moreRef, askMore, entry] = useInView({
+    threshold: 1,
+  });
+
+  useEffect(() => {
+    if (!askMore) return;
+    next();
+  }, [askMore]);
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryCont ">
@@ -182,6 +201,11 @@ export default function CreateHistory({ response, filter, filterData }) {
             );
           })}
         </div>
+        {hasMore && (
+          <div ref={moreRef}>
+            <PageLoader />
+          </div>
+        )}
       </div>
     </div>
   );
