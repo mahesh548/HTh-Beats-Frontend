@@ -9,6 +9,7 @@ export default function History() {
   const [originalResponse, setOriginalResponse] = useState(false);
   const [filterData, setFilterData] = useState({});
   const callAgain = useRef(false);
+  const filterActive = useRef(false);
 
   const idealFilterData = [
     { value: "played", parent: "all", label: "Played" },
@@ -49,8 +50,10 @@ export default function History() {
 
   const filter = (value) => {
     if (value == "all") {
+      filterActive.current = false;
       setHistoryData(refineResponse(originalResponse.data));
     } else {
+      filterActive.current = true;
       setHistoryData(
         refineResponse(originalResponse.data).filter(
           (item) => item.activity == value
@@ -103,6 +106,7 @@ export default function History() {
       filterData={filterData}
       next={next}
       hasMore={originalResponse?.hasMore}
+      filterActive={filterActive.current}
     />
   );
 }

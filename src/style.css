@@ -1434,3 +1434,6 @@ input[type="search"]::-webkit-search-cancel-button {
     border-radius: 8px;
   }
 }
+.deleteList {
+  grid-template-columns: 40px 65px auto;
+}

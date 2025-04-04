@@ -6,6 +6,7 @@ import ChipSort from "./ChipSort";
 import {
   ArrowForwardIosOutlined,
   AutoDeleteOutlined,
+  CheckBoxOutlineBlank,
   ExpandCircleDownOutlined,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router";
@@ -20,11 +21,13 @@ export default function CreateHistory({
   filterData,
   next,
   hasMore,
+  filterActive,
 }) {
-  const { open } = useContext(HashContext);
+  const { openElements, open } = useContext(HashContext);
   const auth = useContext(AuthContext);
   const [accordian, showAccordian] = useState([]);
   const navigate = useNavigate();
+  const [deleteList, setDeleteList] = useState([]);
 
   const getSubtitle = (item) => {
     let restText = "";
@@ -101,7 +104,13 @@ export default function CreateHistory({
             />
             <p className="labelText mt-0">Recents</p>
 
-            <button className="iconButton">
+            <button
+              className="iconButton"
+              onClick={() => {
+                showAccordian([]);
+                open("deleteHist");
+              }}
+            >
               <AutoDeleteOutlined />
             </button>
           </div>
@@ -113,9 +122,18 @@ export default function CreateHistory({
               <React.Fragment key={`history-list-${item?._id}`}>
                 {getLabel(item)}
                 <div
-                  className="playlistSong libraryList"
+                  className={`playlistSong ${
+                    openElements.includes("deleteHist")
+                      ? "deleteList"
+                      : "libraryList"
+                  } `}
                   onClick={() => handleClick(item.type, item?.perma_url)}
                 >
+                  {openElements.includes("deleteHist") && (
+                    <button className="iconButton">
+                      <CheckBoxOutlineBlank />
+                    </button>
+                  )}
                   <img
                     src={item.image}
                     className="playlistSongImg"
@@ -131,28 +149,30 @@ export default function CreateHistory({
                       {getSubtitle(item)}
                     </p>
                   </div>
-                  {item.list.length > 0 && (
-                    <button
-                      className="iconButton svgBut"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleAccordian(item._id);
-                      }}
-                    >
-                      {accordian.includes(item._id) ? (
-                        <ExpandCircleDownOutlined
-                          style={{ rotate: "180deg" }}
-                        />
-                      ) : (
-                        <ExpandCircleDownOutlined />
-                      )}
-                    </button>
-                  )}
-                  {item.list.length == 0 && (
-                    <button className="iconButton svgBut">
-                      <ArrowForwardIosOutlined />
-                    </button>
-                  )}
+                  {item.list.length > 0 &&
+                    !openElements.includes("deleteHist") && (
+                      <button
+                        className="iconButton svgBut"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleAccordian(item._id);
+                        }}
+                      >
+                        {accordian.includes(item._id) ? (
+                          <ExpandCircleDownOutlined
+                            style={{ rotate: "180deg" }}
+                          />
+                        ) : (
+                          <ExpandCircleDownOutlined />
+                        )}
+                      </button>
+                    )}
+                  {item.list.length == 0 &&
+                    !openElements.includes("deleteHist") && (
+                      <button className="iconButton svgBut">
+                        <ArrowForwardIosOutlined />
+                      </button>
+                    )}
                 </div>
                 {item.list.length > 0 && accordian.includes(item._id) && (
                   <div className="histSongCont">
@@ -201,7 +221,7 @@ export default function CreateHistory({
             );
           })}
         </div>
-        {hasMore && (
+        {hasMore && !filterActive && (
           <div ref={moreRef}>
             <PageLoader />
           </div>
