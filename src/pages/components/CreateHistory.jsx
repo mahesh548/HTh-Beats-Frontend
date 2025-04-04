@@ -6,6 +6,7 @@ import ChipSort from "./ChipSort";
 import {
   ArrowForwardIosOutlined,
   AutoDeleteOutlined,
+  CheckBox,
   CheckBoxOutlineBlank,
   ExpandCircleDownOutlined,
 } from "@mui/icons-material";
@@ -90,13 +91,21 @@ export default function CreateHistory({
     next();
   }, [askMore]);
 
+  const toggleDelete = (id) => {
+    if (deleteList.includes(id)) {
+      setDeleteList(deleteList.filter((item) => item != id));
+    } else {
+      setDeleteList([...deleteList, id]);
+    }
+  };
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryCont ">
         <div className="libraryNavCont px-2">
           <div
             className="libraryNav mt-4 mb-3"
-            style={{ gridTemplateColumns: "40px auto  40px" }}
+            style={{ gridTemplateColumns: "40px auto  max-content" }}
           >
             <img
               src={auth?.user?.pic || "logo.png"}
@@ -104,15 +113,28 @@ export default function CreateHistory({
             />
             <p className="labelText mt-0">Recents</p>
 
-            <button
-              className="iconButton"
-              onClick={() => {
-                showAccordian([]);
-                open("deleteHist");
-              }}
-            >
-              <AutoDeleteOutlined />
-            </button>
+            {openElements.includes("deleteHist") ? (
+              deleteList.length == 0 ? (
+                <button
+                  className="iconButton text-primary"
+                  onClick={() => setDeleteList(["all"])}
+                >
+                  Select all
+                </button>
+              ) : (
+                <button className="iconButton text-danger">Delete</button>
+              )
+            ) : (
+              <button
+                className="iconButton"
+                onClick={() => {
+                  showAccordian([]);
+                  open("deleteHist");
+                }}
+              >
+                <AutoDeleteOutlined />
+              </button>
+            )}
           </div>
           <ChipSort filterData={filterData} filter={filter} />
         </div>
@@ -130,8 +152,19 @@ export default function CreateHistory({
                   onClick={() => handleClick(item.type, item?.perma_url)}
                 >
                   {openElements.includes("deleteHist") && (
-                    <button className="iconButton">
-                      <CheckBoxOutlineBlank />
+                    <button
+                      className="iconButton"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleDelete(item._id);
+                      }}
+                    >
+                      {deleteList.includes(item._id) ||
+                      deleteList.includes("all") ? (
+                        <CheckBox className="text-primary" />
+                      ) : (
+                        <CheckBoxOutlineBlank />
+                      )}
                     </button>
                   )}
                   <img
