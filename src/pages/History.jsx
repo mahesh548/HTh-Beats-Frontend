@@ -90,7 +90,14 @@ export default function History() {
     }
   }, [auth.user]);
 
-  const next = async () => {
+  const next = async (reload) => {
+    if (reload) {
+      callAgain.current = false;
+      setHistoryData(false);
+      setOriginalResponse(false);
+      getHistoryData();
+      return;
+    }
     if (!callAgain.current) return;
     callAgain.current = false; // set call again to false to avoid multiple calls
     const page = originalResponse.page + 1;

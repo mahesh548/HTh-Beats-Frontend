@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState, useMemo } from "react";
 import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
@@ -15,6 +15,8 @@ import { HashContext } from "./Hash";
 import PageLoader from "./PageLoader";
 
 import { useInView } from "react-intersection-observer";
+import { createPortal } from "react-dom";
+import ConfirmPrompt from "./ConfirmPrompt";
 
 export default function CreateHistory({
   response,
@@ -24,7 +26,7 @@ export default function CreateHistory({
   hasMore,
   filterActive,
 }) {
-  const { openElements, open } = useContext(HashContext);
+  const { openElements, open, close } = useContext(HashContext);
   const auth = useContext(AuthContext);
   const [accordian, showAccordian] = useState([]);
   const navigate = useNavigate();
@@ -51,6 +53,11 @@ export default function CreateHistory({
     }
     return utils.refineText(`${restText}`);
   };
+
+  const delId = useMemo(() => {
+    return `del_${Math.random().toString(36).substr(2, 9)}`;
+  }, [response]);
+
   const handleClick = (type, id) => {
     if (type == "search") return;
     navigate(`/${type}/${id}`);
@@ -99,6 +106,21 @@ export default function CreateHistory({
     }
   };
 
+  const deleteAll = () => {
+    setDeleteList(response.map((item) => item._id));
+  };
+
+  const deleteHistory = async () => {
+    close("deleteHist");
+    const response = await utils.BACKEND(`/activity`, "DELETE", {
+      deleteData: { historyIds: deleteList, type: "history" },
+    });
+    if (response.status || response?.delete) {
+      setDeleteList([]);
+      next(true);
+    }
+  };
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryCont ">
@@ -117,12 +139,17 @@ export default function CreateHistory({
               deleteList.length == 0 ? (
                 <button
                   className="iconButton text-primary"
-                  onClick={() => setDeleteList(["all"])}
+                  onClick={() => deleteAll()}
                 >
                   Select all
                 </button>
               ) : (
-                <button className="iconButton text-danger">Delete</button>
+                <button
+                  className="iconButton text-danger"
+                  onClick={() => open(delId)}
+                >
+                  Delete
+                </button>
               )
             ) : (
               <button
@@ -159,8 +186,7 @@ export default function CreateHistory({
                         toggleDelete(item._id);
                       }}
                     >
-                      {deleteList.includes(item._id) ||
-                      deleteList.includes("all") ? (
+                      {deleteList.includes(item._id) ? (
                         <CheckBox className="text-primary" />
                       ) : (
                         <CheckBoxOutlineBlank />
@@ -254,11 +280,25 @@ export default function CreateHistory({
             );
           })}
         </div>
-        {hasMore && !filterActive && (
+        {hasMore && !filterActive && !openElements.includes("deleteHist") && (
           <div ref={moreRef}>
             <PageLoader />
           </div>
         )}
+
+        {openElements.includes(delId) &&
+          createPortal(
+            <ConfirmPrompt
+              id={delId}
+              title="Are you sure?"
+              body={
+                "Once deleted, you will not be able to recover this history."
+              }
+              butText={"Delete"}
+              onConfirm={deleteHistory}
+            />,
+            document.body
+          )}
       </div>
     </div>
   );
