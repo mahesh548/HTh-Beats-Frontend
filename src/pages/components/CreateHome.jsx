@@ -1,8 +1,10 @@
 import TimelineSlider from "./TimelineSlider";
 import TimelinePromo from "./TimelinePromo";
+import Recent from "./Recent";
 
 export default function CreateHome() {
   const homeCache = JSON.parse(localStorage.homeCache);
+  const recent = JSON.parse(localStorage?.recent || "[]");
   const {
     charts,
     city_mod,
@@ -26,23 +28,29 @@ export default function CreateHome() {
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
-      {charts && <TimelineSlider label="Try these playlists" data={charts} />}
-      {new_albums && (
+      {recent && recent.length > 0 && <Recent recentData={recent} />}
+
+      {charts && charts.length > 0 && (
+        <TimelineSlider label="Try these playlists" data={charts} />
+      )}
+      {new_albums && new_albums.length > 0 && (
         <TimelineSlider label="Today's biggest hits" data={new_albums} />
       )}
 
-      {tag_mixes && (
+      {tag_mixes && tag_mixes.length > 0 && (
         <TimelineSlider label="Lets mix things up" data={tag_mixes} />
       )}
-      {new_trending && (
+      {new_trending && new_trending.length > 0 && (
         <TimelineSlider label="Trending right now" data={new_trending} />
       )}
-      {/* {radio && <TimelineSlider label="Featured radio stations" data={radio} />} */}
-      {city_mod && <TimelineSlider label="Fresh new music" data={city_mod} />}
-      {top_playlists && (
+
+      {city_mod && city_mod.length > 0 && (
+        <TimelineSlider label="Fresh new music" data={city_mod} />
+      )}
+      {top_playlists && top_playlists.length > 0 && (
         <TimelineSlider label="Most played playlists" data={top_playlists} />
       )}
-      {artist_recos && (
+      {artist_recos && artist_recos.length > 0 && (
         <TimelineSlider
           label="Artist you may like"
           data={artist_recos.map((item) => {

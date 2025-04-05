@@ -1437,3 +1437,10 @@ input[type="search"]::-webkit-search-cancel-button {
 .deleteList {
   grid-template-columns: 40px 65px auto;
 }
+
+.recentChip {
+  p {
+    color: white;
+    font-weight: 400;
+  }
+}

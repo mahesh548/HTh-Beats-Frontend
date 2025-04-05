@@ -115,7 +115,7 @@ export default function CreateHistory({
     const response = await utils.BACKEND(`/activity`, "DELETE", {
       deleteData: { historyIds: deleteList, type: "history" },
     });
-    if (response.status || response?.delete) {
+    if (response.status && response?.delete) {
       setDeleteList([]);
       next(true);
     }

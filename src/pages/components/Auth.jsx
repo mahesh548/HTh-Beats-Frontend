@@ -32,6 +32,9 @@ export default function Auth({ children }) {
     if (!localStorage.preferedPlaylist) {
       localStorage.setItem("preferedPlaylist", JSON.stringify([data.id]));
     }
+    if (data?.recently_played && data.recently_played.length > 0) {
+      localStorage.setItem("recent", JSON.stringify(data.recently_played));
+    }
   };
 
   return (
