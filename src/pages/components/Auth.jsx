@@ -36,7 +36,12 @@ export default function Auth({ children }) {
       localStorage.setItem("recent", JSON.stringify(data.recently_played));
     }
     if (data?.search_history && data.search_history.length > 0) {
-      localStorage.setItem("searched", JSON.stringify(data.search_history));
+      const historyToSave = [
+        ...new Map(
+          data.search_history.map((item) => [item.perma_url, item])
+        ).values(),
+      ].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+      localStorage.setItem("searched", JSON.stringify(historyToSave));
     }
   };
 

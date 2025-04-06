@@ -13,6 +13,15 @@ export default function SearchHistCard({ data }) {
     navigate(`/${data?.type || "song"}/${data?.url || data?.perma_url}`);
   };
 
+  const removeFromHistory = (perma_url) => {
+    const oldHistory = JSON.parse(localStorage?.searched);
+    if (oldHistory.length == 0) return;
+    localStorage.setItem(
+      "searched",
+      JSON.stringify(oldHistory.filter((item) => item.perma_url != perma_url))
+    );
+  };
+
   return (
     <>
       <div
@@ -38,7 +47,13 @@ export default function SearchHistCard({ data }) {
           </p>
         </div>
 
-        <button className="iconButton">
+        <button
+          className="iconButton"
+          onClick={(e) => {
+            e.stopPropagation();
+            removeFromHistory(data.perma_url);
+          }}
+        >
           <Close className="text-white-50" />
         </button>
       </div>
