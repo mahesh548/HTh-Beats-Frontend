@@ -35,6 +35,9 @@ export default function Auth({ children }) {
     if (data?.recently_played && data.recently_played.length > 0) {
       localStorage.setItem("recent", JSON.stringify(data.recently_played));
     }
+    if (data?.search_history && data.search_history.length > 0) {
+      localStorage.setItem("searched", JSON.stringify(data.search_history));
+    }
   };
 
   return (

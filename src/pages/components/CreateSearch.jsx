@@ -12,6 +12,7 @@ import ChipSort from "./ChipSort";
 
 import { useInView } from "react-intersection-observer";
 import { useLocation, useNavigate } from "react-router";
+import SearchHistCard from "./SearchHistCard";
 
 const idealFilterData = [
   { value: "playlist", parent: "all", label: "Playlists" },
@@ -27,7 +28,7 @@ export default function CreateSearch() {
   const { openElements, open, close } = useContext(HashContext);
   const [searchInput, setSearchInput] = useState("");
   const [view, setView] = useState(
-    localStorage.history ? "history" : "default"
+    localStorage.searched ? "history" : "default"
   );
   const [acResult, setAcResult] = useState();
   const [searchResult, setSearchResult] = useState([]);
@@ -54,7 +55,7 @@ export default function CreateSearch() {
     clearTimeout(searchTimeOut.current);
     if (searchInput.length === 0) {
       // show history if nothing searched
-      setView(localStorage.history ? "history" : "default");
+      setView(localStorage.searched ? "history" : "default");
       return;
     }
 
@@ -156,7 +157,7 @@ export default function CreateSearch() {
   const processInput = (value) => {
     setSearchInput(value);
     if (value.length === 0)
-      setView(localStorage.history ? "history" : "default");
+      setView(localStorage.searched ? "history" : "default");
   };
 
   const sortResponse = (data, query) => {
@@ -303,7 +304,18 @@ export default function CreateSearch() {
             </div>
           )}
           {view === "loading" && <PageLoader />}
-          {view === "history" && <div className="historyCont"></div>}
+          {view === "history" && (
+            <>
+              <p className="labelText ps-2">Recent searches</p>
+              <div className="px-2">
+                {JSON.parse(localStorage.searched).map((item, index) => {
+                  return (
+                    <SearchHistCard data={item} key={`history_${index}`} />
+                  );
+                })}
+              </div>
+            </>
+          )}
           {view === "autocomplete" && (
             <div
               className="overflow-scroll px-2 pe-4"

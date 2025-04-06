@@ -233,7 +233,7 @@ p {
   gap: 5px;
   transform: translateZ(0);
   padding-top: 35px;
-  z-index: 1;
+  z-index: 2;
 }
 .navBOTTOM a {
   text-decoration: none;
@@ -1319,6 +1319,9 @@ p {
   padding: 12px;
   border-radius: 8px;
   font-weight: 500;
+  position: sticky;
+  top: 10px;
+  z-index: 1;
   img {
     height: 30px;
     width: 30px;
@@ -1358,6 +1361,7 @@ p {
   background-color: black;
   height: 100%;
   width: 100%;
+  z-index: 1;
 }
 .srchBox {
   display: grid;
