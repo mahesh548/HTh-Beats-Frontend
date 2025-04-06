@@ -13,7 +13,7 @@ export default function Recent({ recentData }) {
       : recentData.slice(0, recentData.length - 1);
 
   return (
-    <div className="recentCont mt-4">
+    <div className="recentCont mt-2">
       {data.map((item, index) => {
         return (
           <div key={`recent_${index}`} className="recentChip">

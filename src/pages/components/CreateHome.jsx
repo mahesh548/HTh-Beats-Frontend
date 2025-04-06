@@ -1,8 +1,12 @@
 import TimelineSlider from "./TimelineSlider";
 import TimelinePromo from "./TimelinePromo";
 import Recent from "./Recent";
+import { AuthContext } from "./Auth";
+import { useContext } from "react";
+import utils from "../../../utils";
 
 export default function CreateHome() {
+  const auth = useContext(AuthContext);
   const homeCache = JSON.parse(localStorage.homeCache);
   const recent = JSON.parse(localStorage?.recent || "[]");
   const {
@@ -25,9 +29,26 @@ export default function CreateHome() {
       }
     }
   }
+  const greeting = utils.getUserHomeGreeting(auth?.user?.username);
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
+      <div className="libraryNavCont px-2 position-static">
+        <div
+          className="libraryNav mt-4 mb-3"
+          style={{ gridTemplateColumns: "40px auto", columnGap: "15px" }}
+        >
+          <img
+            src={auth?.user?.pic || "logo.png"}
+            className="rounded-circle"
+            style={{ height: "40px", width: "40px" }}
+          />
+          <div>
+            <p className="labelText mt-0 fs-5">{greeting.greeting}</p>
+            <p className="fs-6 text-white-50">{greeting.vibeText}</p>
+          </div>
+        </div>
+      </div>
       {recent && recent.length > 0 && <Recent recentData={recent} />}
 
       {charts && charts.length > 0 && (

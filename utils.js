@@ -270,6 +270,32 @@ const utils = {
     }
     return response.type;
   },
+  getUserHomeGreeting: (username = "") => {
+    const hour = new Date().getHours();
+    let timeGreeting = "Hello";
+
+    if (hour < 12) timeGreeting = "Good morning";
+    else if (hour < 18) timeGreeting = "Good afternoon";
+    else timeGreeting = "Good evening";
+
+    const messages = [
+      "Time to find your vibe.",
+      "Let’s discover your sound.",
+      "Start your music journey.",
+      "Press play and explore.",
+      "Your soundtrack starts here.",
+      "Tunes waiting for you.",
+      "Pick your first favorite.",
+      "Let the music begin.",
+    ];
+
+    const vibeText = messages[Math.floor(Math.random() * messages.length)];
+
+    return {
+      greeting: `${timeGreeting}, ${username}`,
+      vibeText: vibeText,
+    };
+  },
 };
 
 export default utils;
