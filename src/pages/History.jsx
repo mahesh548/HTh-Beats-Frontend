@@ -24,10 +24,16 @@ export default function History() {
         const originalType = item.type;
         const { _id } = item;
         item.entityType = originalType;
-        if (item.type == "search") {
+        if (item.type == "search" && item.activity == "played") {
           item.data = {
             title: "Search",
             image: `https://${window.location.host}/Search.png`,
+          };
+        }
+        if (item.type == "song" && item.activity == "played") {
+          item.data = {
+            title: `${item.list.length} Songs played`,
+            image: item.list[0].image,
           };
         }
         let newItem = { ...item, ...item.data, _id: _id };

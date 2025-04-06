@@ -35,6 +35,9 @@ export default function CreateHistory({
   const getSubtitle = (item) => {
     let restText = "";
     const username = auth?.user?.username;
+    if (item.activity == "played" && item.type == "song") {
+      return "";
+    }
     if (item.activity == "played") {
       restText = `${item.list.length} songs played · ${utils.capitalLetter(
         item.type
@@ -59,6 +62,7 @@ export default function CreateHistory({
   }, [response]);
 
   const handleClick = (type, id) => {
+    if (item.activity == "played" && type == "song") return;
     if (type == "search") return;
     navigate(`/${type}/${id}`);
   };

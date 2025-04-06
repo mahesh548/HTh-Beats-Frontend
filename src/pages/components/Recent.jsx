@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router";
 import utils from "../../../utils";
 
 export default function Recent({ recentData }) {
+  const navigate = useNavigate();
   recentData = recentData
     .filter((item) => item.data)
     .sort((a, b) => {
@@ -16,7 +18,11 @@ export default function Recent({ recentData }) {
     <div className="recentCont mt-2">
       {data.map((item, index) => {
         return (
-          <div key={`recent_${index}`} className="recentChip">
+          <div
+            key={`recent_${index}`}
+            className="recentChip"
+            onClick={() => navigate(`/${item.type}/${item.perma_url}`)}
+          >
             <img src={item.image} />
             <p className="thinTwoLineText mt-0">
               {utils.refineText(item?.name || item?.title)}
