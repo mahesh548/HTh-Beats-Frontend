@@ -1464,3 +1464,44 @@ input[type="search"]::-webkit-search-cancel-button {
     font-weight: 400;
   }
 }
+.multipleShadow {
+  position: relative;
+  display: inline-block;
+  border-radius: 10px;
+  overflow: visible;
+}
+
+.multipleShadow img {
+  display: block;
+  width: 57px;
+  border-radius: 10px;
+  object-fit: cover;
+  z-index: 1;
+  position: relative;
+  height: 57px;
+}
+
+.multipleShadow::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 90%;
+  height: 90%;
+  border-radius: 4px;
+  background: #414141;
+  z-index: 0;
+}
+
+.multipleShadow::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 15px;
+  width: 80%;
+  height: 80%;
+  border-radius: 4px;
+  background: #2b2a2a;
+
+  z-index: -1;
+}

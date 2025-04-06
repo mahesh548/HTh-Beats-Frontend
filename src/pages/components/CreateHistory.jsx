@@ -197,13 +197,24 @@ export default function CreateHistory({
                       )}
                     </button>
                   )}
-                  <img
-                    src={item.image}
-                    className="playlistSongImg"
-                    style={{
-                      borderRadius: item.type == "artist" ? "100%" : "0px",
-                    }}
-                  />
+                  <div
+                    className={` ${
+                      item.type == "song" &&
+                      item.activity == "played" &&
+                      item.list.length > 1
+                        ? "multipleShadow"
+                        : ""
+                    }`}
+                  >
+                    <img
+                      src={item.image}
+                      className="playlistSongImg rounded"
+                      style={{
+                        borderRadius: item.type == "artist" ? "100%" : "0px",
+                      }}
+                    />
+                  </div>
+
                   <div>
                     <p className="thinOneLineText playlistSongTitle">
                       {utils.refineText(item.title || item.name)}
