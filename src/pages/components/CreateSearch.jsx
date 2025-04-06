@@ -28,10 +28,15 @@ export default function CreateSearch() {
   const { openElements, open, close } = useContext(HashContext);
   const [searchInput, setSearchInput] = useState("");
   const [view, setView] = useState(
-    localStorage.searched ? "history" : "default"
+    localStorage.searched && JSON.parse(localStorage.searched).length > 0
+      ? "history"
+      : "default"
   );
   const [acResult, setAcResult] = useState();
   const [searchResult, setSearchResult] = useState([]);
+  const [historyResult, setHistoryResult] = useState(
+    JSON.parse(localStorage?.searched || "[]")
+  );
   const [originalResponse, setOriginalResponse] = useState({ page: 1 });
   const callAgain = useRef(false);
   const filterActive = useRef(false);
@@ -232,6 +237,33 @@ export default function CreateSearch() {
     }
   }, [location.search]);
 
+  useEffect(() => {
+    setView(historyResult.length > 0 ? "history" : "default");
+  }, [historyResult]);
+
+  const removeFromHistory = async (songId, historyId) => {
+    const oldHistory = JSON.parse(localStorage?.searched);
+    if (oldHistory.length == 0) return;
+    if (songId.includes("all")) {
+      localStorage.setItem("searched", "[]");
+      setHistoryResult([]);
+
+      await utils.BACKEND(`/activity`, "DELETE", {
+        deleteData: { historyIds: ["all"], type: "search", idList: ["all"] },
+      });
+      return;
+    }
+    const newHistory = oldHistory.filter(
+      (item) => item.id != songId && item.historyId != historyId
+    );
+    localStorage.setItem("searched", JSON.stringify(newHistory));
+    setHistoryResult(newHistory);
+
+    await utils.BACKEND(`/activity`, "DELETE", {
+      deleteData: { historyIds: historyId, type: "search", idList: songId },
+    });
+  };
+
   return (
     <div
       className="page hiddenScrollbar"
@@ -304,13 +336,17 @@ export default function CreateSearch() {
             </div>
           )}
           {view === "loading" && <PageLoader />}
-          {view === "history" && (
+          {view === "history" && historyResult.length > 0 && (
             <>
               <p className="labelText ps-2">Recent searches</p>
               <div className="px-2">
-                {JSON.parse(localStorage.searched).map((item, index) => {
+                {historyResult.map((item, index) => {
                   return (
-                    <SearchHistCard data={item} key={`history_${index}`} />
+                    <SearchHistCard
+                      data={item}
+                      removeFromHistory={removeFromHistory}
+                      key={`history_${index}`}
+                    />
                   );
                 })}
               </div>

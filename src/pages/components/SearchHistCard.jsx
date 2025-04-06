@@ -4,22 +4,13 @@ import { useContext, useMemo } from "react";
 import { songContext } from "./Song";
 import { Close } from "@mui/icons-material";
 
-export default function SearchHistCard({ data }) {
+export default function SearchHistCard({ data, removeFromHistory }) {
   const { Queue } = useContext(songContext);
 
   const navigate = useNavigate();
 
   const showResult = (data) => {
     navigate(`/${data?.type || "song"}/${data?.url || data?.perma_url}`);
-  };
-
-  const removeFromHistory = (perma_url) => {
-    const oldHistory = JSON.parse(localStorage?.searched);
-    if (oldHistory.length == 0) return;
-    localStorage.setItem(
-      "searched",
-      JSON.stringify(oldHistory.filter((item) => item.perma_url != perma_url))
-    );
   };
 
   return (
@@ -51,7 +42,7 @@ export default function SearchHistCard({ data }) {
           className="iconButton"
           onClick={(e) => {
             e.stopPropagation();
-            removeFromHistory(data.perma_url);
+            removeFromHistory([data.id], [data.historyId]);
           }}
         >
           <Close className="text-white-50" />
