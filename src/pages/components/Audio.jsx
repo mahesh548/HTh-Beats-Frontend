@@ -5,12 +5,56 @@ import utils from "../../../utils";
 export default function Audio() {
   const { Queue, setQueue } = useContext(songContext);
 
+  const mediaNotification = (mediaData) => {
+    if (navigator?.mediaSession) {
+      const defaultArtwork = `https://${location.host}/logo.png`;
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: mediaData?.title || "",
+        artist: mediaData?.artist || "",
+        album: mediaData?.album || "",
+        artwork: [
+          {
+            src: mediaData?.img || defaultArtwork,
+            sizes: "512x512",
+            type: "image/png",
+          },
+        ],
+      });
+
+      navigator.mediaSession.setActionHandler("play", () => {
+        setQueue({ type: "STATUS", value: "resume" });
+      });
+      navigator.mediaSession.setActionHandler("pause", () => {
+        setQueue({ type: "STATUS", value: "pause" });
+      });
+
+      navigator.mediaSession.setActionHandler("seekto", (event) => {
+        document.getElementById("audio").currentTime = event.seekTime;
+      });
+      navigator.mediaSession.setActionHandler("previoustrack", () => {
+        setQueue({ type: "PREV" });
+      });
+      navigator.mediaSession.setActionHandler("nexttrack", () => {
+        setQueue({ type: "NEXT" });
+      });
+
+      navigator.mediaSession.setActionHandler("stop", null);
+      navigator.mediaSession.setActionHandler("seekforward", null);
+      navigator.mediaSession.setActionHandler("seekbackward", null);
+    }
+  };
+
   useEffect(() => {
     const play = () => {
       const audio = document.getElementById("audio");
       const song = utils.getItemFromId(Queue.song, Queue.playlist.list);
       audio.src = utils.decryptor(song.more_info.encrypted_media_url);
       audio.play();
+      mediaNotification({
+        title: utils.refineText(song?.title || ""),
+        artist: utils.refineText(song?.subtitle || ""),
+        img: song.image.replace("150x150", "500x500"),
+      });
     };
 
     const pause = () => {
