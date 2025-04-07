@@ -339,7 +339,7 @@ export default function CreateSearch() {
           {view === "history" && historyResult.length > 0 && (
             <>
               <p className="labelText ps-2">Recent searches</p>
-              <div className="px-2">
+              <div className="px-2" style={{ paddingBottom: "150px" }}>
                 {historyResult.map((item, index) => {
                   return (
                     <SearchHistCard
@@ -349,6 +349,17 @@ export default function CreateSearch() {
                     />
                   );
                 })}
+                <button
+                  className="addToBut mt-4 p-1 px-3"
+                  style={{
+                    background: "transparent",
+                    color: "white",
+                    border: "2px solid gray",
+                  }}
+                  onClick={() => removeFromHistory(["all"], ["all"])}
+                >
+                  Clear recent searches
+                </button>
               </div>
             </>
           )}
