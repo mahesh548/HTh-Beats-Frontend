@@ -19,6 +19,7 @@ import { HashContext } from "./Hash";
 import OffCanvas from "./BottomSheet";
 import { createPortal } from "react-dom";
 import MakePlaylist from "./MakePlaylist";
+import MakeRoom from "./MakeRoom";
 
 export default function Navbar() {
   const auth = useContext(AuthContext);
@@ -51,7 +52,12 @@ export default function Navbar() {
         <button className="iconButton playlistSong createButtons">
           <img src={roomFilled} />
           <div>
-            <p className="text-start">Music Room</p>
+            <p
+              className="text-start"
+              onClick={() => closeOpen("createOption", "createRoom")}
+            >
+              Music Room
+            </p>
             <p className="thinOneLineText">
               Create a room and enjoy music with your friends.
             </p>
@@ -129,6 +135,8 @@ export default function Navbar() {
       </div>
       {openElements.includes("createPlaylist") &&
         createPortal(<MakePlaylist type={"viewOnly"} />, document.body)}
+      {openElements.includes("createRoom") &&
+        createPortal(<MakeRoom />, document.body)}
 
       <Outlet />
     </>
