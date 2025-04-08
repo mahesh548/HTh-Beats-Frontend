@@ -3,6 +3,7 @@ import { HashContext } from "./Hash";
 import utils from "../../../utils";
 import { useNavigate } from "react-router";
 import { AuthContext } from "./Auth";
+import { channelContext } from "./Channel";
 export default function MakeRoom() {
   const auth = useContext(AuthContext);
   const { close } = useContext(HashContext);
@@ -10,6 +11,7 @@ export default function MakeRoom() {
   const navigate = useNavigate();
 
   const handleCreate = async () => {
+    const room = useContext(channelContext);
     if (RoomName.length > 0) {
       const response = await utils.BACKEND("/room/create", "POST", {
         roomData: {
@@ -17,9 +19,9 @@ export default function MakeRoom() {
         },
       });
       console.log(response);
-      /*  if (response.status) {
-        navigate("/library");
-      } */
+      if (response.status) {
+        room.connect({ ...response.data });
+      }
     }
   };
   return (
