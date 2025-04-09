@@ -1,0 +1,78 @@
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import PageLoader from "./components/PageLoader";
+import utils from "../../utils";
+import { AuthContext } from "./components/Auth";
+
+import PlaylistNotFound from "./components/PlaylistNotFound";
+
+export default function Room() {
+  const auth = useContext(AuthContext);
+  const { id } = useParams();
+  const [roomInfo, setRoomInfo] = useState(false);
+  const navigate = useNavigate();
+
+  if (!id) {
+    //send to /home if id not provided
+    navigate("/home");
+  }
+
+  const getRoom = async () => {
+    const roomData = {
+      inviteCode: id,
+    };
+    const response = await utils.BACKEND("/room/join", "POST", {
+      roomData: roomData,
+    });
+
+    if (response.status && response.found) {
+      setRoomInfo({ ...response.data });
+    } else {
+      //if room not found set roomInfo to unavailable
+      setRoomInfo("unavailable");
+    }
+  };
+
+  useEffect(() => {
+    if (auth.user?.verified) {
+      getRoom();
+    }
+  }, [auth.user, id]);
+
+  const CreateRoom = ({ data }) => {
+    return (
+      <div className="page hiddenScrollbar">
+        <div
+          className="backgroundGradient position-absolute"
+          style={{ backgroundColor: "#f5deb37d" }}
+        ></div>
+        <div className="editCont hiddenScrollbar">
+          <div className="mt-5">
+            <img
+              src={data.adminPic}
+              style={{ height: "150px", width: "150px" }}
+              className="d-block m-auto rounded-circle"
+            />
+            <p className="labelText text-center">{data.title}</p>
+          </div>
+          <div className="mt-4">
+            <p className="text-center text-white-50">
+              You are invited to join this room created by {data.adminUsername}.
+            </p>
+            <button className="addToBut mt-4" onClick={() => {}}>
+              Join music room
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return roomInfo == false ? (
+    <PageLoader />
+  ) : roomInfo === "unavailable" ? (
+    <PlaylistNotFound />
+  ) : (
+    <CreateRoom data={roomInfo} />
+  );
+}
