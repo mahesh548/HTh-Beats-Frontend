@@ -1,26 +1,25 @@
 import { useContext, useState } from "react";
 import { HashContext } from "./Hash";
 import utils from "../../../utils";
-import { useNavigate } from "react-router";
 import { AuthContext } from "./Auth";
 import { channelContext } from "./Channel";
 export default function MakeRoom() {
   const auth = useContext(AuthContext);
+  const room = useContext(channelContext);
   const { close } = useContext(HashContext);
   const [RoomName, setRoomName] = useState(`${auth?.user?.username}'s Room`);
-  const navigate = useNavigate();
 
   const handleCreate = async () => {
-    const room = useContext(channelContext);
     if (RoomName.length > 0) {
       const response = await utils.BACKEND("/room/create", "POST", {
         roomData: {
           title: RoomName,
         },
       });
-      console.log(response);
+
       if (response.status) {
-        room.connect({ ...response.data });
+        await room.connect({ ...response.data });
+        close("createRoom");
       }
     }
   };
