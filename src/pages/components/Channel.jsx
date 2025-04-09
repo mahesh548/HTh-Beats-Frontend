@@ -3,11 +3,19 @@ import * as Ably from "ably";
 import { AuthContext } from "./Auth";
 
 export const channelContext = createContext(null);
-
 export default function ChannelProvider({ children }) {
   const [channel, setChannel] = useState(null);
   const [roomInfo, setRoomInfo] = useState(null);
-  const [members, setMembers] = useState([]);
+  const hostname = "https://" + window.location.hostname;
+  const [members, setMembers] = useState([
+    { pic: hostname + "/logo.png" },
+    { pic: hostname + "/logo.png" },
+    { pic: hostname + "/logo.png" },
+    { pic: hostname + "/logo.png" },
+    { pic: hostname + "/logo.png" },
+    { pic: hostname + "/logo.png" },
+    { pic: hostname + "/logo.png" },
+  ]);
   const auth = useContext(AuthContext);
   const connect = async ({ token, roomId, admin, role, clientId, title }) => {
     try {

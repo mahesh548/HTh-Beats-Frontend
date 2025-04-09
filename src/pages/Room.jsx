@@ -1,92 +1,29 @@
-import { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import PageLoader from "./components/PageLoader";
-import utils from "../../utils";
-import { AuthContext } from "./components/Auth";
-
-import PlaylistNotFound from "./components/PlaylistNotFound";
+import { useContext } from "react";
+import BackButton from "./components/BackButton";
+import PlaylistOwner from "./components/PlaylistOwner";
 import { channelContext } from "./components/Channel";
 
-export default function Join() {
-  const auth = useContext(AuthContext);
-  const room = useContext(channelContext);
-  const { id } = useParams();
-  const [roomInfo, setRoomInfo] = useState(false);
-  const navigate = useNavigate();
-
-  if (!id) {
-    //send to /home if id not provided
-    navigate("/home");
-  }
-
-  const connectRoom = async (response) => {
-    setRoomInfo(false);
-    delete response.data.adminData;
-    const { success } = room.connect({ ...response.data });
-    if (success) {
-      navigate(`/room/${id}`);
-    } else {
-      setRoomInfo("unavailable");
-    }
-  };
-
-  const getRoom = async () => {
-    const roomData = {
-      inviteCode: id,
-    };
-    const response = await utils.BACKEND("/room/join", "POST", {
-      roomData: roomData,
-    });
-
-    if (response.status && response.found) {
-      setRoomInfo({ ...response.data });
-    } else {
-      //if room not found set roomInfo to unavailable
-      setRoomInfo("unavailable");
-    }
-  };
-
-  useEffect(() => {
-    if (auth.user?.verified) {
-      getRoom();
-    }
-  }, [auth.user, id]);
-
-  const CreateRoom = ({ data }) => {
-    return (
-      <div className="page hiddenScrollbar">
-        <div
-          className="backgroundGradient position-absolute"
-          style={{ backgroundColor: "#f5deb37d" }}
-        ></div>
-        <div className="editCont hiddenScrollbar">
-          <div className="mt-5">
-            <img
-              src={data.adminData.pic}
-              style={{ height: "150px", width: "150px" }}
-              className="d-block m-auto rounded-circle"
-            />
-            <p className="labelText text-center">{data.title}</p>
-          </div>
-          <div className="mt-4">
-            <p className="text-center text-white-50">
-              You are invited to join this room created by{" "}
-              {data.adminData.username}.
-            </p>
-            <button className="addToBut mt-4" onClick={() => connectRoom(data)}>
-              Join music room
-            </button>
-          </div>
-        </div>
+export default function Room() {
+  const { members } = useContext(channelContext);
+  return (
+    <div className="page hiddenScrollbar">
+      <BackButton styleClass="ms-1 mt-2 ps-3" />
+      <p className="labelText mt-0 p-1">Mahesh's room</p>
+      <div className="roomAccess p-1 mt-2">
+        <button
+          className={`borderBut p-0 pe-2 ${members.length <= 3 ? "ps-2" : ""}`}
+        >
+          <PlaylistOwner
+            srcArray={members.map((item) => item.pic).slice(0, 3)}
+            label={""}
+            name=""
+            totalOwner={members.length > 3 ? members.length - 3 : 0}
+          />
+        </button>
+        <button className="borderBut">Invite</button>
+        <button className="borderBut">Leave</button>
       </div>
-    );
-  };
-
-  return roomInfo == false ? (
-    <PageLoader />
-  ) : roomInfo === "unavailable" ? (
-    <PlaylistNotFound />
-  ) : (
-    <CreateRoom data={roomInfo} />
+      <hr className="dividerLine" />
+    </div>
   );
 }

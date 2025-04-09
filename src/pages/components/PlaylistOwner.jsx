@@ -27,7 +27,7 @@ export default function PlaylistOwner({
           <p className="thinOneLineText">{utils.refineText(name)}</p>
         </div>
 
-        {totalOwner != 1 && <span>+{totalOwner - 1} more</span>}
+        {totalOwner > 3 && <span>+{totalOwner - 3} more</span>}
       </div>
     </button>
   );

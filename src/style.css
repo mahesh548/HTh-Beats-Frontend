@@ -1509,3 +1509,28 @@ input[type="search"]::-webkit-search-cancel-button {
 
   z-index: -1;
 }
+.borderBut {
+  background-color: transparent;
+  color: white;
+  border: 1.5px solid #ffffff91;
+  border-radius: 40px;
+  padding: 3px 15px;
+  button {
+    margin: 0;
+  }
+  div {
+    width: auto;
+  }
+}
+.roomAccess {
+  display: grid;
+  grid-template-columns: max-content max-content max-content;
+  column-gap: 5px;
+  margin-bottom: 30px;
+}
+.dividerLine {
+  height: 2px;
+  background-color: var(--thin-text-color);
+  width: 100%;
+  margin: 10px 0 10px 0;
+}
