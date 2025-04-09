@@ -10,38 +10,49 @@ export default function ChannelProvider({ children }) {
   const [members, setMembers] = useState([]);
   const auth = useContext(AuthContext);
   const connect = async ({ token, roomId, admin, role, clientId, title }) => {
-    setRoomInfo({
-      title: title,
-      clientId: clientId,
-      roomId: roomId,
-      admin: admin,
-      role: role,
-    });
-    const client = new Ably.Realtime({ token, clientId });
+    try {
+      setRoomInfo({
+        title: title,
+        clientId: clientId,
+        roomId: roomId,
+        admin: admin,
+        role: role,
+      });
 
-    await client.connection.once("connected");
+      const client = new Ably.Realtime({ token, clientId });
 
-    const ablyChannel = client.channels.get(roomId);
+      await client.connection.once("connected");
 
-    //entering presence in the channel
-    await ablyChannel.presence.enter({
-      username: auth?.user?.username,
-      role: role,
-      pic: auth?.user?.pic,
-      clientId: clientId,
-    });
-    //getting current member in the room
-    const members = await ablyChannel.presence.get();
-    const onlyMembersData = members.map((member) => ({
-      ...member.data,
-      clientId: member.clientId,
-    }));
+      const ablyChannel = client.channels.get(roomId);
 
-    console.log("members", onlyMembersData);
-    setMembers(onlyMembersData);
+      //entering presence in the channel
+      await ablyChannel.presence.enter({
+        username: auth?.user?.username,
+        role: role,
+        pic: auth?.user?.pic,
+        clientId: clientId,
+      });
+      //getting current member in the room
+      const members = await ablyChannel.presence.get();
+      const onlyMembersData = members.map((member) => ({
+        ...member.data,
+        clientId: member.clientId,
+      }));
 
-    //set the channel
-    setChannel(ablyChannel);
+      console.log("members", onlyMembersData);
+      setMembers(onlyMembersData);
+
+      //set the channel
+      setChannel(ablyChannel);
+      return {
+        success: true,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error,
+      };
+    }
   };
 
   return (

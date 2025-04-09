@@ -5,9 +5,11 @@ import utils from "../../utils";
 import { AuthContext } from "./components/Auth";
 
 import PlaylistNotFound from "./components/PlaylistNotFound";
+import { channelContext } from "./components/Channel";
 
-export default function Room() {
+export default function Join() {
   const auth = useContext(AuthContext);
+  const room = useContext(channelContext);
   const { id } = useParams();
   const [roomInfo, setRoomInfo] = useState(false);
   const navigate = useNavigate();
@@ -16,6 +18,17 @@ export default function Room() {
     //send to /home if id not provided
     navigate("/home");
   }
+
+  const connectRoom = async (response) => {
+    setRoomInfo(false);
+    delete response.data.adminData;
+    const { success } = room.connect({ ...response.data });
+    if (success) {
+      navigate(`/room/${id}`);
+    } else {
+      setRoomInfo("unavailable");
+    }
+  };
 
   const getRoom = async () => {
     const roomData = {
@@ -49,7 +62,7 @@ export default function Room() {
         <div className="editCont hiddenScrollbar">
           <div className="mt-5">
             <img
-              src={data.adminPic}
+              src={data.adminData.pic}
               style={{ height: "150px", width: "150px" }}
               className="d-block m-auto rounded-circle"
             />
@@ -57,9 +70,10 @@ export default function Room() {
           </div>
           <div className="mt-4">
             <p className="text-center text-white-50">
-              You are invited to join this room created by {data.adminUsername}.
+              You are invited to join this room created by{" "}
+              {data.adminData.username}.
             </p>
-            <button className="addToBut mt-4" onClick={() => {}}>
+            <button className="addToBut mt-4" onClick={() => connectRoom(data)}>
               Join music room
             </button>
           </div>
