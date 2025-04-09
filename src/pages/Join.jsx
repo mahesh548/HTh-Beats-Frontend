@@ -24,7 +24,7 @@ export default function Join() {
     delete data.adminData;
     const { success } = await room.connect({ ...data });
     if (success) {
-      navigate(`/home`);
+      navigate(`/room`);
     } else {
       setRoomInfo("unavailable");
     }

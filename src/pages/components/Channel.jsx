@@ -2,20 +2,31 @@ import { createContext, useContext, useState } from "react";
 import * as Ably from "ably";
 import { AuthContext } from "./Auth";
 
+const pici = "https://" + window.location.hostname + "/logo.png";
+const testInfo = { title: "room" };
+const testMembers = [
+  {
+    pic: pici,
+  },
+  {
+    pic: pici,
+  },
+  {
+    pic: pici,
+  },
+  {
+    pic: pici,
+  },
+  {
+    pic: pici,
+  },
+];
 export const channelContext = createContext(null);
 export default function ChannelProvider({ children }) {
   const [channel, setChannel] = useState(null);
-  const [roomInfo, setRoomInfo] = useState(null);
-  const hostname = "https://" + window.location.hostname;
-  const [members, setMembers] = useState([
-    { pic: hostname + "/logo.png" },
-    { pic: hostname + "/logo.png" },
-    { pic: hostname + "/logo.png" },
-    { pic: hostname + "/logo.png" },
-    { pic: hostname + "/logo.png" },
-    { pic: hostname + "/logo.png" },
-    { pic: hostname + "/logo.png" },
-  ]);
+  const [roomInfo, setRoomInfo] = useState({});
+
+  const [members, setMembers] = useState([]);
   const auth = useContext(AuthContext);
   const connect = async ({ token, roomId, admin, role, clientId, title }) => {
     try {
@@ -49,6 +60,21 @@ export default function ChannelProvider({ children }) {
 
       console.log("members", onlyMembersData);
       setMembers(onlyMembersData);
+
+      //when a new member enters the room
+      ablyChannel.presence.subscribe("enter", (member) => {
+        member.data.clientId = member.clientId;
+        const newMember = member.data;
+        setMembers((prevMembers) => [...prevMembers, newMember]);
+      });
+
+      //when a member leaves the room
+      ablyChannel.presence.subscribe("leave", (member) => {
+        const newMember = member.data;
+        setMembers((prevMembers) =>
+          prevMembers.filter((item) => item.clientId !== newMember.clientId)
+        );
+      });
 
       //set the channel
       setChannel(ablyChannel);

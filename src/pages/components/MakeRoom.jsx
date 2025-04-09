@@ -4,6 +4,7 @@ import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import { channelContext } from "./Channel";
 import PageLoader from "./PageLoader";
+import { useNavigate } from "react-router";
 
 export default function MakeRoom() {
   const auth = useContext(AuthContext);
@@ -11,6 +12,7 @@ export default function MakeRoom() {
   const { close } = useContext(HashContext);
   const [RoomName, setRoomName] = useState(`${auth?.user?.username}'s Room`);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleCreate = async () => {
     if (RoomName.length > 0) {
@@ -23,7 +25,7 @@ export default function MakeRoom() {
 
       if (response.status) {
         await room.connect({ ...response.data });
-        close("createRoom");
+        navigate("/room");
       }
     }
   };

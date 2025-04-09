@@ -1515,8 +1515,10 @@ input[type="search"]::-webkit-search-cancel-button {
   border: 1.5px solid #ffffff91;
   border-radius: 40px;
   padding: 3px 15px;
+  display: inline-grid;
   button {
     margin: 0;
+    translate: 3px 0;
   }
   div {
     width: auto;
@@ -1525,7 +1527,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .roomAccess {
   display: grid;
   grid-template-columns: max-content max-content max-content;
-  column-gap: 5px;
+  column-gap: 8px;
   margin-bottom: 30px;
 }
 .dividerLine {
@@ -1533,4 +1535,8 @@ input[type="search"]::-webkit-search-cancel-button {
   background-color: var(--thin-text-color);
   width: 100%;
   margin: 10px 0 10px 0;
+}
+.dp {
+  padding: 0 !important;
+  aspect-ratio: 1/1;
 }
