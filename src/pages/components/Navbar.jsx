@@ -20,6 +20,7 @@ import OffCanvas from "./BottomSheet";
 import { createPortal } from "react-dom";
 import MakePlaylist from "./MakePlaylist";
 import MakeRoom from "./MakeRoom";
+import RealtimeSong from "./RealtimeSong";
 
 export default function Navbar() {
   const auth = useContext(AuthContext);
@@ -43,6 +44,7 @@ export default function Navbar() {
   return (
     <>
       <Audio />
+      <RealtimeSong />
 
       {openElements.includes("player") && <Player />}
       <OffCanvas

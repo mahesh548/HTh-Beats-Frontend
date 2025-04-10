@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import * as Ably from "ably";
 import { AuthContext } from "./Auth";
 
@@ -24,9 +24,9 @@ const testMembers = [
 export const channelContext = createContext(null);
 export default function ChannelProvider({ children }) {
   const [channel, setChannel] = useState(null);
-  const [roomInfo, setRoomInfo] = useState({});
-
-  const [members, setMembers] = useState([]);
+  const [roomInfo, setRoomInfo] = useState(null);
+  const [currentSong, setCurrentSong] = useState(null);
+  const [members, setMembers] = useState(null);
   const auth = useContext(AuthContext);
   const connect = async ({ token, roomId, admin, role, clientId, title }) => {
     try {
@@ -58,7 +58,6 @@ export default function ChannelProvider({ children }) {
         clientId: member.clientId,
       }));
 
-      console.log("members", onlyMembersData);
       setMembers(onlyMembersData);
 
       //when a new member enters the room
@@ -76,6 +75,12 @@ export default function ChannelProvider({ children }) {
         );
       });
 
+      ablyChannel.subscribe("song", (message) => {
+        if (message.clientId === clientId) return;
+        const remoteCurrentSong = message.data.remoteCurrentSong;
+        setCurrentSong(remoteCurrentSong);
+      });
+
       //set the channel
       setChannel(ablyChannel);
       return {
@@ -89,8 +94,25 @@ export default function ChannelProvider({ children }) {
     }
   };
 
+  useEffect(() => {
+    if (!channel || !currentSong || !roomInfo) return;
+    if (currentSong.clientId != roomInfo.clientId) return;
+    channel.publish("song", {
+      remoteCurrentSong: currentSong,
+    });
+  }, [currentSong?.songId]);
+
   return (
-    <channelContext.Provider value={{ channel, connect, roomInfo, members }}>
+    <channelContext.Provider
+      value={{
+        channel,
+        connect,
+        roomInfo,
+        members,
+        currentSong,
+        setCurrentSong,
+      }}
+    >
       {children}
     </channelContext.Provider>
   );

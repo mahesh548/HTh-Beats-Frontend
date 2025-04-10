@@ -23,6 +23,7 @@ export default function Join() {
     setRoomInfo(false);
     delete data.adminData;
     const { success } = await room.connect({ ...data });
+
     if (success) {
       navigate(`/room`);
     } else {

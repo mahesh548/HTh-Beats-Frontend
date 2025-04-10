@@ -47,6 +47,7 @@ const createHistory = (Queue, songId) => {
     utils.BACKEND("/song_played", "POST", { playedData: playedData });
   }, 2000);
 };
+
 const songReducer = (state, action) => {
   let liked = [];
   switch (action.type) {
