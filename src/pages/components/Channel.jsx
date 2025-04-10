@@ -27,6 +27,7 @@ export default function ChannelProvider({ children }) {
   const [roomInfo, setRoomInfo] = useState(null);
   const [currentSong, setCurrentSong] = useState(null);
   const [members, setMembers] = useState(null);
+  const [playState, setPlayState] = useState(false);
   const auth = useContext(AuthContext);
   const connect = async ({ token, roomId, admin, role, clientId, title }) => {
     try {
@@ -80,6 +81,11 @@ export default function ChannelProvider({ children }) {
         const remoteCurrentSong = message.data.remoteCurrentSong;
         setCurrentSong(remoteCurrentSong);
       });
+      ablyChannel.subscribe("playState", (message) => {
+        if (message.clientId === clientId) return;
+        const remoteSongState = message.data.remoteSongState;
+        setPlayState(remoteSongState);
+      });
 
       //set the channel
       setChannel(ablyChannel);
@@ -102,6 +108,14 @@ export default function ChannelProvider({ children }) {
     });
   }, [currentSong?.songId]);
 
+  useEffect(() => {
+    if (!channel || !playState || !roomInfo) return;
+    if (playState.clientId != roomInfo.clientId) return;
+    channel.publish("playState", {
+      remoteSongState: playState,
+    });
+  }, [playState?.state]);
+
   return (
     <channelContext.Provider
       value={{
@@ -111,6 +125,8 @@ export default function ChannelProvider({ children }) {
         members,
         currentSong,
         setCurrentSong,
+        playState,
+        setPlayState,
       }}
     >
       {children}
