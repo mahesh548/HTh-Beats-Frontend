@@ -87,6 +87,13 @@ export default function ChannelProvider({ children }) {
         setPlayState(remoteSongState);
       });
 
+      ablyChannel.subscribe("durationChange", (message) => {
+        if (message.clientId === clientId) return;
+        const remoteDuartion = message.data.remoteDuartion;
+        document.getElementById("audio").currentTime =
+          remoteDuartion.currentTime;
+      });
+
       //set the channel
       setChannel(ablyChannel);
       return {
@@ -115,6 +122,34 @@ export default function ChannelProvider({ children }) {
       remoteSongState: playState,
     });
   }, [playState?.state]);
+
+  useEffect(() => {
+    if (!channel || !roomInfo) return;
+
+    const audio = document.getElementById("audio");
+    if (!audio) return;
+
+    let debounceTimeout;
+
+    const handleSeeked = (e) => {
+      clearTimeout(debounceTimeout);
+      debounceTimeout = setTimeout(() => {
+        channel.publish("durationChange", {
+          remoteDuartion: {
+            currentTime: e.target.currentTime,
+            clientId: roomInfo.clientId,
+          },
+        });
+      }, 200);
+    };
+
+    audio.addEventListener("seeked", handleSeeked);
+
+    return () => {
+      clearTimeout(debounceTimeout);
+      audio.removeEventListener("seeked", handleSeeked);
+    };
+  }, [currentSong?.songId, channel, roomInfo]);
 
   return (
     <channelContext.Provider

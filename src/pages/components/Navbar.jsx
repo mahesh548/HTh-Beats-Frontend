@@ -10,6 +10,7 @@ import searchSvgOutlined from "../../assets/icons/searchSvgOutlined.svg";
 import librarySvgFilled from "../../assets/icons/librarySvgFilled.svg";
 import librarySvgOutlined from "../../assets/icons/librarySvgOutlined.svg";
 import roomFilled from "../../assets/icons/roomFilled.svg";
+import roomFilledActive from "../../assets/icons/roomFilledActive.svg";
 import { Add, MusicNote } from "@mui/icons-material";
 
 import Audio from "./Audio";
@@ -21,9 +22,11 @@ import { createPortal } from "react-dom";
 import MakePlaylist from "./MakePlaylist";
 import MakeRoom from "./MakeRoom";
 import RealtimeSong from "./RealtimeSong";
+import { channelContext } from "./Channel";
 
 export default function Navbar() {
   const auth = useContext(AuthContext);
+  const { channel } = useContext(channelContext);
   const navigate = useNavigate();
   const location = useLocation();
   const { openElements, close, open, closeOpen } = useContext(HashContext);
@@ -103,12 +106,23 @@ export default function Navbar() {
           </div>
         </Link>
 
-        <div className="navBTN">
-          <button className="pop" onClick={() => open("createOption")}>
-            <Add className="pop" />
-            <p className="menuLab">Create</p>
-          </button>
-        </div>
+        {!channel ? (
+          <div className="navBTN">
+            <button className="pop" onClick={() => open("createOption")}>
+              <Add className="pop" />
+              <p className="menuLab">Create</p>
+            </button>
+          </div>
+        ) : (
+          <Link to="/room">
+            <div className="navBTN">
+              <button className="pop">
+                <img src={roomFilledActive} className="pop" />
+                <p className="menuLab">Room</p>
+              </button>
+            </div>
+          </Link>
+        )}
         <Link to="library">
           <div className="navBTN">
             <button className="pop">
