@@ -19,7 +19,7 @@ export default function RealtimeSong() {
         id: oldId,
         title: roomInfo?.title,
         type: oldType,
-        list: [response, ...oldList.filter((item) => item.id != songId)],
+        list: [response, ...oldList.filter((item) => item.perma_url != songId)],
       };
       setQueue({
         type: "NEW",

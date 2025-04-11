@@ -9,9 +9,10 @@ import LikeSong from "./LikeSong";
 import SwipeableViews from "react-swipeable-views";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
-
+import { channelContext } from "./Channel";
 export default function MiniPlayer() {
   const { Queue, setQueue } = useContext(songContext);
+  const { currentSong } = useContext(channelContext);
 
   const { open, openElements } = useContext(HashContext);
 
@@ -20,7 +21,7 @@ export default function MiniPlayer() {
   const data = useMemo(() => {
     if (!Queue.song) return null;
     return utils.getItemFromId(Queue.song, Queue.playlist.list);
-  }, [Queue?.song, Queue?.playlist?.list]);
+  }, [Queue?.song, Queue?.playlist?.list, currentSong?.songId]);
 
   useEffect(() => {
     if (data && data.image) {
@@ -76,9 +77,11 @@ export default function MiniPlayer() {
 
       <SwipeableViews
         resistance
-        index={Queue.playlist.list.indexOf(data)}
+        index={Queue.playlist.list.findIndex((item) => item.id === data.id)}
         onChangeIndex={(index) => {
-          const currentIndex = Queue.playlist.list.indexOf(data);
+          const currentIndex = Queue.playlist.list.findIndex(
+            (item) => item.id === data.id
+          );
           if (index > currentIndex) {
             setQueue({ type: "NEXT" });
           }
