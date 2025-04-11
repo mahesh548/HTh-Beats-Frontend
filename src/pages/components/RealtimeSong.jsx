@@ -12,18 +12,19 @@ export default function RealtimeSong() {
     const response = await utils.API(`/song?id=${songId}`, "GET");
 
     if (response.hasOwnProperty("more_info")) {
-      if (!Queue?.playlist) {
-        const playlistEcho = {
-          id: response.id,
-          title: roomInfo?.title,
-          type: "song",
-          list: [response],
-        };
-        setQueue({
-          type: "NEW",
-          value: { playlist: playlistEcho, song: response.id, status: "play" },
-        });
-      }
+      const oldList = Queue?.playlist?.list || [];
+      const oldId = Queue?.playlist?.id || response.id;
+      const oldType = Queue?.playlist?.type || "song";
+      const playlistEcho = {
+        id: oldId,
+        title: roomInfo?.title,
+        type: oldType,
+        list: [response, ...oldList.filter((item) => item.id != songId)],
+      };
+      setQueue({
+        type: "NEW",
+        value: { playlist: playlistEcho, song: response.id, status: "play" },
+      });
     }
   };
 
