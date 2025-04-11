@@ -38,7 +38,7 @@ export default function RealtimeSong() {
 
   useEffect(() => {
     //if user played the song
-    if (!roomInfo) return;
+    if (!roomInfo || !Queue?.song) return;
     if (!currentSong) {
       const songId = Queue.playlist.list.find(
         (item) => item.id == Queue.song

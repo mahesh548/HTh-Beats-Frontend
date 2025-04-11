@@ -1,14 +1,23 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import BackButton from "./components/BackButton";
 import PlaylistOwner from "./components/PlaylistOwner";
 import { channelContext } from "./components/Channel";
 import { useNavigate } from "react-router";
+import utils from "../../utils";
+import { songContext } from "./components/Song";
 
 export default function Room() {
   const { members, roomInfo, channel } = useContext(channelContext);
+  const { Queue } = useContext(songContext);
   const navigate = useNavigate();
   /* if (!channel) navigate("/home"); */
   console.log(members.length);
+  const data = useMemo(() => {
+    if (Queue.song && Queue.playlist) {
+      return utils.getItemFromId(Queue?.song, Queue?.playlist?.list);
+    }
+  }, [Queue?.song, Queue?.playlist]);
+
   return (
     <div className="page hiddenScrollbar">
       <BackButton styleClass="ms-1 mt-2 ps-3" />
@@ -34,6 +43,39 @@ export default function Room() {
         )}
       </div>
       <hr className="dividerLine" />
+      <p className="labelText mt-0 p-1 ">Now playing</p>
+      <div style={{ height: "100px" }}>
+        {!Queue?.song ? (
+          <div className="noSong">
+            <p className="text-white-50">No active playback in the room.</p>
+          </div>
+        ) : (
+          <div
+            className="playlistSong m-auto mt-2"
+            style={{ gridTemplateColumns: "50px auto 50px", width: "98%" }}
+          >
+            <img src={data.image} className="playlistSongImg rounded" />
+            <div>
+              <p className="thinOneLineText playlistSongTitle fw-normal">
+                {utils.refineText(data.title)}
+              </p>
+              <p className="thinOneLineText playlistSongSubTitle">
+                Song
+                {` · ${utils.refineText(data.subtitle)}`}
+              </p>
+            </div>
+
+            <button className="iconButton">
+              <img
+                src="logo.png"
+                alt=""
+                className="playlistSongImg rounded-circle"
+                style={{ width: "30px", height: "30px" }}
+              />
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -24,9 +24,11 @@ const testMembers = [
 export const channelContext = createContext(null);
 export default function ChannelProvider({ children }) {
   const [channel, setChannel] = useState(null);
-  const [roomInfo, setRoomInfo] = useState(null);
+  const [roomInfo, setRoomInfo] = useState(testInfo);
+  // const [roomInfo, setRoomInfo] = useState(null);
   const [currentSong, setCurrentSong] = useState(null);
-  const [members, setMembers] = useState(null);
+  const [members, setMembers] = useState(testMembers);
+  // const [members, setMembers] = useState(null);
   const [playState, setPlayState] = useState(false);
   const auth = useContext(AuthContext);
   const connect = async ({ token, roomId, admin, role, clientId, title }) => {
