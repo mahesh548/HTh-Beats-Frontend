@@ -7,7 +7,7 @@ import utils from "../../utils";
 import { songContext } from "./components/Song";
 
 export default function Room() {
-  const { members, roomInfo, channel, currentSong } =
+  const { members, roomInfo, channel, currentSong, playState } =
     useContext(channelContext);
   const { Queue } = useContext(songContext);
   const navigate = useNavigate();
@@ -77,7 +77,20 @@ export default function Room() {
             </button>
           </div>
         )}
+        {Queue?.status && playState && Queue?.status == "pause" && (
+          <p
+            className="text-center fst-italic mt-3 text-white-50 fw-light"
+            style={{ fontSize: "14px" }}
+          >
+            Song paused by @
+            {
+              members.find((item) => item.clientId == playState.clientId)
+                ?.username
+            }
+          </p>
+        )}
       </div>
+      <hr className="dividerLine" />
     </div>
   );
 }
