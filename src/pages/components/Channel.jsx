@@ -4,26 +4,6 @@ import { AuthContext } from "./Auth";
 import utils from "../../../utils";
 import { useNavigate } from "react-router";
 
-const pici = "https://" + window.location.hostname + "/logo.png";
-const testInfo = { title: "room" };
-const testMembers = [
-  {
-    pic: pici,
-  },
-  {
-    pic: pici,
-  },
-  {
-    pic: pici,
-  },
-  {
-    pic: pici,
-  },
-  {
-    pic: pici,
-  },
-];
-
 export const channelContext = createContext(null);
 export default function ChannelProvider({ children }) {
   const auth = useContext(AuthContext);
@@ -31,6 +11,11 @@ export default function ChannelProvider({ children }) {
 
   // const [roomInfo, setRoomInfo] = useState(testInfo);
   // const [members, setMembers] = useState(testMembers);
+  const pici = "https://" + window.location.hostname + "/logo.png";
+  const defaultUser = {
+    pic: pici,
+    username: "HTh-User",
+  };
 
   const [channel, setChannel] = useState(null);
   const [roomInfo, setRoomInfo] = useState(null);
@@ -170,6 +155,15 @@ export default function ChannelProvider({ children }) {
     });
   }, [roomInfo?.roomId, channel]);
 
+  useEffect(() => {
+    if (!members || members.length === 0) return;
+    const adminCount = members.filter((m) => m.role === "admin").length;
+
+    if (adminCount !== 1) {
+      disconnect();
+    }
+  }, [members]);
+
   const disconnect = async () => {
     if (!channel) return;
     try {
@@ -206,6 +200,7 @@ export default function ChannelProvider({ children }) {
         playState,
         setPlayState,
         disconnect,
+        defaultUser,
       }}
     >
       {children}

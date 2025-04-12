@@ -11,8 +11,15 @@ import ConfirmPrompt from "./components/ConfirmPrompt";
 import { HashContext } from "./components/Hash";
 
 export default function Room() {
-  const { members, roomInfo, channel, currentSong, playState, disconnect } =
-    useContext(channelContext);
+  const {
+    members,
+    roomInfo,
+    channel,
+    currentSong,
+    playState,
+    disconnect,
+    defaultUser,
+  } = useContext(channelContext);
   const { Queue } = useContext(songContext);
   const navigate = useNavigate();
   const { openElements, open, close } = useContext(HashContext);
@@ -94,7 +101,7 @@ export default function Room() {
                   src={
                     members.find(
                       (item) => item.clientId == currentSong?.clientId
-                    )?.pic
+                    )?.pic || defaultUser.pic
                   }
                   alt=""
                   className="playlistSongImg rounded-circle"
@@ -109,10 +116,8 @@ export default function Room() {
               style={{ fontSize: "14px" }}
             >
               Song paused by @
-              {
-                members.find((item) => item.clientId == playState.clientId)
-                  ?.username
-              }
+              {members.find((item) => item.clientId == playState.clientId)
+                ?.username || defaultUser.username}
             </p>
           )}
         </div>

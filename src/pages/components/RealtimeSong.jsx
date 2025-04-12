@@ -11,6 +11,7 @@ export default function RealtimeSong() {
     playState,
     setPlayState,
     members,
+    defaultUser,
   } = useContext(channelContext);
   const { Queue, setQueue } = useContext(songContext);
 
@@ -39,9 +40,9 @@ export default function RealtimeSong() {
     //if remote user played the song
     if (!currentSong || !roomInfo) return;
     if (currentSong?.clientId != roomInfo?.clientId) {
-      const remoteUsername = members.find(
-        (item) => item.clientId == currentSong?.clientId
-      )?.username;
+      const remoteUsername =
+        members.find((item) => item.clientId == currentSong?.clientId)
+          ?.username || defaultUser.username;
       const subtitle = `Played by ${remoteUsername}`;
       playThisSong(currentSong?.songId, subtitle);
     }
