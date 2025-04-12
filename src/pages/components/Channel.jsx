@@ -1,6 +1,8 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import * as Ably from "ably";
 import { AuthContext } from "./Auth";
+import utils from "../../../utils";
+import { useNavigate } from "react-router";
 
 const pici = "https://" + window.location.hostname + "/logo.png";
 const testInfo = { title: "room" };
@@ -21,16 +23,22 @@ const testMembers = [
     pic: pici,
   },
 ];
+
 export const channelContext = createContext(null);
 export default function ChannelProvider({ children }) {
-  const [channel, setChannel] = useState(null);
-  const [roomInfo, setRoomInfo] = useState(testInfo);
-  // const [roomInfo, setRoomInfo] = useState(null);
-  const [currentSong, setCurrentSong] = useState(null);
-  const [members, setMembers] = useState(testMembers);
-  // const [members, setMembers] = useState(null);
-  const [playState, setPlayState] = useState(false);
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  // const [roomInfo, setRoomInfo] = useState(testInfo);
+  // const [members, setMembers] = useState(testMembers);
+
+  const [channel, setChannel] = useState(null);
+  const [roomInfo, setRoomInfo] = useState(null);
+  const [currentSong, setCurrentSong] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [playState, setPlayState] = useState(false);
+  const ablyClient = useRef(null);
+
   const connect = async ({ token, roomId, admin, role, clientId, title }) => {
     try {
       setRoomInfo({
@@ -42,10 +50,17 @@ export default function ChannelProvider({ children }) {
       });
 
       const client = new Ably.Realtime({ token, clientId });
-
       await client.connection.once("connected");
+      ablyClient.current = client;
 
       const ablyChannel = client.channels.get(roomId);
+
+      //when a new member enters the room
+      ablyChannel.presence.subscribe("enter", (member) => {
+        member.data.clientId = member.clientId;
+        const newMember = member.data;
+        setMembers((prevMembers) => [...prevMembers, newMember]);
+      });
 
       //entering presence in the channel
       await ablyChannel.presence.enter({
@@ -62,21 +77,6 @@ export default function ChannelProvider({ children }) {
       }));
 
       setMembers(onlyMembersData);
-
-      //when a new member enters the room
-      ablyChannel.presence.subscribe("enter", (member) => {
-        member.data.clientId = member.clientId;
-        const newMember = member.data;
-        setMembers((prevMembers) => [...prevMembers, newMember]);
-      });
-
-      //when a member leaves the room
-      ablyChannel.presence.subscribe("leave", (member) => {
-        const newMember = member.data;
-        setMembers((prevMembers) =>
-          prevMembers.filter((item) => item.clientId !== newMember.clientId)
-        );
-      });
 
       ablyChannel.subscribe("song", (message) => {
         if (message.clientId === clientId) return;
@@ -153,6 +153,47 @@ export default function ChannelProvider({ children }) {
     };
   }, [currentSong?.songId, channel, roomInfo]);
 
+  useEffect(() => {
+    if (!channel || !roomInfo) return;
+    //when a member leaves the room
+    channel.presence.subscribe("leave", (member) => {
+      console.log("admin", roomInfo?.admin);
+      console.log("member", member.clientId);
+      if (member.clientId == roomInfo?.admin) {
+        disconnect();
+        return;
+      }
+      const newMember = member.data;
+      setMembers((prevMembers) =>
+        prevMembers.filter((item) => item.clientId !== newMember.clientId)
+      );
+    });
+  }, [roomInfo?.roomId, channel]);
+
+  const disconnect = async () => {
+    if (!channel) return;
+    try {
+      if (roomInfo.role === "admin") {
+        const roomData = {
+          inviteCode: roomInfo?.roomId,
+        };
+        await utils.BACKEND("/room/delete", "POST", {
+          roomData: roomData,
+        });
+      }
+      await channel.presence.leave();
+      ablyClient.current.close();
+
+      setChannel(null);
+      setRoomInfo(null);
+      setCurrentSong(null);
+      setMembers([]);
+      navigate("/home");
+    } catch (err) {
+      console.error("Error while disconnecting:", err);
+    }
+  };
+
   return (
     <channelContext.Provider
       value={{
@@ -164,6 +205,7 @@ export default function ChannelProvider({ children }) {
         setCurrentSong,
         playState,
         setPlayState,
+        disconnect,
       }}
     >
       {children}
