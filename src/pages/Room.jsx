@@ -7,11 +7,11 @@ import utils from "../../utils";
 import { songContext } from "./components/Song";
 
 export default function Room() {
-  const { members, roomInfo, channel } = useContext(channelContext);
+  const { members, roomInfo, channel, currentSong } =
+    useContext(channelContext);
   const { Queue } = useContext(songContext);
   const navigate = useNavigate();
   /* if (!channel) navigate("/home"); */
-  console.log(members.length);
   const data = useMemo(() => {
     if (Queue.song && Queue.playlist) {
       return utils.getItemFromId(Queue?.song, Queue?.playlist?.list);
@@ -60,14 +60,16 @@ export default function Room() {
                 {utils.refineText(data.title)}
               </p>
               <p className="thinOneLineText playlistSongSubTitle">
-                Song
-                {` · ${utils.refineText(data.subtitle)}`}
+                {utils.refineText(data.subtitle)}
               </p>
             </div>
 
             <button className="iconButton">
               <img
-                src="logo.png"
+                src={
+                  members.find((item) => item.clientId == currentSong?.clientId)
+                    ?.pic
+                }
                 alt=""
                 className="playlistSongImg rounded-circle"
                 style={{ width: "30px", height: "30px" }}

@@ -57,7 +57,7 @@ const songReducer = (state, action) => {
           liked.push(item.id);
         }
       });
-      return { ...state, playlist: action.value, saved: liked };
+      return { ...state, playlist: action.value, saved: liked, isLocal: true };
 
     case "SONG":
       const songId = action.value;
@@ -67,10 +67,11 @@ const songReducer = (state, action) => {
         song: songId,
         status: "play",
         previous: [...new Set([...state.previous, songId])],
+        isLocal: true,
       };
 
     case "STATUS":
-      return { ...state, status: action.value };
+      return { ...state, status: action.value, isLocal: true };
 
     case "NEW":
       action.value.playlist.list.forEach((item) => {
@@ -79,7 +80,27 @@ const songReducer = (state, action) => {
         }
       });
       createHistory(action.value, action.value.song);
-      return { ...action.value, saved: liked, previous: [action.value.song] };
+      return {
+        ...action.value,
+        saved: liked,
+        previous: [action.value.song],
+        isLocal: true,
+      };
+
+    case "REMOTE_NEW":
+      action.value.playlist.list.forEach((item) => {
+        if (item.savedIn.length > 0) {
+          liked.push(item.id);
+        }
+      });
+      createHistory(action.value, action.value.song);
+      return {
+        ...action.value,
+        saved: liked,
+        previous: [action.value.song],
+        isLocal: false,
+      };
+
     case "NEXT":
       const nextId = playNext(state);
       createHistory(state, nextId);
@@ -88,7 +109,9 @@ const songReducer = (state, action) => {
         song: nextId,
         status: "play",
         previous: [...new Set([...state.previous, nextId])],
+        isLocal: true,
       };
+
     case "PREV":
       const prevId = playPrev(state);
       createHistory(state, prevId);
@@ -97,7 +120,9 @@ const songReducer = (state, action) => {
         song: prevId,
         status: "play",
         previous: [...new Set([...state.previous, prevId])],
+        isLocal: true,
       };
+
     default:
       return { ...state };
   }
