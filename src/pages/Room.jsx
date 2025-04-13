@@ -9,6 +9,7 @@ import { songContext } from "./components/Song";
 import { createPortal } from "react-dom";
 import ConfirmPrompt from "./components/ConfirmPrompt";
 import { HashContext } from "./components/Hash";
+import Emoji from "./components/Emoji";
 
 export default function Room() {
   const {
@@ -130,31 +131,11 @@ export default function Room() {
 
           <div className="remoteReaction m-3 ms-1">
             <img src="logo.png" className="reactProfile" alt="profile pic" />
-            <img
-              src="https://tgs.sgp1.digitaloceanspaces.com/LovelyPeachy/flushed_27251a7d.gif"
-              alt="reaction"
-            />
-          </div>
-          <div className="remoteReaction m-3 ms-1">
-            <img src="logo.png" className="reactProfile" alt="profile pic" />
-            <img
-              src="https://tgs.sgp1.digitaloceanspaces.com/LovelyPeachy/flushed_27251a7d.gif"
-              alt="reaction"
-            />
-          </div>
-          <div className="remoteReaction m-3 ms-1">
-            <img src="logo.png" className="reactProfile" alt="profile pic" />
-            <img
-              src="https://tgs.sgp1.digitaloceanspaces.com/LovelyPeachy/flushed_27251a7d.gif"
-              alt="reaction"
-            />
+            <Emoji src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1744542666/stickers/flushed_27251a7d_m26bnq.gif" />
           </div>
 
           <div className="localReaction m-3 me-1">
-            <img
-              src="https://tgs.sgp1.digitaloceanspaces.com/LovelyPeachy/flushed_27251a7d.gif"
-              alt="reaction"
-            />
+            <Emoji src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1744542666/stickers/flushed_27251a7d_m26bnq.gif" />
             <img src="logo.png" className="reactProfile" alt="profile pic" />
           </div>
         </div>
