@@ -135,11 +135,11 @@ export default function Room() {
 
           <div className="remoteReaction m-3 ms-1">
             <img src="logo.png" className="reactProfile" alt="profile pic" />
-            <Emoji src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1744542666/stickers/flushed_27251a7d_m26bnq.gif" />
+            <Emoji src={utils.stickerUrl("emoji", "1")} />
           </div>
 
           <div className="localReaction m-3 me-1">
-            <Emoji src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1744542666/stickers/flushed_27251a7d_m26bnq.gif" />
+            <Emoji src={utils.stickerUrl("emoji", "1")} />
             <img src="logo.png" className="reactProfile" alt="profile pic" />
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Emoji({
   src = "",
@@ -8,6 +8,10 @@ export default function Emoji({
 }) {
   const [loaded, setLoaded] = useState(false);
 
+  useEffect(() => {
+    setLoaded(false);
+  }, [src]);
+
   return (
     <>
       {!loaded && <div className={`skeleton ${loaderStyleClass}`}></div>}
@@ -16,7 +20,7 @@ export default function Emoji({
         src={src}
         className={imageStyleClass}
         onLoad={() => setLoaded(true)}
-        onClick={() => click}
+        onClick={click}
         style={{ display: loaded ? "block" : "none" }}
       />
     </>
