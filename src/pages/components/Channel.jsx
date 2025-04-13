@@ -5,22 +5,26 @@ import utils from "../../../utils";
 import { useNavigate } from "react-router";
 
 export const channelContext = createContext(null);
+
 export default function ChannelProvider({ children }) {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // const [roomInfo, setRoomInfo] = useState(testInfo);
-  // const [members, setMembers] = useState(testMembers);
   const pici = "https://" + window.location.hostname + "/logo.png";
   const defaultUser = {
     pic: pici,
     username: "HTh-User",
   };
 
+  const testInfo = { title: "test room" };
+  const testMembers = [defaultUser, defaultUser, defaultUser, defaultUser];
+  const [roomInfo, setRoomInfo] = useState(testInfo);
+  const [members, setMembers] = useState(testMembers);
+
   const [channel, setChannel] = useState(null);
-  const [roomInfo, setRoomInfo] = useState(null);
+  // const [roomInfo, setRoomInfo] = useState(null);
+  // const [members, setMembers] = useState([]);
   const [currentSong, setCurrentSong] = useState(null);
-  const [members, setMembers] = useState([]);
   const [playState, setPlayState] = useState(false);
   const ablyClient = useRef(null);
 

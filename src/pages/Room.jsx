@@ -23,7 +23,7 @@ export default function Room() {
   const { Queue } = useContext(songContext);
   const navigate = useNavigate();
   const { openElements, open, close } = useContext(HashContext);
-  if (!channel) navigate("/home");
+  /* if (!channel) navigate("/home"); */
   const data = useMemo(() => {
     if (Queue.song && Queue.playlist) {
       return utils.getItemFromId(Queue?.song, Queue?.playlist?.list);
@@ -122,6 +122,42 @@ export default function Room() {
           )}
         </div>
         <hr className="dividerLine" />
+        <p className="labelText mt-0 p-1 ">Members activity</p>
+        <div className="chatSection">
+          <p className="m-auto d-block text-center mt-3 mb-3 text-white-50 fw-light">
+            <i className="text-wheat">@username</i> has joined the room.
+          </p>
+
+          <div className="remoteReaction m-3 ms-1">
+            <img src="logo.png" className="reactProfile" alt="profile pic" />
+            <img
+              src="https://tgs.sgp1.digitaloceanspaces.com/LovelyPeachy/flushed_27251a7d.gif"
+              alt="reaction"
+            />
+          </div>
+          <div className="remoteReaction m-3 ms-1">
+            <img src="logo.png" className="reactProfile" alt="profile pic" />
+            <img
+              src="https://tgs.sgp1.digitaloceanspaces.com/LovelyPeachy/flushed_27251a7d.gif"
+              alt="reaction"
+            />
+          </div>
+          <div className="remoteReaction m-3 ms-1">
+            <img src="logo.png" className="reactProfile" alt="profile pic" />
+            <img
+              src="https://tgs.sgp1.digitaloceanspaces.com/LovelyPeachy/flushed_27251a7d.gif"
+              alt="reaction"
+            />
+          </div>
+
+          <div className="localReaction m-3 me-1">
+            <img
+              src="https://tgs.sgp1.digitaloceanspaces.com/LovelyPeachy/flushed_27251a7d.gif"
+              alt="reaction"
+            />
+            <img src="logo.png" className="reactProfile" alt="profile pic" />
+          </div>
+        </div>
       </div>
       {openElements.includes(endId) &&
         createPortal(
