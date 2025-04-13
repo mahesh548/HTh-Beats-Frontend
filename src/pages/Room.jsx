@@ -10,6 +10,8 @@ import { createPortal } from "react-dom";
 import ConfirmPrompt from "./components/ConfirmPrompt";
 import { HashContext } from "./components/Hash";
 import Emoji from "./components/Emoji";
+import OffCanvas from "./components/BottomSheet";
+import Stickers from "./components/Stickers";
 
 export default function Room() {
   const {
@@ -64,7 +66,9 @@ export default function Room() {
               totalOwner={members.length > 3 ? members.length : 0}
             />
           </span>
-          <button className="borderBut">Invite</button>
+          <button className="borderBut" onClick={() => open("stickers")}>
+            Invite
+          </button>
           {roomInfo?.role === "admin" ? (
             <button className="borderBut" onClick={() => open(endId)}>
               End
@@ -151,6 +155,12 @@ export default function Room() {
           />,
           document.body
         )}
+      <OffCanvas
+        open={openElements.includes("stickers")}
+        dismiss={() => close("stickers")}
+      >
+        <Stickers />
+      </OffCanvas>
     </>
   );
 }

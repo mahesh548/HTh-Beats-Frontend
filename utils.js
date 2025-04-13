@@ -296,6 +296,9 @@ const utils = {
       vibeText: vibeText,
     };
   },
+  stickerUrl: (sticker, id) => {
+    return `https://cdn.jsdelivr.net/gh/mahesh548/hth-beats-stickers/${sticker}/${sticker}_${id}.gif `;
+  },
 };
 
 export default utils;

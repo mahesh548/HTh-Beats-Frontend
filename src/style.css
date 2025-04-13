@@ -1632,3 +1632,26 @@ input[type="search"]::-webkit-search-cancel-button {
     left: 100%;
   }
 }
+/* STICKERS CSS */
+.stkNav {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  overflow-y: scroll;
+  img {
+    height: 40px;
+    width: 40px;
+    margin: 0 5px;
+    border-radius: 100%;
+    padding: 2px;
+    filter: grayscale(1);
+    opacity: 0.5;
+    float: left;
+  }
+}
+.activeSticker {
+  img {
+    filter: grayscale(0) !important;
+    opacity: 1 !important;
+  }
+}
