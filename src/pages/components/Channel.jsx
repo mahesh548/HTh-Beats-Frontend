@@ -18,14 +18,15 @@ export default function ChannelProvider({ children }) {
 
   const testInfo = { title: "test room" };
   const testMembers = [defaultUser, defaultUser, defaultUser, defaultUser];
-  const [roomInfo, setRoomInfo] = useState(testInfo);
-  const [members, setMembers] = useState(testMembers);
+  // const [roomInfo, setRoomInfo] = useState(testInfo);
+  // const [members, setMembers] = useState(testMembers);
 
   const [channel, setChannel] = useState(null);
-  // const [roomInfo, setRoomInfo] = useState(null);
-  // const [members, setMembers] = useState([]);
+  const [roomInfo, setRoomInfo] = useState(null);
+  const [members, setMembers] = useState([]);
   const [currentSong, setCurrentSong] = useState(null);
   const [playState, setPlayState] = useState(false);
+  const [messages, setMessages] = useState([]);
   const ablyClient = useRef(null);
 
   const connect = async ({ token, roomId, admin, role, clientId, title }) => {
@@ -48,6 +49,11 @@ export default function ChannelProvider({ children }) {
       ablyChannel.presence.subscribe("enter", (member) => {
         member.data.clientId = member.clientId;
         const newMember = member.data;
+        const newMessage = {
+          type: "join",
+          username: newMember.username,
+        };
+        setMessages((prevMessages) => [newMessage, ...prevMessages]);
         setMembers((prevMembers) => [...prevMembers, newMember]);
       });
 
@@ -83,6 +89,12 @@ export default function ChannelProvider({ children }) {
         const remoteDuartion = message.data.remoteDuartion;
         document.getElementById("audio").currentTime =
           remoteDuartion.currentTime;
+      });
+      ablyChannel.subscribe("reaction", (message) => {
+        if (message.clientId === clientId) return;
+        const newReact = message.data.newReact;
+        newReact.type = "remote-react";
+        setMessages((prevMessages) => [newReact, ...prevMessages]);
       });
 
       //set the channel
@@ -146,13 +158,16 @@ export default function ChannelProvider({ children }) {
     if (!channel || !roomInfo) return;
     //when a member leaves the room
     channel.presence.subscribe("leave", (member) => {
-      console.log("admin", roomInfo?.admin);
-      console.log("member", member.clientId);
       if (member.clientId == roomInfo?.admin) {
         disconnect();
         return;
       }
       const newMember = member.data;
+      const newMessage = {
+        type: "leave",
+        username: newMember.username,
+      };
+      setMessages((prevMessages) => [newMessage, ...prevMessages]);
       setMembers((prevMembers) =>
         prevMembers.filter((item) => item.clientId !== newMember.clientId)
       );
@@ -192,6 +207,21 @@ export default function ChannelProvider({ children }) {
     }
   };
 
+  const sendReaction = async (pack, id) => {
+    if (!channel) return;
+    try {
+      const newReact = {
+        pack: pack,
+        id: id,
+        clientId: roomInfo.clientId,
+        type: "local-react",
+      };
+      setMessages((prevMessages) => [newReact, ...prevMessages]);
+      await channel.publish("reaction", { newReact: newReact });
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
   return (
     <channelContext.Provider
       value={{
@@ -205,6 +235,8 @@ export default function ChannelProvider({ children }) {
         setPlayState,
         disconnect,
         defaultUser,
+        messages,
+        sendReaction,
       }}
     >
       {children}

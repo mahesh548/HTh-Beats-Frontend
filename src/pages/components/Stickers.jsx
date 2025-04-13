@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import utils from "../../../utils";
 import Emoji from "./Emoji";
+import { channelContext } from "./Channel";
 
 const stickerPack = [
   {
@@ -43,6 +44,7 @@ const stickerPack = [
 export default function Stickers({ pack = "emoji" }) {
   const [packName, setPackName] = useState(pack);
   const [stickers, setStickers] = useState([]);
+  const { sendReaction } = useContext(channelContext);
 
   useEffect(() => {
     const stickerList = [];
@@ -82,6 +84,7 @@ export default function Stickers({ pack = "emoji" }) {
                 imageStyleClass="w-100"
                 loaderStyleClass="w-100 ratio ratio-1x1"
                 key={pack + "-emoji-" + index}
+                click={() => sendReaction(packName, index + 1)}
               />
             </button>
           );

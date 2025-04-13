@@ -22,11 +22,12 @@ export default function Room() {
     playState,
     disconnect,
     defaultUser,
+    messages,
   } = useContext(channelContext);
   const { Queue } = useContext(songContext);
   const navigate = useNavigate();
   const { openElements, open, close } = useContext(HashContext);
-  /* if (!channel) navigate("/home"); */
+  if (!channel) navigate("/home");
   const data = useMemo(() => {
     if (Queue.song && Queue.playlist) {
       return utils.getItemFromId(Queue?.song, Queue?.playlist?.list);
@@ -129,19 +130,66 @@ export default function Room() {
         <hr className="dividerLine" />
         <p className="labelText mt-0 p-1 ">Members activity</p>
         <div className="chatSection">
-          <p className="m-auto d-block text-center mt-3 mb-3 text-white-50 fw-light">
-            <i className="text-wheat">@username</i> has joined the room.
-          </p>
-
-          <div className="remoteReaction m-3 ms-1">
-            <img src="logo.png" className="reactProfile" alt="profile pic" />
-            <Emoji src={utils.stickerUrl("emoji", "1")} />
-          </div>
-
-          <div className="localReaction m-3 me-1">
-            <Emoji src={utils.stickerUrl("emoji", "1")} />
-            <img src="logo.png" className="reactProfile" alt="profile pic" />
-          </div>
+          {messages.map((item, index) => {
+            if (item.type == "join") {
+              return (
+                <p
+                  className="m-auto d-block text-center mt-3 mb-3 text-white-50 fw-light"
+                  key={"join-msg-" + index}
+                >
+                  <i className="text-wheat">@{item?.username}</i> has joined the
+                  room.
+                </p>
+              );
+            }
+            if (item.type == "leave") {
+              return (
+                <p
+                  className="m-auto d-block text-center mt-3 mb-3 text-white-50 fw-light"
+                  key={"left-msg-" + index}
+                >
+                  <i className="text-wheat">@{item?.username}</i> has left the
+                  room.
+                </p>
+              );
+            }
+            if (item.type == "local-react") {
+              return (
+                <div
+                  className="localReaction m-3 me-1"
+                  key={"local-msg-" + index}
+                >
+                  <Emoji src={utils.stickerUrl(item.pack, item.id)} />
+                  <img
+                    src={
+                      members.find((mem) => mem.clientId == item.clientId)
+                        ?.pic || defaultUser.pic
+                    }
+                    className="reactProfile"
+                    alt="profile pic"
+                  />
+                </div>
+              );
+            }
+            if (item.type == "remote-react") {
+              return (
+                <div
+                  className="remoteReaction m-3 ms-1"
+                  key={"local-msg-" + index}
+                >
+                  <img
+                    src={
+                      members.find((mem) => mem.clientId == item.clientId)
+                        ?.pic || defaultUser.pic
+                    }
+                    className="reactProfile"
+                    alt="profile pic"
+                  />
+                  <Emoji src={utils.stickerUrl(item.pack, item.id)} />
+                </div>
+              );
+            }
+          })}
         </div>
       </div>
       {openElements.includes(endId) &&
