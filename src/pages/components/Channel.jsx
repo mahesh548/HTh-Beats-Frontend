@@ -65,7 +65,8 @@ export default function ChannelProvider({ children }) {
       ablyChannel.subscribe("sync", (message) => {
         if (
           message.clientId === clientId ||
-          message.data.sync.newUser != clientId
+          message.data.sync.newUser != clientId ||
+          message.clientId != roomInfo.admin
         )
           return;
 
@@ -147,7 +148,7 @@ export default function ChannelProvider({ children }) {
     const handleSeeked = (e) => {
       if (isRemoteSeek.current) {
         isRemoteSeek.current = false;
-        return; // Skip broadcasting if it's from remote
+        return;
       }
 
       clearTimeout(debounceTimeout);

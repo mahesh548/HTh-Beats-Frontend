@@ -12,7 +12,7 @@ import { HashContext } from "./components/Hash";
 import Emoji from "./components/Emoji";
 import OffCanvas from "./components/BottomSheet";
 import Stickers from "./components/Stickers";
-import { IosShareOutlined } from "@mui/icons-material";
+import { BlockOutlined, IosShareOutlined } from "@mui/icons-material";
 import QrCode from "./components/QrCode";
 
 export default function Room() {
@@ -95,6 +95,7 @@ export default function Room() {
               label={""}
               name=""
               totalOwner={members.length > 3 ? members.length : 0}
+              action={() => open("roomMembers")}
             />
           </span>
           <button className="borderBut" onClick={() => open("roomShare")}>
@@ -252,6 +253,7 @@ export default function Room() {
       >
         <Stickers />
       </OffCanvas>
+
       <OffCanvas
         open={openElements.includes("roomShare")}
         dismiss={() => close("roomShare")}
@@ -280,6 +282,42 @@ export default function Room() {
             bgColor="#00000024"
           />
         </div>
+      </OffCanvas>
+      <OffCanvas
+        open={openElements.includes("roomMembers")}
+        dismiss={() => close("roomMembers")}
+      >
+        <p className="text-white text-center">Members</p>
+        <hr className="dividerLine" />
+        {members.map((data, index) => {
+          return (
+            <div
+              className="playlistSong mt-3 px-2 mb-3"
+              style={{ gridTemplateColumns: "50px auto 40px" }}
+              key={"room-member-" + index}
+            >
+              <img
+                src={data?.pic || defaultUser.pic}
+                className="playlistSongImg rounded-circle"
+              />
+              <div>
+                <p className="thinOneLineText playlistSongTitle fw-normal">
+                  {data?.username || defaultUser.username}
+                </p>
+                <p className="thinOneLineText playlistSongSubTitle">
+                  {utils.capitalLetter(data?.role || "member")} • Joined 2h ago.
+                </p>
+              </div>
+
+              {roomInfo.admin == roomInfo.clientId &&
+                data.clientId != roomInfo.clientId && (
+                  <button className="iconButton">
+                    <BlockOutlined className="text-danger" />
+                  </button>
+                )}
+            </div>
+          );
+        })}
       </OffCanvas>
     </>
   );
