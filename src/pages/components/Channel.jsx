@@ -26,6 +26,7 @@ export default function ChannelProvider({ children }) {
   const [members, setMembers] = useState([]);
   const [currentSong, setCurrentSong] = useState(null);
   const [playState, setPlayState] = useState(false);
+  const isRemoteSeek = useRef(false);
   const [messages, setMessages] = useState([]);
   const ablyClient = useRef(null);
 
@@ -67,7 +68,7 @@ export default function ChannelProvider({ children }) {
           message.data.sync.newUser != clientId
         )
           return;
-        console.log("syncing", message.data.sync);
+
         const remoteSync = message.data.sync;
         setCurrentSong(remoteSync.song);
         setPlayState(remoteSync.playState);
@@ -86,10 +87,19 @@ export default function ChannelProvider({ children }) {
 
       ablyChannel.subscribe("durationChange", (message) => {
         if (message.clientId === clientId) return;
+
         const remoteDuartion = message.data.remoteDuartion;
-        document.getElementById("audio").currentTime =
-          remoteDuartion.currentTime;
+        const audio = document.getElementById("audio");
+
+        if (!audio) return;
+
+        // Optional: Add a small threshold to avoid unnecessary seeks
+        if (Math.abs(audio.currentTime - remoteDuartion.currentTime) > 0.3) {
+          isRemoteSeek.current = true;
+          audio.currentTime = remoteDuartion.currentTime;
+        }
       });
+
       ablyChannel.subscribe("reaction", (message) => {
         if (message.clientId === clientId) return;
         const newReact = message.data.newReact;
@@ -135,6 +145,11 @@ export default function ChannelProvider({ children }) {
     let debounceTimeout;
 
     const handleSeeked = (e) => {
+      if (isRemoteSeek.current) {
+        isRemoteSeek.current = false;
+        return; // Skip broadcasting if it's from remote
+      }
+
       clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(() => {
         channel.publish("durationChange", {
@@ -143,7 +158,7 @@ export default function ChannelProvider({ children }) {
             clientId: roomInfo.clientId,
           },
         });
-      }, 200);
+      }, 500);
     };
 
     audio.addEventListener("seeked", handleSeeked);
@@ -183,7 +198,6 @@ export default function ChannelProvider({ children }) {
       setMessages((prevMessages) => [newMessage, ...prevMessages]);
       setMembers((prevMembers) => [...prevMembers, newMember]);
       if (roomInfo.role === "admin") {
-        console.log("sending sync");
         channel.publish("sync", {
           sync: {
             song: currentSong,

@@ -1,9 +1,11 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useCallback } from "react";
 import { songContext } from "./Song";
 import utils from "../../../utils";
+import { channelContext } from "./Channel";
 
 export default function Audio() {
   const { Queue, setQueue } = useContext(songContext);
+  const { channel, currentSong, roomInfo } = useContext(channelContext);
 
   const mediaNotification = (mediaData) => {
     if (navigator?.mediaSession) {
@@ -77,6 +79,17 @@ export default function Audio() {
     }
   }, [Queue?.status, Queue?.song]);
 
+  const ended = useCallback(() => {
+    if (
+      channel &&
+      currentSong &&
+      roomInfo &&
+      currentSong.clientId !== roomInfo.clientId
+    )
+      return;
+    setQueue({ type: "NEXT" });
+  }, [channel, currentSong, roomInfo, setQueue]);
+
   return (
     <audio
       src=""
@@ -85,7 +98,7 @@ export default function Audio() {
       style={{ display: "none" }}
       id="audio"
       onTimeUpdate={utils.timelineUpdater}
-      onEnded={() => setQueue({ type: "NEXT" })}
+      onEnded={() => ended()}
     ></audio>
   );
 }
