@@ -27,7 +27,7 @@ export default function Room() {
   const { Queue } = useContext(songContext);
   const navigate = useNavigate();
   const { openElements, open, close } = useContext(HashContext);
-  /* if (!channel) navigate("/home"); */
+  if (!channel) navigate("/home");
   const data = useMemo(() => {
     if (Queue.song && Queue.playlist) {
       return utils.getItemFromId(Queue?.song, Queue?.playlist?.list);
@@ -52,7 +52,9 @@ export default function Room() {
   return (
     <>
       <div className="page hiddenScrollbar">
-        <BackButton styleClass="ms-1 mt-2 ps-3" />
+        <div className="stickyTop">
+          <BackButton styleClass="ms-1 mt-2 ps-3" />
+        </div>
         <p className="labelText mt-0 p-1 fs-1">{roomInfo?.title}</p>
         <div className="roomAccess p-1 mt-2">
           <span

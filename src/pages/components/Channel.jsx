@@ -18,12 +18,12 @@ export default function ChannelProvider({ children }) {
 
   const testInfo = { title: "test room" };
   const testMembers = [defaultUser, defaultUser, defaultUser, defaultUser];
-  const [roomInfo, setRoomInfo] = useState(testInfo);
-  const [members, setMembers] = useState(testMembers);
+  // const [roomInfo, setRoomInfo] = useState(testInfo);
+  // const [members, setMembers] = useState(testMembers);
 
   const [channel, setChannel] = useState(null);
-  // const [roomInfo, setRoomInfo] = useState(null);
-  // const [members, setMembers] = useState([]);
+  const [roomInfo, setRoomInfo] = useState(null);
+  const [members, setMembers] = useState([]);
   const [currentSong, setCurrentSong] = useState(null);
   const [playState, setPlayState] = useState(false);
   const [messages, setMessages] = useState([]);
