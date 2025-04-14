@@ -45,18 +45,6 @@ export default function ChannelProvider({ children }) {
 
       const ablyChannel = client.channels.get(roomId);
 
-      //when a new member enters the room
-      ablyChannel.presence.subscribe("enter", (member) => {
-        member.data.clientId = member.clientId;
-        const newMember = member.data;
-        const newMessage = {
-          type: "join",
-          username: newMember.username,
-        };
-        setMessages((prevMessages) => [newMessage, ...prevMessages]);
-        setMembers((prevMembers) => [...prevMembers, newMember]);
-      });
-
       //entering presence in the channel
       await ablyChannel.presence.enter({
         username: auth?.user?.username,
@@ -73,6 +61,18 @@ export default function ChannelProvider({ children }) {
 
       setMembers(onlyMembersData);
 
+      ablyChannel.subscribe("sync", (message) => {
+        if (
+          message.clientId === clientId ||
+          message.data.sync.newUser != clientId
+        )
+          return;
+        console.log("syncing", message.data.sync);
+        const remoteSync = message.data.sync;
+        setCurrentSong(remoteSync.song);
+        setPlayState(remoteSync.playState);
+        document.getElementById("audio").currentTime = remoteSync.currentTime;
+      });
       ablyChannel.subscribe("song", (message) => {
         if (message.clientId === clientId) return;
         const remoteCurrentSong = message.data.remoteCurrentSong;
@@ -157,7 +157,8 @@ export default function ChannelProvider({ children }) {
   useEffect(() => {
     if (!channel || !roomInfo) return;
     //when a member leaves the room
-    channel.presence.subscribe("leave", (member) => {
+
+    const handleLeave = (member) => {
       if (member.clientId == roomInfo?.admin) {
         disconnect();
         return;
@@ -171,8 +172,36 @@ export default function ChannelProvider({ children }) {
       setMembers((prevMembers) =>
         prevMembers.filter((item) => item.clientId !== newMember.clientId)
       );
-    });
-  }, [roomInfo?.roomId, channel]);
+    };
+    const handleEnter = (member) => {
+      member.data.clientId = member.clientId;
+      const newMember = member.data;
+      const newMessage = {
+        type: "join",
+        username: newMember.username,
+      };
+      setMessages((prevMessages) => [newMessage, ...prevMessages]);
+      setMembers((prevMembers) => [...prevMembers, newMember]);
+      if (roomInfo.role === "admin") {
+        console.log("sending sync");
+        channel.publish("sync", {
+          sync: {
+            song: currentSong,
+            playState: playState,
+            currentTime: document.getElementById("audio")?.currentTime,
+            newUser: member.clientId,
+          },
+        });
+      }
+    };
+    channel.presence.subscribe("leave", handleLeave);
+    channel.presence.subscribe("enter", handleEnter);
+
+    return () => {
+      channel.presence.unsubscribe("leave", handleLeave);
+      channel.presence.unsubscribe("enter", handleEnter);
+    };
+  }, [roomInfo?.roomId, channel, currentSong, playState]);
 
   useEffect(() => {
     if (!members || members.length === 0) return;

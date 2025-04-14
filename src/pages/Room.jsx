@@ -12,7 +12,7 @@ import { HashContext } from "./components/Hash";
 import Emoji from "./components/Emoji";
 import OffCanvas from "./components/BottomSheet";
 import Stickers from "./components/Stickers";
-import { IosShareOutlined, ShareOutlined } from "@mui/icons-material";
+import { IosShareOutlined } from "@mui/icons-material";
 import QrCode from "./components/QrCode";
 
 export default function Room() {
@@ -54,7 +54,7 @@ export default function Room() {
   const shareRoom = async () => {
     const roomId = roomInfo?.roomId;
     const url = `https://${location.hostname}/join/${roomId}`;
-    const text = `Join me in this music room: ${roomInfo?.title}`;
+    const text = `Hey! I'm listening to some tunes in this music room: ${roomInfo?.title}. Join me and let's enjoy the music together.`;
     const shareData = {
       title: roomInfo?.title,
       text: text,
