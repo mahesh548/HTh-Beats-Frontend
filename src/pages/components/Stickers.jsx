@@ -75,11 +75,7 @@ export default function Stickers({ pack = "emoji" }) {
       <div className="stkCont">
         {stickers.map((item, index) => {
           return (
-            <button
-              key={pack + "-sticker-" + index}
-              className="iconButton pop"
-              onClick={() => console.log(item)}
-            >
+            <button key={pack + "-sticker-" + index} className="iconButton pop">
               <Emoji
                 src={item}
                 imageStyleClass="w-100"

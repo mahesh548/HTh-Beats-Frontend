@@ -12,6 +12,8 @@ import { HashContext } from "./components/Hash";
 import Emoji from "./components/Emoji";
 import OffCanvas from "./components/BottomSheet";
 import Stickers from "./components/Stickers";
+import { IosShareOutlined, ShareOutlined } from "@mui/icons-material";
+import QrCode from "./components/QrCode";
 
 export default function Room() {
   const {
@@ -69,7 +71,9 @@ export default function Room() {
               totalOwner={members.length > 3 ? members.length : 0}
             />
           </span>
-          <button className="borderBut">Invite</button>
+          <button className="borderBut" onClick={() => open("roomShare")}>
+            Invite
+          </button>
           {roomInfo?.role === "admin" ? (
             <button className="borderBut" onClick={() => open(endId)}>
               End
@@ -221,6 +225,32 @@ export default function Room() {
         dismiss={() => close("stickers")}
       >
         <Stickers />
+      </OffCanvas>
+      <OffCanvas
+        open={openElements.includes("roomShare")}
+        dismiss={() => close("roomShare")}
+      >
+        <p className="text-white text-center">
+          Invite your friends to this music room.
+        </p>
+        <button className="addToBut addToButGrid mt-3 mb-3 px-4">
+          <IosShareOutlined style={{ fontSize: "20px" }} />
+          Share link
+        </button>
+        <hr className="dividerLine" />
+        <div className="addToButGrid mt-4 mb-3 px-2">
+          <div>
+            <p className="text-white">Scan QR code</p>
+            <p className="text-white-50">
+              Let your friends scan this code to join room.
+            </p>
+          </div>
+          <QrCode
+            value={`https://${location.hostname}/join/${roomInfo?.roomId}`}
+            fgColor="wheat"
+            bgColor="#00000024"
+          />
+        </div>
       </OffCanvas>
     </>
   );
