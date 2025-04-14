@@ -71,7 +71,7 @@ export default function ChannelProvider({ children }) {
         if (
           message.clientId === clientId ||
           message.data.sync.newUser != clientId ||
-          message.clientId != roomInfo.admin
+          message.clientId != admin
         )
           return;
 
@@ -79,6 +79,34 @@ export default function ChannelProvider({ children }) {
         setCurrentSong(remoteSync.song);
         setPlayState(remoteSync.playState);
         document.getElementById("audio").currentTime = remoteSync.currentTime;
+      });
+
+      ablyChannel.subscribe("block", async (message) => {
+        if (
+          message.data.block.blockId != clientId &&
+          message.clientId == admin
+        ) {
+          const newMessage = {
+            type: "block",
+            username: message.data.block.username,
+          };
+          setMessages((prevMessages) => [newMessage, ...prevMessages]);
+        }
+        if (
+          message.clientId === clientId ||
+          message.data.block.blockId != clientId ||
+          message.clientId != admin
+        )
+          return;
+
+        await ablyChannel.presence.leave();
+        ablyClient.current.close();
+
+        setChannel(null);
+        setRoomInfo(null);
+        setCurrentSong(null);
+        setMembers([]);
+        navigate("/home");
       });
       ablyChannel.subscribe("song", (message) => {
         if (message.clientId === clientId) return;
@@ -279,6 +307,34 @@ export default function ChannelProvider({ children }) {
       console.error("Error sending message:", error);
     }
   };
+
+  const block = async (id) => {
+    if (!channel || !roomInfo) return;
+    if (
+      roomInfo?.admin == id ||
+      roomInfo?.admin != roomInfo?.clientId ||
+      roomInfo?.role != "admin"
+    )
+      return;
+    const blockData = {
+      blockId: id,
+      inviteCode: roomInfo?.roomId,
+    };
+    const response = await utils.BACKEND("/room/block", "POST", {
+      roomData: blockData,
+    });
+    if (response?.status && response?.block) {
+      channel.publish("block", {
+        block: {
+          blockId: id,
+          username:
+            members.find((m) => m.clientId == id)?.username ||
+            defaultUser.username,
+        },
+      });
+    }
+  };
+
   return (
     <channelContext.Provider
       value={{
@@ -294,6 +350,7 @@ export default function ChannelProvider({ children }) {
         defaultUser,
         messages,
         sendReaction,
+        block,
       }}
     >
       {children}

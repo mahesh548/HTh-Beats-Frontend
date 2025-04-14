@@ -25,6 +25,7 @@ export default function Room() {
     disconnect,
     defaultUser,
     messages,
+    block,
   } = useContext(channelContext);
   const { Queue } = useContext(songContext);
   const navigate = useNavigate();
@@ -197,6 +198,17 @@ export default function Room() {
                 </p>
               );
             }
+            if (item.type == "block") {
+              return (
+                <p
+                  className="m-auto d-block text-center mt-3 mb-3 text-white-50 fw-light"
+                  key={"left-msg-" + index}
+                >
+                  <i className="text-danger">@{item?.username}</i> blocked by
+                  admin.
+                </p>
+              );
+            }
             if (item.type == "local-react") {
               return (
                 <div
@@ -312,7 +324,13 @@ export default function Room() {
 
               {roomInfo.admin == roomInfo.clientId &&
                 data?.clientId != roomInfo.clientId && (
-                  <button className="iconButton">
+                  <button
+                    className="iconButton"
+                    onClick={() => {
+                      block(data.clientId);
+                      close("roomMembers");
+                    }}
+                  >
                     <BlockOutlined className="text-danger" />
                   </button>
                 )}
