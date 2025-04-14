@@ -1,7 +1,14 @@
 import { useContext, useMemo, useState, useEffect } from "react";
 import { songContext } from "./Song";
 import utils from "../../../utils";
-import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
+import {
+  Add,
+  AddReaction,
+  ExpandCircleDown,
+  ExpandCircleDownOutlined,
+  PauseRounded,
+  PlayArrowRounded,
+} from "@mui/icons-material";
 
 import { HashContext } from "./Hash";
 import LikeSong from "./LikeSong";
@@ -10,11 +17,15 @@ import SwipeableViews from "react-swipeable-views";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import { channelContext } from "./Channel";
+import { useLocation } from "react-router";
+import Emoji from "./Emoji";
+
 export default function MiniPlayer() {
   const { Queue, setQueue } = useContext(songContext);
   const { currentSong } = useContext(channelContext);
 
   const { open, openElements } = useContext(HashContext);
+  const location = useLocation();
 
   const [localLike, setLocalLike] = useState(false);
 
@@ -65,8 +76,36 @@ export default function MiniPlayer() {
     }
   };
   if (!Queue.song) return <></>;
+
+  const isRoom = location.pathname === "/room";
   return (
-    <div className="playlistSong miniPlayer" id="miniPlayer">
+    <div
+      className="playlistSong miniPlayer"
+      id="miniPlayer"
+      style={{ height: isRoom ? "110px" : "60px" }}
+    >
+      {isRoom && (
+        <div className="instantReact">
+          <button className="iconButton">
+            <Emoji src={utils.stickerUrl("emoji", "39")} />
+          </button>
+          <button className="iconButton">
+            <Emoji src={utils.stickerUrl("emoji", "4")} />
+          </button>
+          <button className="iconButton">
+            <Emoji src={utils.stickerUrl("emoji", "1")} />
+          </button>
+          <button className="iconButton">
+            <Emoji src={utils.stickerUrl("emoji", "17")} />
+          </button>
+          <button className="iconButton" onClick={() => open("stickers")}>
+            <ExpandCircleDownOutlined
+              style={{ rotate: "180deg" }}
+              className="text-white-50"
+            />
+          </button>
+        </div>
+      )}
       <div className="miniRange RANGE"></div>
       <img
         src={data.image}

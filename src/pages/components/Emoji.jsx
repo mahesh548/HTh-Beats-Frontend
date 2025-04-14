@@ -14,7 +14,6 @@ export default function Emoji({
 
     const img = imgRef.current;
     if (img && img.complete && img.naturalHeight !== 0) {
-      // Image loaded from cache
       setLoaded(true);
     }
   }, [src]);

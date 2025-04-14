@@ -1662,3 +1662,19 @@ input[type="search"]::-webkit-search-cancel-button {
   column-gap: 10px;
   row-gap: 25px;
 }
+.instantReact {
+  grid-column-start: 1;
+  grid-column-end: 5;
+  height: 35px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  justify-items: center;
+  img {
+    height: 35px;
+    width: 35px;
+    /* background-color: #ffffff1c; */
+    padding: 5px;
+    border-radius: 100%;
+    border: 1px solid #ffffff44;
+  }
+}

@@ -27,7 +27,7 @@ export default function Room() {
   const { Queue } = useContext(songContext);
   const navigate = useNavigate();
   const { openElements, open, close } = useContext(HashContext);
-  if (!channel) navigate("/home");
+  /* if (!channel) navigate("/home"); */
   const data = useMemo(() => {
     if (Queue.song && Queue.playlist) {
       return utils.getItemFromId(Queue?.song, Queue?.playlist?.list);
@@ -67,9 +67,7 @@ export default function Room() {
               totalOwner={members.length > 3 ? members.length : 0}
             />
           </span>
-          <button className="borderBut" onClick={() => open("stickers")}>
-            Invite
-          </button>
+          <button className="borderBut">Invite</button>
           {roomInfo?.role === "admin" ? (
             <button className="borderBut" onClick={() => open(endId)}>
               End
