@@ -299,6 +299,23 @@ const utils = {
   stickerUrl: (sticker, id) => {
     return `https://cdn.jsdelivr.net/gh/mahesh548/hth-beats-stickers/${sticker}/${sticker}_${id}.gif `;
   },
+  longAgoText: (timestamp) => {
+    const now = new Date();
+    const past = new Date(timestamp);
+    const diffInSeconds = Math.floor((now - past) / 1000);
+
+    if (diffInSeconds < 60) {
+      return "just now";
+    }
+
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes} min ago`;
+    }
+
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    return `${diffInHours}h ago`;
+  },
 };
 
 export default utils;

@@ -171,7 +171,7 @@ export default function Room() {
                 imageStyleClass="m-auto w-50"
                 loaderStyleClass="m-auto"
               />
-              <p>Activity.</p>
+              <p>Activities, right now.</p>
             </div>
           )}
           {messages.map((item, index) => {
@@ -287,7 +287,7 @@ export default function Room() {
         open={openElements.includes("roomMembers")}
         dismiss={() => close("roomMembers")}
       >
-        <p className="text-white text-center">Members</p>
+        <p className="text-white text-center">{members.length} members</p>
         <hr className="dividerLine" />
         {members.map((data, index) => {
           return (
@@ -305,12 +305,13 @@ export default function Room() {
                   {data?.username || defaultUser.username}
                 </p>
                 <p className="thinOneLineText playlistSongSubTitle">
-                  {utils.capitalLetter(data?.role || "member")} • Joined 2h ago.
+                  {utils.capitalLetter(data?.role || "member")} • Joined{" "}
+                  {utils.longAgoText(data?.time)}.
                 </p>
               </div>
 
               {roomInfo.admin == roomInfo.clientId &&
-                data.clientId != roomInfo.clientId && (
+                data?.clientId != roomInfo.clientId && (
                   <button className="iconButton">
                     <BlockOutlined className="text-danger" />
                   </button>

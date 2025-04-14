@@ -52,13 +52,18 @@ export default function ChannelProvider({ children }) {
         role: role,
         pic: auth?.user?.pic,
         clientId: clientId,
+        time: new Date(),
       });
       //getting current member in the room
       const members = await ablyChannel.presence.get();
-      const onlyMembersData = members.map((member) => ({
-        ...member.data,
-        clientId: member.clientId,
-      }));
+      const onlyMembersData = members
+        .map((member) => ({
+          ...member.data,
+          clientId: member.clientId,
+        }))
+        .sort((a, b) => {
+          return new Date(b.time) - new Date(a.time);
+        });
 
       setMembers(onlyMembersData);
 
@@ -185,9 +190,13 @@ export default function ChannelProvider({ children }) {
         username: newMember.username,
       };
       setMessages((prevMessages) => [newMessage, ...prevMessages]);
-      setMembers((prevMembers) =>
-        prevMembers.filter((item) => item.clientId !== newMember.clientId)
-      );
+      setMembers((prevMembers) => {
+        return prevMembers
+          .filter((item) => item.clientId !== newMember.clientId)
+          .sort((a, b) => {
+            return new Date(b.time) - new Date(a.time);
+          });
+      });
     };
     const handleEnter = (member) => {
       member.data.clientId = member.clientId;
@@ -197,7 +206,11 @@ export default function ChannelProvider({ children }) {
         username: newMember.username,
       };
       setMessages((prevMessages) => [newMessage, ...prevMessages]);
-      setMembers((prevMembers) => [...prevMembers, newMember]);
+      setMembers((prevMembers) => {
+        return [...prevMembers, newMember].sort((a, b) => {
+          return new Date(b.time) - new Date(a.time);
+        });
+      });
       if (roomInfo.role === "admin") {
         channel.publish("sync", {
           sync: {
