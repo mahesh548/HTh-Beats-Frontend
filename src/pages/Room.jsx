@@ -51,6 +51,32 @@ export default function Room() {
           button: "Leave this room",
         };
 
+  const shareRoom = async () => {
+    const roomId = roomInfo?.roomId;
+    const url = `https://${location.hostname}/join/${roomId}`;
+    const text = `Join me in this music room: ${roomInfo?.title}`;
+    const shareData = {
+      title: roomInfo?.title,
+      text: text,
+      url: url,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        console.error("Error sharing:", error);
+      }
+    } else {
+      if (navigator.clipboard) {
+        try {
+          await navigator.clipboard.writeText(url);
+        } catch (error) {
+          console.error("Error copying to clipboard:", error);
+        }
+      }
+    }
+    close("roomShare");
+  };
   return (
     <>
       <div className="page hiddenScrollbar">
@@ -233,7 +259,10 @@ export default function Room() {
         <p className="text-white text-center">
           Invite your friends to this music room.
         </p>
-        <button className="addToBut addToButGrid mt-3 mb-3 px-4">
+        <button
+          className="addToBut addToButGrid mt-3 mb-3 px-4"
+          onClick={() => shareRoom()}
+        >
           <IosShareOutlined style={{ fontSize: "20px" }} />
           Share link
         </button>
