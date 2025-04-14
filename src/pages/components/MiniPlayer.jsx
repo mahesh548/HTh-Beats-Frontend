@@ -22,7 +22,7 @@ import Emoji from "./Emoji";
 
 export default function MiniPlayer() {
   const { Queue, setQueue } = useContext(songContext);
-  const { currentSong } = useContext(channelContext);
+  const { currentSong, sendReaction } = useContext(channelContext);
 
   const { open, openElements } = useContext(HashContext);
   const location = useLocation();
@@ -87,16 +87,28 @@ export default function MiniPlayer() {
       {isRoom && (
         <div className="instantReact">
           <button className="iconButton">
-            <Emoji src={utils.stickerUrl("emoji", "39")} />
+            <Emoji
+              src={utils.stickerUrl("emoji", "39")}
+              click={() => sendReaction("emoji", "39")}
+            />
           </button>
           <button className="iconButton">
-            <Emoji src={utils.stickerUrl("emoji", "4")} />
+            <Emoji
+              src={utils.stickerUrl("emoji", "4")}
+              click={() => sendReaction("emoji", "4")}
+            />
           </button>
           <button className="iconButton">
-            <Emoji src={utils.stickerUrl("emoji", "1")} />
+            <Emoji
+              src={utils.stickerUrl("emoji", "1")}
+              click={() => sendReaction("emoji", "1")}
+            />
           </button>
           <button className="iconButton">
-            <Emoji src={utils.stickerUrl("emoji", "17")} />
+            <Emoji
+              src={utils.stickerUrl("emoji", "17")}
+              click={() => sendReaction("emoji", "17")}
+            />
           </button>
           <button className="iconButton" onClick={() => open("stickers")}>
             <ExpandCircleDownOutlined

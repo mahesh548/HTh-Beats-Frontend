@@ -58,7 +58,7 @@ export default function Stickers({ pack = "emoji" }) {
 
   return (
     <div>
-      <div className="stkNav hiddenScrollbar mb-4">
+      <div className="stkNav hiddenScrollbar mb-2">
         {stickerPack.map((item, index) => (
           <button
             key={"nav-sticker" + index}
@@ -71,6 +71,7 @@ export default function Stickers({ pack = "emoji" }) {
           </button>
         ))}
       </div>
+      <hr className="dividerLine mb-4" />
       <div className="stkCont">
         {stickers.map((item, index) => {
           return (

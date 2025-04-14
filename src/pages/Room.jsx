@@ -128,6 +128,19 @@ export default function Room() {
         <hr className="dividerLine" />
         <p className="labelText mt-0 p-1 ">Members activity</p>
         <div className="chatSection">
+          {messages.length == 0 && (
+            <div
+              className="d-block text-center text-white-50 fw-light"
+              style={{ marginTop: "50%" }}
+            >
+              <Emoji
+                src={utils.stickerUrl("fish", "20")}
+                imageStyleClass="m-auto w-50"
+                loaderStyleClass="m-auto"
+              />
+              <p>Activity.</p>
+            </div>
+          )}
           {messages.map((item, index) => {
             if (item.type == "join") {
               return (
