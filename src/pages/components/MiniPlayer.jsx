@@ -69,6 +69,10 @@ export default function MiniPlayer() {
   };
 
   const togglePlay = () => {
+    if (Queue.status === "stop") {
+      setQueue({ type: "STATUS", value: "play" });
+      return;
+    }
     if (Queue.status === "play" || Queue.status === "resume") {
       setQueue({ type: "STATUS", value: "pause" });
     } else {
@@ -166,7 +170,11 @@ export default function MiniPlayer() {
       </div>
       <div>
         <button className="miniPlayerButton" onClick={togglePlay}>
-          {Queue.status === "pause" ? <PlayArrowRounded /> : <PauseRounded />}
+          {Queue.status === "pause" || Queue.status === "stop" ? (
+            <PlayArrowRounded />
+          ) : (
+            <PauseRounded />
+          )}
         </button>
       </div>
       {openElements.includes(addId) &&

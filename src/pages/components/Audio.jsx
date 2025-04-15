@@ -50,6 +50,7 @@ export default function Audio() {
     const play = () => {
       const audio = document.getElementById("audio");
       const song = utils.getItemFromId(Queue.song, Queue.playlist.list);
+      console.log("song from cache", song);
       audio.src = utils.decryptor(song.more_info.encrypted_media_url);
       audio.play();
       mediaNotification({

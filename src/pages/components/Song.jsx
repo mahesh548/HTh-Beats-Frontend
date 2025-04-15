@@ -1,5 +1,6 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer } from "react";
 import utils from "../../../utils";
+import { useLocation } from "react-router";
 export const songContext = createContext();
 
 const playNext = (Queue) => {
@@ -129,7 +130,21 @@ const songReducer = (state, action) => {
 };
 
 export default function SongWrap({ children }) {
-  const [Queue, setQueue] = useReducer(songReducer, {});
+  const location = useLocation();
+  const initialQueue =
+    location.pathname.includes("/join") || location.pathname.includes("/room")
+      ? {}
+      : JSON.parse(localStorage.getItem("QUEUE") || "{}");
+
+  const [Queue, setQueue] = useReducer(songReducer, initialQueue);
+
+  useEffect(() => {
+    if (!Queue && Queue.length == 0) return;
+    if (!Queue.isLocal) return;
+    const cacheQueue = JSON.parse(JSON.stringify(Queue));
+    cacheQueue.status = "stop";
+    localStorage.setItem("QUEUE", JSON.stringify(cacheQueue));
+  }, [Queue]);
 
   return (
     <songContext.Provider value={{ Queue, setQueue }}>

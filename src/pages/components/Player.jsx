@@ -36,6 +36,10 @@ export default function Player() {
     closePlayer();
   }
   const togglePlay = () => {
+    if (Queue.status === "stop") {
+      setQueue({ type: "STATUS", value: "play" });
+      return;
+    }
     if (Queue.status == "play" || Queue.status == "resume") {
       setQueue({ type: "STATUS", value: "pause" });
     } else {
@@ -179,7 +183,7 @@ export default function Player() {
                 <SkipPreviousRounded style={{ fontSize: "60px" }} />
               </button>
               <button onClick={() => togglePlay()}>
-                {Queue.status == "pause" ? (
+                {Queue.status === "pause" || Queue.status === "stop" ? (
                   <PlayCircleFilled style={{ fontSize: "70px" }} />
                 ) : (
                   <PauseCircleFilled style={{ fontSize: "70px" }} />
