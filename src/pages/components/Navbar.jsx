@@ -1,5 +1,5 @@
 import { useNavigate, Outlet, Link, useLocation } from "react-router";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "./Auth";
 
 //icons
@@ -26,10 +26,12 @@ import { channelContext } from "./Channel";
 
 export default function Navbar() {
   const auth = useContext(AuthContext);
-  const { channel } = useContext(channelContext);
+  const { channel, messages } = useContext(channelContext);
   const navigate = useNavigate();
   const location = useLocation();
   const { openElements, close, open, closeOpen } = useContext(HashContext);
+  const [badge, setBadge] = useState(false);
+  const messageCounts = useRef(0);
   useEffect(() => {
     const checkAuth = async () => {
       const isAuth = await auth.authentication();
@@ -41,6 +43,14 @@ export default function Navbar() {
     };
     checkAuth();
   }, []);
+
+  useEffect(() => {
+    if (!channel || !messages) return;
+    if (location.pathname === "/room") setBadge(false);
+    if (messages?.length != messageCounts.current)
+      setBadge(location.pathname !== "/room");
+    messageCounts.current = messages?.length;
+  }, [channel, messages, location.pathname]);
 
   const isActive = (path) => location.pathname === path;
 
@@ -117,6 +127,12 @@ export default function Navbar() {
           <Link to="/room">
             <div className="navBTN">
               <button className="pop">
+                {badge && (
+                  <span
+                    className="position-absolute p-1 bg-danger rounded-circle"
+                    style={{ right: "25px", zIndex: "1" }}
+                  ></span>
+                )}
                 <img src={roomFilledActive} className="pop" />
                 <p className="menuLab">Room</p>
               </button>
