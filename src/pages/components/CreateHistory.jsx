@@ -128,7 +128,7 @@ export default function CreateHistory({
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryCont ">
-        <div className="libraryNavCont px-2">
+        <div className="libraryNavCont px-2" style={{ zIndex: "11" }}>
           <div
             className="libraryNav mt-4 mb-3"
             style={{ gridTemplateColumns: "40px auto  max-content" }}

@@ -5,11 +5,13 @@ import { AuthContext } from "./Auth";
 import { channelContext } from "./Channel";
 import PageLoader from "./PageLoader";
 import { useNavigate } from "react-router";
+import { songContext } from "./Song";
 
 export default function MakeRoom() {
   const auth = useContext(AuthContext);
   const room = useContext(channelContext);
   const { close } = useContext(HashContext);
+  const { setQueue } = useContext(songContext);
   const [RoomName, setRoomName] = useState(`${auth?.user?.username}'s Room`);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ export default function MakeRoom() {
       });
 
       if (response.status) {
+        await setQueue({ type: "RESET" });
         await room.connect({ ...response.data });
         navigate("/room");
       }

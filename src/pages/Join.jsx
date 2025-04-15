@@ -6,10 +6,12 @@ import { AuthContext } from "./components/Auth";
 
 import PlaylistNotFound from "./components/PlaylistNotFound";
 import { channelContext } from "./components/Channel";
+import { songContext } from "./components/Song";
 
 export default function Join() {
   const auth = useContext(AuthContext);
   const room = useContext(channelContext);
+  const { setQueue } = useContext(songContext);
   const { id } = useParams();
   const [roomInfo, setRoomInfo] = useState(false);
   const navigate = useNavigate();
@@ -21,6 +23,7 @@ export default function Join() {
 
   const connectRoom = async (data) => {
     setRoomInfo(false);
+    await setQueue({ type: "RESET" });
     delete data.adminData;
     const { success } = await room.connect({ ...data });
 

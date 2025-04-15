@@ -52,6 +52,9 @@ const createHistory = (Queue, songId) => {
 const songReducer = (state, action) => {
   let liked = [];
   switch (action.type) {
+    case "RESET":
+      return {};
+
     case "PLAYLIST":
       action.value.list.forEach((item) => {
         if (item.savedIn.length > 0) {
