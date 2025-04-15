@@ -1691,3 +1691,14 @@ input[type="search"]::-webkit-search-cancel-button {
   grid-template-columns: auto auto;
   column-gap: 5px;
 }
+/* PROFILE CSS */
+
+.profileCont {
+  margin-top: 90px;
+  text-align: center;
+}
+.profilePic {
+  height: 150px;
+  width: 150px;
+  border-radius: 100%;
+}

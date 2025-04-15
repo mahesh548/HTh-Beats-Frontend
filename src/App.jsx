@@ -23,6 +23,7 @@ import "./style.css";
 import History from "./pages/History";
 import Join from "./pages/Join";
 import Room from "./pages/Room";
+import Profile from "./pages/Profile";
 
 export default function App() {
   return (
@@ -37,6 +38,7 @@ export default function App() {
 
       {/* LOGIN REQUIRED */}
       <Route element={<Navbar />}>
+        <Route path="/profile" element={<Profile />} />
         <Route path="/home" element={<Home />} />
         <Route path="/library" element={<Library />} />
         <Route path="/history" element={<History />} />
