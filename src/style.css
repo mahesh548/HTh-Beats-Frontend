@@ -1695,10 +1695,8 @@ input[type="search"]::-webkit-search-cancel-button {
 
 .profileCont {
   margin-top: 90px;
-  text-align: center;
 }
-.profilePic {
-  height: 150px;
-  width: 150px;
-  border-radius: 100%;
+.profileIcon {
+  font-size: 30px !important;
+  color: white;
 }
