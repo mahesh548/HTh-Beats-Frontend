@@ -5,7 +5,6 @@ import {
   CameraAltOutlined,
   EqualizerOutlined,
   InfoOutlined,
-  LanguageOutlined,
   ManageAccountsOutlined,
   TranslateOutlined,
 } from "@mui/icons-material";
@@ -36,6 +35,9 @@ export default function Profile() {
             <div>
               <p className="thinOneLineText playlistSongTitle fw-normal">
                 {auth?.user?.username}
+              </p>
+              <p className="thinOneLineText playlistSongSubTitle">
+                {auth?.user?.email} • verified email
               </p>
             </div>
 
@@ -70,7 +72,7 @@ export default function Profile() {
                 Audio streaming quality
               </p>
               <p className="thinOneLineText playlistSongSubTitle">
-                Choose the quality of your audio streaming and downloading.
+                Choose the quality of your audio streaming • Download quality.
               </p>
             </div>
           </div>
@@ -85,7 +87,7 @@ export default function Profile() {
                 Manage your data
               </p>
               <p className="thinOneLineText playlistSongSubTitle">
-                Manage your account data and history or delete your account.
+                Manage your account data and history • Delete your account.
               </p>
             </div>
           </div>
@@ -100,7 +102,7 @@ export default function Profile() {
                 About
               </p>
               <p className="thinOneLineText playlistSongSubTitle">
-                Learn more about HTh Beats and how its made.
+                Learn more about HTh Beats • How its made.
               </p>
             </div>
           </div>
