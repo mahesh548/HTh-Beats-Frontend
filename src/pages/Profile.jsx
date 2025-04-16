@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import BackButton from "./components/BackButton";
 import { AuthContext } from "./components/Auth";
 import {
@@ -8,9 +8,28 @@ import {
   ManageAccountsOutlined,
   TranslateOutlined,
 } from "@mui/icons-material";
+import React from "react";
+import { HashContext } from "./components/Hash";
+import OffCanvas from "./components/BottomSheet";
 
 export default function Profile() {
   const auth = useContext(AuthContext);
+  const [preview, setPreview] = useState(null);
+  const { openElements, open, close } = useContext(HashContext);
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setPreview(reader.result);
+        open("picPreview");
+      };
+
+      reader.readAsDataURL(file);
+    }
+    e.target.value = null;
+  };
   return (
     <div className="page">
       <div className="profilePage">
@@ -40,8 +59,18 @@ export default function Profile() {
                 {auth?.user?.email} • verified email
               </p>
             </div>
+            <input
+              type="file"
+              style={{ display: "none" }}
+              id="picSelector"
+              onChange={handleFileChange}
+              accept=".png, .jpg, .jpeg"
+            />
 
-            <button className="iconButton">
+            <button
+              className="iconButton"
+              onClick={() => document.getElementById("picSelector").click()}
+            >
               <CameraAltOutlined />
             </button>
           </div>
@@ -109,6 +138,25 @@ export default function Profile() {
 
           <button className="addToBut p-2 px-3 mt-4">Log out</button>
         </div>
+        <OffCanvas
+          open={openElements.includes("picPreview")}
+          dismiss={() => close("picPreview")}
+        >
+          <p className="text-white text-center">Preview</p>
+          <hr className="dividerLine" />
+          <img
+            src={preview}
+            id="previewPic"
+            className="d-block m-auto w-50 rounded rounded-circle"
+          />
+          <button className="addToBut mt-4">Set as profile pic</button>
+          <button
+            className="iconButton mt-3 text-center d-block m-auto"
+            onClick={() => close("picPreview")}
+          >
+            Cancel
+          </button>
+        </OffCanvas>
       </div>
     </div>
   );
