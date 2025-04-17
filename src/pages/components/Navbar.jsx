@@ -23,6 +23,7 @@ import MakePlaylist from "./MakePlaylist";
 import MakeRoom from "./MakeRoom";
 import RealtimeSong from "./RealtimeSong";
 import { channelContext } from "./Channel";
+import ChangeLang from "./ChangeLang";
 
 export default function Navbar() {
   const auth = useContext(AuthContext);
@@ -58,6 +59,7 @@ export default function Navbar() {
     <>
       <Audio />
       <RealtimeSong />
+      <ChangeLang />
 
       {openElements.includes("player") && <Player />}
       <OffCanvas

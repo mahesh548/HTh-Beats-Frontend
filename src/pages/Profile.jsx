@@ -36,17 +36,21 @@ export default function Profile() {
     e.target.value = null;
   };
   const handleFileUpload = async () => {
+    close("picPreview");
+    close("picOption");
     const formData = new FormData();
     formData.append("image", profileFile);
     const response = await utils.BACKEND("/profile_pic", "POST", formData);
     if (response?.status && response.uploaded) {
-      close("picPreview");
+      await auth?.authentication();
     }
   };
 
   const handleFileDelete = async () => {
+    close("picOption");
     const response = await utils.BACKEND("/profile_pic", "DELETE");
-    if (response?.status && response.uploaded) {
+    if (response?.status && response.deleted) {
+      await auth?.authentication();
     }
   };
   const openPS = () => {
@@ -93,7 +97,7 @@ export default function Profile() {
             style={{ gridTemplateColumns: "40px auto" }}
           >
             <TranslateOutlined className="profileIcon" />
-            <div>
+            <div onClick={() => open("languages")}>
               <p className="thinOneLineText playlistSongTitle fw-normal">
                 Languages for music
               </p>
