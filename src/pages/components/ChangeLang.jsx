@@ -100,7 +100,7 @@ export default function ChangeLang() {
         );
       })}
       <div style={{ height: "110px" }}></div>
-      {showSubmit && (
+      {showSubmit && chosen.length != 0 && (
         <div
           className="position-fixed bottom-0 left-0 w-100 pb-3 text-center"
           style={{ background: "#1f1f1f" }}

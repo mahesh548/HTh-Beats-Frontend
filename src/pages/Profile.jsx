@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BackButton from "./components/BackButton";
 import { AuthContext } from "./components/Auth";
 import {
@@ -7,6 +7,8 @@ import {
   EqualizerOutlined,
   InfoOutlined,
   ManageAccountsOutlined,
+  RadioButtonChecked,
+  RadioButtonUncheckedOutlined,
   TranslateOutlined,
   Upload,
 } from "@mui/icons-material";
@@ -15,10 +17,28 @@ import { HashContext } from "./components/Hash";
 import OffCanvas from "./components/BottomSheet";
 import utils from "../../utils";
 
+const audioQuality = [
+  { value: "12", display: "Data saver" },
+  { value: "48", display: "Low" },
+  { value: "96", display: "Normal" },
+  { value: "160", display: "High" },
+  { value: "320", display: "Very high" },
+];
+
 export default function Profile() {
   const auth = useContext(AuthContext);
   const [preview, setPreview] = useState(null);
   const [profileFile, setProfileFile] = useState(null);
+  const [currentQ, setCurrentQ] = useState(
+    localStorage.getItem("stream_quality") || "96"
+  );
+  const [currentD, setCurrentD] = useState(
+    localStorage.getItem("download_quality") || "96"
+  );
+  useEffect(() => {
+    localStorage.setItem("stream_quality", currentQ);
+    localStorage.setItem("download_quality", currentD);
+  }, [currentQ, currentD]);
   const { openElements, open, close } = useContext(HashContext);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -112,7 +132,7 @@ export default function Profile() {
             style={{ gridTemplateColumns: "40px auto" }}
           >
             <EqualizerOutlined className="profileIcon" />
-            <div>
+            <div onClick={() => open("audioQuality")}>
               <p className="thinOneLineText playlistSongTitle fw-normal">
                 Audio streaming quality
               </p>
@@ -213,6 +233,75 @@ export default function Profile() {
               </p>
             </div>
           </div>
+        </OffCanvas>
+        <OffCanvas
+          open={openElements.includes("audioQuality")}
+          dismiss={() => close("audioQuality")}
+        >
+          <p className="text-white text-center">Media quality</p>
+          <hr className="dividerLine" />
+
+          <p className="labelText ps-2 fw-light">Audio streaming quality</p>
+          <p className="playlistSongSubTitle text-white-50 fw-light ps-2">
+            Choose the quality of your audio streaming when you're connected to
+            internet.
+          </p>
+
+          {audioQuality.map((item, index) => {
+            return (
+              <div
+                className="playlistSong mt-4 px-2 mb-3"
+                style={{ gridTemplateColumns: " auto 40px" }}
+                key={"quality-" + index}
+              >
+                <div onClick={() => setCurrentQ(item.value)}>
+                  <p className="thinOneLineText playlistSongTitle fw-normal">
+                    {item.display}
+                  </p>
+                </div>
+                <button
+                  className="iconButton"
+                  onClick={() => setCurrentQ(item.value)}
+                >
+                  {currentQ == item.value ? (
+                    <RadioButtonChecked className="profileIcon text-wheat" />
+                  ) : (
+                    <RadioButtonUncheckedOutlined className="profileIcon" />
+                  )}
+                </button>
+              </div>
+            );
+          })}
+          <p className="labelText ps-2 fw-light mt-5">Audio download quality</p>
+          <p className="playlistSongSubTitle text-white-50 fw-light ps-2">
+            Choose the quality of all your audio downloads.
+          </p>
+
+          {audioQuality.map((item, index) => {
+            return (
+              <div
+                className="playlistSong mt-4 px-2 mb-3"
+                style={{ gridTemplateColumns: " auto 40px" }}
+                key={"download-quality-" + index}
+              >
+                <div onClick={() => setCurrentD(item.value)}>
+                  <p className="thinOneLineText playlistSongTitle fw-normal">
+                    {item.display}
+                  </p>
+                </div>
+                <button
+                  className="iconButton"
+                  onClick={() => setCurrentD(item.value)}
+                >
+                  {currentD == item.value ? (
+                    <RadioButtonChecked className="profileIcon text-wheat" />
+                  ) : (
+                    <RadioButtonUncheckedOutlined className="profileIcon" />
+                  )}
+                </button>
+              </div>
+            );
+          })}
         </OffCanvas>
       </div>
     </div>

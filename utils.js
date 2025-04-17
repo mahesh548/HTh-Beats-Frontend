@@ -201,7 +201,8 @@ const utils = {
       padding: CryptoJS.pad.Pkcs7,
     });
     const plaintext = decrypted.toString(CryptoJS.enc.Utf8);
-    return plaintext.replace("_96.mp4", "_320.mp4");
+    const quality = localStorage.getItem("stream_quality") || "96";
+    return plaintext.replace("_96.mp4", `_${quality}.mp4`);
   },
   formatDuration: (time) => {
     var hrs = ~~(time / 3600);
