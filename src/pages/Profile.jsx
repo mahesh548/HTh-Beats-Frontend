@@ -2,11 +2,13 @@ import { useContext, useState } from "react";
 import BackButton from "./components/BackButton";
 import { AuthContext } from "./components/Auth";
 import {
-  CameraAltOutlined,
+  DeleteOutline,
+  Edit,
   EqualizerOutlined,
   InfoOutlined,
   ManageAccountsOutlined,
   TranslateOutlined,
+  Upload,
 } from "@mui/icons-material";
 import React from "react";
 import { HashContext } from "./components/Hash";
@@ -41,6 +43,15 @@ export default function Profile() {
       close("picPreview");
     }
   };
+
+  const handleFileDelete = async () => {
+    const response = await utils.BACKEND("/profile_pic", "DELETE");
+    if (response?.status && response.uploaded) {
+    }
+  };
+  const openPS = () => {
+    document.getElementById("picSelector").click();
+  };
   return (
     <div className="page">
       <div className="profilePage">
@@ -70,19 +81,9 @@ export default function Profile() {
                 {auth?.user?.email} • verified email
               </p>
             </div>
-            <input
-              type="file"
-              style={{ display: "none" }}
-              id="picSelector"
-              onChange={handleFileChange}
-              accept=".png, .jpg, .jpeg"
-            />
 
-            <button
-              className="iconButton"
-              onClick={() => document.getElementById("picSelector").click()}
-            >
-              <CameraAltOutlined />
+            <button className="iconButton" onClick={() => open("picOption")}>
+              <Edit />
             </button>
           </div>
 
@@ -169,6 +170,45 @@ export default function Profile() {
           >
             Cancel
           </button>
+        </OffCanvas>
+        <OffCanvas
+          open={openElements.includes("picOption")}
+          dismiss={() => close("picOption")}
+        >
+          <p className="text-white text-center">Change or remove profile pic</p>
+          <hr className="dividerLine" />
+          <input
+            type="file"
+            style={{ display: "none" }}
+            id="picSelector"
+            onChange={handleFileChange}
+            accept=".png, .jpg, .jpeg"
+          />
+          <div
+            className="playlistSong mt-4 px-2 mb-3"
+            style={{ gridTemplateColumns: "40px auto" }}
+          >
+            <Upload className="profileIcon" onClick={() => openPS()} />
+            <div onClick={() => openPS()}>
+              <p className="thinOneLineText playlistSongTitle fw-normal">
+                Upload a new profile picture
+              </p>
+            </div>
+          </div>
+          <div
+            className="playlistSong mt-4 px-2 mb-3"
+            style={{ gridTemplateColumns: "40px auto" }}
+          >
+            <DeleteOutline
+              className="profileIcon"
+              onClick={() => handleFileDelete()}
+            />
+            <div onClick={() => handleFileDelete()}>
+              <p className="thinOneLineText playlistSongTitle fw-normal">
+                Delete current profile picture
+              </p>
+            </div>
+          </div>
         </OffCanvas>
       </div>
     </div>
