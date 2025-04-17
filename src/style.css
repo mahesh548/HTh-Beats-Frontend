@@ -59,6 +59,8 @@ p {
   background-color: transparent;
   border: none;
   color: white;
+  outline: none;
+  box-shadow: none;
 }
 /* LOGIN , SIGNUP , LOADER AND SOME OTHER STYLES */
 .inputWrapperLogin {

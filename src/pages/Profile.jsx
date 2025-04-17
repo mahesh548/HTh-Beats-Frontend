@@ -147,9 +147,9 @@ export default function Profile() {
             style={{ gridTemplateColumns: "40px auto" }}
           >
             <ManageAccountsOutlined className="profileIcon" />
-            <div>
+            <div onClick={() => open("manageAccount")}>
               <p className="thinOneLineText playlistSongTitle fw-normal">
-                Manage your data
+                Manage your account and data
               </p>
               <p className="thinOneLineText playlistSongSubTitle">
                 Manage your account data and history • Delete your account.
@@ -307,6 +307,54 @@ export default function Profile() {
               </div>
             );
           })}
+        </OffCanvas>
+        <OffCanvas
+          open={openElements.includes("manageAccount")}
+          dismiss={() => close("manageAccount")}
+        >
+          <p className="text-white text-center">Manage account & data</p>
+          <hr className="dividerLine" />
+          <i
+            className="text-white-50 text-center d-block px-2"
+            style={{ fontSize: "14px" }}
+          >
+            Anything that you delete here will be removed forever and can not be
+            recover once deleted.
+          </i>
+          <button className="iconButton text-start mt-4">
+            <p className="labelText ps-2 fw-light mt-2 text-danger">
+              Clear search history
+            </p>
+            <p className="thinThreeLineText mt-1 ps-2">
+              Delete all of your search history at once for always.
+            </p>
+          </button>
+          <button className="iconButton text-start mt-4">
+            <p className="labelText ps-2 fw-light mt-2 text-danger">
+              Delete recent play
+            </p>
+            <p className="thinThreeLineText mt-1 ps-2">
+              Clear all the recently played song history.
+            </p>
+          </button>
+          <button className="iconButton text-start mt-4">
+            <p className="labelText ps-2 fw-light mt-2 text-danger">
+              Delete all playlist
+            </p>
+            <p className="thinThreeLineText mt-1 ps-2">
+              Delete all the playlist that you created (own). collabs that you
+              have joined will not be deleted.
+            </p>
+          </button>
+          <button className="iconButton text-start mt-4">
+            <p className="labelText ps-2 fw-light mt-2 text-danger">
+              Delete account
+            </p>
+            <p className="thinThreeLineText mt-1 ps-2">
+              If you want to delete everything at once then delete your account.
+              you can not recover your account once deleted.
+            </p>
+          </button>
         </OffCanvas>
       </div>
     </div>
