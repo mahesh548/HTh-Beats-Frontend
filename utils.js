@@ -316,6 +316,9 @@ const utils = {
     const diffInHours = Math.floor(diffInMinutes / 60);
     return `${diffInHours}h ago`;
   },
+  getUIAvatarUrl: (username) => {
+    return `https://ui-avatars.com/api/?name=${username}&bold=true&background=f5deb3&length=1&font-size=0.6`;
+  },
 };
 
 export default utils;
