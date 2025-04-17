@@ -172,7 +172,12 @@ export default function Profile() {
             </div>
           </div>
 
-          <button className="addToBut p-2 px-3 mt-4">Log out</button>
+          <button
+            className="addToBut p-2 px-3 mt-4"
+            onClick={() => utils.Logout()}
+          >
+            Log out
+          </button>
         </div>
         <OffCanvas
           open={openElements.includes("picPreview")}
