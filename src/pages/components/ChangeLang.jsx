@@ -1,9 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "./Auth";
-import { CheckBoxOutlineBlank } from "@mui/icons-material";
+import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 import React from "react";
 import { HashContext } from "./Hash";
 import OffCanvas from "./BottomSheet";
+import utils from "../../../utils";
 
 const availableLang = [
   { display: "Hindi", value: "hindi", native: "हिन्दी" },
@@ -26,9 +27,42 @@ const availableLang = [
 
 export default function ChangeLang() {
   const auth = useContext(AuthContext);
+  const [chosen, setChosen] = useState(auth?.user?.languages || []);
+  const [showSubmit, setShowSubmit] = useState(false);
 
   const { openElements, open, close } = useContext(HashContext);
 
+  const toggleLang = (lang) => {
+    setChosen((prev) => {
+      return prev.includes(lang)
+        ? prev.filter((l) => l != lang)
+        : [lang, ...prev];
+    });
+  };
+
+  useEffect(() => {
+    setChosen(auth?.user?.languages || []);
+  }, [auth]);
+
+  useEffect(() => {
+    if (!auth?.user || !chosen) return;
+    const authLangString = auth.user.languages.sort().join(",");
+    const chosenLangString = chosen.sort().join(",");
+    setShowSubmit(authLangString != chosenLangString);
+  }, [chosen, auth]);
+
+  const submitLang = async () => {
+    close("languages");
+    if (chosen.length == 0) return;
+
+    const response = await utils.BACKEND("/add_language", "POST", {
+      lang: chosen,
+    });
+    if (response.status && response.updated) {
+      localStorage.removeItem("homeCache");
+      auth?.authentication();
+    }
+  };
   return (
     <OffCanvas
       open={openElements.includes("languages")}
@@ -43,8 +77,18 @@ export default function ChangeLang() {
             style={{ gridTemplateColumns: "40px auto" }}
             key={"lang-" + index}
           >
-            <CheckBoxOutlineBlank className="profileIcon" />
-            <div>
+            <button
+              className="iconButton"
+              onClick={() => toggleLang(item.value)}
+            >
+              {chosen.includes(item.value) ? (
+                <CheckBox className="profileIcon text-wheat" />
+              ) : (
+                <CheckBoxOutlineBlank className="profileIcon" />
+              )}
+            </button>
+
+            <div onClick={() => toggleLang(item.value)}>
               <p className="thinOneLineText playlistSongTitle fw-normal">
                 {item.display}
               </p>
@@ -55,6 +99,20 @@ export default function ChangeLang() {
           </div>
         );
       })}
+      <div style={{ height: "110px" }}></div>
+      {showSubmit && (
+        <div
+          className="position-fixed bottom-0 left-0 w-100 pb-3 text-center"
+          style={{ background: "#1f1f1f" }}
+        >
+          <button className="addToBut mb-2" onClick={() => submitLang()}>
+            Save changes
+          </button>
+          <i className="text-white-50 fw-light">
+            {chosen.length} language selected
+          </i>
+        </div>
+      )}
     </OffCanvas>
   );
 }
