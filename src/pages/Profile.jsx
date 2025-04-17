@@ -11,14 +11,17 @@ import {
 import React from "react";
 import { HashContext } from "./components/Hash";
 import OffCanvas from "./components/BottomSheet";
+import utils from "../../utils";
 
 export default function Profile() {
   const auth = useContext(AuthContext);
   const [preview, setPreview] = useState(null);
+  const [profileFile, setProfileFile] = useState(null);
   const { openElements, open, close } = useContext(HashContext);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setProfileFile(file);
       const reader = new FileReader();
 
       reader.onloadend = () => {
@@ -29,6 +32,14 @@ export default function Profile() {
       reader.readAsDataURL(file);
     }
     e.target.value = null;
+  };
+  const handleFileUpload = async () => {
+    const formData = new FormData();
+    formData.append("image", profileFile);
+    const response = await utils.BACKEND("/profile_pic", "POST", formData);
+    if (response?.status && response.uploaded) {
+      close("picPreview");
+    }
   };
   return (
     <div className="page">
@@ -149,7 +160,9 @@ export default function Profile() {
             id="previewPic"
             className="d-block m-auto w-50 rounded rounded-circle"
           />
-          <button className="addToBut mt-4">Set as profile pic</button>
+          <button className="addToBut mt-4" onClick={() => handleFileUpload()}>
+            Set as profile pic
+          </button>
           <button
             className="iconButton mt-3 text-center d-block m-auto"
             onClick={() => close("picPreview")}
