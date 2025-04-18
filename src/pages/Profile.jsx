@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import BackButton from "./components/BackButton";
 import { AuthContext } from "./components/Auth";
 import {
@@ -16,6 +16,7 @@ import React from "react";
 import { HashContext } from "./components/Hash";
 import OffCanvas from "./components/BottomSheet";
 import utils from "../../utils";
+import ConfirmPrompt from "./components/ConfirmPrompt";
 
 const audioQuality = [
   { value: "12", display: "Data saver" },
@@ -24,6 +25,28 @@ const audioQuality = [
   { value: "160", display: "High" },
   { value: "320", display: "Very high" },
 ];
+const alertMessage = {
+  search: {
+    body: "All of your search history will be deleted.",
+    butText: "Clear searches",
+    action: "search",
+  },
+  recent: {
+    body: "All the history of songs that you played will be deleted.",
+    butText: "Clear recents",
+    action: "recent",
+  },
+  playlist: {
+    body: "All the playlist created and own by you will be deleted.once deleted you can not undo the process.",
+    butText: "Delete all playlist",
+    action: "playlist",
+  },
+  account: {
+    body: "Your HTh-Beats account and all of your data will be deleted and can never be recovered.",
+    butText: "Delete my account",
+    action: "account",
+  },
+};
 
 export default function Profile() {
   const auth = useContext(AuthContext);
@@ -35,11 +58,12 @@ export default function Profile() {
   const [currentD, setCurrentD] = useState(
     localStorage.getItem("download_quality") || "96"
   );
+  const alertText = useRef(null);
   useEffect(() => {
     localStorage.setItem("stream_quality", currentQ);
     localStorage.setItem("download_quality", currentD);
   }, [currentQ, currentD]);
-  const { openElements, open, close } = useContext(HashContext);
+  const { openElements, open, close, closeOpen } = useContext(HashContext);
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -76,6 +100,13 @@ export default function Profile() {
   const openPS = () => {
     document.getElementById("picSelector").click();
   };
+  const openAlert = async (type) => {
+    alertText.current = alertMessage[type];
+    closeOpen("manageAccount", "deleteConfirm");
+  };
+
+  const deleteThis = (type) => {};
+
   return (
     <div className="page">
       <div className="profilePage">
@@ -321,7 +352,10 @@ export default function Profile() {
             Anything that you delete here will be removed forever and can not be
             recover once deleted.
           </i>
-          <button className="iconButton text-start mt-4">
+          <button
+            className="iconButton text-start mt-4"
+            onClick={() => openAlert("search")}
+          >
             <p className="labelText ps-2 fw-light mt-2 text-danger">
               Clear search history
             </p>
@@ -329,7 +363,10 @@ export default function Profile() {
               Delete all of your search history at once for always.
             </p>
           </button>
-          <button className="iconButton text-start mt-4">
+          <button
+            className="iconButton text-start mt-4"
+            onClick={() => openAlert("recent")}
+          >
             <p className="labelText ps-2 fw-light mt-2 text-danger">
               Delete recent play
             </p>
@@ -337,7 +374,10 @@ export default function Profile() {
               Clear all the recently played song history.
             </p>
           </button>
-          <button className="iconButton text-start mt-4">
+          <button
+            className="iconButton text-start mt-4"
+            onClick={() => openAlert("playlist")}
+          >
             <p className="labelText ps-2 fw-light mt-2 text-danger">
               Delete all playlist
             </p>
@@ -346,7 +386,10 @@ export default function Profile() {
               have joined will not be deleted.
             </p>
           </button>
-          <button className="iconButton text-start mt-4">
+          <button
+            className="iconButton text-start mt-4"
+            onClick={() => openAlert("account")}
+          >
             <p className="labelText ps-2 fw-light mt-2 text-danger">
               Delete account
             </p>
@@ -356,6 +399,12 @@ export default function Profile() {
             </p>
           </button>
         </OffCanvas>
+        <ConfirmPrompt
+          id="deleteConfirm"
+          body={alertText.current?.body}
+          butText={alertText.current?.butText}
+          onConfirm={() => deleteThis(alertText.current?.action)}
+        />
       </div>
     </div>
   );

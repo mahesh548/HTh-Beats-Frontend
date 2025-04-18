@@ -1,7 +1,13 @@
 import { useContext } from "react";
 import { HashContext } from "./Hash";
 
-export default function ConfirmPrompt({ id, title, body, butText, onConfirm }) {
+export default function ConfirmPrompt({
+  id,
+  title = "Are you sure!",
+  body,
+  butText,
+  onConfirm,
+}) {
   const { openElements, close } = useContext(HashContext);
 
   const handleClick = () => {
