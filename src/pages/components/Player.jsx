@@ -23,6 +23,7 @@ import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import OptionSong from "./OptionSong";
 import OffCanvas from "./BottomSheet";
+import BackButton from "./BackButton";
 
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
@@ -93,8 +94,9 @@ export default function Player() {
   }
 
   const getLyrics = async (snippet, id) => {
+    const color = document.getElementById("miniPlayer").style.backgroundColor;
+
     if (lyrics.current?.id == id) {
-      console.log(lyrics.current.data);
       open("lyrics");
       return;
     }
@@ -102,11 +104,10 @@ export default function Player() {
     if (snippet == "No Lyrics") return;
     const response = await utils.API(`/lyrics?id=${id}`, "GET");
     if (response.status) {
-      const lyricArray = response.lyrics
-        .split("<br>")
-        .filter((line) => line.length != 0);
+      const lyricArray = response.lyrics.split("<br>");
+      /* .filter((line) => line.length != 0); */
       console.log(lyricArray);
-      lyrics.current = { data: lyricArray, id: id };
+      lyrics.current = { data: lyricArray, id: id, color: color };
       open("lyrics");
     }
   };
@@ -253,23 +254,57 @@ export default function Player() {
           />,
           document.body
         )}
-      <OffCanvas
-        open={openElements.includes("lyrics")}
-        dismiss={() => close("lyrics")}
-      >
-        <div>
-          {lyrics.current.data.map((line, index) => {
-            return (
-              <p
-                key={"lyrics-line-" + index}
-                className="text-white mt-2 mb-2 px-1 fs-4 fw-bold"
-              >
-                {line}
-              </p>
-            );
-          })}
+      {openElements.includes("lyrics") && (
+        <div
+          className="floatingPage overflow-scroll hiddenScrollbar"
+          style={{ backgroundColor: lyrics.current.color }}
+        >
+          <div
+            className="libraryNavCont px-2"
+            style={{
+              zIndex: "11",
+              backgroundColor: lyrics.current.color,
+              boxShadow: "0px 5px 5px " + lyrics.current.color,
+            }}
+          >
+            <div
+              className="libraryNav mt-3 mb-1"
+              style={{ gridTemplateColumns: "40px auto 40px" }}
+            >
+              <BackButton styleClass="m-0 p-0" />
+              <div className="text-center ">
+                <p className="thinOneLineText playlistSongTitle fs-5">
+                  {utils.refineText(data.title)}
+                </p>
+                <p className="thinOneLineText playlistSongSubTitle fs-6">
+                  {data.subtitle?.length != 0
+                    ? utils.refineText(data.subtitle)
+                    : utils.refineText(
+                        `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
+                      )}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div style={{ marginTop: "80px" }}>
+            {lyrics.current.data.map((line, index) => {
+              if (line.length == 0) {
+                return (
+                  <div key={"lyrics-line-" + index} className="mt-4 mb-2"></div>
+                );
+              }
+              return (
+                <p
+                  key={"lyrics-line-" + index}
+                  className="text-white mt-2 mb-2 px-2 ps-3 fs-4 fw-normal"
+                >
+                  {line}
+                </p>
+              );
+            })}
+          </div>
         </div>
-      </OffCanvas>
+      )}
     </div>
   );
 }
