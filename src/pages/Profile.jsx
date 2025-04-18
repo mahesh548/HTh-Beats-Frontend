@@ -36,11 +36,7 @@ const alertMessage = {
     butText: "Clear recents",
     action: "recent",
   },
-  playlist: {
-    body: "All the playlist created and own by you will be deleted.once deleted you can not undo the process.",
-    butText: "Delete all playlist",
-    action: "playlist",
-  },
+
   account: {
     body: "Your HTh-Beats account and all of your data will be deleted and can never be recovered.",
     butText: "Delete my account",
@@ -105,7 +101,26 @@ export default function Profile() {
     closeOpen("manageAccount", "deleteConfirm");
   };
 
-  const deleteThis = (type) => {};
+  const deleteThis = async (type) => {
+    if (type == "search") {
+      await utils.BACKEND(`/activity`, "DELETE", {
+        deleteData: { historyIds: ["all"], type: "search", idList: ["all"] },
+      });
+      return;
+    }
+    if (type == "recent") {
+      await utils.BACKEND(`/activity`, "DELETE", {
+        deleteData: { historyIds: ["all"], type: "history" },
+      });
+      return;
+    }
+    if (type == "account") {
+      const result = await utils.BACKEND(`/account`, "DELETE");
+      if (result.status && result.delete) {
+        utils.Logout();
+      }
+    }
+  };
 
   return (
     <div className="page">
@@ -372,18 +387,6 @@ export default function Profile() {
             </p>
             <p className="thinThreeLineText mt-1 ps-2">
               Clear all the recently played song history.
-            </p>
-          </button>
-          <button
-            className="iconButton text-start mt-4"
-            onClick={() => openAlert("playlist")}
-          >
-            <p className="labelText ps-2 fw-light mt-2 text-danger">
-              Delete all playlist
-            </p>
-            <p className="thinThreeLineText mt-1 ps-2">
-              Delete all the playlist that you created (own). collabs that you
-              have joined will not be deleted.
             </p>
           </button>
           <button
