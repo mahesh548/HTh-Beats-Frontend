@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState, useEffect } from "react";
+import { useContext, useMemo, useState, useEffect, useRef } from "react";
 import { songContext } from "./Song";
 import {
   ChevronLeftRounded,
@@ -22,12 +22,17 @@ import SwipeableViews from "react-swipeable-views";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import OptionSong from "./OptionSong";
+import OffCanvas from "./BottomSheet";
 
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
   const { openElements, open, close } = useContext(HashContext);
   const [isSliding, setIsSliding] = useState(false);
   const [localLike, setLocalLike] = useState(false);
+  const lyrics = useRef({
+    data: ["Lyrics not available for this track!"],
+    id: null,
+  });
 
   const closePlayer = () => {
     close("player");
@@ -87,6 +92,24 @@ export default function Player() {
     return <></>;
   }
 
+  const getLyrics = async (snippet, id) => {
+    if (lyrics.current?.id == id) {
+      console.log(lyrics.current.data);
+      open("lyrics");
+      return;
+    }
+
+    if (snippet == "No Lyrics") return;
+    const response = await utils.API(`/lyrics?id=${id}`, "GET");
+    if (response.status) {
+      const lyricArray = response.lyrics
+        .split("<br>")
+        .filter((line) => line.length != 0);
+      console.log(lyricArray);
+      lyrics.current = { data: lyricArray, id: id };
+      open("lyrics");
+    }
+  };
   return (
     <div className="playerCont">
       <div className="blurPage">
@@ -152,7 +175,15 @@ export default function Player() {
                 key={`playerLike_${data.id}`}
               />
 
-              <button className="lyricsLine playerDetailsButton">
+              <button
+                className="lyricsLine playerDetailsButton"
+                onClick={() =>
+                  getLyrics(
+                    data.more_info?.lyrics_snippet || "No Lyrics",
+                    data.id
+                  )
+                }
+              >
                 <FormatQuoteRounded />
                 <p>{data.more_info?.lyrics_snippet || "No Lyrics"}</p>
               </button>
@@ -222,6 +253,23 @@ export default function Player() {
           />,
           document.body
         )}
+      <OffCanvas
+        open={openElements.includes("lyrics")}
+        dismiss={() => close("lyrics")}
+      >
+        <div>
+          {lyrics.current.data.map((line, index) => {
+            return (
+              <p
+                key={"lyrics-line-" + index}
+                className="text-white mt-2 mb-2 px-1 fs-4 fw-bold"
+              >
+                {line}
+              </p>
+            );
+          })}
+        </div>
+      </OffCanvas>
     </div>
   );
 }

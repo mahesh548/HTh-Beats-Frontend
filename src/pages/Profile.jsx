@@ -106,13 +106,11 @@ export default function Profile() {
       await utils.BACKEND(`/activity`, "DELETE", {
         deleteData: { historyIds: ["all"], type: "search", idList: ["all"] },
       });
-      return;
     }
     if (type == "recent") {
       await utils.BACKEND(`/activity`, "DELETE", {
         deleteData: { historyIds: ["all"], type: "history" },
       });
-      return;
     }
     if (type == "account") {
       const result = await utils.BACKEND(`/account`, "DELETE");
