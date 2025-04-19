@@ -6,6 +6,7 @@ import {
   MoreHorizRounded,
   PauseCircleFilled,
   PlayCircleFilled,
+  RepeatOneOutlined,
   RepeatOutlined,
   ShareOutlined,
   SkipNextRounded,
@@ -30,6 +31,9 @@ export default function Player() {
   const { openElements, open, close } = useContext(HashContext);
   const [isSliding, setIsSliding] = useState(false);
   const [localLike, setLocalLike] = useState(false);
+  const [repeatOne, setRepeatOne] = useState(
+    JSON.parse(localStorage.getItem("repeat")) || false
+  );
   const lyrics = useRef({
     data: ["Lyrics not available for this track!"],
     id: null,
@@ -110,6 +114,11 @@ export default function Player() {
       lyrics.current = { data: lyricArray, id: id, color: color };
       open("lyrics");
     }
+  };
+  const setRepeat = () => {
+    const value = JSON.parse(localStorage.getItem("repeat")) || false;
+    localStorage.setItem("repeat", !value);
+    setRepeatOne(!value);
   };
   return (
     <div className="playerCont">
@@ -233,9 +242,10 @@ export default function Player() {
             </div>
           </div>
           <div className="playerBottomBar">
-            <button>
-              <RepeatOutlined />
+            <button onClick={() => setRepeat()}>
+              {repeatOne ? <RepeatOneOutlined /> : <RepeatOutlined />}
             </button>
+
             <button>
               <ShareOutlined />
             </button>

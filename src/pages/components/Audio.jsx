@@ -87,7 +87,14 @@ export default function Audio() {
       currentSong.clientId !== roomInfo.clientId
     )
       return;
-    setQueue({ type: "NEXT" });
+    const repeatOne = JSON.parse(localStorage.getItem("repeat")) || false;
+    if (repeatOne) {
+      document.getElementById("audio").currentTime = 0;
+      const audio = document.getElementById("audio");
+      audio.play();
+    } else {
+      setQueue({ type: "NEXT" });
+    }
   }, [channel, currentSong, roomInfo, setQueue]);
 
   return (
