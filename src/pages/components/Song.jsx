@@ -1,12 +1,13 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useRef } from "react";
 import utils from "../../../utils";
 import { useLocation } from "react-router";
+
 export const songContext = createContext();
 
 const playNext = (Queue) => {
   const list = Queue.playlist.list;
-  const currentIndex = list.indexOf(utils.getItemFromId(Queue.song, list));
-  if (currentIndex < list.length) {
+  const currentIndex = list.findIndex((item) => item.id == Queue.song);
+  if (currentIndex < list.length - 1) {
     return list[currentIndex + 1].id;
   } else {
     return list[currentIndex].id;
@@ -14,7 +15,7 @@ const playNext = (Queue) => {
 };
 const playPrev = (Queue) => {
   const list = Queue.playlist.list;
-  const currentIndex = list.indexOf(utils.getItemFromId(Queue.song, list));
+  const currentIndex = list.findIndex((item) => item.id == Queue.song);
   if (currentIndex > 0) {
     return list[currentIndex - 1].id;
   } else {
@@ -43,10 +44,9 @@ const createHistory = (Queue, songId) => {
       2) *
     1000;
 
-  console.log("history will be created in: ", timeDelay);
   historyRequest = setTimeout(() => {
     utils.BACKEND("/song_played", "POST", { playedData: playedData });
-  }, 2000);
+  }, timeDelay);
 };
 
 const songReducer = (state, action) => {
@@ -83,12 +83,16 @@ const songReducer = (state, action) => {
           liked.push(item.id);
         }
       });
+      const queueStation = action.value.playlist.list
+        .map((item) => item.id)
+        .slice(0, 9);
       createHistory(action.value, action.value.song);
       return {
         ...action.value,
         saved: liked,
         previous: [action.value.song],
         isLocal: true,
+        queueStation: queueStation,
       };
 
     case "REMOTE_NEW":
@@ -134,6 +138,7 @@ const songReducer = (state, action) => {
 
 export default function SongWrap({ children }) {
   const location = useLocation();
+  const stationId = useRef(null);
   const initialQueue =
     location.pathname.includes("/join") || location.pathname.includes("/room")
       ? {}
@@ -147,7 +152,37 @@ export default function SongWrap({ children }) {
     const cacheQueue = JSON.parse(JSON.stringify(Queue));
     cacheQueue.status = "stop";
     localStorage.setItem("QUEUE", JSON.stringify(cacheQueue));
+    const currentIndex = Queue.playlist.list.findIndex(
+      (item) => item.id == Queue.song
+    );
+    if (
+      !Queue?.queueStation ||
+      currentIndex + 2 < Queue.playlist.list.length ||
+      Queue.status == "stop"
+    )
+      return;
+
+    getStation(Queue.queueStation, Queue.playlist);
   }, [Queue]);
+
+  const getStation = async (queueStation, oldPlaylist) => {
+    if (queueStation === stationId.current) return;
+    stationId.current = queueStation;
+    const response = await utils.API("/queue", "POST", {
+      ids: queueStation,
+    });
+    if (response.status && response.data) {
+      const alreadyInQueue = oldPlaylist.list.map((item) => item.id);
+      const freshList = response.data.filter(
+        (item) => !alreadyInQueue.includes(item.id)
+      );
+      const newPL = {
+        ...oldPlaylist,
+        list: [...oldPlaylist.list, ...freshList],
+      };
+      setQueue({ type: "PLAYLIST", value: newPL });
+    }
+  };
 
   return (
     <songContext.Provider value={{ Queue, setQueue }}>

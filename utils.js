@@ -34,6 +34,7 @@ const utils = {
   },
   API: async (path = "/", methods = "GET", payload = {}) => {
     try {
+      console.log(payload);
       const url = `${apiUrl}${path}`;
       const session = localStorage.getItem("session");
       axios.defaults.headers.common["Authorization"] = `Bearer ${session}`;
