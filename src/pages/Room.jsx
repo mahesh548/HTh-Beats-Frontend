@@ -231,7 +231,7 @@ export default function Room() {
               return (
                 <div
                   className="remoteReaction m-3 ms-1"
-                  key={"local-msg-" + index}
+                  key={"remote-msg-" + index}
                 >
                   <img
                     src={

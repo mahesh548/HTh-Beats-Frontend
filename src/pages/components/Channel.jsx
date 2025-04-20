@@ -3,6 +3,7 @@ import * as Ably from "ably";
 import { AuthContext } from "./Auth";
 import utils from "../../../utils";
 import { useNavigate } from "react-router";
+import { showToast } from "./showToast";
 
 export const channelContext = createContext(null);
 
@@ -134,13 +135,6 @@ export default function ChannelProvider({ children }) {
         }
       });
 
-      ablyChannel.subscribe("reaction", (message) => {
-        if (message.clientId === clientId) return;
-        const newReact = message.data.newReact;
-        newReact.type = "remote-react";
-        setMessages((prevMessages) => [newReact, ...prevMessages]);
-      });
-
       //set the channel
       setChannel(ablyChannel);
       return {
@@ -209,10 +203,22 @@ export default function ChannelProvider({ children }) {
 
     const handleLeave = (member) => {
       if (member.clientId == roomInfo?.admin) {
+        showToast({ text: "Room ended by admin" });
         disconnect();
         return;
       }
       const newMember = member.data;
+
+      if (!location.pathname.includes("room")) {
+        //show toast message if user is not at room page
+        showToast({
+          text: `${
+            newMember?.username || defaultUser.username
+          } has left the room`,
+          image: newMember?.pic || defaultUser.pic,
+          type: "imgBtn",
+        });
+      }
       const newMessage = {
         type: "leave",
         username: newMember.username,
@@ -229,6 +235,16 @@ export default function ChannelProvider({ children }) {
     const handleEnter = (member) => {
       member.data.clientId = member.clientId;
       const newMember = member.data;
+      if (!location.pathname.includes("room")) {
+        //show toast message if user is not at room page
+        showToast({
+          text: `${
+            newMember?.username || defaultUser.username
+          } has joined the room`,
+          image: newMember?.pic || defaultUser.pic,
+          type: "imgBtn",
+        });
+      }
       const newMessage = {
         type: "join",
         username: newMember.username,
@@ -250,8 +266,28 @@ export default function ChannelProvider({ children }) {
         });
       }
     };
+
+    const handleReaction = (message) => {
+      if (message.clientId === roomInfo.clientId) return;
+      const newReact = message.data.newReact;
+      if (!location.pathname.includes("room")) {
+        //show toast message if user is not at room page
+        const person = members.find(
+          (item) => item.clientId == message.clientId
+        );
+        showToast({
+          text: `${person?.username || defaultUser.username} sent a reaction`,
+          image:
+            utils.stickerUrl(newReact.pack, newReact.id) || defaultUser.pic,
+          type: "imgBtn",
+        });
+      }
+      newReact.type = "remote-react";
+      setMessages((prevMessages) => [newReact, ...prevMessages]);
+    };
     channel.presence.subscribe("leave", handleLeave);
     channel.presence.subscribe("enter", handleEnter);
+    channel.subscribe("reaction", handleReaction);
 
     return () => {
       channel.presence.unsubscribe("leave", handleLeave);
@@ -278,6 +314,9 @@ export default function ChannelProvider({ children }) {
         await utils.BACKEND("/room/delete", "POST", {
           roomData: roomData,
         });
+        showToast({ text: "Room deleted" });
+      } else {
+        showToast({ text: "Left the room" });
       }
       await channel.presence.leave();
       ablyClient.current.close();

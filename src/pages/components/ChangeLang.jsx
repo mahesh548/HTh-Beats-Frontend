@@ -61,7 +61,7 @@ export default function ChangeLang() {
     });
     if (response.status && response.updated) {
       showToast({
-        text: "Updated music your languages",
+        text: "Updated your music languages",
       });
       localStorage.removeItem("homeCache");
       auth?.authentication();

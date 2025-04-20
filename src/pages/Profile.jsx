@@ -17,6 +17,7 @@ import { HashContext } from "./components/Hash";
 import OffCanvas from "./components/BottomSheet";
 import utils from "../../utils";
 import ConfirmPrompt from "./components/ConfirmPrompt";
+import { showToast } from "./components/showToast";
 
 const audioQuality = [
   { value: "12", display: "Data saver" },
@@ -82,6 +83,11 @@ export default function Profile() {
     formData.append("image", profileFile);
     const response = await utils.BACKEND("/profile_pic", "POST", formData);
     if (response?.status && response.uploaded) {
+      showToast({
+        text: "Profile picture updated",
+        image: response.url,
+        type: "img",
+      });
       await auth?.authentication();
     }
   };
@@ -90,6 +96,7 @@ export default function Profile() {
     close("picOption");
     const response = await utils.BACKEND("/profile_pic", "DELETE");
     if (response?.status && response.deleted) {
+      showToast({ text: "Profile picture removed" });
       await auth?.authentication();
     }
   };
@@ -106,11 +113,13 @@ export default function Profile() {
       await utils.BACKEND(`/activity`, "DELETE", {
         deleteData: { historyIds: ["all"], type: "search", idList: ["all"] },
       });
+      showToast({ text: "Search history deleted" });
     }
     if (type == "recent") {
       await utils.BACKEND(`/activity`, "DELETE", {
         deleteData: { historyIds: ["all"], type: "history" },
       });
+      showToast({ text: "Deleted recent play" });
     }
     if (type == "account") {
       const result = await utils.BACKEND(`/account`, "DELETE");
