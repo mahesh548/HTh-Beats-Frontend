@@ -12,6 +12,7 @@ import { HashContext } from "./Hash";
 import OptionSong from "./OptionSong";
 import LikeSong from "./LikeSong";
 import TimelineSlider from "./TimelineSlider";
+import PageLoader from "./PageLoader";
 
 export default function CreatePlaylist({ response }) {
   const { openElements } = useContext(HashContext);
@@ -172,10 +173,9 @@ export default function CreatePlaylist({ response }) {
                 label="Related playlists"
                 data={relatedPlaylist}
               />
-              <div>Trending in language</div>
             </>
           ) : (
-            <div>Loading..</div>
+            <PageLoader />
           )}
         </div>
       </div>

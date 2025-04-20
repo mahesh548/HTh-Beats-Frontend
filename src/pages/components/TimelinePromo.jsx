@@ -1,9 +1,13 @@
 import { ChevronRight } from "@mui/icons-material";
 import utils from "../../../utils";
-import { useState } from "react";
-
+import { useContext, useState } from "react";
+import { createPortal } from "react-dom";
+import Offcanvas from "./BottomSheet";
+import { HashContext } from "./Hash";
+import TimelineSquare from "./TimelineSquare";
 export default function TimelinePromo({ promo }) {
   const homeCache = JSON.parse(localStorage.homeCache);
+  const { openElements, open, close } = useContext(HashContext);
   const setBackgroundColor = async (img, setColor) => {
     const color = await utils.getAverageColor(img);
     setColor(color);
@@ -22,6 +26,7 @@ export default function TimelinePromo({ promo }) {
         className="promoContainer"
         key={key}
         style={{ backgroundColor: color }}
+        onClick={() => open(key)}
       >
         <div>
           <p className="promoTitle">{title}</p>
@@ -43,6 +48,32 @@ export default function TimelinePromo({ promo }) {
             <ChevronRight />
           </button>
         </div>
+        {createPortal(
+          <Offcanvas
+            open={openElements.includes(key)}
+            dismiss={() => close(key)}
+          >
+            <p className="labelText text-center mt-0">{title}</p>
+            <hr className="dividerLine" />
+            <div className="promoShow mt-4">
+              {data.map((item) => {
+                const { id, image, title, type, perma_url } = item;
+                const perma_id = perma_url.split("/").pop();
+
+                return (
+                  <TimelineSquare
+                    key={`${id}_${Math.random().toString(36).substr(2, 9)}`}
+                    img={image}
+                    text={title}
+                    type={type}
+                    id={perma_id}
+                  />
+                );
+              })}
+            </div>
+          </Offcanvas>,
+          document.body
+        )}
       </div>
     );
   });

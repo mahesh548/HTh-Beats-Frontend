@@ -352,6 +352,18 @@ p {
   margin-top: 20px;
   padding: 15px;
 }
+.promoShow {
+  display: grid;
+  grid-template-columns: min-content min-content;
+  row-gap: 20px;
+  justify-content: space-evenly;
+  div {
+    grid-row-start: auto;
+  }
+  p {
+    margin-top: 5px;
+  }
+}
 .promoTitle {
   color: white;
   font-size: 25px;

@@ -1,11 +1,9 @@
 import { useNavigate } from "react-router";
+import utils from "../../../utils";
 
 export default function TimelineSquare({ img, text, id, type, style = "" }) {
   const navigate = useNavigate();
   const func = () => {
-    console.log(text);
-    console.log(id);
-    console.log(type);
     if (type == "playlist") {
       navigate(`/playlist/${id}`);
     }
@@ -28,7 +26,7 @@ export default function TimelineSquare({ img, text, id, type, style = "" }) {
       className={style == "round" ? "TimelineRoundItem" : "TimelineSquareItem"}
     >
       <img src={img} alt="playlist banner" onClick={() => func()} />
-      <p>{text.replaceAll("&quot;", "")}</p>
+      <p>{utils.refineText(text)}</p>
     </div>
   );
 }
