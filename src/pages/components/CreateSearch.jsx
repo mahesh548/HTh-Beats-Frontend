@@ -11,7 +11,7 @@ import SearchCard from "./SearchCard";
 import ChipSort from "./ChipSort";
 
 import { useInView } from "react-intersection-observer";
-import { useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import SearchHistCard from "./SearchHistCard";
 
 const idealFilterData = [
@@ -272,7 +272,12 @@ export default function CreateSearch() {
     >
       <div className="libraryNavCont px-2 position-relative">
         <div className="libraryNav mt-4 mb-3">
-          <img src={auth?.user?.pic || "logo.png"} className="rounded-circle" />
+          <Link to="/profile">
+            <img
+              src={auth?.user?.pic || "logo.png"}
+              className="rounded-circle"
+            />
+          </Link>
           <p className="labelText mt-0">Search</p>
         </div>
       </div>

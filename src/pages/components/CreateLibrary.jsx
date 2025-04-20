@@ -4,7 +4,7 @@ import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
 
 import { Add, History } from "@mui/icons-material";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { HashContext } from "./Hash";
 
 export default function CreateLibrary({ response, filter, filterData }) {
@@ -47,10 +47,13 @@ export default function CreateLibrary({ response, filter, filterData }) {
             className="libraryNav mt-4 mb-3"
             style={{ gridTemplateColumns: "40px auto 40px 40px" }}
           >
-            <img
-              src={auth?.user?.pic || "logo.png"}
-              className="rounded-circle"
-            />
+            <Link to="/profile">
+              <img
+                src={auth?.user?.pic || "logo.png"}
+                className="rounded-circle"
+              />
+            </Link>
+
             <p className="labelText mt-0">Your library</p>
 
             <button className="iconButton" onClick={() => open("createOption")}>

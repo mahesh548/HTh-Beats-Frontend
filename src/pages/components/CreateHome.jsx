@@ -4,6 +4,7 @@ import Recent from "./Recent";
 import { AuthContext } from "./Auth";
 import { useContext } from "react";
 import utils from "../../../utils";
+import { Link } from "react-router";
 
 export default function CreateHome() {
   const auth = useContext(AuthContext);
@@ -38,11 +39,14 @@ export default function CreateHome() {
           className="libraryNav mt-4 mb-3"
           style={{ gridTemplateColumns: "40px auto", columnGap: "15px" }}
         >
-          <img
-            src={auth?.user?.pic || "logo.png"}
-            className="rounded-circle"
-            style={{ height: "40px", width: "40px" }}
-          />
+          <Link to="/profile">
+            <img
+              src={auth?.user?.pic || "logo.png"}
+              className="rounded-circle"
+              style={{ height: "40px", width: "40px" }}
+            />
+          </Link>
+
           <div>
             <p className="labelText mt-0 fs-5">{greeting.greeting}</p>
             <p className="fs-6 text-white-50">{greeting.vibeText}</p>
