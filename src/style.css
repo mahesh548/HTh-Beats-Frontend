@@ -904,6 +904,20 @@ p {
 }
 
 /* QUEUE PAGE */
+.queueNav {
+  position: fixed;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  bottom: 20px;
+  background: var(--light-dark-bg);
+  left: 150%;
+  translate: -50% 0;
+  margin: auto;
+  padding: 5px 6px;
+  border-radius: 40px;
+  border: 1px solid #ffffff2f;
+  z-index: 6;
+}
 .queuePage {
   height: 100dvh;
   width: 100%;
@@ -924,8 +938,8 @@ p {
   font-size: 15px;
 }
 .chipsActive {
-  background-color: #f5deb347;
-  color: wheat;
+  background-color: wheat;
+  color: black;
 }
 .sortPlaylistSong {
   display: grid;

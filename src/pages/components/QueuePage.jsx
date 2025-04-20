@@ -69,22 +69,22 @@ export default function QueuePage() {
           <BackButton />
           <p>Queue</p>
         </div>
-        <div>
+        <div className="queueNav">
           <button
-            className={`chips ${chips == "all" ? "chipsActive" : ""}`}
+            className={`chips m-0 ${chips == "all" ? "chipsActive" : ""}`}
             onClick={() => setChips("all")}
           >
             All
           </button>
           <button
-            className={`chips ${chips == "next" ? "chipsActive" : ""}`}
+            className={`chips m-0 ${chips == "next" ? "chipsActive" : ""}`}
             onClick={() => setChips("next")}
           >
             Next
           </button>
           {Queue?.previous?.length > 0 && (
             <button
-              className={`chips ${chips == "prev" ? "chipsActive" : ""}`}
+              className={`chips m-0 ${chips == "prev" ? "chipsActive" : ""}`}
               onClick={() => setChips("prev")}
             >
               Previous
