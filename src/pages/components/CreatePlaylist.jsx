@@ -16,6 +16,7 @@ import AddToPlaylist from "./AddToPlaylist";
 import { HashContext } from "./Hash";
 import PlaylistOwner from "./PlaylistOwner";
 import TimelineSlider from "./TimelineSlider";
+import PageLoader from "./PageLoader";
 
 export default function CreatePlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -226,10 +227,9 @@ export default function CreatePlaylist({ response }) {
                 label="Related playlists"
                 data={relatedPlaylist}
               />
-              <div>Trending in language</div>
             </>
           ) : (
-            data.type != "mix" && <div>Loading..</div>
+            data.type != "mix" && <PageLoader />
           )}
         </div>
       )}

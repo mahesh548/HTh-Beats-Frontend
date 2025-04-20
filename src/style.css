@@ -1720,3 +1720,15 @@ input[type="search"]::-webkit-search-cancel-button {
   aspect-ratio: 1/1;
   object-fit: cover;
 }
+.loaderCont {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  div {
+    height: 50px;
+    width: 50px;
+    opacity: 0.8;
+  }
+}
