@@ -122,6 +122,13 @@ export default function Player() {
     localStorage.setItem("repeat", !value);
     setRepeatOne(!value);
   };
+  const startDownload = async (URL, title) => {
+    showToast({ text: "Starting download..." });
+    const response = await utils.downloadThis(URL, title);
+    if (response.status) {
+      showToast({ text: `Downloading ${title}` });
+    }
+  };
   return (
     <div className="playerCont">
       <div className="blurPage">
@@ -219,7 +226,12 @@ export default function Player() {
               {utils.formatDuration(data.more_info.duration) || "00:00"}
             </div>
             <div className="playerButtons">
-              <button style={{ justifyContent: "start" }}>
+              <button
+                style={{ justifyContent: "start" }}
+                onClick={() =>
+                  startDownload(data.more_info.encrypted_media_url, data.title)
+                }
+              >
                 <img src={downloadOutlined} width={"30px"} />
               </button>
               <button onClick={() => setQueue({ type: "PREV" })}>

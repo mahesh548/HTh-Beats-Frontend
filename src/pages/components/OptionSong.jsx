@@ -84,6 +84,17 @@ export default function OptionSong({ children, styleClass, data, addId }) {
     ).values(),
   ];
 
+  const startDownload = async (URL, title) => {
+    showToast({ text: "Starting download..." });
+    setTimeout(async () => {
+      const response = await utils.downloadThis(URL, title);
+      if (response.status) {
+        showToast({ text: `Downloading ${title}` });
+      }
+    }, 1000);
+    close(eleId);
+  };
+
   return (
     <>
       <button className={styleClass} onClick={() => open(eleId)}>
@@ -176,7 +187,12 @@ export default function OptionSong({ children, styleClass, data, addId }) {
             <ShareOutlined />
             <p>Share</p>
           </button>
-          <button className="icoTextBut">
+          <button
+            className="icoTextBut"
+            onClick={() =>
+              startDownload(data?.more_info?.encrypted_media_url, data.title)
+            }
+          >
             <img src={downloadOutlined} />
             <p>Download</p>
           </button>

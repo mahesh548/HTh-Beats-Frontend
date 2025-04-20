@@ -13,6 +13,7 @@ import OptionSong from "./OptionSong";
 import LikeSong from "./LikeSong";
 import TimelineSlider from "./TimelineSlider";
 import PageLoader from "./PageLoader";
+import { showToast } from "./showToast";
 
 export default function CreatePlaylist({ response }) {
   const { openElements } = useContext(HashContext);
@@ -94,6 +95,13 @@ export default function CreatePlaylist({ response }) {
 
     getRelated();
   }, [data?.id]);
+  const startDownload = async (URL, title) => {
+    showToast({ text: "Starting download..." });
+    const response = await utils.downloadThis(URL, title);
+    if (response.status) {
+      showToast({ text: `Downloading ${title}` });
+    }
+  };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
@@ -124,7 +132,15 @@ export default function CreatePlaylist({ response }) {
                   likeClicked={(obj) => handleLocalLike(obj)}
                   key={data.id}
                 />
-                <button className="playlistButtonSecondary">
+                <button
+                  className="playlistButtonSecondary"
+                  onClick={() =>
+                    startDownload(
+                      data.more_info.encrypted_media_url,
+                      data.title
+                    )
+                  }
+                >
                   <img src={downloadOutlined} />
                 </button>
 

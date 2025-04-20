@@ -316,6 +316,33 @@ const utils = {
     const diffInHours = Math.floor(diffInMinutes / 60);
     return `${diffInHours}h ago`;
   },
+  downloadThis: async (url, title) => {
+    const streamQuality = localStorage.getItem("stream_quality") || "96";
+    const downloadQuality = localStorage.getItem("download_quality") || "96";
+    try {
+      const audioUrl = utils.decryptor(url);
+      const qualityUrl = audioUrl.replace(
+        `_${streamQuality}.mp4`,
+        `_${downloadQuality}.mp4`
+      );
+      const response = await fetch(qualityUrl);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = `${
+        utils.refineText(title) || "song"
+      } (${downloadQuality}kbps) By HTh-Beats.mp3`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+      return { status: true, file: title };
+    } catch (err) {
+      return { status: false, file: title };
+    }
+  },
 };
 
 export default utils;
