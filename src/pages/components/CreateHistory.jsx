@@ -17,6 +17,7 @@ import PageLoader from "./PageLoader";
 import { useInView } from "react-intersection-observer";
 import { createPortal } from "react-dom";
 import ConfirmPrompt from "./ConfirmPrompt";
+import { showToast } from "./showToast";
 
 export default function CreateHistory({
   response,
@@ -120,6 +121,7 @@ export default function CreateHistory({
       deleteData: { historyIds: deleteList, type: "history" },
     });
     if (response.status && response?.delete) {
+      showToast({ text: "History deleted" });
       setDeleteList([]);
       next(true);
     }

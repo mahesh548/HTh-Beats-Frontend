@@ -14,6 +14,7 @@ import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import { songContext } from "./Song";
 import { arrayMoveImmutable } from "array-move";
+import { showToast } from "./showToast";
 
 export default function OptionSong({ children, styleClass, data, addId }) {
   const { Queue, setQueue } = useContext(songContext);
@@ -61,6 +62,7 @@ export default function OptionSong({ children, styleClass, data, addId }) {
         value: { ...Queue.playlist, list: newList },
       });
     }
+    showToast({ text: "Queue updated" });
   };
 
   const toggleQueue = () => {
@@ -74,6 +76,7 @@ export default function OptionSong({ children, styleClass, data, addId }) {
       type: "PLAYLIST",
       value: { ...Queue.playlist, list: newList },
     });
+    showToast({ text: "Queue updated" });
   };
   const artists = [
     ...new Map(

@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { HashContext } from "./Hash";
 import utils from "../../../utils";
 import { useNavigate } from "react-router";
+import { showToast } from "./showToast";
 
 export default function MakePlaylist() {
   const { close } = useContext(HashContext);
@@ -16,8 +17,8 @@ export default function MakePlaylist() {
           song: [],
         },
       });
-      console.log(response);
       if (response.status) {
+        showToast({ text: "Playlist created" });
         navigate("/library");
       }
     }

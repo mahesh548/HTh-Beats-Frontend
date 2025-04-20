@@ -3,6 +3,7 @@ import utils from "../../../utils";
 import { debounce } from "lodash";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import likeFilled from "../../assets/icons/likeFilled.svg";
+import { showToast } from "./showToast";
 
 export default function LikeEntity({ isLiked, styleClass, likeData }) {
   const [likeIt, setLikeIt] = useState(false);
@@ -30,6 +31,9 @@ export default function LikeEntity({ isLiked, styleClass, likeData }) {
             savedData: likeData,
           });
           if (response?.status == true) {
+            showToast({
+              text: "Added to your library",
+            });
             setLikeIt(true);
           }
         } else {
@@ -37,6 +41,9 @@ export default function LikeEntity({ isLiked, styleClass, likeData }) {
             savedData: likeData,
           });
           if (response?.status == true) {
+            showToast({
+              text: "Removed from your library",
+            });
             setLikeIt(false);
           }
         }

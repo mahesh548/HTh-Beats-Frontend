@@ -5,6 +5,7 @@ import React from "react";
 import { HashContext } from "./Hash";
 import OffCanvas from "./BottomSheet";
 import utils from "../../../utils";
+import { showToast } from "./showToast";
 
 const availableLang = [
   { display: "Hindi", value: "hindi", native: "हिन्दी" },
@@ -59,6 +60,9 @@ export default function ChangeLang() {
       lang: chosen,
     });
     if (response.status && response.updated) {
+      showToast({
+        text: "Updated music your languages",
+      });
       localStorage.removeItem("homeCache");
       auth?.authentication();
     }

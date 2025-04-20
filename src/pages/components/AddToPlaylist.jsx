@@ -7,6 +7,7 @@ import { Add } from "@mui/icons-material";
 import utils from "../../../utils";
 import { HashContext } from "./Hash";
 import { songContext } from "./Song";
+import { showToast } from "./showToast";
 export default function AddToPlaylist({
   likeData,
   playlistIds,
@@ -36,6 +37,22 @@ export default function AddToPlaylist({
       savedTo,
       removedFrom,
     });
+  };
+
+  const notifyText = (savedTo, removedFrom) => {
+    if (savedTo.length == 1 && removedFrom.length == 0) {
+      const { title } = user.users_playlists.find(
+        (item) => item.id == savedTo[0]
+      );
+      return `Added to ${title}`;
+    }
+    if (removedFrom.length == 1 && savedTo.length == 0) {
+      const { title } = user.users_playlists.find(
+        (item) => item.id == removedFrom[0]
+      );
+      return `Removed from ${title}`;
+    }
+    return "Changes saved";
   };
 
   const setStatus = (obj) => {
@@ -79,6 +96,9 @@ export default function AddToPlaylist({
           });
         }
         if (savedTo.length > 0 || removedFrom.length > 0) {
+          showToast({
+            text: notifyText(savedTo, removedFrom),
+          });
           setStatus(obj);
         }
       };

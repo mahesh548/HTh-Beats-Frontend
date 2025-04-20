@@ -13,6 +13,7 @@ import ChipSort from "./ChipSort";
 import { useInView } from "react-intersection-observer";
 import { Link, useLocation, useNavigate } from "react-router";
 import SearchHistCard from "./SearchHistCard";
+import { showToast } from "./showToast";
 
 const idealFilterData = [
   { value: "playlist", parent: "all", label: "Playlists" },
@@ -250,6 +251,9 @@ export default function CreateSearch() {
 
       await utils.BACKEND(`/activity`, "DELETE", {
         deleteData: { historyIds: ["all"], type: "search", idList: ["all"] },
+      });
+      showToast({
+        text: "Cleared recent searches",
       });
       return;
     }

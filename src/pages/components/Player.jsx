@@ -25,6 +25,7 @@ import AddToPlaylist from "./AddToPlaylist";
 import OptionSong from "./OptionSong";
 import OffCanvas from "./BottomSheet";
 import BackButton from "./BackButton";
+import { showToast } from "./showToast";
 
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
@@ -105,12 +106,13 @@ export default function Player() {
       return;
     }
 
-    if (snippet == "No Lyrics") return;
+    if (snippet == "No Lyrics") {
+      showToast({ text: "Lyrics not available" });
+      return;
+    }
     const response = await utils.API(`/lyrics?id=${id}`, "GET");
     if (response.status) {
       const lyricArray = response.lyrics.split("<br>");
-      /* .filter((line) => line.length != 0); */
-      console.log(lyricArray);
       lyrics.current = { data: lyricArray, id: id, color: color };
       open("lyrics");
     }

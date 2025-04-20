@@ -24,6 +24,7 @@ import ConfirmPrompt from "./ConfirmPrompt";
 import { useNavigate } from "react-router";
 import EditPlaylist from "./EditPlaylist";
 import ManageOwner from "./ManageOwner";
+import { showToast } from "./showToast";
 
 export default function CreateCustomPlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -132,17 +133,19 @@ export default function CreateCustomPlaylist({ response }) {
         newData.ownerInfo = newData.ownerInfo.filter((item) =>
           changedData.members.includes(item.id)
         );
-
+      showToast({ text: "Playlist updated" });
       if (changedData?.invite) {
         navigator.clipboard.writeText(
           `https://${location.host}/collab?token=${response.token}`
         );
-        alert("Link Copied");
+        showToast({ text: "Link copied to clipboard" });
       }
       if (changedData?.privacy && changedData.privacy == "private")
-        newData.userId = newData.userId.filter((item) => item != "viewOnly");
+        showToast({ text: "Playlist is now private" });
+      newData.userId = newData.userId.filter((item) => item != "viewOnly");
 
       if (changedData?.privacy && changedData.privacy == "public") {
+        showToast({ text: "Playlist is now public" });
         newData.userId = newData.userId.filter((item) => item != "viewOnly");
         newData.userId.push("viewOnly");
       }

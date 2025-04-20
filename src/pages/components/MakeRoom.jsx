@@ -6,6 +6,7 @@ import { channelContext } from "./Channel";
 import PageLoader from "./PageLoader";
 import { useNavigate } from "react-router";
 import { songContext } from "./Song";
+import { showToast } from "./showToast";
 
 export default function MakeRoom() {
   const auth = useContext(AuthContext);
@@ -26,6 +27,7 @@ export default function MakeRoom() {
       });
 
       if (response.status) {
+        showToast({ text: "Music room is ready" });
         await setQueue({ type: "RESET" });
         await room.connect({ ...response.data });
         navigate("/room");

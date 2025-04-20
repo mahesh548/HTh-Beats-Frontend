@@ -9,6 +9,7 @@ import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 
 import addTo from "../../assets/icons/addTo.svg";
+import { showToast } from "./showToast";
 
 export default function SearchCard({ data, ac, setGlobalLike }) {
   const { Queue, setQueue } = useContext(songContext);
@@ -73,6 +74,7 @@ export default function SearchCard({ data, ac, setGlobalLike }) {
       type: "PLAYLIST",
       value: { ...Queue.playlist, list: newList },
     });
+    showToast({ text: "Queue updated" });
   };
 
   return (

@@ -15,7 +15,6 @@ export default function CreateHome() {
   const {
     charts,
     city_mod,
-    radio,
     tag_mixes,
     artist_recos,
     new_albums,

@@ -5,6 +5,7 @@ import likeOutlined from "../../assets/icons/likeOutlinedPlayer.svg";
 import likeFilled from "../../assets/icons/likeFilled.svg";
 import { songContext } from "./Song";
 import { HashContext } from "./Hash";
+import { showToast } from "./showToast";
 
 export default function LikeSong({
   isLiked,
@@ -54,6 +55,13 @@ export default function LikeSong({
         setStatus(likeData.playlistIds);
         const obj = { savedTo: likeData.playlistIds, removedFrom: [] };
         likeClicked?.(obj);
+        showToast({
+          text: "Added to Liked songs",
+          image: "/Like.png",
+          actionText: "Change",
+          onAction: () => open(addId),
+          type: "imgBtn",
+        });
       }
     };
     req();
