@@ -1744,3 +1744,34 @@ input[type="search"]::-webkit-search-cancel-button {
     opacity: 0.8;
   }
 }
+/* TOAST CSS */
+.toast {
+  width: 100%;
+  border-radius: 8px;
+  display: grid !important;
+  padding: 15px;
+  background-color: whitesmoke;
+  align-content: center;
+  align-content: center;
+  column-gap: 5px;
+  p {
+    color: black;
+    font-size: 16px;
+    font-weight: normal;
+  }
+  img {
+    height: 30px;
+    width: 30px;
+    border-radius: 4px;
+  }
+}
+
+.btn-toast {
+  grid-template-columns: auto max-content !important;
+}
+.img-toast {
+  grid-template-columns: 30px auto !important;
+}
+.img-btn-toast {
+  grid-template-columns: 30px auto max-content !important;
+}
