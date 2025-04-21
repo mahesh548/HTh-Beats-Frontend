@@ -150,16 +150,18 @@ export default function CreatePlaylist({ response }) {
                 </OptionSong>
               </div>
               <div>
-                {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (
+                {Queue?.playlist?.id != data.id ||
+                Queue?.status == "pause" ||
+                Queue?.status == "stop" ? (
+                  <button className="playlistButton" onClick={() => play()}>
+                    <PlayArrowRounded />
+                  </button>
+                ) : (
                   <button
                     className="playlistButton"
                     onClick={() => setQueue({ type: "STATUS", value: "pause" })}
                   >
                     <PauseRounded />
-                  </button>
-                ) : (
-                  <button className="playlistButton" onClick={() => play()}>
-                    <PlayArrowRounded />
                   </button>
                 )}
               </div>
