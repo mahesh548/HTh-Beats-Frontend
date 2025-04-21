@@ -123,11 +123,7 @@ export default function Player() {
     setRepeatOne(!value);
   };
   const startDownload = async (URL, title) => {
-    showToast({ text: "Starting download..." });
-    const response = await utils.downloadThis(URL, title);
-    if (response.status) {
-      showToast({ text: `Downloading ${title}` });
-    }
+    await utils.downloadThis(URL, title);
   };
   return (
     <div className="playerCont">

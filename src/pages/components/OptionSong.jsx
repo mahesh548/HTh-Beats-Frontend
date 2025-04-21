@@ -85,12 +85,8 @@ export default function OptionSong({ children, styleClass, data, addId }) {
   ];
 
   const startDownload = async (URL, title) => {
-    showToast({ text: "Starting download..." });
     setTimeout(async () => {
-      const response = await utils.downloadThis(URL, title);
-      if (response.status) {
-        showToast({ text: `Downloading ${title}` });
-      }
+      await utils.downloadThis(URL, title);
     }, 1000);
     close(eleId);
   };

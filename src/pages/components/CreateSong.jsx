@@ -96,11 +96,7 @@ export default function CreatePlaylist({ response }) {
     getRelated();
   }, [data?.id]);
   const startDownload = async (URL, title) => {
-    showToast({ text: "Starting download..." });
-    const response = await utils.downloadThis(URL, title);
-    if (response.status) {
-      showToast({ text: `Downloading ${title}` });
-    }
+    await utils.downloadThis(URL, title);
   };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>

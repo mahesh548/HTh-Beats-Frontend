@@ -1,6 +1,8 @@
 import axios from "axios";
+import { showToast } from "./src/pages/components/showToast";
 const apiUrl = "https://m8b5chhv-5000.inc1.devtunnels.ms/api";
 const backendUrl = "https://m8b5chhv-8080.inc1.devtunnels.ms";
+const activeDownloads = new Set();
 
 const utils = {
   BACKEND: async (path = "/", methods = "POST", payload = {}) => {
@@ -316,19 +318,33 @@ const utils = {
     const diffInHours = Math.floor(diffInMinutes / 60);
     return `${diffInHours}h ago`;
   },
-  downloadThis: async (url, title) => {
+  downloadThis: async (url, title, batch = false) => {
+    const audioUrl = utils.decryptor(url);
     const streamQuality = localStorage.getItem("stream_quality") || "96";
     const downloadQuality = localStorage.getItem("download_quality") || "96";
+    const qualityUrl = audioUrl.replace(
+      `_${streamQuality}.mp4`,
+      `_${downloadQuality}.mp4`
+    );
+
+    // Skip download if already in progress
+    if (activeDownloads.has(qualityUrl)) {
+      if (!batch) showToast({ text: "Already downloading..." });
+      return { status: false, file: title };
+    }
+
+    // Add to active downloads set
+    activeDownloads.add(qualityUrl);
+
+    // If not a batch download, show toast that download is starting
+    if (!batch) showToast({ text: "Starting download..." });
+
     try {
-      const audioUrl = utils.decryptor(url);
-      const qualityUrl = audioUrl.replace(
-        `_${streamQuality}.mp4`,
-        `_${downloadQuality}.mp4`
-      );
       const response = await fetch(qualityUrl);
       const blob = await response.blob();
       const blobUrl = URL.createObjectURL(blob);
 
+      // Create and click an anchor tag to start download
       const a = document.createElement("a");
       a.href = blobUrl;
       a.download = `${
@@ -338,9 +354,44 @@ const utils = {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(blobUrl);
+
+      // If it's not a batch download, show the completion toast
+      if (!batch) showToast({ text: `Downloaded ${title}` });
+
       return { status: true, file: title };
     } catch (err) {
+      // If it's not a batch download, show the error toast
+      if (!batch) showToast({ text: "Failed to download" });
       return { status: false, file: title };
+    } finally {
+      activeDownloads.delete(qualityUrl); // Clean up active download set
+    }
+  },
+  batchDownload: async (songs) => {
+    let completed = 0;
+    // Show toast when download is going to start
+    showToast({
+      text: `Starting downloads...`,
+    });
+
+    for (let i = 0; i < songs.length; i++) {
+      const { url, title } = songs[i];
+      try {
+        const result = await downloadThis(url, title, true);
+
+        // If download was successful, increment the completed counter
+        if (result.status === true) {
+          completed++;
+        }
+        // Show final download progress
+        showToast({
+          text: `Downloaded ${completed}/${songs.length} songs`,
+        });
+      } catch (error) {
+        showToast({
+          text: `Failed to download`,
+        });
+      }
     }
   },
 };
