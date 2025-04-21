@@ -35,7 +35,12 @@ export default function DownloadEntity({ children, styleClass, data }) {
 
   return (
     <>
-      <button className={styleClass} onClick={() => open(eleId)}>
+      <button
+        className={styleClass}
+        onClick={() => {
+          if (data?.list?.length != 0) open(eleId);
+        }}
+      >
         {children}
       </button>
 

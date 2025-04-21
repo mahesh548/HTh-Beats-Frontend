@@ -87,19 +87,21 @@ export default function CreateLikePlaylist({ response }) {
             </DownloadEntity>
           </div>
           <div>
-            {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (
-              <button
-                className="playlistButton"
-                onClick={() => setQueue({ type: "STATUS", value: "pause" })}
-              >
-                <PauseRounded />
-              </button>
-            ) : (
+            {Queue?.playlist?.id != data.id ||
+            Queue?.status == "pause" ||
+            Queue?.status == "stop" ? (
               <button
                 className="playlistButton"
                 onClick={() => play(data.list[0].id)}
               >
                 <PlayArrowRounded />
+              </button>
+            ) : (
+              <button
+                className="playlistButton"
+                onClick={() => setQueue({ type: "STATUS", value: "pause" })}
+              >
+                <PauseRounded />
               </button>
             )}
           </div>
