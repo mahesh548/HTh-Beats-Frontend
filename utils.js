@@ -349,7 +349,7 @@ const utils = {
       a.href = blobUrl;
       a.download = `${
         utils.refineText(title) || "song"
-      } (${downloadQuality}kbps) By HTh-Beats.mp3`;
+      } (${downloadQuality}kbps) from HTh-Beats.mp3`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -358,6 +358,7 @@ const utils = {
       // If it's not a batch download, show the completion toast
       if (!batch) showToast({ text: `Downloaded ${title}` });
 
+      // Delay for 2 second before next download
       return { status: true, file: title };
     } catch (err) {
       // If it's not a batch download, show the error toast
@@ -369,29 +370,30 @@ const utils = {
   },
   batchDownload: async (songs) => {
     let completed = 0;
-    // Show toast when download is going to start
+
     showToast({
       text: `Starting downloads...`,
     });
 
     for (let i = 0; i < songs.length; i++) {
       const { url, title } = songs[i];
-      try {
-        const result = await downloadThis(url, title, true);
 
-        // If download was successful, increment the completed counter
+      try {
+        const result = await utils.downloadThis(url, title, true);
+
         if (result.status === true) {
           completed++;
         }
-        // Show final download progress
+
         showToast({
           text: `Downloaded ${completed}/${songs.length} songs`,
         });
       } catch (error) {
         showToast({
-          text: `Failed to download`,
+          text: `Failed to download ${title}`,
         });
       }
+      await new Promise((resolve) => setTimeout(() => resolve(), 3000));
     }
   },
 };

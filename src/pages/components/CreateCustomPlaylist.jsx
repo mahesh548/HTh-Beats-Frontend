@@ -2,7 +2,6 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import utils from "../../../utils";
 import BackButton from "./BackButton";
 
-import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import addCollab from "../../assets/icons/addCollab.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
 import {
@@ -25,6 +24,8 @@ import { useNavigate } from "react-router";
 import EditPlaylist from "./EditPlaylist";
 import ManageOwner from "./ManageOwner";
 import { showToast } from "./showToast";
+import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
+import DownloadEntity from "./DownloadEntity";
 
 export default function CreateCustomPlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -226,9 +227,16 @@ export default function CreateCustomPlaylist({ response }) {
             >
               <img src={moreOutlined} />
             </OptionEntity>
-            <button className="playlistButtonSecondary">
+            <DownloadEntity
+              styleClass="playlistButtonSecondary"
+              data={{
+                id: data.id,
+                title: data.title,
+                list: data.list,
+              }}
+            >
               <img src={downloadOutlined} />
-            </button>
+            </DownloadEntity>
 
             {data.owner == auth?.user?.id ? (
               <button

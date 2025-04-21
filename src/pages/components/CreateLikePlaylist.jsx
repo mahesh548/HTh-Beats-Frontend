@@ -2,12 +2,13 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import utils from "../../../utils";
 import BackButton from "./BackButton";
 
-import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import PlaylistNavbar from "./PlaylistNavbar";
 import { useInView } from "react-intersection-observer";
+import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
+import DownloadEntity from "./DownloadEntity";
 
 export default function CreateLikePlaylist({ response }) {
   const [data, setData] = useState(response);
@@ -74,9 +75,16 @@ export default function CreateLikePlaylist({ response }) {
         </div>
         <div className="playlistButtonCont">
           <div>
-            <button className="playlistButtonSecondary">
+            <DownloadEntity
+              styleClass="playlistButtonSecondary"
+              data={{
+                id: data.id,
+                title: data.title,
+                list: data.list,
+              }}
+            >
               <img src={downloadOutlined} />
-            </button>
+            </DownloadEntity>
           </div>
           <div>
             {Queue?.playlist?.id == data.id && Queue.status != "pause" ? (

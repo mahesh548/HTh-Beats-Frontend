@@ -1,8 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import utils from "../../../utils";
 import BackButton from "./BackButton";
-
-import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
 import {
   PauseRounded,
@@ -24,6 +22,8 @@ import { Link, useNavigate } from "react-router";
 import fb from "../../assets/icons/fb.svg";
 import twitter from "../../assets/icons/twitter.svg";
 import wiki from "../../assets/icons/wiki.svg";
+import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
+import DownloadEntity from "./DownloadEntity";
 
 export default function CreateArtist({ response }) {
   const navigate = useNavigate();
@@ -164,9 +164,16 @@ export default function CreateArtist({ response }) {
                 styleClass="playlistButtonSecondary"
                 likeData={likeData}
               />
-              <button className="playlistButtonSecondary">
+              <DownloadEntity
+                styleClass="playlistButtonSecondary"
+                data={{
+                  id: data.id,
+                  title: data.name,
+                  list: data.list,
+                }}
+              >
                 <img src={downloadOutlined} />
-              </button>
+              </DownloadEntity>
 
               <OptionEntity
                 styleClass="playlistButtonSecondary"

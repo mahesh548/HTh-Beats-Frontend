@@ -17,6 +17,7 @@ import { HashContext } from "./Hash";
 import PlaylistOwner from "./PlaylistOwner";
 import TimelineSlider from "./TimelineSlider";
 import PageLoader from "./PageLoader";
+import DownloadEntity from "./DownloadEntity";
 
 export default function CreatePlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -165,9 +166,16 @@ export default function CreatePlaylist({ response }) {
               styleClass="playlistButtonSecondary"
               likeData={likeData}
             />
-            <button className="playlistButtonSecondary">
+            <DownloadEntity
+              styleClass="playlistButtonSecondary"
+              data={{
+                id: data.id,
+                title: data.title,
+                list: data.list,
+              }}
+            >
               <img src={downloadOutlined} />
-            </button>
+            </DownloadEntity>
 
             <OptionEntity
               styleClass="playlistButtonSecondary"
