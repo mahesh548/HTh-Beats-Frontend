@@ -24,6 +24,11 @@ export default function Join() {
   const connectRoom = async (data) => {
     setRoomInfo(false);
     await setQueue({ type: "RESET" });
+    const audio = document.getElementById("audio");
+    audio.pause();
+    audio.currentTime = 0;
+    audio.src = "";
+
     delete data.adminData;
     const { success } = await room.connect({ ...data });
 

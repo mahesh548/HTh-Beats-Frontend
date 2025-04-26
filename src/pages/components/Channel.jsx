@@ -292,6 +292,7 @@ export default function ChannelProvider({ children }) {
     return () => {
       channel.presence.unsubscribe("leave", handleLeave);
       channel.presence.unsubscribe("enter", handleEnter);
+      channel.unsubscribe("reaction", handleReaction);
     };
   }, [roomInfo?.roomId, channel, currentSong, playState]);
 
