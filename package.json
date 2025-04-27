@@ -28,7 +28,8 @@
     "react-swipeable-views": "^0.14.0",
     "react-transition-group": "^4.4.5",
     "sonner": "^2.0.3",
-    "sortablejs": "^1.15.6"
+    "sortablejs": "^1.15.6",
+    "vite-plugin-pwa": "^1.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

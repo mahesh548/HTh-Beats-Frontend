@@ -9,9 +9,12 @@ lerna-debug.log*
 
 node_modules
 dist
+dev-dist
 Blueprint
 dist-ssr
 *.local
+
+
 
 # Editor directories and files
 .vscode/*
