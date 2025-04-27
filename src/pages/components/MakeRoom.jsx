@@ -29,6 +29,11 @@ export default function MakeRoom() {
       if (response.status) {
         showToast({ text: "Music room is ready" });
         await setQueue({ type: "RESET" });
+        const audio = document.getElementById("audio");
+        audio.pause();
+        audio.currentTime = 0;
+        audio.src = "";
+
         await room.connect({ ...response.data });
         navigate("/room");
       }

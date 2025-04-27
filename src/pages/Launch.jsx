@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router";
-import LogoBack from "./components/LogoBack";
 export default function Launch() {
   const navigate = useNavigate();
   const goToLogin = () => {
