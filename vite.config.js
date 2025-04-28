@@ -10,6 +10,7 @@ export default defineConfig({
       devOptions: {
         enabled: true,
         type: "module",
+        suppressWarnings: true,
       },
       manifest: {
         name: "Hertz To hearts - Beats",
@@ -20,6 +21,7 @@ export default defineConfig({
         background_color: "#000000",
         display: "standalone",
         start_url: "/",
+        id: "HTh-Beats",
         icons: [
           {
             src: "/icon-192x192.png",
@@ -28,7 +30,7 @@ export default defineConfig({
           },
           {
             src: "/logo.png",
-            sizes: "512x512",
+            sizes: "500x500",
             type: "image/png",
           },
         ],

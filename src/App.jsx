@@ -17,6 +17,7 @@ import Library from "./pages/Library";
 
 //components
 import Navbar from "./pages/components/Navbar";
+import Install from "./pages/components/Install";
 
 //css
 import "./style.css";
@@ -30,6 +31,7 @@ export default function App() {
   return (
     <>
       <Toaster />
+      <Install />
       <Routes>
         {/* LOGIN NOT REQUIRED */}
         <Route path="/login" element={<Login />} />
