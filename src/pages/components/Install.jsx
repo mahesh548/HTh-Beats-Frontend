@@ -36,6 +36,7 @@ export default function Install() {
     setDeferredPrompt(null);
     close("Install");
   };
+  /* test */
 
   return (
     <OffCanvas open={openElements.includes("Install")} dismiss={() => dimiss()}>
