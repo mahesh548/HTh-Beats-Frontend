@@ -1,6 +1,3 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
-  "git": {
-    "branches": ["main"]
-  }
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
