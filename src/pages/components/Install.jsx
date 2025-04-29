@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { HashContext } from "./Hash";
 import OffCanvas from "./BottomSheet";
+import BackButton from "./BackButton";
 
 export default function Install() {
   const { openElements, open, close } = useContext(HashContext);
@@ -43,8 +44,10 @@ export default function Install() {
       dismiss={() => dismiss()}
     >
       <div>
+        <BackButton styleClass="iconButton mt-0 " />
+        <hr className="dividerLine opacity-0" />
         <div
-          className="playlistSong px-3 mb-3"
+          className="playlistSong px-3 mb-4 mt-4"
           style={{ gridTemplateColumns: "50px auto max-content" }}
         >
           <img src="logo.png" alt="Logo" className="playlistSongImg" />
@@ -52,11 +55,13 @@ export default function Install() {
             <p className="thinOneLineText playlistSongTitle">
               Hertz To hearts - Beats
             </p>
-            <p className="thinOneLineText playlistSongSubTitle">~ 1MB</p>
+            <p className="thinOneLineText playlistSongSubTitle">
+              Download size ~ 1MB
+            </p>
           </div>
 
           <button
-            className="addToBut px-3 py-2"
+            className="iconButton addToBut px-3 py-2 "
             onClick={() => handleInstallClick()}
           >
             Install
@@ -75,12 +80,6 @@ export default function Install() {
           <img src="screenshot5.png" alt="screen shot" />
           <img src="screenshot6.png" alt="screen shot" />
         </div>
-        <button
-          className="iconButton w-100 text-center pt-3"
-          onClick={() => dismiss()}
-        >
-          May be later
-        </button>
       </div>
     </OffCanvas>
   );
