@@ -32,14 +32,16 @@ export default function Install() {
     }
   };
 
-  const dimiss = () => {
+  const dismiss = () => {
     setDeferredPrompt(null);
     close("Install");
   };
-  /* test */
 
   return (
-    <OffCanvas open={openElements.includes("Install")} dismiss={() => dimiss()}>
+    <OffCanvas
+      open={openElements.includes("Install")}
+      dismiss={() => dismiss()}
+    >
       <div>
         <div
           className="playlistSong px-3 mb-3"
@@ -61,6 +63,24 @@ export default function Install() {
           </button>
         </div>
         <hr className="dividerLine" />
+        <p className="text-white-50 fs-6 text-start ps-2 fw-light py-2">
+          Install HTh-Beats for faster and easier access to your favorite
+          musics.
+        </p>
+        <div className="sliderContainer screenshots hiddenScrollbar px-2">
+          <img src="screenshot1.png" alt="screen shot" />
+          <img src="screenshot2.png" alt="screen shot" />
+          <img src="screenshot3.png" alt="screen shot" />
+          <img src="screenshot4.png" alt="screen shot" />
+          <img src="screenshot5.png" alt="screen shot" />
+          <img src="screenshot6.png" alt="screen shot" />
+        </div>
+        <button
+          className="iconButton w-100 text-center pt-3"
+          onClick={() => dismiss()}
+        >
+          May be later
+        </button>
       </div>
     </OffCanvas>
   );
