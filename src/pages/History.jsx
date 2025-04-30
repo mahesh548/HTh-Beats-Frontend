@@ -85,6 +85,15 @@ export default function History() {
       });
       setHistoryData([...HistoryData, ...refineResponse(response.data)]);
       callAgain.current = response.hasMore; // set call again to hasMore (true,false) for more result
+    } else if (
+      response?.data &&
+      response.data.length == 0 &&
+      response.page == 1 &&
+      response.status
+    ) {
+      setOriginalResponse([]);
+      setHistoryData([]);
+      callAgain.current = false;
     }
   };
 
@@ -110,7 +119,7 @@ export default function History() {
     await getHistoryData(page);
   };
 
-  return HistoryData == false ? (
+  return HistoryData === false ? (
     <PageLoader />
   ) : (
     <CreateHistory

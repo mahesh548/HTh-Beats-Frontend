@@ -126,6 +126,9 @@ export default function CreateHistory({
       next(true);
     }
   };
+  if (response.length == 0) {
+    return <p>You don't have any history</p>;
+  }
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
@@ -174,6 +177,7 @@ export default function CreateHistory({
           </div>
           <ChipSort filterData={filterData} filter={filter} />
         </div>
+
         <div className="libraryList px-2">
           {response.map((item) => {
             return (
