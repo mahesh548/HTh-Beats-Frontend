@@ -50,7 +50,7 @@ export default function Install() {
           className="playlistSong px-3 mb-4 mt-4"
           style={{ gridTemplateColumns: "50px auto max-content" }}
         >
-          <img src="logo.png" alt="Logo" className="playlistSongImg" />
+          <img src="/logo.png" alt="Logo" className="playlistSongImg" />
           <div className="">
             <p className="thinOneLineText playlistSongTitle">
               Hertz To hearts - Beats
@@ -73,12 +73,12 @@ export default function Install() {
           musics.
         </p>
         <div className="sliderContainer screenshots hiddenScrollbar px-2">
-          <img src="screenshot1.png" alt="screen shot" />
-          <img src="screenshot2.png" alt="screen shot" />
-          <img src="screenshot3.png" alt="screen shot" />
-          <img src="screenshot4.png" alt="screen shot" />
-          <img src="screenshot5.png" alt="screen shot" />
-          <img src="screenshot6.png" alt="screen shot" />
+          <img src="/screenshot1.png" alt="screen shot" />
+          <img src="/screenshot2.png" alt="screen shot" />
+          <img src="/screenshot3.png" alt="screen shot" />
+          <img src="/screenshot4.png" alt="screen shot" />
+          <img src="/screenshot5.png" alt="screen shot" />
+          <img src="/screenshot6.png" alt="screen shot" />
         </div>
       </div>
     </OffCanvas>

@@ -8,6 +8,7 @@ import {
   LogoutOutlined,
   PauseRounded,
   PlayArrowRounded,
+  Add,
 } from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
@@ -26,6 +27,7 @@ import ManageOwner from "./ManageOwner";
 import { showToast } from "./showToast";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import DownloadEntity from "./DownloadEntity";
+import { Link } from "react-router";
 
 export default function CreateCustomPlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -274,6 +276,23 @@ export default function CreateCustomPlaylist({ response }) {
             )}
           </div>
         </div>
+      </div>
+      <div className="songList">
+        <Link to="/search" className="text-decoration-none">
+          <div className="playlistSong">
+            <button
+              className="iconButton rounded"
+              style={{ background: "#ffffff2e", aspectRatio: "1/1" }}
+            >
+              <Add className="text-white-50 " />
+            </button>
+            <div>
+              <p className="thinOneLineText playlistSongTitle fs-5 fw-light ">
+                Add to this playlist
+              </p>
+            </div>
+          </div>
+        </Link>
       </div>
       <div className="songList">
         {data.list.map((item) => {

@@ -2,13 +2,14 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import utils from "../../../utils";
 import BackButton from "./BackButton";
 
-import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
+import { Add, PauseRounded, PlayArrowRounded } from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import PlaylistNavbar from "./PlaylistNavbar";
 import { useInView } from "react-intersection-observer";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import DownloadEntity from "./DownloadEntity";
+import { Link } from "react-router";
 
 export default function CreateLikePlaylist({ response }) {
   const [data, setData] = useState(response);
@@ -107,6 +108,25 @@ export default function CreateLikePlaylist({ response }) {
           </div>
         </div>
       </div>
+
+      <div className="songList">
+        <Link to="/search" className="text-decoration-none">
+          <div className="playlistSong">
+            <button
+              className="iconButton rounded"
+              style={{ background: "#ffffff2e", aspectRatio: "1/1" }}
+            >
+              <Add className="text-white-50 " />
+            </button>
+            <div>
+              <p className="thinOneLineText playlistSongTitle fs-5 fw-light ">
+                Add to this playlist
+              </p>
+            </div>
+          </div>
+        </Link>
+      </div>
+
       <div className="songList">
         {data.list.map((item) => {
           const isLiked = Queue?.saved && Queue?.saved.includes(item.id);

@@ -18,6 +18,7 @@ import { useInView } from "react-intersection-observer";
 import { createPortal } from "react-dom";
 import ConfirmPrompt from "./ConfirmPrompt";
 import { showToast } from "./showToast";
+import Emoji from "./Emoji";
 
 export default function CreateHistory({
   response,
@@ -126,6 +127,35 @@ export default function CreateHistory({
       next(true);
     }
   };
+  if (response.length == 0) {
+    return (
+      <div className="page">
+        <div className="libraryNavCont px-2" style={{ zIndex: "11" }}>
+          <div
+            className="libraryNav mt-4 mb-3"
+            style={{ gridTemplateColumns: "40px auto  max-content" }}
+          >
+            <Link to="/profile">
+              <img
+                src={auth?.user?.pic || "logo.png"}
+                className="rounded-circle"
+              />
+            </Link>
+
+            <p className="labelText mt-0">Recents</p>
+          </div>
+        </div>
+        <div className="position-absolute top-50 start-50 translate-middle">
+          <Emoji
+            src={utils.stickerUrl("duck", "25")}
+            imageStyleClass="loaderStk"
+            loaderStyleClass="loaderStk"
+          />
+          <p className="text-white-50">No recent history</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
@@ -174,6 +204,7 @@ export default function CreateHistory({
           </div>
           <ChipSort filterData={filterData} filter={filter} />
         </div>
+
         <div className="libraryList px-2">
           {response.map((item) => {
             return (
