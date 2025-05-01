@@ -20,7 +20,7 @@ import Navbar from "./pages/components/Navbar";
 import Install from "./pages/components/Install";
 
 //css
-import "./style.css";
+
 import History from "./pages/History";
 import Join from "./pages/Join";
 import Room from "./pages/Room";
