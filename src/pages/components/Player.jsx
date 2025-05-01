@@ -168,13 +168,16 @@ export default function Player() {
               <MoreHorizRounded />
             </OptionSong>
           </div>
-          <img
-            src={utils
-              .getItemFromId(Queue.song, Queue.playlist.list)
-              .image.replace("150x150", "500x500")}
-            alt={data.title}
-            className="playerBanner"
-          />
+          <div className="bannerWrapper">
+            <img
+              src={utils
+                .getItemFromId(Queue.song, Queue.playlist.list)
+                .image.replace("150x150", "500x500")}
+              alt={data.title}
+              className="playerBanner"
+            />
+          </div>
+
           <div className="playerController">
             <div className="playerDetails">
               <div>

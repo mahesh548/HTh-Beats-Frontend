@@ -9,7 +9,7 @@ export default function Root() {
 
   useEffect(() => {
     const checkDevice = () => {
-      setIsDesktop(window.innerWidth >= 380);
+      setIsDesktop(window.innerWidth >= 1000);
     };
 
     checkDevice();
