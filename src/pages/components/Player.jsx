@@ -101,15 +101,23 @@ export default function Player() {
   const getLyrics = async (snippet, id) => {
     const color = document.getElementById("miniPlayer").style.backgroundColor;
 
-    if (lyrics.current?.id == id) {
-      open("lyrics");
-      return;
-    }
-
     if (snippet == "No Lyrics") {
       showToast({ text: "Lyrics not available" });
       return;
     }
+
+    if (lyrics.current?.id == id && lyrics.current.data.length > 2) {
+      open("lyrics");
+      return;
+    }
+    if (lyrics.current.id == id) {
+      showToast({ text: "Fetching lyrics..." });
+      return;
+    }
+
+    lyrics.current.id = id;
+    lyrics.current.data = ["Lyrics not available for this track!"];
+
     const response = await utils.API(`/lyrics?id=${id}`, "GET");
     if (response.status) {
       const lyricArray = response.lyrics.split("<br>");
