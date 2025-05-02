@@ -34,7 +34,10 @@ export default function CreateHome() {
   const greeting = utils.getUserHomeGreeting(auth?.user?.username);
 
   return (
-    <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
+    <div
+      className="page hiddenScrollbar deskScroll"
+      style={{ overflowY: "scroll" }}
+    >
       <div className="libraryNavCont px-2 position-static mobo">
         <div
           className="libraryNav mt-4 mb-3"
