@@ -24,6 +24,7 @@ import MakeRoom from "./MakeRoom";
 import RealtimeSong from "./RealtimeSong";
 import { channelContext } from "./Channel";
 import ChangeLang from "./ChangeLang";
+import DeskPlayer from "./DeskPlayer";
 
 export default function Screen() {
   const auth = useContext(AuthContext);
@@ -60,7 +61,7 @@ export default function Screen() {
       <Audio />
       <RealtimeSong />
       <ChangeLang />
-      <MiniPlayer />
+
       <div className="screen">
         <div className="screenNavbar p-2">
           <div className="d-grid justify-content-center">
@@ -75,7 +76,7 @@ export default function Screen() {
             <Outlet />
           </div>
         </div>
-        <div className="screenBottomBar"></div>
+        <div className="screenBottomBar">{<DeskPlayer />}</div>
       </div>
 
       {/* {openElements.includes("createPlaylist") &&

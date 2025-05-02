@@ -309,6 +309,7 @@ p {
 }
 .TimelineSquareItem {
   grid-row: 1;
+  cursor: pointer;
 }
 .TimelineSquareItem img {
   border-radius: 8px;
@@ -331,6 +332,7 @@ p {
 }
 .TimelineRoundItem {
   grid-row: 1;
+  cursor: pointer;
 }
 .TimelineRoundItem img {
   border-radius: 100%;
@@ -735,6 +737,7 @@ p {
     outline: none;
     margin: auto;
     border-radius: 40px;
+    cursor: pointer;
   }
 }
 
@@ -1813,6 +1816,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .screenNavbar {
   display: grid;
+
   grid-template-columns: 80px 1fr auto;
 }
 .screenMain {
@@ -1833,7 +1837,8 @@ input[type="search"]::-webkit-search-cancel-button {
   border-radius: 8px;
 }
 .screenBottomBar {
-  height: 80px;
+  max-height: 80px;
+  min-height: 0;
   width: 100%;
   display: block;
 }
@@ -1876,12 +1881,20 @@ input[type="search"]::-webkit-search-cancel-button {
     position: relative;
   }
   .TimelineSquareItem {
-    cursor: pointer;
     padding: 8px;
     border-radius: 8px;
     background: transparent;
   }
   .TimelineSquareItem:hover {
+    background: var(--light-dark-bg);
+  }
+  .TimelineRoundItem {
+    padding: 8px;
+    border-radius: 8px;
+    background: transparent;
+  }
+
+  .TimelineRoundItem:hover {
     background: var(--light-dark-bg);
   }
   .timelineScrollBtn {
@@ -1908,6 +1921,7 @@ input[type="search"]::-webkit-search-cancel-button {
   .sliderWrap:hover .timelineScrollBtn {
     opacity: 1;
   }
+
   .hiddenScrollbar.deskScroll {
     overflow: auto;
     scrollbar-width: none;
@@ -1938,5 +1952,29 @@ input[type="search"]::-webkit-search-cancel-button {
 
   .hiddenScrollbar.deskScroll::-webkit-scrollbar-thumb:hover {
     background: #ffffff6e;
+  }
+  .deskPlayer {
+    height: 80px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .playerButtons {
+    display: grid;
+    width: auto;
+    grid-template-columns: repeat(5, max-content);
+    margin-top: 0px;
+    column-gap: 15px;
+    justify-content: center;
+  }
+  .playerButtons button:hover {
+    opacity: 1 !important;
+    scale: 1.1;
+  }
+  .miniPlayerPoster {
+    height: 60px;
+    width: 60px;
+    margin: auto;
+    border-radius: 4px;
   }
 }
