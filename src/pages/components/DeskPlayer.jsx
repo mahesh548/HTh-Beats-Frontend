@@ -2,14 +2,18 @@ import { useContext, useMemo, useState, useEffect } from "react";
 import { songContext } from "./Song";
 import utils from "../../../utils";
 import {
+  FormatQuoteRounded,
+  IosShareOutlined,
   PauseCircleFilled,
   PauseRounded,
   PlayArrowRounded,
   PlayCircleFilled,
   RepeatOneOutlined,
   RepeatOutlined,
+  ShareOutlined,
   SkipNextRounded,
   SkipPreviousRounded,
+  SlideshowOutlined,
 } from "@mui/icons-material";
 
 import { HashContext } from "./Hash";
@@ -175,7 +179,24 @@ export default function DeskPlayer() {
           </div>
         </div>
       </div>
-      <div></div>
+      <div
+        className="d-flex align-items-center justify-content-end"
+        style={{ gap: "5px" }}
+      >
+        <button className="iconButton opacity-50">
+          <SlideshowOutlined />
+        </button>
+        <button className="iconButton opacity-50">
+          <FormatQuoteRounded />
+        </button>
+
+        <button className="iconButton opacity-50">
+          <img src={playlistOutlined} width={"25px"} />
+        </button>
+        <button className="iconButton opacity-50">
+          <ShareOutlined />
+        </button>
+      </div>
       {openElements.includes(addId) &&
         createPortal(
           <AddToPlaylist
