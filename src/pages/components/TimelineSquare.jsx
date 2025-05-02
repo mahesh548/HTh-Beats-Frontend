@@ -25,7 +25,11 @@ export default function TimelineSquare({ img, text, id, type, style = "" }) {
     <div
       className={style == "round" ? "TimelineRoundItem" : "TimelineSquareItem"}
     >
-      <img src={img} alt="playlist banner" onClick={() => func()} />
+      <img
+        src={img.replace("150x150", "500x500")}
+        alt="playlist banner"
+        onClick={() => func()}
+      />
       <p>{utils.refineText(text)}</p>
     </div>
   );

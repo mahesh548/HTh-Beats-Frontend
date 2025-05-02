@@ -26,12 +26,12 @@ import Join from "./pages/Join";
 import Room from "./pages/Room";
 import Profile from "./pages/Profile";
 import { Toaster } from "sonner";
+import PlaylistNotFound from "./pages/components/PlaylistNotFound";
 
 export default function App() {
   return (
     <>
       <Toaster />
-      <Install />
       <Routes>
         {/* LOGIN NOT REQUIRED */}
         <Route path="/login" element={<Login />} />
@@ -59,7 +59,7 @@ export default function App() {
         </Route>
 
         {/* ERROR PAGES */}
-        <Route path="*" element={<h1>Not Found</h1>} />
+        <Route path="*" element={<PlaylistNotFound />} />
       </Routes>
     </>
   );

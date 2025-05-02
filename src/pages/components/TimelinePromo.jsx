@@ -9,7 +9,7 @@ export default function TimelinePromo({ promo }) {
   const homeCache = JSON.parse(localStorage.homeCache);
   const { openElements, open, close } = useContext(HashContext);
   const setBackgroundColor = async (img, setColor) => {
-    const color = await utils.getAverageColor(img);
+    const color = await utils.getAverageColor(img, 0.5);
     setColor(color);
   };
   const promoElements = Object.keys(promo).map((key) => {
