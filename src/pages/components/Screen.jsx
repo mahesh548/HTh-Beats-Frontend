@@ -64,7 +64,7 @@ export default function Screen() {
       <div className="screen">
         <div className="screenNavbar p-2">
           <div className="d-grid justify-content-center">
-            <img src="/logo.png" height="50px" width="50px" />
+            <img src="/logo.png" height="40px" width="40px" />
           </div>
           <div></div>
           <div></div>

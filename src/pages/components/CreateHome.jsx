@@ -35,7 +35,7 @@ export default function CreateHome() {
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
-      <div className="libraryNavCont px-2 position-static">
+      <div className="libraryNavCont px-2 position-static mobo">
         <div
           className="libraryNav mt-4 mb-3"
           style={{ gridTemplateColumns: "40px auto", columnGap: "15px" }}
@@ -87,7 +87,9 @@ export default function CreateHome() {
         />
       )}
       <div style={{ height: "40px" }}></div>
-      {promo && <TimelinePromo promo={promo} />}
+      <div className="promoCont">
+        {promo && <TimelinePromo promo={promo} />}
+      </div>
     </div>
   );
 }

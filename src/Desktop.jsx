@@ -33,7 +33,6 @@ export default function Desktop() {
   return (
     <>
       <Toaster />
-      <Install />
       <Routes>
         {/* LOGIN NOT REQUIRED */}
         <Route path="/login" element={<Login />} />

@@ -311,9 +311,9 @@ p {
   grid-row: 1;
 }
 .TimelineSquareItem img {
-  height: 150px;
-  width: 150px;
   border-radius: 8px;
+  width: clamp(150px, 160px, 180px);
+  height: clamp(150px, 160px, 180px);
 }
 .TimelineSquareItem p {
   color: var(--thin-text-color);
@@ -333,9 +333,9 @@ p {
   grid-row: 1;
 }
 .TimelineRoundItem img {
-  height: 140px;
-  width: 140px;
   border-radius: 100%;
+  width: clamp(140px, 150px, 170px);
+  height: clamp(140px, 150px, 170px);
 }
 .TimelineRoundItem p {
   color: white;
@@ -1833,13 +1833,73 @@ input[type="search"]::-webkit-search-cancel-button {
   border-radius: 8px;
 }
 .screenBottomBar {
-  height: 100px;
+  height: 80px;
   width: 100%;
   display: block;
 }
+@media (max-width: 1024px) {
+  /* MOBILE SPECIFIC CSS */
+  .desk {
+    display: none !important;
+  }
+}
 @media (min-width: 1024px) {
+  /* DESKTOP SPECIFIC CSS */
   .page {
     height: 100% !important;
-    padding-bottom: 0 !important;
+    padding-bottom: 20px !important;
+  }
+  .mobo {
+    display: none !important;
+  }
+  .promoCont {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+  .promoContainer {
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    background-color: #2c2c2c;
+    border-radius: 12px;
+    margin-top: 20px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+  }
+  .sliderContainer {
+    margin-bottom: 30px;
+  }
+  .sliderWrap {
+    position: relative;
+  }
+  .TimelineSquareItem {
+    cursor: pointer;
+  }
+  .timelineScrollBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+    background-color: var(--light-dark-bg);
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    svg {
+      font-size: 18px;
+    }
+  }
+  .timelineScrollBtn.right {
+    right: 5px;
+  }
+  .timelineScrollBtn.left {
+    left: 5px;
+  }
+  .sliderWrap:hover .timelineScrollBtn {
+    opacity: 1;
   }
 }
