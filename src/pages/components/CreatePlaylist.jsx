@@ -126,14 +126,14 @@ export default function CreatePlaylist({ response }) {
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
 
-      <div className="playlistMain">
+      <div className="playlistMain dp-s">
         <PlaylistNavbar
           response={response}
           setData={setData}
           display={inView}
         />
 
-        <BackButton />
+        <BackButton styleClass="mobo" />
         <img
           src={data.image}
           alt={data.title}
@@ -141,6 +141,9 @@ export default function CreatePlaylist({ response }) {
           ref={ref}
         />
         <div className="playlistDetails">
+          <h1 className="desk thinOneLineText playlistHeader">
+            {utils.refineText(data.title)}
+          </h1>
           <p className="thinTwoLineText">
             {utils.refineText(data.header_desc || data.title)}
           </p>

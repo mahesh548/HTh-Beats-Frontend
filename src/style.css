@@ -1835,6 +1835,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .screenPage {
   background-color: var(--desktop-dark-grey);
   border-radius: 8px;
+  position: relative;
 }
 .screenBottomBar {
   max-height: 80px;
@@ -2014,5 +2015,65 @@ input[type="search"]::-webkit-search-cancel-button {
   .iconButton:hover {
     scale: 1.1;
     opacity: 1 !important;
+  }
+  .playlistNavbar {
+    display: grid;
+    grid-template-columns: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(50%);
+    width: 100%;
+    border-radius: 8px 8px 0 0;
+  }
+  .dp-s {
+    padding-left: 20px;
+  }
+  .backgroundGradient {
+    position: unset !important;
+    height: 500px !important;
+    background-image: linear-gradient(
+      360deg,
+      var(--desktop-dark-grey),
+      transparent
+    );
+  }
+  .playlistMain {
+    width: 100%;
+    margin: auto;
+    margin-top: -480px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+    align-items: end;
+  }
+  .playlistDetails {
+    margin-top: 0;
+    padding: 0;
+  }
+  .playlistMainImg {
+    margin-top: 0;
+  }
+  .playlistButtonCont {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 0px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    padding-right: 20px;
+  }
+  .playlistHeader {
+    font-size: 4rem;
+    margin: 0;
+    color: white;
+    font-weight: bold;
+  }
+  .songList {
+    padding: 10px 20px;
+    margin-top: 8px;
+    background-color: #00000024;
   }
 }

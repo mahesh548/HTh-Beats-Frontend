@@ -142,7 +142,7 @@ export default function PlaylistNavbar({ response, setData, display }) {
               : "none",
         }}
       >
-        <button className="iconButton" onClick={() => navigate(-1)}>
+        <button className="iconButton mobo" onClick={() => navigate(-1)}>
           <ArrowBack />
         </button>
         {isOn ? (

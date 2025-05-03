@@ -72,7 +72,7 @@ export default function Screen() {
         </div>
         <div className="screenMain p-2">
           <div className="sidePanel"></div>
-          <div className="screenPage hiddenScrollbar ps-4">
+          <div className="screenPage hiddenScrollbar ">
             <Outlet />
           </div>
         </div>

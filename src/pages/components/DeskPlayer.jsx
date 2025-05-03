@@ -97,10 +97,9 @@ export default function DeskPlayer() {
 
   useEffect(() => {
     const audio = document.getElementById("audio");
+    const volumeRange = document.getElementById("volumeRange");
 
-    document
-      .getElementById("volumeRange")
-      .style.setProperty("--progress", `${volume}%`);
+    if (volumeRange) volumeRange.style.setProperty("--progress", `${volume}%`);
     if (audio) audio.volume = volume / 100;
   }, [volume]);
 
