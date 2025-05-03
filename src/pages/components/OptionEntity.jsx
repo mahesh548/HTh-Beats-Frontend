@@ -64,7 +64,7 @@ export default function OptionEntity({
       >
         <div className="prevCont">
           <div
-            className="playlistSong"
+            className="playlistSong mobo"
             style={{
               width: "95%",
               margin: "auto",
