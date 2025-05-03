@@ -3,6 +3,7 @@ import { songContext } from "./Song";
 import utils from "../../../utils";
 import {
   FormatQuoteRounded,
+  Fullscreen,
   IosShareOutlined,
   PauseCircleFilled,
   PauseRounded,
@@ -14,6 +15,9 @@ import {
   SkipNextRounded,
   SkipPreviousRounded,
   SlideshowOutlined,
+  SpeakerNotesOutlined,
+  VolumeMuteOutlined,
+  VolumeUpOutlined,
 } from "@mui/icons-material";
 
 import { HashContext } from "./Hash";
@@ -29,6 +33,9 @@ export default function DeskPlayer() {
   const { currentSong, sendReaction } = useContext(channelContext);
 
   const { open, openElements } = useContext(HashContext);
+  const [volume, setVolume] = useState(
+    (document.getElementById("audio")?.volume || 1) * 100
+  );
 
   const [repeatOne, setRepeatOne] = useState(
     JSON.parse(localStorage.getItem("repeat")) || false
@@ -87,6 +94,16 @@ export default function DeskPlayer() {
   const startDownload = async (URL, title) => {
     await utils.downloadThis(URL, title);
   };
+
+  useEffect(() => {
+    const audio = document.getElementById("audio");
+
+    document
+      .getElementById("volumeRange")
+      .style.setProperty("--progress", `${volume}%`);
+    if (audio) audio.volume = volume / 100;
+  }, [volume]);
+
   if (!Queue.song) return <></>;
 
   return (
@@ -195,6 +212,35 @@ export default function DeskPlayer() {
         </button>
         <button className="iconButton opacity-50">
           <ShareOutlined />
+        </button>
+        <div className="volumneCont">
+          {volume > 0 ? (
+            <button
+              className="iconButton opacity-50"
+              onClick={() => setVolume(0)}
+            >
+              <VolumeUpOutlined />
+            </button>
+          ) : (
+            <button
+              className="iconButton opacity-50"
+              onClick={() => setVolume(50)}
+            >
+              <VolumeMuteOutlined />
+            </button>
+          )}
+          <input
+            type="range"
+            className="volumneRange"
+            min={0}
+            value={volume}
+            max={100}
+            onChange={(e) => setVolume(e.target.value)}
+            id="volumeRange"
+          />
+        </div>
+        <button className="iconButton opacity-50">
+          <Fullscreen />
         </button>
       </div>
       {openElements.includes(addId) &&
