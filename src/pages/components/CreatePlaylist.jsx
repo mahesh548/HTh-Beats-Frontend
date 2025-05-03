@@ -218,6 +218,23 @@ export default function CreatePlaylist({ response }) {
         </div>
       </div>
       <div className="songList">
+        <div className="desk listInfo">
+          <div
+            className="d-grid"
+            style={{
+              gridTemplateColumns: "50px 1fr 1fr 1fr 40px 40px",
+              columnGap: "15px",
+            }}
+          >
+            <div></div>
+            <p className="thinOneLineText playlistSongSubTitle">Title</p>
+            <p className="thinOneLineText playlistSongSubTitle">Album</p>
+            <p className="thinOneLineText playlistSongSubTitle text-center">
+              Duration
+            </p>
+          </div>
+          <hr className="dividerLine mb-4" />
+        </div>
         {data.list.map((item) => {
           const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
           return (

@@ -158,7 +158,7 @@ export default function PlaylistNavbar({ response, setData, display }) {
         ) : (
           <div className="playlistNavbarInfo">
             <p className="thinOneLineText playlistTitle">{response.title}</p>
-            <button className="iconButton" onClick={() => setIsOn(true)}>
+            <button className="iconButton mobo" onClick={() => setIsOn(true)}>
               <img src={searchOutlined} height={"20px"} />
             </button>
           </div>
