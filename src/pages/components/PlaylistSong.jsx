@@ -47,7 +47,7 @@ export default function PlaylistSong({
     setGlobalLike?.(obj, data.id);
   };
   return (
-    <div className="playlistSong">
+    <div className="playlistSong deskPlaylistSong">
       <img
         src={data.image}
         alt={data.title}
@@ -71,6 +71,22 @@ export default function PlaylistSong({
             : utils.refineText(
                 `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
               )}
+        </p>
+      </div>
+      <div className="desk">
+        <p
+          className="thinOneLineText playlistSongSubTitle"
+          onClick={() => play(data.id)}
+        >
+          {utils.refineText(data.more_info?.album || "No album")}
+        </p>
+      </div>
+      <div className="desk">
+        <p
+          className="thinOneLineText playlistSongSubTitle text-center"
+          onClick={() => play(data.id)}
+        >
+          {utils.formatDuration(data.more_info?.duration) || "00:00"}
         </p>
       </div>
       <div>

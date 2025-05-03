@@ -40,7 +40,7 @@ export default function TimelineSlider({ data, label, style = "" }) {
   }, [sliderRef.current]);
   return (
     <>
-      <p className="labelText">{label}</p>
+      <p className="labelText dp-s">{label}</p>
       <div className="sliderWrap">
         {showScroll.left && (
           <button
@@ -50,7 +50,7 @@ export default function TimelineSlider({ data, label, style = "" }) {
             <ArrowForwardIos style={{ transform: "rotate(180deg)" }} />
           </button>
         )}
-        <div className="sliderContainer hiddenScrollbar" ref={sliderRef}>
+        <div className="sliderContainer hiddenScrollbar dp-s" ref={sliderRef}>
           <div className="slider">
             {" "}
             {data.map((item) => {
