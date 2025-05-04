@@ -1149,6 +1149,7 @@ p {
 }
 .albumList {
   grid-template-columns: 80px auto 40px 40px;
+  cursor: pointer;
   img {
     height: 80px;
     width: 80px;
@@ -2039,8 +2040,12 @@ input[type="search"]::-webkit-search-cancel-button {
       font-weight: bold;
     }
   }
+
   .dp-s {
     padding-left: 20px !important;
+  }
+  .dp-t {
+    padding-top: 20px !important;
   }
   .backgroundGradient {
     position: unset !important;
@@ -2061,7 +2066,7 @@ input[type="search"]::-webkit-search-cancel-button {
     align-items: end;
   }
   .playlistDetails {
-    margin-top: 0;
+    margin-top: 0 !important;
     padding: 0;
   }
   .playlistMainImg {
@@ -2086,8 +2091,8 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .songList {
     padding: 20px 20px;
-    margin-top: 8px;
-    background-color: #00000024;
+    margin-top: 8px !important;
+    background-color: #00000024 !important;
   }
   .ownerAvt img {
     border: 3px solid #00000000;
@@ -2202,4 +2207,32 @@ input[type="search"]::-webkit-search-cancel-button {
     scale: 1.08;
     border: 0.5px solid black;
   }
+  .desk-artist-cover {
+    display: grid;
+    grid-column-start: 1;
+    grid-column-end: 3;
+
+    width: 100%;
+    margin: auto;
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+    align-items: end;
+    background-color: transparent !important;
+  }
+  .fade-shadow {
+    background-image: linear-gradient(
+      180deg,
+      #0f0f0f40 0% 5%,
+      #0f0f0fbd,
+      #0f0f0f
+    );
+  }
+  .desk-no-black {
+    background-color: transparent !important;
+  }
+  .desk-art-card {
+    margin-left: 20px !important;
+    width: 50% !important;
+  }
+  
 }
