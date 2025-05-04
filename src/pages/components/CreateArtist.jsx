@@ -239,6 +239,23 @@ export default function CreateArtist({ response }) {
           style={{ height: showAll.songs ? "" : "500px" }}
         >
           <p className="labelText ps-1 mb-1">Popular songs</p>
+          <div className="desk listInfo mt-4">
+            <div
+              className="d-grid"
+              style={{
+                gridTemplateColumns: "75px 1fr 1fr 1fr 40px 40px",
+                columnGap: "15px",
+              }}
+            >
+              <div></div>
+              <p className="thinOneLineText playlistSongSubTitle">Title</p>
+              <p className="thinOneLineText playlistSongSubTitle">Album</p>
+              <p className="thinOneLineText playlistSongSubTitle text-center">
+                Duration
+              </p>
+            </div>
+            <hr className="dividerLine mb-4" />
+          </div>
           {data.list.map((item, index) => {
             const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
             return (
@@ -274,6 +291,7 @@ export default function CreateArtist({ response }) {
               style={{ height: showAll.albums ? "" : "500px" }}
             >
               <p className="labelText ps-1 mb-1">Popular albums</p>
+
               {data.topAlbums.map((album, index) => {
                 return (
                   <div className="sortPlaylistSong" key={"wrap-" + album.id}>
