@@ -46,17 +46,17 @@ export default function ContextMenu({ show, onClose, children }) {
         newY = innerHeight - menuRect.height - 10;
       }
 
-      if (newX !== clickPos.x || newY !== clickPos.y) {
-        menuR.current.style.top = `${newY}px`;
-        menuR.current.style.left = `${newX}px`;
-      }
+      console.log("cordinate:", { newX, newY });
+
+      menuR.current.style.top = `${newY}px`;
+      menuR.current.style.left = `${newX}px`;
     }
   }, [show, clickPos]);
   if (!show) return null;
   return createPortal(
     <div className="context-menu-backdrop contextMenuPart" onClick={onClose}>
       <div
-        className="context-menu-container fade-in contextMenuPart"
+        className="context-menu-container fade-in contextMenuPart hiddenScrollbar deskScroll"
         onClick={(e) => e.stopPropagation()}
         ref={menuR}
       >
