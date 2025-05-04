@@ -63,6 +63,7 @@ export default function DownloadEntity({ children, styleClass, data }) {
                   className={`playlistSong mt-4`}
                   onClick={() => toggleDownload(item.id)}
                   key={"download-" + index}
+                  style={{ cursor: "pointer" }}
                 >
                   <button className="iconButton">
                     {DownloadList.includes(item.id) ? (

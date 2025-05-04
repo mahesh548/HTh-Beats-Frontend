@@ -165,6 +165,7 @@ export default function OptionEntity({
                     margin: "auto",
                     marginTop: "10px",
                     marginBottom: "25px",
+                    cursor: "pointer",
                   }}
                   key={`${item.name}_${item.id}`}
                 >

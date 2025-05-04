@@ -46,8 +46,6 @@ export default function ContextMenu({ show, onClose, children }) {
         newY = innerHeight - menuRect.height - 10;
       }
 
-      console.log("cordinate:", { newX, newY });
-
       menuR.current.style.top = `${newY}px`;
       menuR.current.style.left = `${newX}px`;
     }

@@ -2040,7 +2040,7 @@ input[type="search"]::-webkit-search-cancel-button {
     }
   }
   .dp-s {
-    padding-left: 20px;
+    padding-left: 20px !important;
   }
   .backgroundGradient {
     position: unset !important;
@@ -2169,5 +2169,37 @@ input[type="search"]::-webkit-search-cancel-button {
     display: grid;
     grid-template-rows: auto 1fr auto;
     height: 85dvh;
+  }
+  .songsCard {
+    width: 100%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+    align-items: end;
+  }
+  .songsCardImg {
+    height: 235px;
+    width: 235px;
+    display: block;
+    margin: auto;
+    margin-top: -30px;
+    border-radius: 8px;
+  }
+  .songArtCont {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    div {
+      border-radius: 40px;
+      background-color: #00000052;
+      cursor: pointer;
+      img {
+        border-radius: 100%;
+      }
+    }
+  }
+  .songArtCont div:hover {
+    scale: 1.08;
+    border: 0.5px solid black;
   }
 }
