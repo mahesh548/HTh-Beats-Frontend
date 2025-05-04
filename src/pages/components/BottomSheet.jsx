@@ -1,8 +1,10 @@
 import { BottomSheet } from "react-spring-bottom-sheet";
 import "../../BottomSheet.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import ContextMenu from "./ContextMenu";
 export default function OffCanvas({ children, open, dismiss }) {
   const [isDis, setIsDis] = useState(false);
+
   const handleDismiss = () => {
     if (isDis) return;
     setIsDis(true);
@@ -11,7 +13,12 @@ export default function OffCanvas({ children, open, dismiss }) {
       setIsDis(false);
     }, 400);
   };
-  return (
+  const isDesktop = window.innerWidth >= 1000;
+  return isDesktop ? (
+    <ContextMenu show={open} onClose={() => handleDismiss()}>
+      {children}
+    </ContextMenu>
+  ) : (
     <BottomSheet
       open={open}
       onDismiss={() => handleDismiss()}

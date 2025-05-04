@@ -103,13 +103,20 @@ export default function CreatePlaylist({ response }) {
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
 
       <div className="playlistMain">
-        <BackButton />
+        <BackButton styleClass="mobo" />
         <div className="songsCard px-3 mt-4">
-          <img src={data.image} alt={data.title} className="songsCardImg" />
+          <img
+            src={data.image.replace("150x150", "500x500")}
+            alt={data.title}
+            className="songsCardImg"
+          />
           <div>
             <div className="playlistDetails mt-2">
+              <h1 className="desk thinOneLineText playlistHeader">
+                {utils.refineText(data.title)}
+              </h1>
               <p
-                className="thinTwoLineText text-white mt-2"
+                className="thinTwoLineText text-white mt-2 mobo"
                 style={{ fontSize: "18px", fontWeight: "bold" }}
               >
                 {utils.refineText(data.title)}
@@ -168,7 +175,9 @@ export default function CreatePlaylist({ response }) {
             </div>
           </div>
         </div>
-        <p className="labelText ps-2 mt-4 mb-2">Featured artist</p>
+      </div>
+      <div>
+        <p className="labelText ps-2 mt-4 mb-2 dp-s">Featured artist</p>
         <div className="songArtCont">
           {data.more_info.artistMap.artists.map((item) => {
             return (
@@ -184,7 +193,7 @@ export default function CreatePlaylist({ response }) {
           {relatedPlaylist ? (
             <>
               <TimelineSlider
-                label="Related playlists"
+                label="Recommended songs"
                 data={relatedPlaylist}
               />
             </>

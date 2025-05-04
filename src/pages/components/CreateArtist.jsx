@@ -138,7 +138,7 @@ export default function CreateArtist({ response }) {
             <p className="thinOneLineText playlistTitle">{data?.name}</p>
           </div>
         </div>
-        <BackButton />
+        <BackButton styleClass="mobo" />
         <div
           className="bg-black"
           style={{

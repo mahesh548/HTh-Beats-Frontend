@@ -64,7 +64,7 @@ export default function OptionEntity({
       >
         <div className="prevCont">
           <div
-            className="playlistSong"
+            className="playlistSong mobo"
             style={{
               width: "95%",
               margin: "auto",
@@ -165,6 +165,7 @@ export default function OptionEntity({
                     margin: "auto",
                     marginTop: "10px",
                     marginBottom: "25px",
+                    cursor: "pointer",
                   }}
                   key={`${item.name}_${item.id}`}
                 >

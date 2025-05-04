@@ -1758,6 +1758,12 @@ input[type="search"]::-webkit-search-cancel-button {
     opacity: 0.8;
   }
 }
+/* DOWNLOAD CSS */
+.dlCont {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 94dvh;
+}
 /* TOAST CSS */
 .toast {
   width: 100%;
@@ -2034,7 +2040,7 @@ input[type="search"]::-webkit-search-cancel-button {
     }
   }
   .dp-s {
-    padding-left: 20px;
+    padding-left: 20px !important;
   }
   .backgroundGradient {
     position: unset !important;
@@ -2099,5 +2105,101 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .deskPlaylistSong:hover {
     background-color: #ffffff1e;
+  }
+
+  .context-menu-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    z-index: 999;
+  }
+
+  .context-menu-container {
+    position: absolute;
+    background: #282828d6;
+    border-radius: 6px;
+    min-width: 180px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    padding: 8px 0;
+    z-index: 1000;
+    animation: fadeIn 200ms ease-out;
+    color: white;
+    backdrop-filter: blur(3px);
+    max-width: 300px;
+    max-height: 90dvh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .icoTextBut {
+    grid-template-columns: 20px auto;
+    column-gap: 10px;
+    font-size: 15px;
+    margin-top: 0px;
+    font-weight: 100;
+    width: 100%;
+    justify-content: start;
+    img {
+      height: 20px;
+      width: 20px;
+    }
+    svg {
+      font-size: 20px;
+    }
+  }
+  .icoTextBut:hover {
+    background-color: #ffffff0c;
+    border-radius: 4px;
+    scale: 1.07;
+  }
+  .dlCont {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 85dvh;
+  }
+  .songsCard {
+    width: 100%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+    align-items: end;
+  }
+  .songsCardImg {
+    height: 235px;
+    width: 235px;
+    display: block;
+    margin: auto;
+    margin-top: -30px;
+    border-radius: 8px;
+  }
+  .songArtCont {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    div {
+      border-radius: 40px;
+      background-color: #00000052;
+      cursor: pointer;
+      img {
+        border-radius: 100%;
+      }
+    }
+  }
+  .songArtCont div:hover {
+    scale: 1.08;
+    border: 0.5px solid black;
   }
 }

@@ -103,7 +103,7 @@ export default function OptionSong({ children, styleClass, data, addId }) {
       >
         <div className="prevCont">
           <div
-            className="playlistSong"
+            className="playlistSong mobo"
             style={{
               width: "95%",
               margin: "auto",
