@@ -87,8 +87,8 @@ export default function DownloadEntity({ children, styleClass, data }) {
 
           {DownloadList.length != 0 && (
             <div
-              className=" w-100 pb-3 text-center"
-              style={{ background: "#1f1f1f" }}
+              className=" w-100 pb-1 text-center"
+              /* style={{ background: "#1f1f1f" }} */
             >
               <button
                 className="addToBut mb-2"
@@ -96,7 +96,10 @@ export default function DownloadEntity({ children, styleClass, data }) {
               >
                 Download {DownloadList.length}/5 songs
               </button>
-              <i className="text-white-50 fw-light">
+              <i
+                className="text-white-50 fw-light"
+                style={{ fontSize: "0.8rem" }}
+              >
                 You can download 5 songs at once in{" "}
                 <b>{downloadQuality} kbps</b>.
               </i>

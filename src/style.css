@@ -1762,7 +1762,7 @@ input[type="search"]::-webkit-search-cancel-button {
 .dlCont {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  height: 60dvh;
+  height: 94dvh;
 }
 /* TOAST CSS */
 .toast {
@@ -2129,7 +2129,7 @@ input[type="search"]::-webkit-search-cancel-button {
     color: white;
     backdrop-filter: blur(3px);
     max-width: 300px;
-    max-height: 60dvh;
+    max-height: 90dvh;
     overflow-y: scroll;
     overflow-x: hidden;
   }
@@ -2164,5 +2164,10 @@ input[type="search"]::-webkit-search-cancel-button {
     background-color: #ffffff0c;
     border-radius: 4px;
     scale: 1.07;
+  }
+  .dlCont {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 85dvh;
   }
 }
