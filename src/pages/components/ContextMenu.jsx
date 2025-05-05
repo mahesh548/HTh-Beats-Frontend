@@ -1,19 +1,10 @@
-import { useEffect, useRef, useState, useLayoutEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import { getClick } from "./ClickPosition";
 
 export default function ContextMenu({ show, onClose, children }) {
   const menuRef = useRef();
   const menuR = useRef();
-  const [clickPos, setClickPos] = useState({ x: 0, y: 0 });
-
-  useEffect(() => {
-    const handleClick = (e) => {
-      if (!e.target.classList.contains("contextMenuPart"))
-        setClickPos({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("click", handleClick);
-    return () => window.removeEventListener("click", handleClick);
-  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -29,14 +20,14 @@ export default function ContextMenu({ show, onClose, children }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [show, onClose]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (show && menuR.current) {
       const menu = menuR.current;
       const { innerWidth, innerHeight } = window;
 
       const menuRect = menu.getBoundingClientRect();
-      let newX = clickPos.x;
-      let newY = clickPos.y;
+      let newX = getClick().x;
+      let newY = getClick().y;
 
       if (newX + menuRect.width > innerWidth) {
         newX = innerWidth - menuRect.width - 10;
@@ -49,7 +40,8 @@ export default function ContextMenu({ show, onClose, children }) {
       menuR.current.style.top = `${newY}px`;
       menuR.current.style.left = `${newX}px`;
     }
-  }, [show, clickPos]);
+  }, [show, getClick]);
+
   if (!show) return null;
   return createPortal(
     <div className="context-menu-backdrop contextMenuPart" onClick={onClose}>

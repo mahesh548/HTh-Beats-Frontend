@@ -8,6 +8,7 @@ import utils from "../../../utils";
 import { HashContext } from "./Hash";
 import { songContext } from "./Song";
 import { showToast } from "./showToast";
+import OffCanvas from "./BottomSheet";
 export default function AddToPlaylist({
   likeData,
   playlistIds,
@@ -18,7 +19,7 @@ export default function AddToPlaylist({
 
   //storing the id of the playlist in which the song is saved
   const [addedTo, setAddedTo] = useState(playlistIds || []);
-  const { close } = useContext(HashContext);
+  const { openElements, close } = useContext(HashContext);
   const { Queue, setQueue } = useContext(songContext);
   const toggleList = (id) => {
     //toggling the id of the playlist
@@ -106,6 +107,61 @@ export default function AddToPlaylist({
     },
     [likeData, eleId]
   );
+  const isDesktop = window.innerWidth >= 1000;
+  if (isDesktop) {
+    return (
+      <OffCanvas
+        open={openElements.includes(eleId)}
+        dismiss={() => close(eleId)}
+      >
+        <div className="dlCont p-2" style={{ width: "300px" }}>
+          <div>
+            <p className="text-white-50 text-start">Add to playlist</p>
+            <button className="icoTextBut mt-2">
+              <Add />
+              <p>Create new playlist</p>
+            </button>
+            <hr className="dividerLine" />
+          </div>
+
+          <div
+            style={{ overflow: "scroll", maxHeight: "70dvh" }}
+            className="hiddenScrollbar"
+          >
+            {user.users_playlists.map((item) => {
+              return (
+                <button
+                  className="plCont"
+                  onClick={() => toggleList(item.id)}
+                  key={item.id}
+                >
+                  <p className="thinOneLineText fs-6">{item.title}</p>
+                  <img
+                    src={addedTo.includes(item.id) ? likeFilled : likeOutlined}
+                  />
+                </button>
+              );
+            })}
+          </div>
+          <div className="text-end">
+            <hr className="dividerLine" />
+            <button
+              className="iconButton m-0 d-inline text-white-50"
+              onClick={() => close(eleId)}
+            >
+              Cancel
+            </button>
+            <button
+              className="addToBut px-3 py-1 m-0 d-inline ms-2"
+              onClick={() => saveChanges()}
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      </OffCanvas>
+    );
+  }
   return (
     <div className="floatingPage">
       <div className="addToCont">
