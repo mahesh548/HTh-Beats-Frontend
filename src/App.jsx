@@ -25,13 +25,13 @@ import History from "./pages/History";
 import Join from "./pages/Join";
 import Room from "./pages/Room";
 import Profile from "./pages/Profile";
-import { Toaster } from "sonner";
+/* import { Toaster } from "sonner"; */
 import PlaylistNotFound from "./pages/components/PlaylistNotFound";
 
 export default function App() {
   return (
     <>
-      <Toaster />
+      {/* <Toaster /> */}
       <Routes>
         {/* LOGIN NOT REQUIRED */}
         <Route path="/login" element={<Login />} />
