@@ -1836,7 +1836,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .sidePanel {
   display: block;
-  width: 80px;
+  width: max-content;
   height: 100%;
   background-color: var(--desktop-dark-grey);
   border-radius: 8px;
@@ -2206,6 +2206,9 @@ input[type="search"]::-webkit-search-cancel-button {
       }
     }
   }
+  .op-10 {
+    opacity: 0.1;
+  }
   .songArtCont div:hover {
     scale: 1.08;
     border: 0.5px solid black;
@@ -2340,5 +2343,56 @@ input[type="search"]::-webkit-search-cancel-button {
     max-width: 70vw;
     max-height: 90vh;
     height: fit-content;
+  }
+  .editCont {
+    margin-top: -480px;
+  }
+  .quickCont {
+    height: 100%;
+  }
+  .quickCont.closed {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0px;
+    width: 80px;
+    align-items: center;
+  }
+  .quickCont.open {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0px;
+    width: 250px;
+    align-items: center;
+  }
+  .quickCont.closed .qaButton p {
+    display: none;
+  }
+  .quickCont.closed .labelText {
+    display: none;
+  }
+  .quickCont.open .labelText {
+    display: "";
+  }
+  .quickCont.open .qaButton {
+    height: 40px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+  }
+  .qaButton {
+    height: 40px;
+    width: 40px;
+    border-radius: 12px;
+    background-color: var(--light-dark-bg);
+    svg {
+      font-size: 16px;
+    }
+    img {
+      height: 20px;
+    }
   }
 }
