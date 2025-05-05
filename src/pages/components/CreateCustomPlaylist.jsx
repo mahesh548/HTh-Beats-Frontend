@@ -143,9 +143,10 @@ export default function CreateCustomPlaylist({ response }) {
         );
         showToast({ text: "Link copied to clipboard" });
       }
-      if (changedData?.privacy && changedData.privacy == "private")
+      if (changedData?.privacy && changedData.privacy == "private") {
         showToast({ text: "Playlist is now private" });
-      newData.userId = newData.userId.filter((item) => item != "viewOnly");
+        newData.userId = newData.userId.filter((item) => item != "viewOnly");
+      }
 
       if (changedData?.privacy && changedData.privacy == "public") {
         showToast({ text: "Playlist is now public" });

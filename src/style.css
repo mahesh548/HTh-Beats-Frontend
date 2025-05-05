@@ -1328,6 +1328,7 @@ p {
   padding: 20px;
   row-gap: 15px;
   border-radius: 12px;
+  max-width: 400px;
 }
 /* EDIT PLAYLIST CSS */
 .editCont {
@@ -2296,5 +2297,48 @@ input[type="search"]::-webkit-search-cancel-button {
     width: fit-content !important;
     max-width: 350px;
     cursor: pointer;
+  }
+  .deskBack {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    background-color: #0000003a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .editMain {
+    width: 100%;
+    margin: auto;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+    height: fit-content;
+    max-height: 90dvh;
+  }
+  .edInput {
+    outline: none;
+    border: none;
+    text-align: left;
+    font-size: 16px;
+    background-color: #ffffff1f;
+    border-radius: 8px;
+    padding: 4px;
+    color: white;
+    width: 100%;
+    padding-left: 10px;
+    height: 40px;
+  }
+  .deskEditCont {
+    width: fit-content;
+    background: var(--light-dark-bg);
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 70vw;
+    max-height: 90vh;
+    height: fit-content;
   }
 }
