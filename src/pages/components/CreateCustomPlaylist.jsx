@@ -139,7 +139,7 @@ export default function CreateCustomPlaylist({ response }) {
       showToast({ text: "Playlist updated" });
       if (changedData?.invite) {
         navigator.clipboard.writeText(
-          `https://${location.host}/collab?token=${response.token}`
+          `https://${location.host}/collab/${response.token}`
         );
         showToast({ text: "Link copied to clipboard" });
       }
@@ -356,7 +356,11 @@ export default function CreateCustomPlaylist({ response }) {
         )}
       {openElements.includes(ownerId) &&
         createPortal(
-          <ManageOwner ownerInfo={data.ownerInfo} saveEdit={saveEdit} />,
+          <ManageOwner
+            ownerInfo={data.ownerInfo}
+            saveEdit={saveEdit}
+            ownerId={ownerId}
+          />,
           document.body
         )}
       {openElements.includes(delId) &&
