@@ -118,7 +118,7 @@ export default function CreateArtist({ response }) {
 
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
-      <div className="artistCover">
+      <div className="artistCover mobo">
         <img src={data.image} alt={data.name} className="playlistMainImg" />
         <p>{data.name}</p>
       </div>
@@ -130,7 +130,7 @@ export default function CreateArtist({ response }) {
             display: !inView ? "grid" : "none",
           }}
         >
-          <button className="iconButton" onClick={() => navigate(-1)}>
+          <button className="iconButton mobo" onClick={() => navigate(-1)}>
             <ArrowBack />
           </button>
 
@@ -140,7 +140,7 @@ export default function CreateArtist({ response }) {
         </div>
         <BackButton styleClass="mobo" />
         <div
-          className="bg-black"
+          className="bg-black desk-artist-cover dp-s dp-t"
           style={{
             backgroundImage: `linear-gradient(180deg, ${bg.replace(
               ")",
@@ -148,11 +148,20 @@ export default function CreateArtist({ response }) {
             )} 0% 35%, transparent 100%)`,
           }}
         >
+          <img
+            src={data.image.replace("150x150", "500x500")}
+            alt={data.title}
+            className="playlistMainImg desk rounded-circle"
+            ref={ref}
+          />
           <div
             className="playlistDetails py-1"
             style={{ marginTop: "50%" }}
             ref={ref}
           >
+            <h1 className="desk thinOneLineText playlistHeader">
+              {utils.refineText(data.name)}
+            </h1>
             <p className="thinTwoLineText">
               {utils.refineText(data?.subtitle_desc)}
             </p>
@@ -230,6 +239,23 @@ export default function CreateArtist({ response }) {
           style={{ height: showAll.songs ? "" : "500px" }}
         >
           <p className="labelText ps-1 mb-1">Popular songs</p>
+          <div className="desk listInfo mt-4">
+            <div
+              className="d-grid"
+              style={{
+                gridTemplateColumns: "75px 1fr 1fr 1fr 40px 40px",
+                columnGap: "15px",
+              }}
+            >
+              <div></div>
+              <p className="thinOneLineText playlistSongSubTitle">Title</p>
+              <p className="thinOneLineText playlistSongSubTitle">Album</p>
+              <p className="thinOneLineText playlistSongSubTitle text-center">
+                Duration
+              </p>
+            </div>
+            <hr className="dividerLine mb-4" />
+          </div>
           {data.list.map((item, index) => {
             const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
             return (
@@ -265,6 +291,7 @@ export default function CreateArtist({ response }) {
               style={{ height: showAll.albums ? "" : "500px" }}
             >
               <p className="labelText ps-1 mb-1">Popular albums</p>
+
               {data.topAlbums.map((album, index) => {
                 return (
                   <div className="sortPlaylistSong" key={"wrap-" + album.id}>
@@ -303,7 +330,10 @@ export default function CreateArtist({ response }) {
           </>
         )}
       </div>
-      <div className="bg-black pt-4" style={{ marginTop: "-5px" }}>
+      <div
+        className="bg-black pt-4 desk-no-black"
+        style={{ marginTop: "-5px" }}
+      >
         <div className="ps-2">
           {data?.singles && (
             <TimelineSlider label="Popular releases" data={data.singles} />
@@ -323,7 +353,7 @@ export default function CreateArtist({ response }) {
         </div>
 
         <div
-          className="card bg-dark text-white mx-auto mt-5 mb-5"
+          className="card bg-dark text-white mx-auto mt-5 mb-5 desk-art-card"
           style={{ width: "95%" }}
         >
           <img src={data.image} className="card-img artC" alt={data.name} />

@@ -26,13 +26,19 @@ import History from "./pages/History";
 import Join from "./pages/Join";
 import Room from "./pages/Room";
 import Profile from "./pages/Profile";
-import { Toaster } from "sonner";
+/* import { Toaster } from "sonner"; */
 import PlaylistNotFound from "./pages/components/PlaylistNotFound";
+import { useEffect } from "react";
+import { setClick } from "./pages/components/ClickPosition";
 
 export default function Desktop() {
+  useEffect(() => {
+    window.addEventListener("click", setClick);
+    return () => window.removeEventListener("click", setClick);
+  }, []);
   return (
     <>
-      <Toaster />
+      {/*  <Toaster /> */}
       <Routes>
         {/* LOGIN NOT REQUIRED */}
         <Route path="/login" element={<Login />} />

@@ -149,7 +149,7 @@ export default function OptionEntity({
         </div>
       </OffCanvas>
 
-      {(entityType != "private" || entityType != "collab") && (
+      {entityType != "private" && entityType != "collab" && (
         <OffCanvas
           open={openElements.includes(artId)}
           dismiss={() => close(artId)}
@@ -210,7 +210,7 @@ export default function OptionEntity({
                   key={`${item.username}_playlistOwner`}
                 >
                   <img src={item.pic} className="playlistSongImg rounded" />
-                  <div>
+                  <div className="extendedGrid">
                     <p className="thinOneLineText playlistSongTitle">
                       {utils.refineText(item.username)}
                     </p>

@@ -56,19 +56,24 @@ export default function CreateLikePlaylist({ response }) {
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
 
-      <div className="playlistMain">
+      <div className="playlistMain dp-s">
         <PlaylistNavbar
           response={response}
           setData={setData}
           display={inView}
         />
 
-        <BackButton />
+        <img
+          src={data.image}
+          alt={data.title}
+          className="playlistMainImg desk"
+        />
 
-        <div className="playlistDetails">
-          <p className="labelText fs-1" ref={ref}>
-            Liked Songs
-          </p>
+        <BackButton styleClass="mobo" />
+
+        <div className="playlistDetails" ref={ref}>
+          <h1 className="desk thinOneLineText playlistHeader">Liked Songs</h1>
+          <p className="labelText fs-1 mobo">Liked Songs</p>
 
           <p className="thinTwoLineText">
             {utils.refineText(`${data.list_count || 0} songs`)}
@@ -127,7 +132,27 @@ export default function CreateLikePlaylist({ response }) {
         </Link>
       </div>
 
-      <div className="songList">
+      <div
+        className="songList"
+        style={{ display: data.list.length > 0 ? "block" : "none" }}
+      >
+        <div className="desk listInfo">
+          <div
+            className="d-grid"
+            style={{
+              gridTemplateColumns: "50px 1fr 1fr 1fr 40px 40px",
+              columnGap: "15px",
+            }}
+          >
+            <div></div>
+            <p className="thinOneLineText playlistSongSubTitle">Title</p>
+            <p className="thinOneLineText playlistSongSubTitle">Album</p>
+            <p className="thinOneLineText playlistSongSubTitle text-center">
+              Duration
+            </p>
+          </div>
+          <hr className="dividerLine mb-4" />
+        </div>
         {data.list.map((item) => {
           const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
           return (

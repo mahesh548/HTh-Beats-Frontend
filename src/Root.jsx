@@ -4,7 +4,7 @@ import "./style.css";
 import Install from "./pages/components/Install";
 const Desktop = lazy(() => import("./Desktop"));
 const App = lazy(() => import("./App"));
-
+import { Toaster } from "sonner";
 export default function Root() {
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -22,6 +22,7 @@ export default function Root() {
     <>
       {/* Uncomment the install component in final stage */}
       {/* <Install /> */}
+      <Toaster />
       <Suspense
         fallback={
           <div className="page" style={{ paddingTop: "150px" }}>

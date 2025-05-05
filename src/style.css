@@ -354,6 +354,7 @@ p {
   border-radius: 12px;
   margin-top: 20px;
   padding: 15px;
+  cursor: pointer;
 }
 .promoShow {
   display: grid;
@@ -1149,6 +1150,7 @@ p {
 }
 .albumList {
   grid-template-columns: 80px auto 40px 40px;
+  cursor: pointer;
   img {
     height: 80px;
     width: 80px;
@@ -1931,23 +1933,23 @@ input[type="search"]::-webkit-search-cancel-button {
 
   .hiddenScrollbar.deskScroll {
     overflow: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    scrollbar-width: auto;
+    -ms-overflow-style: auto;
   }
 
   .hiddenScrollbar.deskScroll::-webkit-scrollbar {
     width: 5px;
-    display: none;
+    display: block;
   }
 
-  .hiddenScrollbar.deskScroll:hover {
+  /*  .hiddenScrollbar.deskScroll:hover {
     scrollbar-width: auto;
     -ms-overflow-style: auto;
   }
 
   .hiddenScrollbar.deskScroll:hover::-webkit-scrollbar {
     display: block;
-  }
+  } */
 
   .hiddenScrollbar.deskScroll::-webkit-scrollbar-track {
     background-color: #12121200 !important;
@@ -2039,8 +2041,12 @@ input[type="search"]::-webkit-search-cancel-button {
       font-weight: bold;
     }
   }
+
   .dp-s {
     padding-left: 20px !important;
+  }
+  .dp-t {
+    padding-top: 20px !important;
   }
   .backgroundGradient {
     position: unset !important;
@@ -2061,7 +2067,7 @@ input[type="search"]::-webkit-search-cancel-button {
     align-items: end;
   }
   .playlistDetails {
-    margin-top: 0;
+    margin-top: 0 !important;
     padding: 0;
   }
   .playlistMainImg {
@@ -2086,8 +2092,8 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .songList {
     padding: 20px 20px;
-    margin-top: 8px;
-    background-color: #00000024;
+    margin-top: 8px !important;
+    background-color: #00000024 !important;
   }
   .ownerAvt img {
     border: 3px solid #00000000;
@@ -2168,7 +2174,8 @@ input[type="search"]::-webkit-search-cancel-button {
   .dlCont {
     display: grid;
     grid-template-rows: auto 1fr auto;
-    height: 85dvh;
+    max-height: 85dvh;
+    height: fit-content !important;
   }
   .songsCard {
     width: 100%;
@@ -2201,5 +2208,93 @@ input[type="search"]::-webkit-search-cancel-button {
   .songArtCont div:hover {
     scale: 1.08;
     border: 0.5px solid black;
+  }
+  .desk-artist-cover {
+    display: grid;
+    grid-column-start: 1;
+    grid-column-end: 3;
+
+    width: 100%;
+    margin: auto;
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+    align-items: end;
+    background-color: transparent !important;
+  }
+  .fade-shadow {
+    background-image: linear-gradient(
+      180deg,
+      #0f0f0f40 0% 5%,
+      #0f0f0fbd,
+      #0f0f0f
+    );
+  }
+  .desk-no-black {
+    background-color: transparent !important;
+  }
+  .desk-art-card {
+    margin-left: 20px !important;
+    width: 50% !important;
+  }
+  .promoShow {
+    grid-template-columns: auto;
+    row-gap: 5px;
+  }
+  .promoShow .TimelineSquareItem {
+    display: grid;
+    grid-template-columns: 40px auto !important;
+    gap: 10px;
+    align-items: center;
+    img {
+      height: 40px;
+      width: 40px;
+    }
+    p {
+      color: white;
+    }
+  }
+  .plCont {
+    padding: 6px;
+    margin-top: 5px;
+    border-radius: 8px;
+    img {
+      height: 20px;
+      width: 100%;
+    }
+  }
+  .plCont:hover {
+    background-color: #ffffff0c;
+    border-radius: 8px;
+    scale: 1.03;
+  }
+  [data-sonner-toaster] {
+    --width: 100vw !important;
+    position: fixed !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-end !important;
+    pointer-events: none;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+  }
+
+  [data-sonner-toast] {
+    pointer-events: auto;
+    width: auto !important;
+    max-width: 100vw;
+  }
+  ol[data-sonner-toaster] > li[data-sonner-toast] {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+  .toast {
+    width: fit-content !important;
+    max-width: 350px;
+    cursor: pointer;
   }
 }

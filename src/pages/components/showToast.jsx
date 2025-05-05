@@ -37,6 +37,7 @@ export const showToast = ({
           left: "50%",
           transform: "translateX(-50%)",
           position: "fixed",
+          width: "100%",
         }}
       >
         {image && <img src={image} alt="toast icon" />}

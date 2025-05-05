@@ -135,7 +135,7 @@ export default function CreatePlaylist({ response }) {
 
         <BackButton styleClass="mobo" />
         <img
-          src={data.image}
+          src={data.image.replace("150x150", "500x500")}
           alt={data.title}
           className="playlistMainImg"
           ref={ref}
