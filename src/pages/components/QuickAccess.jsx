@@ -15,17 +15,24 @@ export default function QuickAccess() {
     <div className={`quickCont ${open ? "open" : "closed"}`}>
       <div
         className={`d-flex  justify-content-${open ? "start" : "center"}`}
-        style={{ width: "90%" }}
+        style={{ width: "90%", gap: "5px" }}
       >
         <button
-          className="iconButton text-center"
+          className="iconButton text-center opacity-50"
           onClick={() => setOpen(!open)}
         >
-          {open ? <img src={PanelOpen} /> : <img src={PanelOpen} />}
+          {open ? (
+            <img src={PanelOpen} style={{ scale: "0.8" }} />
+          ) : (
+            <img
+              src={PanelOpen}
+              style={{ transform: "scaleX(-1)", scale: "0.9" }}
+            />
+          )}
         </button>
         <p className="labelText m-0">Quick access</p>
       </div>
-
+      <hr className="dividerLine op-10 m-0" />
       <button className="iconButton qaButton">
         <Add />
         <p>Create</p>
@@ -35,9 +42,17 @@ export default function QuickAccess() {
         <p>Your library</p>
       </button>
       <hr className="dividerLine op-10 m-0" />
-      <button className="iconButton qaList">
-        <img src="./Like.png" />
-        <p>Like Songs</p>
+
+      <button className="qaList">
+        <img src="/Like.png" />
+        <div>
+          <p className="thinOneLineText playlistSongTitle text-start">
+            Like Songs
+          </p>
+          <p className="thinOneLineText playlistSongSubTitle">
+            Private playlist
+          </p>
+        </div>
       </button>
     </div>
   );

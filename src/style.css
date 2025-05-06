@@ -2399,19 +2399,30 @@ input[type="search"]::-webkit-search-cancel-button {
     height: 40px;
     width: 40px;
     padding: 0;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
     img {
       height: 100%;
       border-radius: 8px;
+      height: 40px;
+      width: 40px;
     }
   }
   .quickCont.closed .qaList p {
     display: none;
   }
   .quickCont.open .qaList {
-    height: 40px;
+    height: 50px;
     width: 90%;
     display: flex;
     align-items: center;
     gap: 10px;
+    padding: 6px;
+    border-radius: 8px;
+  }
+  .qaList:hover {
+    background-color: #ffffff1e;
   }
 }
