@@ -1,16 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import librarySvgOutlined from "../../assets/icons/librarySvgOutlined.svg";
 import PanelOpen from "../../assets/icons/PanelOpen.svg";
-import {
-  Add,
-  ArrowBackIos,
-  ArrowForwardIosOutlined,
-  SwipeLeft,
-} from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
+import { AuthContext } from "./Auth";
+import utils from "../../../utils";
 
 export default function QuickAccess() {
   const [open, setOpen] = useState(false);
+  const auth = useContext(AuthContext);
   return (
     <div className={`quickCont ${open ? "open" : "closed"}`}>
       <div
@@ -43,17 +41,33 @@ export default function QuickAccess() {
       </button>
       <hr className="dividerLine op-10 m-0" />
 
-      <button className="qaList">
-        <img src="/Like.png" />
-        <div>
-          <p className="thinOneLineText playlistSongTitle text-start">
-            Like Songs
-          </p>
-          <p className="thinOneLineText playlistSongSubTitle">
-            Private playlist
-          </p>
-        </div>
-      </button>
+      {auth?.user?.users_playlists &&
+        [
+          auth.user.users_playlists.find(
+            (item) => item.perma_url == auth?.user?.id
+          ),
+          ...auth.user.users_playlists.filter(
+            (item) => item.perma_url != auth?.user?.id
+          ),
+        ].map((item, index) => {
+          return (
+            <button className="qaList" key={"quick-act-" + index}>
+              <img src={item.image} />
+              <div className="text-start">
+                <p className="thinOneLineText playlistSongTitle">
+                  {item.title}
+                </p>
+                <p className="thinOneLineText playlistSongSubTitle">
+                  Playlist{" · "}
+                  {utils.checkPlaylistType(
+                    { ...item, type: "playlist" },
+                    auth.user.id
+                  )}
+                </p>
+              </div>
+            </button>
+          );
+        })}
     </div>
   );
 }
