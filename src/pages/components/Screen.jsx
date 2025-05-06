@@ -25,6 +25,8 @@ import RealtimeSong from "./RealtimeSong";
 import { channelContext } from "./Channel";
 import ChangeLang from "./ChangeLang";
 import DeskPlayer from "./DeskPlayer";
+import Library from "../Library";
+import QuickAccess from "./QuickAccess";
 
 export default function Screen() {
   const auth = useContext(AuthContext);
@@ -71,7 +73,9 @@ export default function Screen() {
           <div></div>
         </div>
         <div className="screenMain p-2">
-          <div className="sidePanel"></div>
+          <div className="sidePanel">
+            <QuickAccess />
+          </div>
           <div className="screenPage hiddenScrollbar ">
             <Outlet />
           </div>
