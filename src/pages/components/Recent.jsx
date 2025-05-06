@@ -17,7 +17,7 @@ export default function Recent({ recentData }) {
       : recentData.slice(0, recentData.length - 1);
 
   return (
-    <div className="recentCont mt-2">
+    <div className="recentCont mt-2 mobo">
       {data.map((item, index) => {
         return (
           <div

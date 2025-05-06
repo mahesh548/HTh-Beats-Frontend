@@ -2351,20 +2351,22 @@ input[type="search"]::-webkit-search-cancel-button {
     height: 100%;
   }
   .quickCont.closed {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+
     gap: 20px;
     padding: 20px 0px;
     width: 80px;
     align-items: center;
+
+    justify-items: center;
   }
   .quickCont.open {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: 10px;
     padding: 20px 0px;
     width: 250px;
     align-items: center;
+    justify-items: center;
   }
   .quickCont.closed .qaButton p {
     display: none;

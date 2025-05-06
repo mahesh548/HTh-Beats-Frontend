@@ -9,6 +9,15 @@ import utils from "../../../utils";
 export default function QuickAccess() {
   const [open, setOpen] = useState(false);
   const auth = useContext(AuthContext);
+  let recentData = JSON.parse(localStorage?.recent || "[]");
+  recentData = [...new Map(recentData.map((item) => [item.id, item])).values()];
+  const recents = recentData
+    .filter((item) => item.data)
+    .sort((a, b) => {
+      return new Date(b.updatedAt) - new Date(a.updatedAt);
+    })
+    .map((item) => item.data);
+
   return (
     <div className={`quickCont ${open ? "open" : "closed"}`}>
       <div
@@ -54,7 +63,7 @@ export default function QuickAccess() {
             <button className="qaList" key={"quick-act-" + index}>
               <img src={item.image} />
               <div className="text-start">
-                <p className="thinOneLineText playlistSongTitle">
+                <p className="thinOneLineText playlistSongTitle fw-light">
                   {item.title}
                 </p>
                 <p className="thinOneLineText playlistSongSubTitle">
@@ -63,6 +72,23 @@ export default function QuickAccess() {
                     { ...item, type: "playlist" },
                     auth.user.id
                   )}
+                </p>
+              </div>
+            </button>
+          );
+        })}
+      {recents.length > 0 && <hr className="dividerLine op-10 m-0" />}
+      {recents.length > 0 &&
+        recents.map((item, index) => {
+          return (
+            <button className="qaList" key={"quick-rec-" + index}>
+              <img src={item.image} />
+              <div className="text-start">
+                <p className="thinOneLineText playlistSongTitle fw-light">
+                  {item.title}
+                </p>
+                <p className="thinOneLineText playlistSongSubTitle">
+                  {utils.capitalLetter(item.type)}
                 </p>
               </div>
             </button>
