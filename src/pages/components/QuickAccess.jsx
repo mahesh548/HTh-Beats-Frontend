@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import librarySvgOutlined from "../../assets/icons/librarySvgOutlined.svg";
+import PanelOpen from "../../assets/icons/PanelOpen.svg";
 import {
   Add,
   ArrowBackIos,
@@ -13,19 +14,14 @@ export default function QuickAccess() {
   return (
     <div className={`quickCont ${open ? "open" : "closed"}`}>
       <div
-        className={`d-flex w-100 justify-content-${
-          open ? "start px-2" : "center"
-        }`}
+        className={`d-flex  justify-content-${open ? "start" : "center"}`}
+        style={{ width: "90%" }}
       >
         <button
           className="iconButton text-center"
           onClick={() => setOpen(!open)}
         >
-          {open ? (
-            <ArrowBackIos style={{ fontSize: "16px" }} />
-          ) : (
-            <ArrowForwardIosOutlined style={{ fontSize: "16px" }} />
-          )}
+          {open ? <img src={PanelOpen} /> : <img src={PanelOpen} />}
         </button>
         <p className="labelText m-0">Quick access</p>
       </div>
@@ -39,6 +35,10 @@ export default function QuickAccess() {
         <p>Your library</p>
       </button>
       <hr className="dividerLine op-10 m-0" />
+      <button className="iconButton qaList">
+        <img src="./Like.png" />
+        <p>Like Songs</p>
+      </button>
     </div>
   );
 }

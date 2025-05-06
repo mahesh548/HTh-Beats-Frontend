@@ -2361,7 +2361,7 @@ input[type="search"]::-webkit-search-cancel-button {
   .quickCont.open {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     padding: 20px 0px;
     width: 250px;
     align-items: center;
@@ -2394,5 +2394,24 @@ input[type="search"]::-webkit-search-cancel-button {
     img {
       height: 20px;
     }
+  }
+  .qaList {
+    height: 40px;
+    width: 40px;
+    padding: 0;
+    img {
+      height: 100%;
+      border-radius: 8px;
+    }
+  }
+  .quickCont.closed .qaList p {
+    display: none;
+  }
+  .quickCont.open .qaList {
+    height: 40px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 }
