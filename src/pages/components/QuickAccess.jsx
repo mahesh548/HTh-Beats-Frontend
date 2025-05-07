@@ -5,10 +5,14 @@ import PanelOpen from "../../assets/icons/PanelOpen.svg";
 import { Add } from "@mui/icons-material";
 import { AuthContext } from "./Auth";
 import utils from "../../../utils";
+import { useNavigate } from "react-router";
+import { HashContext } from "./Hash";
 
 export default function QuickAccess() {
-  const [open, setOpen] = useState(false);
+  const [panelOpen, setOpen] = useState(false);
   const auth = useContext(AuthContext);
+  const { openElements, close, open, closeOpen } = useContext(HashContext);
+  const navigate = useNavigate();
   let recentData = JSON.parse(localStorage?.recent || "[]");
   recentData = [...new Map(recentData.map((item) => [item.id, item])).values()];
   const recents = recentData
@@ -18,17 +22,21 @@ export default function QuickAccess() {
     })
     .map((item) => item.data);
 
+  const openPlaylist = (id) => {
+    navigate(`/playlist/${id}`);
+  };
+
   return (
-    <div className={`quickCont ${open ? "open" : "closed"}`}>
+    <div className={`quickCont ${panelOpen ? "open" : "closed"}`}>
       <div
-        className={`d-flex  justify-content-${open ? "start" : "center"}`}
+        className={`d-flex  justify-content-${panelOpen ? "start" : "center"}`}
         style={{ width: "90%", gap: "5px" }}
       >
         <button
           className="iconButton text-center opacity-50"
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen(!panelOpen)}
         >
-          {open ? (
+          {panelOpen ? (
             <img src={PanelOpen} style={{ scale: "0.8" }} />
           ) : (
             <img
@@ -40,7 +48,10 @@ export default function QuickAccess() {
         <p className="labelText m-0">Quick access</p>
       </div>
       <hr className="dividerLine op-10 m-0" />
-      <button className="iconButton qaButton">
+      <button
+        className="iconButton qaButton"
+        onClick={() => open("createOption")}
+      >
         <Add />
         <p>Create</p>
       </button>
@@ -60,7 +71,11 @@ export default function QuickAccess() {
           ),
         ].map((item, index) => {
           return (
-            <button className="qaList" key={"quick-act-" + index}>
+            <button
+              className="qaList"
+              key={"quick-act-" + index}
+              onClick={() => openPlaylist(item?.perma_url)}
+            >
               <img src={item.image} />
               <div className="text-start">
                 <p className="thinOneLineText playlistSongTitle fw-light">
@@ -81,7 +96,11 @@ export default function QuickAccess() {
       {recents.length > 0 &&
         recents.map((item, index) => {
           return (
-            <button className="qaList" key={"quick-rec-" + index}>
+            <button
+              className="qaList"
+              key={"quick-rec-" + index}
+              onClick={() => openPlaylist(item?.perma_url)}
+            >
               <img src={item.image} />
               <div className="text-start">
                 <p className="thinOneLineText playlistSongTitle fw-light">
