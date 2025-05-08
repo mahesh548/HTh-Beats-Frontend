@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { getClick } from "./ClickPosition";
 
@@ -20,7 +20,7 @@ export default function ContextMenu({ show, onClose, children }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [show, onClose]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (show && menuR.current) {
       const menu = menuR.current;
       const { innerWidth, innerHeight } = window;

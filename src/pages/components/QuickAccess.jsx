@@ -60,7 +60,12 @@ export default function QuickAccess() {
         <p>Your library</p>
       </button>
       <hr className="dividerLine op-10 m-0" />
-
+      <p
+        className="text-white-50 text-start w-100 ps-4 fw-light qh"
+        style={{ fontSize: "0.9rem" }}
+      >
+        Your playlists
+      </p>
       {auth?.user?.users_playlists &&
         [
           auth.user.users_playlists.find(
@@ -92,7 +97,17 @@ export default function QuickAccess() {
             </button>
           );
         })}
-      {recents.length > 0 && <hr className="dividerLine op-10 m-0" />}
+      {recents.length > 0 && (
+        <>
+          <hr className="dividerLine op-10 m-0" />{" "}
+          <p
+            className="text-white-50 text-start w-100 ps-4 fw-light qh"
+            style={{ fontSize: "0.9rem" }}
+          >
+            Recents
+          </p>
+        </>
+      )}
       {recents.length > 0 &&
         recents.map((item, index) => {
           return (
@@ -113,6 +128,7 @@ export default function QuickAccess() {
             </button>
           );
         })}
+      <div className="w-100" style={{ height: "1rem" }}></div>
     </div>
   );
 }

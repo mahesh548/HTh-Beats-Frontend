@@ -39,6 +39,58 @@ export default function MakeRoom() {
       }
     }
   };
+  const isDesktop = window.innerWidth >= 1000;
+  if (isDesktop) {
+    return (
+      <>
+        {loading ? (
+          <PageLoader />
+        ) : (
+          <div className="deskBack contextMenuPart" onClick={() => goBack()}>
+            <div
+              className="deskEditCont "
+              onClick={(e) => e.stopPropagation()}
+              style={{ width: "350px" }}
+            >
+              <p className="labelText text-start">Choose name for room</p>
+              <hr className="dividerLine" />
+              {/* <input
+                  type="text"
+                  value={RoomName}
+                  className="iconButton mpInput"
+                  onInput={(e) => setRoomName(e.target.value)}
+                  id="roomName"
+                /> */}
+              <input
+                type="text"
+                value={RoomName}
+                className=" edInput m-auto mt-2 mb-2"
+                onInput={(e) => {
+                  setRoomName(e.target.value);
+                }}
+                id="playlistName"
+              />
+              <hr className="dividerLine" />
+              <div className="text-end">
+                <button
+                  className="iconButton d-inline"
+                  onClick={() => close("createRoom")}
+                >
+                  Cancel
+                </button>
+                <button
+                  className={`addToBut me-1 px-3 py-2 d-inline ms-3 mt-1 opacity-100 cursor-pointer `}
+                  onClick={() => handleCreate()}
+                >
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
   return (
     <div
       className="floatingPage"
