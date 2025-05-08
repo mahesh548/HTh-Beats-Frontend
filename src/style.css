@@ -2378,17 +2378,20 @@ input[type="search"]::-webkit-search-cancel-button {
     display: "";
   }
   .quickCont.open .qaButton {
-    height: 40px;
+    height: 45px;
     width: 90%;
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px;
+    padding: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
   .qaButton {
     height: 40px;
     width: 40px;
     border-radius: 12px;
+
     background-color: var(--light-dark-bg);
     svg {
       font-size: 16px;
@@ -2432,11 +2435,17 @@ input[type="search"]::-webkit-search-cancel-button {
     scale: 1.05;
   }
   .quickCont.open hr {
-    width: 100% !important;
+    width: 90% !important;
     opacity: 0.1 !important;
   }
   .quickCont.closed hr {
-    width: 80% !important;
+    width: 60% !important;
     opacity: 0.1 !important;
+  }
+  .quickCont.open .qh {
+    display: block;
+  }
+  .quickCont.closed .qh {
+    display: none;
   }
 }
