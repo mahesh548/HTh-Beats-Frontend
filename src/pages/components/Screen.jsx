@@ -27,6 +27,7 @@ import ChangeLang from "./ChangeLang";
 import DeskPlayer from "./DeskPlayer";
 import Library from "../Library";
 import QuickAccess from "./QuickAccess";
+import RightPanel from "./RightPanel";
 
 export default function Screen() {
   const auth = useContext(AuthContext);
@@ -78,6 +79,9 @@ export default function Screen() {
           </div>
           <div className="screenPage hiddenScrollbar ">
             <Outlet />
+          </div>
+          <div className="rightPanel hiddenScrollbar">
+            <RightPanel />
           </div>
         </div>
         <div className="screenBottomBar">{<DeskPlayer />}</div>
