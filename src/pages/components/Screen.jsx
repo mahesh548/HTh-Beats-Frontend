@@ -83,10 +83,40 @@ export default function Screen() {
         <div className="screenBottomBar">{<DeskPlayer />}</div>
       </div>
 
-      {/* {openElements.includes("createPlaylist") &&
+      <OffCanvas
+        open={openElements.includes("createOption")}
+        dismiss={() => close("createOption")}
+      >
+        <button
+          className="iconButton playlistSong createButtons"
+          onClick={() => closeOpen("createOption", "createRoom")}
+        >
+          <img src={roomFilled} />
+          <div className="text-start">
+            <p className="text-start">Music Room</p>
+            <p className="thinOneLineText">
+              Create a room and enjoy music with your friends.
+            </p>
+          </div>
+        </button>
+        <button
+          className="iconButton playlistSong createButtons"
+          onClick={() => closeOpen("createOption", "createPlaylist")}
+        >
+          <MusicNote />
+          <div className="text-start">
+            <p className="text-start">Playlist</p>
+            <p className="thinOneLineText">
+              Build a playlist with your favorite songs.
+            </p>
+          </div>
+        </button>
+      </OffCanvas>
+
+      {openElements.includes("createPlaylist") &&
         createPortal(<MakePlaylist type={"viewOnly"} />, document.body)}
       {openElements.includes("createRoom") &&
-        createPortal(<MakeRoom />, document.body)} */}
+        createPortal(<MakeRoom />, document.body)}
     </>
   );
 }

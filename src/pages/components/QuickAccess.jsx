@@ -113,6 +113,7 @@ export default function QuickAccess() {
             </button>
           );
         })}
+      <div className="w-100" style={{ height: "1rem" }}></div>
     </div>
   );
 }

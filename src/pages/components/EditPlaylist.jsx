@@ -64,7 +64,7 @@ export default function EditPlaylist({ editId, title, img, list, saveEdit }) {
     return (
       <div className="deskBack contextMenuPart" onClick={() => goBack()}>
         <div className="deskEditCont" onClick={(e) => e.stopPropagation()}>
-          <p className="labelText mt-0">Edit playlist</p>
+          <p className="labelText mt-0 text-start w-100">Edit playlist</p>
           <hr className="dividerLine" />
           <div className="editMain mt-2">
             <div className="text-center">
