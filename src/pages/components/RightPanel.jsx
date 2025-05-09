@@ -51,6 +51,12 @@ export default function RightPanel() {
     }
   }, [Queue?.song, Queue?.playlist]);
 
+  useEffect(() => {
+    if (data && data.image && openElements.includes("player")) {
+      setColor(data.image);
+    }
+  }, [data?.image, openElements]);
+
   const likeData = useMemo(() => {
     if (!Queue.song) return null;
     const playlistPreference = localStorage?.preferedPlaylist;
@@ -110,63 +116,73 @@ export default function RightPanel() {
     }
   };
 
+  const setColor = async (url) => {
+    const color = await utils.getAverageColor(url, 0.5);
+    document.getElementById("desk-player").style.backgroundColor = color;
+  };
+
   return (
     <>
-      <div className="desk-player">
-        <div className="desk-playerNav">
-          <button onClick={() => closePlayer()}>
-            <img src={PanelOpen} style={{ transform: "scaleX(-1)" }} />
-          </button>
-          <div>
-            <b
-              className="thinOneLineText"
-              style={{ color: "white", fontWeight: "bold" }}
+      {openElements.includes("player") && (
+        <div className="desk-player px-2" id="desk-player">
+          <div className="desk-playerNav">
+            <button
+              className="iconButton opacity-50"
+              onClick={() => closePlayer()}
             >
-              {Queue.playlist.title}
-            </b>
-          </div>
-          <OptionSong
-            styleClass=""
-            data={data}
-            likeData={likeData}
-            addId={addId}
-          >
-            <MoreHorizRounded />
-          </OptionSong>
-        </div>
-
-        <img
-          src={utils
-            .getItemFromId(Queue.song, Queue.playlist.list)
-            .image.replace("150x150", "500x500")}
-          alt={data.title}
-          className="playerBanner"
-        />
-
-        <div className="playerDetails">
-          <div>
-            <p className="thinOneLineText playerTitle">
-              {utils.refineText(data.title)}
-            </p>
-            <p className="thinOneLineText playerSubtitle">
-              {data.subtitle?.length != 0
-                ? utils.refineText(data.subtitle)
-                : utils.refineText(
-                    `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
-                  )}
-            </p>
+              <img src={PanelOpen} style={{ transform: "scaleX(-1)" }} />
+            </button>
+            <div>
+              <b
+                className="thinOneLineText"
+                style={{ color: "white", fontWeight: "bold" }}
+              >
+                {Queue.playlist.title}
+              </b>
+            </div>
+            <OptionSong
+              styleClass=""
+              data={data}
+              likeData={likeData}
+              addId={addId}
+            >
+              <MoreHorizRounded />
+            </OptionSong>
           </div>
 
-          <LikeSong
-            styleClass="playerDetailsButton"
-            isLiked={localLike}
-            likeData={likeData}
-            addId={addId}
-            key={`playerLike_${data.id}`}
+          <img
+            src={utils
+              .getItemFromId(Queue.song, Queue.playlist.list)
+              .image.replace("150x150", "500x500")}
+            alt={data.title}
+            className="playerBanner"
           />
+
+          <div className="playerDetails">
+            <div>
+              <p className="thinOneLineText playerTitle fs-5">
+                {utils.refineText(data.title)}
+              </p>
+              <p className="thinOneLineText playerSubtitle">
+                {data.subtitle?.length != 0
+                  ? utils.refineText(data.subtitle)
+                  : utils.refineText(
+                      `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
+                    )}
+              </p>
+            </div>
+
+            <LikeSong
+              styleClass="desk-playerDetailsButton"
+              isLiked={localLike}
+              likeData={likeData}
+              addId={addId}
+              key={`playerLike_${data.id}`}
+            />
+          </div>
         </div>
-      </div>
-      {/*  <QueuePage /> */}
+      )}
+      {openElements.includes("queue") && <QueuePage />}
 
       {openElements.includes(addId) &&
         createPortal(
