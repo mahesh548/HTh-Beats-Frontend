@@ -32,7 +32,7 @@ export default function DeskPlayer() {
   const { Queue, setQueue } = useContext(songContext);
   const { currentSong, sendReaction } = useContext(channelContext);
 
-  const { open, openElements } = useContext(HashContext);
+  const { open, openElements, close } = useContext(HashContext);
   const [volume, setVolume] = useState(
     (document.getElementById("audio")?.volume || 1) * 100
   );
@@ -102,6 +102,14 @@ export default function DeskPlayer() {
     if (volumeRange) volumeRange.style.setProperty("--progress", `${volume}%`);
     if (audio) audio.volume = volume / 100;
   }, [volume]);
+
+  const togglePlayer = () => {
+    if (openElements.includes("player")) {
+      close("player");
+    } else {
+      open("player");
+    }
+  };
 
   if (!Queue.song) return <></>;
 
@@ -199,7 +207,12 @@ export default function DeskPlayer() {
         className="d-flex align-items-center justify-content-end"
         style={{ gap: "5px" }}
       >
-        <button className="iconButton opacity-50">
+        <button
+          className={`iconButton opacity-50 ${
+            openElements.includes("player") && "desk-active"
+          }`}
+          onClick={() => togglePlayer()}
+        >
           <SlideshowOutlined />
         </button>
         <button className="iconButton opacity-50">
