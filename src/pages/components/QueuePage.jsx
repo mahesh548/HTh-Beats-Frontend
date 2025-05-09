@@ -11,6 +11,7 @@ import {
 import { arrayMoveImmutable } from "array-move";
 import PlaylistSong from "./PlaylistSong";
 import utils from "../../../utils";
+import PanelOpen from "../../assets/icons/PanelOpen.svg";
 export default function QueuePage() {
   const [chips, setChips] = useState("all");
   const { Queue, setQueue } = useContext(songContext);
@@ -66,7 +67,17 @@ export default function QueuePage() {
     <div className="queuePage">
       <div className="queuePageLayout">
         <div className="navbarAddTo">
-          <BackButton />
+          <BackButton styleClass="mobo" />
+          <button
+            className="iconButton opacity-50 w-100 desk"
+            onClick={() => {}}
+          >
+            <img
+              src={PanelOpen}
+              className="w-100"
+              style={{ transform: "scaleX(-1)" }}
+            />
+          </button>
           <p>Queue</p>
         </div>
         <div className="queueNav">

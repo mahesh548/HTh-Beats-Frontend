@@ -182,7 +182,7 @@ export default function RightPanel() {
           </div>
         </div>
       )}
-      {/*  <QueuePage /> */}
+      {openElements.includes("queue") && <QueuePage />}
 
       {openElements.includes(addId) &&
         createPortal(

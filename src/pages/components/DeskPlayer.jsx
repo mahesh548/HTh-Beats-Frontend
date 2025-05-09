@@ -110,6 +110,13 @@ export default function DeskPlayer() {
       open("player");
     }
   };
+  const toggleQueue = () => {
+    if (openElements.includes("queue")) {
+      close("queue");
+    } else {
+      open("queue");
+    }
+  };
 
   if (!Queue.song) return <></>;
 
@@ -219,7 +226,12 @@ export default function DeskPlayer() {
           <FormatQuoteRounded />
         </button>
 
-        <button className="iconButton opacity-50">
+        <button
+          className={`iconButton opacity-50 ${
+            openElements.includes("queue") && "desk-active"
+          }`}
+          onClick={() => toggleQueue()}
+        >
           <img src={playlistOutlined} width={"25px"} />
         </button>
         <button className="iconButton opacity-50">
