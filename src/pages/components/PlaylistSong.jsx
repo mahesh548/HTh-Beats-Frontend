@@ -89,7 +89,7 @@ export default function PlaylistSong({
           {utils.formatDuration(data.more_info?.duration) || "00:00"}
         </p>
       </div>
-      <div>
+      <div className="desk-likeBut">
         {localLike ? (
           <LikeSong
             styleClass="playlistSongButton playlistSongLike"

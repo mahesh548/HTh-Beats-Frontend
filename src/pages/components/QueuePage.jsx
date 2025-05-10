@@ -12,9 +12,11 @@ import { arrayMoveImmutable } from "array-move";
 import PlaylistSong from "./PlaylistSong";
 import utils from "../../../utils";
 import PanelOpen from "../../assets/icons/PanelOpen.svg";
+import { HashContext } from "./Hash";
 export default function QueuePage() {
   const [chips, setChips] = useState("all");
   const { Queue, setQueue } = useContext(songContext);
+  const { close } = useContext(HashContext);
   const play = (id) => {
     setQueue({
       type: "SONG",
@@ -70,7 +72,7 @@ export default function QueuePage() {
           <BackButton styleClass="mobo" />
           <button
             className="iconButton opacity-50 w-100 desk"
-            onClick={() => {}}
+            onClick={() => close("queue")}
           >
             <img
               src={PanelOpen}
