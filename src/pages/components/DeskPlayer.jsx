@@ -224,7 +224,12 @@ export default function DeskPlayer() {
         >
           <SlideshowOutlined />
         </button>
-        <button className="iconButton opacity-50" id="lyricsBtn">
+        <button
+          className={`iconButton opacity-50 ${
+            openElements.includes("lyrics") && "desk-active"
+          }`}
+          id="lyricsBtn"
+        >
           <FormatQuoteRounded />
         </button>
 
