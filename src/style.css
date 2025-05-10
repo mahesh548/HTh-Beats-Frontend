@@ -2485,6 +2485,8 @@ input[type="search"]::-webkit-search-cancel-button {
     align-items: center;
     border-radius: 8px;
     transition: background-color 0.5s ease;
+    position: relative;
+    z-index: 1000;
   }
   .desk-playerDetailsButton {
     background-color: transparent;

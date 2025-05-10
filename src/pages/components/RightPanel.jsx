@@ -30,7 +30,7 @@ import { showToast } from "./showToast";
 
 export default function RightPanel() {
   const { Queue, setQueue } = useContext(songContext);
-  const { openElements, open, close } = useContext(HashContext);
+  const { openElements, open, close, closeOpen } = useContext(HashContext);
   const [localLike, setLocalLike] = useState(false);
 
   const lyrics = useRef({
@@ -89,15 +89,13 @@ export default function RightPanel() {
   }
 
   const getLyrics = async (snippet, id) => {
-    const color = document.getElementById("miniPlayer").style.backgroundColor;
-
     if (snippet == "No Lyrics") {
       showToast({ text: "Lyrics not available" });
       return;
     }
 
     if (lyrics.current?.id == id && lyrics.current.data.length > 2) {
-      open("lyrics");
+      toggleRightPanel("lyrics");
       return;
     }
     if (lyrics.current.id == id) {
@@ -111,8 +109,8 @@ export default function RightPanel() {
     const response = await utils.API(`/lyrics?id=${id}`, "GET");
     if (response.status) {
       const lyricArray = response.lyrics.split("<br>");
-      lyrics.current = { data: lyricArray, id: id, color: color };
-      open("lyrics");
+      lyrics.current = { data: lyricArray, id: id };
+      toggleRightPanel("lyrics");
     }
   };
 
@@ -120,6 +118,40 @@ export default function RightPanel() {
     const color = await utils.getAverageColor(url, 0.5);
     document.getElementById("desk-player").style.backgroundColor = color;
   };
+
+  const toggleRightPanel = (type) => {
+    const allTypes = ["player", "queue", "lyrics"];
+    if (openElements.includes(type)) {
+      close(type);
+      return;
+    }
+    if (openElements.some((ele) => allTypes.includes(ele))) {
+      allTypes.forEach((ele) => {
+        if (openElements.includes(ele)) {
+          closeOpen(ele, type);
+        }
+      });
+    } else {
+      open(type);
+    }
+  };
+  useEffect(() => {
+    const lyricsBtn = document.getElementById("lyricsBtn");
+
+    const handleClick = () => {
+      getLyrics(data.more_info?.lyrics_snippet || "No Lyrics", data.id);
+    };
+
+    if (lyricsBtn) {
+      lyricsBtn.addEventListener("click", handleClick);
+    }
+
+    return () => {
+      if (lyricsBtn) {
+        lyricsBtn.removeEventListener("click", handleClick);
+      }
+    };
+  }, [data.id]);
 
   return (
     <>
