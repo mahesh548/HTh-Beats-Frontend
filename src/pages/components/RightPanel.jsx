@@ -30,7 +30,7 @@ import { showToast } from "./showToast";
 
 export default function RightPanel() {
   const { Queue, setQueue } = useContext(songContext);
-  const { openElements, open, close } = useContext(HashContext);
+  const { openElements, open, close, closeOpen } = useContext(HashContext);
   const [localLike, setLocalLike] = useState(false);
 
   const lyrics = useRef({
@@ -52,7 +52,11 @@ export default function RightPanel() {
   }, [Queue?.song, Queue?.playlist]);
 
   useEffect(() => {
-    if (data && data.image && openElements.includes("player")) {
+    if (
+      data &&
+      data.image &&
+      (openElements.includes("player") || openElements.includes("lyrics"))
+    ) {
       setColor(data.image);
     }
   }, [data?.image, openElements]);
@@ -89,15 +93,14 @@ export default function RightPanel() {
   }
 
   const getLyrics = async (snippet, id) => {
-    const color = document.getElementById("miniPlayer").style.backgroundColor;
-
     if (snippet == "No Lyrics") {
       showToast({ text: "Lyrics not available" });
       return;
     }
 
     if (lyrics.current?.id == id && lyrics.current.data.length > 2) {
-      open("lyrics");
+      console.log("toggling the panel");
+      toggleRightPanel("lyrics");
       return;
     }
     if (lyrics.current.id == id) {
@@ -111,14 +114,61 @@ export default function RightPanel() {
     const response = await utils.API(`/lyrics?id=${id}`, "GET");
     if (response.status) {
       const lyricArray = response.lyrics.split("<br>");
-      lyrics.current = { data: lyricArray, id: id, color: color };
-      open("lyrics");
+      lyrics.current = { data: lyricArray, id: id };
+      console.log("togglint the panel");
+      toggleRightPanel("lyrics");
     }
   };
 
   const setColor = async (url) => {
     const color = await utils.getAverageColor(url, 0.5);
-    document.getElementById("desk-player").style.backgroundColor = color;
+    document
+      .getElementById("desk-player")
+      ?.style?.setProperty("background-color", color);
+    document
+      .getElementById("desk-lyrics")
+      ?.style?.setProperty("background-color", color);
+    document
+      .getElementById("desk-lyrics-nav")
+      ?.style?.setProperty("background-color", color);
+    document
+      .getElementById("desk-lyrics-nav")
+      ?.style?.setProperty("box-shadow", `0px 5px 5px ${color}`);
+  };
+
+  useEffect(() => {
+    const lyricsBtn = document.getElementById("lyricsBtn");
+
+    const handleClick = () => {
+      getLyrics(data.more_info?.lyrics_snippet || "No Lyrics", data.id);
+    };
+
+    if (lyricsBtn) {
+      lyricsBtn.addEventListener("click", handleClick);
+    }
+
+    return () => {
+      if (lyricsBtn) {
+        lyricsBtn.removeEventListener("click", handleClick);
+      }
+    };
+  }, [data.id, openElements]);
+
+  const toggleRightPanel = (type) => {
+    const allTypes = ["player", "queue", "lyrics"];
+    if (openElements.includes(type)) {
+      close(type);
+      return;
+    }
+    if (openElements.some((ele) => allTypes.includes(ele))) {
+      allTypes.forEach((ele) => {
+        if (openElements.includes(ele)) {
+          closeOpen(ele, type);
+        }
+      });
+    } else {
+      open(type);
+    }
   };
 
   return (
@@ -195,38 +245,32 @@ export default function RightPanel() {
           document.body
         )}
       {openElements.includes("lyrics") && (
-        <div
-          className="floatingPage overflow-scroll hiddenScrollbar"
-          style={{ backgroundColor: lyrics.current.color }}
-        >
-          <div
-            className="libraryNavCont px-2"
-            style={{
-              zIndex: "11",
-              backgroundColor: lyrics.current.color,
-              boxShadow: "0px 5px 5px " + lyrics.current.color,
-            }}
-          >
-            <div
-              className="libraryNav mt-3 mb-1"
-              style={{ gridTemplateColumns: "40px auto 40px" }}
+        <div className="queuePageLayout" id="desk-lyrics">
+          <div className="navbarAddTo" id="desk-lyrics-nav">
+            <button
+              className="iconButton opacity-50 w-100 desk"
+              onClick={() => close("queue")}
             >
-              <BackButton styleClass="m-0 p-0" />
-              <div className="text-center ">
-                <p className="thinOneLineText playlistSongTitle fs-5">
-                  {utils.refineText(data.title)}
-                </p>
-                <p className="thinOneLineText playlistSongSubTitle fs-6">
-                  {data.subtitle?.length != 0
-                    ? utils.refineText(data.subtitle)
-                    : utils.refineText(
-                        `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
-                      )}
-                </p>
-              </div>
+              <img
+                src={PanelOpen}
+                className="w-100"
+                style={{ transform: "scaleX(-1)" }}
+              />
+            </button>
+            <div className="text-center ">
+              <p className="thinOneLineText playlistSongTitle fs-5">
+                {utils.refineText(data.title)}
+              </p>
+              <p className="thinOneLineText playlistSongSubTitle fs-6">
+                {data.subtitle?.length != 0
+                  ? utils.refineText(data.subtitle)
+                  : utils.refineText(
+                      `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
+                    )}
+              </p>
             </div>
           </div>
-          <div style={{ marginTop: "80px" }}>
+          <div className="hiddenScrollbar">
             {lyrics.current.data.map((line, index) => {
               if (line.length == 0) {
                 return (

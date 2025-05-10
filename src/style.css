@@ -986,6 +986,7 @@ p {
   align-items: center;
   color: var(--thin-text-color);
   opacity: 0.5;
+  cursor: grab;
 }
 .sortableHelper {
   z-index: 10000000001;
@@ -2453,6 +2454,8 @@ input[type="search"]::-webkit-search-cancel-button {
     overflow: hidden;
     min-width: 0;
     width: auto;
+    background-color: var(--desktop-dark-grey);
+    border-radius: 8px;
   }
   .desk-playerNav {
     display: grid;
@@ -2482,6 +2485,8 @@ input[type="search"]::-webkit-search-cancel-button {
     align-items: center;
     border-radius: 8px;
     transition: background-color 0.5s ease;
+    position: relative;
+    z-index: 1000;
   }
   .desk-playerDetailsButton {
     background-color: transparent;
@@ -2509,10 +2514,11 @@ input[type="search"]::-webkit-search-cancel-button {
   .queuePage {
     height: 100%;
     width: 100%;
+    padding: 3px;
   }
   .queuePageLayout {
     height: 100%;
-    grid-template-rows: max-content 1fr auto;
+    grid-template-rows: max-content 1fr;
   }
   .queueNav {
     bottom: 100px;
@@ -2523,14 +2529,39 @@ input[type="search"]::-webkit-search-cancel-button {
     width: 180px;
     backdrop-filter: blur(3px);
     border: none;
+    border-radius: 8px;
     button {
       font-size: 12px !important;
       padding: 3px 10px !important;
+      border-radius: 8px;
     }
   }
   .queuePageLayout .navbarAddTo {
     justify-items: start;
     grid-template-columns: 30px auto;
     column-gap: 10px;
+  }
+  .queuePageLayout .sortPlaylistSong {
+    margin-top: 15px;
+  }
+  .queuePageLayout .playlistSong {
+    grid-template-columns: 40px 1fr 40px;
+    column-gap: 8px;
+    font-size: 14px;
+    margin-top: 0;
+    img {
+      height: 40px;
+      width: 40px;
+    }
+  }
+  .queuePageLayout .playlistSong .desk {
+    display: none;
+  }
+  .queuePageLayout .playlistSong .playlistSongLike img {
+    height: 30px;
+    width: 30px;
+  }
+  .queuePageLayout .playlistSong .desk-likeBut {
+    display: none;
   }
 }

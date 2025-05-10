@@ -32,7 +32,7 @@ export default function DeskPlayer() {
   const { Queue, setQueue } = useContext(songContext);
   const { currentSong, sendReaction } = useContext(channelContext);
 
-  const { open, openElements, close } = useContext(HashContext);
+  const { open, openElements, close, closeOpen } = useContext(HashContext);
   const [volume, setVolume] = useState(
     (document.getElementById("audio")?.volume || 1) * 100
   );
@@ -103,18 +103,20 @@ export default function DeskPlayer() {
     if (audio) audio.volume = volume / 100;
   }, [volume]);
 
-  const togglePlayer = () => {
-    if (openElements.includes("player")) {
-      close("player");
-    } else {
-      open("player");
+  const toggleRightPanel = (type) => {
+    const allTypes = ["player", "queue", "lyrics"];
+    if (openElements.includes(type)) {
+      close(type);
+      return;
     }
-  };
-  const toggleQueue = () => {
-    if (openElements.includes("queue")) {
-      close("queue");
+    if (openElements.some((ele) => allTypes.includes(ele))) {
+      allTypes.forEach((ele) => {
+        if (openElements.includes(ele)) {
+          closeOpen(ele, type);
+        }
+      });
     } else {
-      open("queue");
+      open(type);
     }
   };
 
@@ -218,11 +220,16 @@ export default function DeskPlayer() {
           className={`iconButton opacity-50 ${
             openElements.includes("player") && "desk-active"
           }`}
-          onClick={() => togglePlayer()}
+          onClick={() => toggleRightPanel("player")}
         >
           <SlideshowOutlined />
         </button>
-        <button className="iconButton opacity-50">
+        <button
+          className={`iconButton opacity-50 ${
+            openElements.includes("lyrics") && "desk-active"
+          }`}
+          id="lyricsBtn"
+        >
           <FormatQuoteRounded />
         </button>
 
@@ -230,7 +237,7 @@ export default function DeskPlayer() {
           className={`iconButton opacity-50 ${
             openElements.includes("queue") && "desk-active"
           }`}
-          onClick={() => toggleQueue()}
+          onClick={() => toggleRightPanel("queue")}
         >
           <img src={playlistOutlined} width={"25px"} />
         </button>
