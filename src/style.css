@@ -2538,7 +2538,7 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .queuePageLayout .navbarAddTo {
     justify-items: start;
-    grid-template-columns: 30px auto;
+    grid-template-columns: 30px auto 30px;
     column-gap: 10px;
   }
   .queuePageLayout .sortPlaylistSong {
@@ -2563,5 +2563,14 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .queuePageLayout .playlistSong .desk-likeBut {
     display: none;
+  }
+  .lyricalText {
+    font-size: 1rem;
+  }
+  #desk-lyrics {
+    transition: background-color 0.5s ease;
+  }
+  #desk-lyrics-nav {
+    transition: background-color 0.5s ease;
   }
 }

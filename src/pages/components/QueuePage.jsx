@@ -16,7 +16,7 @@ import { HashContext } from "./Hash";
 export default function QueuePage() {
   const [chips, setChips] = useState("all");
   const { Queue, setQueue } = useContext(songContext);
-  const { close } = useContext(HashContext);
+  const { close, closeAll } = useContext(HashContext);
   const play = (id) => {
     setQueue({
       type: "SONG",
@@ -72,7 +72,7 @@ export default function QueuePage() {
           <BackButton styleClass="mobo" />
           <button
             className="iconButton opacity-50 w-100 desk"
-            onClick={() => close("queue")}
+            onClick={() => closeAll(["player", "queue", "lyrics"])}
           >
             <img
               src={PanelOpen}

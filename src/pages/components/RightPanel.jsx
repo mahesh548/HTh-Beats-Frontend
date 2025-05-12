@@ -11,6 +11,8 @@ import {
   ShareOutlined,
   SkipNextRounded,
   SkipPreviousRounded,
+  ZoomOutMapOutlined,
+  ZoomOutOutlined,
 } from "@mui/icons-material";
 import utils from "../../../utils";
 
@@ -30,7 +32,8 @@ import { showToast } from "./showToast";
 
 export default function RightPanel() {
   const { Queue, setQueue } = useContext(songContext);
-  const { openElements, open, close, closeOpen } = useContext(HashContext);
+  const { openElements, open, close, closeOpen, closeAll } =
+    useContext(HashContext);
   const [localLike, setLocalLike] = useState(false);
 
   const lyrics = useRef({
@@ -39,7 +42,7 @@ export default function RightPanel() {
   });
 
   const closePlayer = () => {
-    close("player");
+    toggleRightPanel("player");
   };
   if (Queue?.song?.length == undefined) {
     closePlayer();
@@ -131,9 +134,6 @@ export default function RightPanel() {
     document
       .getElementById("desk-lyrics-nav")
       ?.style?.setProperty("background-color", color);
-    document
-      .getElementById("desk-lyrics-nav")
-      ?.style?.setProperty("box-shadow", `0px 5px 5px ${color}`);
   };
 
   useEffect(() => {
@@ -157,7 +157,7 @@ export default function RightPanel() {
   const toggleRightPanel = (type) => {
     const allTypes = ["player", "queue", "lyrics"];
     if (openElements.includes(type)) {
-      close(type);
+      closeAll(allTypes);
       return;
     }
     if (openElements.some((ele) => allTypes.includes(ele))) {
@@ -246,10 +246,10 @@ export default function RightPanel() {
         )}
       {openElements.includes("lyrics") && (
         <div className="queuePageLayout" id="desk-lyrics">
-          <div className="navbarAddTo" id="desk-lyrics-nav">
+          <div className="navbarAddTo px-1 mt-1" id="desk-lyrics-nav">
             <button
               className="iconButton opacity-50 w-100 desk"
-              onClick={() => close("queue")}
+              onClick={() => toggleRightPanel("lyrics")}
             >
               <img
                 src={PanelOpen}
@@ -257,11 +257,14 @@ export default function RightPanel() {
                 style={{ transform: "scaleX(-1)" }}
               />
             </button>
-            <div className="text-center ">
-              <p className="thinOneLineText playlistSongTitle fs-5">
+            <div className="text-center">
+              <p className="thinOneLineText" style={{ fontSize: "1rem" }}>
                 {utils.refineText(data.title)}
               </p>
-              <p className="thinOneLineText playlistSongSubTitle fs-6">
+              <p
+                className="thinOneLineText text-white-50"
+                style={{ fontSize: "0.8rem" }}
+              >
                 {data.subtitle?.length != 0
                   ? utils.refineText(data.subtitle)
                   : utils.refineText(
@@ -269,8 +272,14 @@ export default function RightPanel() {
                     )}
               </p>
             </div>
+            <button
+              className="iconButton opacity-50 w-100 desk"
+              onClick={() => close("queue")}
+            >
+              <ZoomOutMapOutlined style={{ height: "18px" }} />
+            </button>
           </div>
-          <div className="hiddenScrollbar">
+          <div className="hiddenScrollbar deskScroll">
             {lyrics.current.data.map((line, index) => {
               if (line.length == 0) {
                 return (
@@ -280,7 +289,7 @@ export default function RightPanel() {
               return (
                 <p
                   key={"lyrics-line-" + index}
-                  className="text-white mt-2 mb-2 px-2 ps-3 fs-4 fw-normal"
+                  className="text-white mt-2 mb-2 px-2 ps-3 fw-normal lyricalText"
                 >
                   {line}
                 </p>
