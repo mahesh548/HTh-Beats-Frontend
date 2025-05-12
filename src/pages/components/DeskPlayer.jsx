@@ -32,7 +32,8 @@ export default function DeskPlayer() {
   const { Queue, setQueue } = useContext(songContext);
   const { currentSong, sendReaction } = useContext(channelContext);
 
-  const { open, openElements, close, closeOpen } = useContext(HashContext);
+  const { open, openElements, close, closeOpen, closeAll } =
+    useContext(HashContext);
   const [volume, setVolume] = useState(
     (document.getElementById("audio")?.volume || 1) * 100
   );
@@ -106,7 +107,7 @@ export default function DeskPlayer() {
   const toggleRightPanel = (type) => {
     const allTypes = ["player", "queue", "lyrics"];
     if (openElements.includes(type)) {
-      close(type);
+      closeAll(allTypes);
       return;
     }
     if (openElements.some((ele) => allTypes.includes(ele))) {
@@ -117,6 +118,13 @@ export default function DeskPlayer() {
       });
     } else {
       open(type);
+    }
+  };
+
+  const goFullscreen = () => {
+    const screen = document.body;
+    if (screen?.requestFullscreen) {
+      screen.requestFullscreen();
     }
   };
 
@@ -270,7 +278,10 @@ export default function DeskPlayer() {
             id="volumeRange"
           />
         </div>
-        <button className="iconButton opacity-50">
+        <button
+          className="iconButton opacity-50"
+          onClick={() => goFullscreen()}
+        >
           <Fullscreen />
         </button>
       </div>

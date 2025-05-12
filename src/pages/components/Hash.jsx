@@ -23,6 +23,17 @@ export default function HashProvider({ children }) {
       navigate(url, { replace: false });
     }
   };
+  const closeAll = (closeIds) => {
+    const newOpenElements = [
+      ...openElements.filter((item) => !closeIds.includes(item)),
+    ];
+    if (newOpenElements.length == 0) {
+      navigate(location.pathname, { replace: true });
+      return;
+    }
+    const url = `${location.pathname}?open=${newOpenElements.join("&open=")}`;
+    navigate(url, { replace: false });
+  };
 
   const open = (id) => {
     if (!openElements.includes(id)) {
@@ -47,7 +58,9 @@ export default function HashProvider({ children }) {
     }
   };
   return (
-    <HashContext.Provider value={{ openElements, open, close, closeOpen }}>
+    <HashContext.Provider
+      value={{ openElements, open, close, closeOpen, closeAll }}
+    >
       {children}
     </HashContext.Provider>
   );

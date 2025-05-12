@@ -3,7 +3,9 @@ import { songContext } from "./Song";
 import {
   ChevronLeftRounded,
   FormatQuoteRounded,
+  MoreHorizOutlined,
   MoreHorizRounded,
+  MoreVertOutlined,
   PauseCircleFilled,
   PlayCircleFilled,
   RepeatOneOutlined,
@@ -11,6 +13,9 @@ import {
   ShareOutlined,
   SkipNextRounded,
   SkipPreviousRounded,
+  ZoomInMapOutlined,
+  ZoomOutMapOutlined,
+  ZoomOutOutlined,
 } from "@mui/icons-material";
 import utils from "../../../utils";
 
@@ -28,9 +33,10 @@ import OffCanvas from "./BottomSheet";
 import BackButton from "./BackButton";
 import { showToast } from "./showToast";
 
-export default function RightPanel() {
+export default function RightPanel({ Fullscreen, setFullscreen }) {
   const { Queue, setQueue } = useContext(songContext);
-  const { openElements, open, close, closeOpen } = useContext(HashContext);
+  const { openElements, open, close, closeOpen, closeAll } =
+    useContext(HashContext);
   const [localLike, setLocalLike] = useState(false);
 
   const lyrics = useRef({
@@ -39,7 +45,7 @@ export default function RightPanel() {
   });
 
   const closePlayer = () => {
-    close("player");
+    toggleRightPanel("player");
   };
   if (Queue?.song?.length == undefined) {
     closePlayer();
@@ -131,9 +137,6 @@ export default function RightPanel() {
     document
       .getElementById("desk-lyrics-nav")
       ?.style?.setProperty("background-color", color);
-    document
-      .getElementById("desk-lyrics-nav")
-      ?.style?.setProperty("box-shadow", `0px 5px 5px ${color}`);
   };
 
   useEffect(() => {
@@ -156,8 +159,9 @@ export default function RightPanel() {
 
   const toggleRightPanel = (type) => {
     const allTypes = ["player", "queue", "lyrics"];
+    setFullscreen("none");
     if (openElements.includes(type)) {
-      close(type);
+      closeAll(allTypes);
       return;
     }
     if (openElements.some((ele) => allTypes.includes(ele))) {
@@ -168,6 +172,13 @@ export default function RightPanel() {
       });
     } else {
       open(type);
+    }
+  };
+
+  const switchFullscreen = (element) => {
+    setFullscreen(element);
+    if (document.body?.requestFullscreen) {
+      document.body.requestFullscreen();
     }
   };
 
@@ -196,8 +207,23 @@ export default function RightPanel() {
               likeData={likeData}
               addId={addId}
             >
-              <MoreHorizRounded />
+              <MoreHorizOutlined className="iconButton opacity-50" />
             </OptionSong>
+            {Fullscreen !== "player" ? (
+              <button
+                className="iconButton opacity-50 w-100 desk"
+                onClick={() => switchFullscreen("player")}
+              >
+                <ZoomOutMapOutlined style={{ height: "18px" }} />
+              </button>
+            ) : (
+              <button
+                className="iconButton opacity-50 w-100 desk"
+                onClick={() => setFullscreen("none")}
+              >
+                <ZoomInMapOutlined style={{ height: "18px" }} />
+              </button>
+            )}
           </div>
 
           <img
@@ -245,23 +271,36 @@ export default function RightPanel() {
           document.body
         )}
       {openElements.includes("lyrics") && (
-        <div className="queuePageLayout" id="desk-lyrics">
-          <div className="navbarAddTo" id="desk-lyrics-nav">
-            <button
-              className="iconButton opacity-50 w-100 desk"
-              onClick={() => close("queue")}
+        <div
+          className="queuePageLayout"
+          id="desk-lyrics"
+          style={{ minWidth: "300px" }}
+        >
+          <div className="navbarAddTo px-1 mt-1" id="desk-lyrics-nav">
+            {Fullscreen !== "lyrics" && (
+              <button
+                className="iconButton opacity-50 w-100 desk"
+                onClick={() => toggleRightPanel("lyrics")}
+              >
+                <img
+                  src={PanelOpen}
+                  className="w-100"
+                  style={{ transform: "scaleX(-1)" }}
+                />
+              </button>
+            )}
+            <div
+              className={`${
+                Fullscreen == "lyrics" ? "text-start" : "text-center"
+              } w-100`}
             >
-              <img
-                src={PanelOpen}
-                className="w-100"
-                style={{ transform: "scaleX(-1)" }}
-              />
-            </button>
-            <div className="text-center ">
-              <p className="thinOneLineText playlistSongTitle fs-5">
+              <p className="thinOneLineText" style={{ fontSize: "1rem" }}>
                 {utils.refineText(data.title)}
               </p>
-              <p className="thinOneLineText playlistSongSubTitle fs-6">
+              <p
+                className="thinOneLineText text-white-50"
+                style={{ fontSize: "0.8rem" }}
+              >
                 {data.subtitle?.length != 0
                   ? utils.refineText(data.subtitle)
                   : utils.refineText(
@@ -269,8 +308,23 @@ export default function RightPanel() {
                     )}
               </p>
             </div>
+            {Fullscreen !== "lyrics" ? (
+              <button
+                className="iconButton opacity-50 w-100 desk"
+                onClick={() => switchFullscreen("lyrics")}
+              >
+                <ZoomOutMapOutlined style={{ height: "18px" }} />
+              </button>
+            ) : (
+              <button
+                className="iconButton opacity-50 w-100 desk"
+                onClick={() => setFullscreen("none")}
+              >
+                <ZoomInMapOutlined style={{ height: "18px" }} />
+              </button>
+            )}
           </div>
-          <div className="hiddenScrollbar">
+          <div className="hiddenScrollbar deskScroll">
             {lyrics.current.data.map((line, index) => {
               if (line.length == 0) {
                 return (
@@ -280,7 +334,7 @@ export default function RightPanel() {
               return (
                 <p
                   key={"lyrics-line-" + index}
-                  className="text-white mt-2 mb-2 px-2 ps-3 fs-4 fw-normal"
+                  className={`text-white  fw-normal mt-2 mb-2 px-2 ps-3 lyricalText`}
                 >
                   {line}
                 </p>

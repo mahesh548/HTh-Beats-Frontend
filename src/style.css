@@ -1824,6 +1824,12 @@ input[type="search"]::-webkit-search-cancel-button {
   display: grid;
   grid-template-rows: auto 1fr auto;
 }
+.fullScreen {
+  height: 100dvh;
+  width: 100dvw;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
 .screenNavbar {
   display: grid;
 
@@ -1832,6 +1838,12 @@ input[type="search"]::-webkit-search-cancel-button {
 .screenMain {
   display: grid;
   grid-template-columns: auto 1fr auto;
+  overflow: hidden;
+  column-gap: 10px;
+}
+.fullScreenMain {
+  display: grid;
+  grid-template-columns: auto;
   overflow: hidden;
   column-gap: 10px;
 }
@@ -2457,9 +2469,17 @@ input[type="search"]::-webkit-search-cancel-button {
     background-color: var(--desktop-dark-grey);
     border-radius: 8px;
   }
+  .fullScreenRightPanel {
+    max-width: 100%;
+    overflow: hidden;
+    min-width: 0;
+    width: auto;
+    background-color: var(--desktop-dark-grey);
+    border-radius: 8px;
+  }
   .desk-playerNav {
     display: grid;
-    grid-template-columns: 30px auto 40px;
+    grid-template-columns: 30px auto 30px 40px;
     width: 100%;
     align-items: center;
     button {
@@ -2486,7 +2506,7 @@ input[type="search"]::-webkit-search-cancel-button {
     border-radius: 8px;
     transition: background-color 0.5s ease;
     position: relative;
-    z-index: 1000;
+    z-index: 10;
   }
   .desk-playerDetailsButton {
     background-color: transparent;
@@ -2538,7 +2558,7 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .queuePageLayout .navbarAddTo {
     justify-items: start;
-    grid-template-columns: 30px auto;
+    grid-template-columns: 30px auto 30px;
     column-gap: 10px;
   }
   .queuePageLayout .sortPlaylistSong {
@@ -2563,5 +2583,23 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .queuePageLayout .playlistSong .desk-likeBut {
     display: none;
+  }
+  .lyricalText {
+    padding-inline-start: 1rem;
+  }
+  #desk-lyrics {
+    transition: background-color 0.5s ease;
+  }
+  #desk-lyrics-nav {
+    transition: background-color 0.5s ease;
+  }
+  .fullScreenRightPanel #desk-lyrics-nav {
+    grid-template-columns: auto 30px;
+  }
+  .fullScreenRightPanel .lyricalText {
+    font-size: 2.5rem;
+  }
+  .fullScreenRightPanel .queuePageLayout {
+    padding: 20px;
   }
 }
