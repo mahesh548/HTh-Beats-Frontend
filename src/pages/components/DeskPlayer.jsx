@@ -32,7 +32,8 @@ export default function DeskPlayer() {
   const { Queue, setQueue } = useContext(songContext);
   const { currentSong, sendReaction } = useContext(channelContext);
 
-  const { open, openElements, close, closeOpen } = useContext(HashContext);
+  const { open, openElements, close, closeOpen, closeAll } =
+    useContext(HashContext);
   const [volume, setVolume] = useState(
     (document.getElementById("audio")?.volume || 1) * 100
   );
@@ -106,7 +107,7 @@ export default function DeskPlayer() {
   const toggleRightPanel = (type) => {
     const allTypes = ["player", "queue", "lyrics"];
     if (openElements.includes(type)) {
-      close(type);
+      closeAll(allTypes);
       return;
     }
     if (openElements.some((ele) => allTypes.includes(ele))) {

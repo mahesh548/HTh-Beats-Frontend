@@ -2479,7 +2479,7 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .desk-playerNav {
     display: grid;
-    grid-template-columns: 30px auto 40px;
+    grid-template-columns: 30px auto 30px 40px;
     width: 100%;
     align-items: center;
     button {
@@ -2585,11 +2585,6 @@ input[type="search"]::-webkit-search-cancel-button {
     display: none;
   }
   .lyricalText {
-    font-size: 1rem;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
     padding-inline-start: 1rem;
   }
   #desk-lyrics {
@@ -2597,5 +2592,14 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   #desk-lyrics-nav {
     transition: background-color 0.5s ease;
+  }
+  .fullScreenRightPanel #desk-lyrics-nav {
+    grid-template-columns: auto 30px;
+  }
+  .fullScreenRightPanel .lyricalText {
+    font-size: 2.5rem;
+  }
+  .fullScreenRightPanel .queuePageLayout {
+    padding: 20px;
   }
 }

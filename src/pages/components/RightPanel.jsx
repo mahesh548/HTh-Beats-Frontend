@@ -3,7 +3,9 @@ import { songContext } from "./Song";
 import {
   ChevronLeftRounded,
   FormatQuoteRounded,
+  MoreHorizOutlined,
   MoreHorizRounded,
+  MoreVertOutlined,
   PauseCircleFilled,
   PlayCircleFilled,
   RepeatOneOutlined,
@@ -11,6 +13,7 @@ import {
   ShareOutlined,
   SkipNextRounded,
   SkipPreviousRounded,
+  ZoomInMapOutlined,
   ZoomOutMapOutlined,
   ZoomOutOutlined,
 } from "@mui/icons-material";
@@ -172,6 +175,13 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
     }
   };
 
+  const switchFullscreen = (element) => {
+    setFullscreen(element);
+    if (document.body?.requestFullscreen) {
+      document.body.requestFullscreen();
+    }
+  };
+
   return (
     <>
       {openElements.includes("player") && (
@@ -197,8 +207,23 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
               likeData={likeData}
               addId={addId}
             >
-              <MoreHorizRounded />
+              <MoreHorizOutlined className="iconButton opacity-50" />
             </OptionSong>
+            {Fullscreen !== "player" ? (
+              <button
+                className="iconButton opacity-50 w-100 desk"
+                onClick={() => switchFullscreen("player")}
+              >
+                <ZoomOutMapOutlined style={{ height: "18px" }} />
+              </button>
+            ) : (
+              <button
+                className="iconButton opacity-50 w-100 desk"
+                onClick={() => setFullscreen("none")}
+              >
+                <ZoomInMapOutlined style={{ height: "18px" }} />
+              </button>
+            )}
           </div>
 
           <img
@@ -246,11 +271,13 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
           document.body
         )}
       {openElements.includes("lyrics") && (
-        <div className="queuePageLayout" id="desk-lyrics">
+        <div
+          className="queuePageLayout"
+          id="desk-lyrics"
+          style={{ minWidth: "300px" }}
+        >
           <div className="navbarAddTo px-1 mt-1" id="desk-lyrics-nav">
-            {Fullscreen == "lyrics" ? (
-              <div></div>
-            ) : (
+            {Fullscreen !== "lyrics" && (
               <button
                 className="iconButton opacity-50 w-100 desk"
                 onClick={() => toggleRightPanel("lyrics")}
@@ -284,7 +311,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
             {Fullscreen !== "lyrics" ? (
               <button
                 className="iconButton opacity-50 w-100 desk"
-                onClick={() => setFullscreen("lyrics")}
+                onClick={() => switchFullscreen("lyrics")}
               >
                 <ZoomOutMapOutlined style={{ height: "18px" }} />
               </button>
@@ -293,7 +320,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
                 className="iconButton opacity-50 w-100 desk"
                 onClick={() => setFullscreen("none")}
               >
-                <ZoomOutMapOutlined style={{ height: "18px" }} />
+                <ZoomInMapOutlined style={{ height: "18px" }} />
               </button>
             )}
           </div>
@@ -307,7 +334,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
               return (
                 <p
                   key={"lyrics-line-" + index}
-                  className={`text-white  fw-normal lyricalText`}
+                  className={`text-white  fw-normal mt-2 mb-2 px-2 ps-3 lyricalText`}
                 >
                   {line}
                 </p>
