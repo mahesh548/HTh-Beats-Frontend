@@ -103,7 +103,9 @@ export default function Screen() {
             <RightPanel Fullscreen={Fullscreen} setFullscreen={setFullscreen} />
           </div>
         </div>
-        <div className="screenBottomBar">{<DeskPlayer />}</div>
+        <div className="screenBottomBar">
+          {<DeskPlayer setFullscreen={setFullscreen} />}
+        </div>
       </div>
 
       <OffCanvas
