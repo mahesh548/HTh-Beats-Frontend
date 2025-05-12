@@ -128,6 +128,10 @@ export default function DeskPlayer({ setFullscreen }) {
   const goFullscreen = () => {
     const screen = document.body;
     if (screen?.requestFullscreen) {
+      if (!openElements.includes("player")) {
+        toggleRightPanel("player");
+        setFullscreen("player");
+      }
       screen.requestFullscreen();
     }
   };
