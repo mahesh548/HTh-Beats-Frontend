@@ -36,6 +36,7 @@ export default function Screen() {
   const location = useLocation();
   const { openElements, close, open, closeOpen } = useContext(HashContext);
   const [badge, setBadge] = useState(false);
+  const [Fullscreen, setFullscreen] = useState("none");
   const messageCounts = useRef(0);
   useEffect(() => {
     const checkAuth = async () => {
@@ -65,23 +66,41 @@ export default function Screen() {
       <RealtimeSong />
       <ChangeLang />
 
-      <div className="screen">
-        <div className="screenNavbar p-2">
+      <div className={`${Fullscreen !== "none" ? "fullScreen" : "screen"}`}>
+        <div
+          className={`screenNavbar p-2 ${Fullscreen !== "none" && "d-none"}`}
+        >
           <div className="d-grid justify-content-center">
             <img src="/logo.png" height="40px" width="40px" />
           </div>
           <div></div>
           <div></div>
         </div>
-        <div className="screenMain p-2">
-          <div className="sidePanel hiddenScrollbar">
+        <div
+          className={`${
+            Fullscreen !== "none" ? "fullScreenMain" : "screenMain"
+          } p-2`}
+        >
+          <div
+            className={`sidePanel hiddenScrollbar ${
+              Fullscreen !== "none" && "d-none"
+            }`}
+          >
             <QuickAccess />
           </div>
-          <div className="screenPage hiddenScrollbar ">
+          <div
+            className={`screenPage hiddenScrollbar ${
+              Fullscreen !== "none" && "d-none"
+            }`}
+          >
             <Outlet />
           </div>
-          <div className="rightPanel hiddenScrollbar">
-            <RightPanel />
+          <div
+            className={` hiddenScrollbar ${
+              Fullscreen !== "none" ? "fullScreenRightPanel" : "rightPanel"
+            }`}
+          >
+            <RightPanel Fullscreen={Fullscreen} setFullscreen={setFullscreen} />
           </div>
         </div>
         <div className="screenBottomBar">{<DeskPlayer />}</div>

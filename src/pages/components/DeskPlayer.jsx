@@ -120,6 +120,13 @@ export default function DeskPlayer() {
     }
   };
 
+  const goFullscreen = () => {
+    const screen = document.body;
+    if (screen?.requestFullscreen) {
+      screen.requestFullscreen();
+    }
+  };
+
   if (!Queue.song) return <></>;
 
   return (
@@ -270,7 +277,10 @@ export default function DeskPlayer() {
             id="volumeRange"
           />
         </div>
-        <button className="iconButton opacity-50">
+        <button
+          className="iconButton opacity-50"
+          onClick={() => goFullscreen()}
+        >
           <Fullscreen />
         </button>
       </div>

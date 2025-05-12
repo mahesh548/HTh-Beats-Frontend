@@ -30,7 +30,7 @@ import OffCanvas from "./BottomSheet";
 import BackButton from "./BackButton";
 import { showToast } from "./showToast";
 
-export default function RightPanel() {
+export default function RightPanel({ Fullscreen, setFullscreen }) {
   const { Queue, setQueue } = useContext(songContext);
   const { openElements, open, close, closeOpen, closeAll } =
     useContext(HashContext);
@@ -156,6 +156,7 @@ export default function RightPanel() {
 
   const toggleRightPanel = (type) => {
     const allTypes = ["player", "queue", "lyrics"];
+    setFullscreen("none");
     if (openElements.includes(type)) {
       closeAll(allTypes);
       return;
@@ -247,17 +248,25 @@ export default function RightPanel() {
       {openElements.includes("lyrics") && (
         <div className="queuePageLayout" id="desk-lyrics">
           <div className="navbarAddTo px-1 mt-1" id="desk-lyrics-nav">
-            <button
-              className="iconButton opacity-50 w-100 desk"
-              onClick={() => toggleRightPanel("lyrics")}
+            {Fullscreen == "lyrics" ? (
+              <div></div>
+            ) : (
+              <button
+                className="iconButton opacity-50 w-100 desk"
+                onClick={() => toggleRightPanel("lyrics")}
+              >
+                <img
+                  src={PanelOpen}
+                  className="w-100"
+                  style={{ transform: "scaleX(-1)" }}
+                />
+              </button>
+            )}
+            <div
+              className={`${
+                Fullscreen == "lyrics" ? "text-start" : "text-center"
+              } w-100`}
             >
-              <img
-                src={PanelOpen}
-                className="w-100"
-                style={{ transform: "scaleX(-1)" }}
-              />
-            </button>
-            <div className="text-center">
               <p className="thinOneLineText" style={{ fontSize: "1rem" }}>
                 {utils.refineText(data.title)}
               </p>
@@ -272,12 +281,21 @@ export default function RightPanel() {
                     )}
               </p>
             </div>
-            <button
-              className="iconButton opacity-50 w-100 desk"
-              onClick={() => close("queue")}
-            >
-              <ZoomOutMapOutlined style={{ height: "18px" }} />
-            </button>
+            {Fullscreen !== "lyrics" ? (
+              <button
+                className="iconButton opacity-50 w-100 desk"
+                onClick={() => setFullscreen("lyrics")}
+              >
+                <ZoomOutMapOutlined style={{ height: "18px" }} />
+              </button>
+            ) : (
+              <button
+                className="iconButton opacity-50 w-100 desk"
+                onClick={() => setFullscreen("none")}
+              >
+                <ZoomOutMapOutlined style={{ height: "18px" }} />
+              </button>
+            )}
           </div>
           <div className="hiddenScrollbar deskScroll">
             {lyrics.current.data.map((line, index) => {
@@ -289,7 +307,7 @@ export default function RightPanel() {
               return (
                 <p
                   key={"lyrics-line-" + index}
-                  className="text-white mt-2 mb-2 px-2 ps-3 fw-normal lyricalText"
+                  className={`text-white  fw-normal lyricalText`}
                 >
                   {line}
                 </p>
