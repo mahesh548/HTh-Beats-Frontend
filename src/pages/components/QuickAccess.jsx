@@ -26,6 +26,8 @@ export default function QuickAccess() {
     navigate(`/playlist/${id}`);
   };
 
+  const isActive = (path) => location.pathname.includes(path);
+
   return (
     <div className={`quickCont ${panelOpen ? "open" : "closed"}`}>
       <div
@@ -55,7 +57,12 @@ export default function QuickAccess() {
         <Add />
         <p>Create</p>
       </button>
-      <button className="iconButton qaButton">
+      <button
+        className={`iconButton qaButton ${
+          isActive("/library") && "qaButtonActive"
+        }`}
+        onClick={() => navigate("/library")}
+      >
         <img src={librarySvgOutlined} />
         <p>Your library</p>
       </button>
