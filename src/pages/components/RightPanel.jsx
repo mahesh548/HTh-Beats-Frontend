@@ -186,18 +186,21 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
     <>
       {openElements.includes("player") && (
         <div className="desk-player px-2" id="desk-player">
-          <div className="desk-playerNav">
+          <div
+            className={`${
+              Fullscreen !== "player" ? "desk-playerNav" : "desk-playerNav-full"
+            }`}
+          >
             <button
-              className="iconButton opacity-50"
+              className={`iconButton opacity-50 ${
+                Fullscreen == "player" && "d-none"
+              } `}
               onClick={() => closePlayer()}
             >
               <img src={PanelOpen} style={{ transform: "scaleX(-1)" }} />
             </button>
             <div>
-              <b
-                className="thinOneLineText"
-                style={{ color: "white", fontWeight: "bold" }}
-              >
+              <b className="thinOneLineText text-white-50 fw-bold">
                 {Queue.playlist.title}
               </b>
             </div>
@@ -226,15 +229,18 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
             )}
           </div>
 
-          <img
-            src={utils
-              .getItemFromId(Queue.song, Queue.playlist.list)
-              .image.replace("150x150", "500x500")}
-            alt={data.title}
-            className="playerBanner"
-          />
-
-          <div className="playerDetails">
+          <div className="bannerWrapper">
+            <img
+              src={utils
+                .getItemFromId(Queue.song, Queue.playlist.list)
+                .image.replace("150x150", "500x500")}
+              alt={data.title}
+              className="playerBanner"
+            />
+          </div>
+          <div
+            className={`playerDetails ${Fullscreen == "player" && "d-none"}`}
+          >
             <div>
               <p className="thinOneLineText playerTitle fs-5">
                 {utils.refineText(data.title)}

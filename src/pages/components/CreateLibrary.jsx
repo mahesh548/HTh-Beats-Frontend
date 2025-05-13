@@ -3,7 +3,13 @@ import utils from "../../../utils";
 import { AuthContext } from "./Auth";
 import ChipSort from "./ChipSort";
 
-import { Add, History } from "@mui/icons-material";
+import {
+  Add,
+  AddBoxOutlined,
+  ArrowForwardIos,
+  ArrowForwardIosOutlined,
+  History,
+} from "@mui/icons-material";
 import { Link, useNavigate } from "react-router";
 import { HashContext } from "./Hash";
 
@@ -41,10 +47,10 @@ export default function CreateLibrary({ response, filter, filterData }) {
   };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
-      <div className="libraryCont ">
-        <div className="libraryNavCont px-2">
+      <div className="libraryCont desk-libraryCont">
+        <div className="libraryNavCont px-2 desk-libraryNavCont">
           <div
-            className="libraryNav mt-4 mb-3"
+            className="libraryNav mt-4 mb-3 mobo"
             style={{ gridTemplateColumns: "40px auto 40px 40px" }}
           >
             <Link to="/profile">
@@ -61,6 +67,19 @@ export default function CreateLibrary({ response, filter, filterData }) {
             </button>
             <button className="iconButton" onClick={() => navigate("/history")}>
               <History />
+            </button>
+          </div>
+          <div className="desk">
+            <p className="labelText mt-0 desk mb-2 d-inline-block">
+              Your library
+            </p>
+            <button
+              className="addToBut m-0 d-inline-block float-end px-3 py-1 text-white me-2"
+              style={{ backgroundColor: "#ffffff30" }}
+              onClick={() => open("createOption")}
+            >
+              <Add className="text-white-50" />
+              Create
             </button>
           </div>
           <ChipSort filterData={filterData} filter={filter} />

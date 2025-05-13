@@ -4,6 +4,7 @@ import utils from "../../../utils";
 import {
   FormatQuoteRounded,
   Fullscreen,
+  FullscreenExitOutlined,
   IosShareOutlined,
   PauseCircleFilled,
   PauseRounded,
@@ -28,7 +29,7 @@ import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import { channelContext } from "./Channel";
 
-export default function DeskPlayer() {
+export default function DeskPlayer({ setFullscreen }) {
   const { Queue, setQueue } = useContext(songContext);
   const { currentSong, sendReaction } = useContext(channelContext);
 
@@ -37,6 +38,8 @@ export default function DeskPlayer() {
   const [volume, setVolume] = useState(
     (document.getElementById("audio")?.volume || 1) * 100
   );
+
+  const [isFull, setIsFull] = useState(false);
 
   const [repeatOne, setRepeatOne] = useState(
     JSON.parse(localStorage.getItem("repeat")) || false
@@ -106,6 +109,7 @@ export default function DeskPlayer() {
 
   const toggleRightPanel = (type) => {
     const allTypes = ["player", "queue", "lyrics"];
+    setFullscreen("none");
     if (openElements.includes(type)) {
       closeAll(allTypes);
       return;
@@ -124,9 +128,33 @@ export default function DeskPlayer() {
   const goFullscreen = () => {
     const screen = document.body;
     if (screen?.requestFullscreen) {
+      if (!openElements.includes("player")) {
+        toggleRightPanel("player");
+        setFullscreen("player");
+      }
       screen.requestFullscreen();
     }
   };
+  const exitFullscreen = () => {
+    document.exitFullscreen();
+  };
+
+  useEffect(() => {
+    const handleFullscreen = () => {
+      setIsFull(!isFull);
+    };
+    const screen = document.body;
+    screen.addEventListener("fullscreenchange", handleFullscreen);
+    screen.addEventListener("mozfullscreenchange", handleFullscreen);
+    screen.addEventListener("webkitfullscreenchange", handleFullscreen);
+    screen.addEventListener("msfullscreenchange", handleFullscreen);
+    return () => {
+      screen.removeEventListener("fullscreenchange", handleFullscreen);
+      screen.removeEventListener("mozfullscreenchange", handleFullscreen);
+      screen.removeEventListener("webkitfullscreenchange", handleFullscreen);
+      screen.removeEventListener("msfullscreenchange", handleFullscreen);
+    };
+  }, [isFull]);
 
   if (!Queue.song) return <></>;
 
@@ -278,12 +306,21 @@ export default function DeskPlayer() {
             id="volumeRange"
           />
         </div>
-        <button
-          className="iconButton opacity-50"
-          onClick={() => goFullscreen()}
-        >
-          <Fullscreen />
-        </button>
+        {!isFull ? (
+          <button
+            className="iconButton opacity-50"
+            onClick={() => goFullscreen()}
+          >
+            <Fullscreen />
+          </button>
+        ) : (
+          <button
+            className="iconButton opacity-50"
+            onClick={() => exitFullscreen()}
+          >
+            <FullscreenExitOutlined />
+          </button>
+        )}
       </div>
       {openElements.includes(addId) &&
         createPortal(

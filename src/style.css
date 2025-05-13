@@ -1231,6 +1231,7 @@ p {
 }
 .libraryList {
   grid-template-columns: 65px auto 40px;
+  cursor: pointer;
   img {
     height: 65px;
     width: 65px;
@@ -2413,6 +2414,7 @@ input[type="search"]::-webkit-search-cancel-button {
       height: 20px;
     }
   }
+
   .qaList {
     height: 40px;
     width: 40px;
@@ -2480,8 +2482,9 @@ input[type="search"]::-webkit-search-cancel-button {
   .desk-playerNav {
     display: grid;
     grid-template-columns: 30px auto 30px 40px;
+    column-gap: 3px;
     width: 100%;
-    align-items: center;
+    align-items: baseline;
     button {
       background-color: transparent;
       color: white;
@@ -2493,6 +2496,32 @@ input[type="search"]::-webkit-search-cancel-button {
         height: 100%;
         width: 100%;
       }
+    }
+    b {
+      font-size: 16px;
+    }
+  }
+  .desk-playerNav-full {
+    display: grid;
+    grid-template-columns: auto 30px 40px;
+    column-gap: 15px;
+    width: 100%;
+    align-items: baseline;
+    padding: 5px;
+    button {
+      background-color: transparent;
+      color: white;
+      border: none;
+      svg {
+        font-size: 30px;
+      }
+      img {
+        height: 100%;
+        width: 100%;
+      }
+    }
+    b {
+      font-size: 16px;
     }
   }
   .desk-player {
@@ -2601,5 +2630,30 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .fullScreenRightPanel .queuePageLayout {
     padding: 20px;
+  }
+  .desk-libraryNavCont {
+    position: absolute;
+    background-color: var(--desktop-dark-grey);
+    box-shadow: none;
+    padding: 0.9rem !important;
+  }
+  .libraryCont {
+    padding-top: 5.5rem;
+  }
+  .playlistSong.libraryList {
+    padding: 4px;
+    border-radius: 8px;
+    img {
+      border-radius: 4px !important;
+    }
+  }
+  .playlistSong.libraryList:hover {
+    background-color: #ffffff1e;
+  }
+  .qaButtonActive {
+    background-color: white;
+    img {
+      filter: invert(1);
+    }
   }
 }
