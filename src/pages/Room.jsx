@@ -81,10 +81,11 @@ export default function Room() {
   return (
     <>
       <div className="page hiddenScrollbar">
-        <div className="stickyTop">
+        <div className="stickyTop mobo">
           <BackButton styleClass="ms-1 mt-2 ps-3" />
         </div>
-        <p className="labelText mt-0 p-1 fs-1">{roomInfo?.title}</p>
+        <p className="labelText mt-0 p-1 fs-1 mobo">{roomInfo?.title}</p>
+        <p className="thinOneLineText dsk-rm-tit desk">{roomInfo?.title}</p>
         <div className="roomAccess p-1 mt-2">
           <span
             className={`borderBut p-0  ${members.length > 3 && "pe-3"}  ${

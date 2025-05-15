@@ -2652,8 +2652,20 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .qaButtonActive {
     background-color: white;
+    color: black;
     img {
       filter: invert(1);
     }
+  }
+  .roomAccess {
+    top: 0px;
+    background-color: var(--desktop-dark-grey);
+  }
+  .dsk-rm-tit {
+    font-size: 4rem;
+    color: white;
+    font-weight: 500;
+    padding-left: 1rem;
+    margin-top: 1rem;
   }
 }

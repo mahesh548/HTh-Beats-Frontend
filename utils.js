@@ -1,6 +1,6 @@
 import axios from "axios";
 import { showToast } from "./src/pages/components/showToast";
-const prod = false;
+const prod = true;
 const apiUrl = prod
   ? "https://hthbeats-api-bzbgepaqcug2abb4.canadacentral-01.azurewebsites.net/api"
   : "https://m8b5chhv-5000.inc1.devtunnels.ms/api";

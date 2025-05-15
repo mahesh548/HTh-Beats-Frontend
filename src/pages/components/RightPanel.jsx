@@ -65,8 +65,8 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
   const closePlayer = () => {
     toggleRightPanel("player");
   };
-  if (Queue?.song?.length == undefined) {
-    closePlayer();
+  if (Queue?.song == undefined && openElements.includes("player")) {
+    closeAll(["player", "queue", "lyrics"]);
   }
 
   const data = useMemo(() => {
@@ -112,10 +112,6 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
     }
   }, [data?.savedIn, Queue?.song]);
 
-  if (Queue.song == undefined) {
-    return <></>;
-  }
-
   const getLyrics = async (snippet, id) => {
     if (snippet == "No Lyrics") {
       showToast({ text: "Lyrics not available" });
@@ -158,6 +154,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
   };
 
   useEffect(() => {
+    if (!data?.id) return;
     const lyricsBtn = document.getElementById("lyricsBtn");
 
     const handleClick = () => {
@@ -173,7 +170,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
         lyricsBtn.removeEventListener("click", handleClick);
       }
     };
-  }, [data.id, openElements]);
+  }, [data?.id, openElements]);
 
   const switchFullscreen = (element) => {
     setFullscreen(element);
@@ -181,6 +178,10 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
       document.body.requestFullscreen();
     }
   };
+
+  if (Queue.song == undefined) {
+    return <></>;
+  }
 
   return (
     <>
