@@ -12,7 +12,12 @@ import { HashContext } from "./components/Hash";
 import Emoji from "./components/Emoji";
 import OffCanvas from "./components/BottomSheet";
 import Stickers from "./components/Stickers";
-import { BlockOutlined, IosShareOutlined } from "@mui/icons-material";
+import {
+  BlockOutlined,
+  IosShareOutlined,
+  ExpandCircleDownOutlined,
+  Close,
+} from "@mui/icons-material";
 import QrCode from "./components/QrCode";
 
 export default function Room() {
@@ -26,6 +31,7 @@ export default function Room() {
     defaultUser,
     messages,
     block,
+    sendReaction,
   } = useContext(channelContext);
   const { Queue } = useContext(songContext);
   const navigate = useNavigate();
@@ -78,9 +84,10 @@ export default function Room() {
     }
     close("roomShare");
   };
+  const isDesktop = window.innerWidth >= 1000;
   return (
     <>
-      <div className="page hiddenScrollbar">
+      <div className="page hiddenScrollbar roomPage">
         <div className="stickyTop mobo">
           <BackButton styleClass="ms-1 mt-2 ps-3" />
         </div>
@@ -115,7 +122,7 @@ export default function Room() {
         </div>
         <hr className="dividerLine" />
         <p className="labelText mt-0 p-1 ">Now playing</p>
-        <div style={{ height: "100px" }}>
+        <div style={{ height: "100px" }} className="dsk-rm-song">
           {!Queue?.song ? (
             <div className="noSong">
               <p className="text-white-50">No active playback in the room.</p>
@@ -160,12 +167,12 @@ export default function Room() {
             </p>
           )}
         </div>
-        <hr className="dividerLine" />
+        <hr className="dividerLine nbh" />
         <p className="labelText mt-0 p-1 ">Members activity</p>
         <div className="chatSection">
           {messages.length == 0 && (
             <div
-              className="d-block text-center text-white-50 fw-light"
+              className="d-block text-center text-white-50 fw-light noMsg"
               style={{ marginTop: "50%" }}
             >
               <Emoji
@@ -247,7 +254,44 @@ export default function Room() {
               );
             }
           })}
+          <div className="w-100 float-end chtSpace"></div>
         </div>
+        {isDesktop && (
+          <div className="dskReact">
+            <div className="instantReact">
+              <button className="iconButton">
+                <Emoji
+                  src={utils.stickerUrl("emoji", "39")}
+                  click={() => sendReaction("emoji", "39")}
+                />
+              </button>
+              <button className="iconButton">
+                <Emoji
+                  src={utils.stickerUrl("emoji", "4")}
+                  click={() => sendReaction("emoji", "4")}
+                />
+              </button>
+              <button className="iconButton">
+                <Emoji
+                  src={utils.stickerUrl("emoji", "1")}
+                  click={() => sendReaction("emoji", "1")}
+                />
+              </button>
+              <button className="iconButton">
+                <Emoji
+                  src={utils.stickerUrl("emoji", "17")}
+                  click={() => sendReaction("emoji", "17")}
+                />
+              </button>
+              <button className="iconButton" onClick={() => open("stickers")}>
+                <ExpandCircleDownOutlined
+                  style={{ rotate: "180deg" }}
+                  className="text-white-50"
+                />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       {openElements.includes(endId) &&
         createPortal(
@@ -260,12 +304,35 @@ export default function Room() {
           />,
           document.body
         )}
-      <OffCanvas
-        open={openElements.includes("stickers")}
-        dismiss={() => close("stickers")}
-      >
-        <Stickers />
-      </OffCanvas>
+      {!isDesktop && (
+        <OffCanvas
+          open={openElements.includes("stickers")}
+          dismiss={() => close("stickers")}
+        >
+          <Stickers />
+        </OffCanvas>
+      )}
+
+      {isDesktop && openElements.includes("stickers") && (
+        <div className="deskBack contextMenuPart" onClick={() => navigate(-1)}>
+          <div
+            className="deskEditCont"
+            onClick={(e) => e.stopPropagation()}
+            style={{ width: "350px" }}
+          >
+            <p className="labelText text-start d-inline-block mt-0">Stickers</p>
+            <button
+              className="iconButton float-end "
+              onClick={() => close("stickers")}
+            >
+              <Close />
+            </button>
+            <hr className="dividerLine" />
+
+            <Stickers />
+          </div>
+        </div>
+      )}
 
       <OffCanvas
         open={openElements.includes("roomShare")}
