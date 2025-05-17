@@ -2626,6 +2626,12 @@ input[type="search"]::-webkit-search-cancel-button {
   #desk-lyrics-nav {
     transition: background-color 0.5s ease;
   }
+  #desk-room {
+    transition: background-color 0.5s ease;
+  }
+  #desk-room-access {
+    transition: background-color 0.5s ease;
+  }
   .fullScreenRightPanel #desk-lyrics-nav {
     grid-template-columns: auto 30px;
   }
