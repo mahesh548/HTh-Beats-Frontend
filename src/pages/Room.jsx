@@ -1,5 +1,5 @@
-import React from "react";
-import { useContext, useMemo } from "react";
+import React, { useEffect } from "react";
+import { useContext, useMemo, useState } from "react";
 import BackButton from "./components/BackButton";
 import PlaylistOwner from "./components/PlaylistOwner";
 import { channelContext } from "./components/Channel";
@@ -84,16 +84,33 @@ export default function Room() {
     }
     close("roomShare");
   };
+  useEffect(() => {
+    if (data && data.image) {
+      setColor(data.image);
+    }
+  }, [data?.image]);
+
+  const setColor = async (url) => {
+    const isDesktop = window.innerWidth >= 1000;
+    if (!isDesktop) return;
+    const color = await utils.getAverageColor(url, 0.3);
+    document
+      .getElementById("desk-room")
+      ?.style?.setProperty("background-color", color);
+    document
+      .getElementById("desk-room-access")
+      ?.style?.setProperty("background-color", color);
+  };
   const isDesktop = window.innerWidth >= 1000;
   return (
     <>
-      <div className="page hiddenScrollbar roomPage">
-        <div className="stickyTop mobo">
+      <div className="page hiddenScrollbar roomPage" id="desk-room">
+        <div className=" mobo">
           <BackButton styleClass="ms-1 mt-2 ps-3" />
         </div>
         <p className="labelText mt-0 p-1 fs-1 mobo">{roomInfo?.title}</p>
         <p className="thinOneLineText dsk-rm-tit desk">{roomInfo?.title}</p>
-        <div className="roomAccess p-1 mt-2">
+        <div className="roomAccess p-1 mt-2" id="desk-room-access">
           <span
             className={`borderBut p-0  ${members.length > 3 && "pe-3"}  ${
               members.length == 1 && "dp"
@@ -130,7 +147,10 @@ export default function Room() {
           ) : (
             <div
               className="playlistSong m-auto mt-2"
-              style={{ gridTemplateColumns: "50px auto 50px", width: "98%" }}
+              style={{
+                gridTemplateColumns: "50px auto max-content",
+                width: "98%",
+              }}
             >
               <img src={data.image} className="playlistSongImg rounded" />
               <div>
@@ -142,7 +162,7 @@ export default function Room() {
                 </p>
               </div>
 
-              <button className="iconButton">
+              <button className="iconButton mobo">
                 <img
                   src={
                     members.find(
@@ -153,6 +173,23 @@ export default function Room() {
                   className="playlistSongImg rounded-circle"
                   style={{ width: "30px", height: "30px" }}
                 />
+              </button>
+              <button className="plyrIn desk">
+                <img
+                  src={
+                    members.find(
+                      (item) => item.clientId == currentSong?.clientId
+                    )?.pic || defaultUser.pic
+                  }
+                  alt=""
+                  className="playlistSongImg rounded-circle"
+                  style={{ width: "30px", height: "30px" }}
+                />
+                <p>
+                  {members.find(
+                    (item) => item.clientId == currentSong?.clientId
+                  )?.username || defaultUser.username}
+                </p>
               </button>
             </div>
           )}
