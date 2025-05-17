@@ -1578,9 +1578,10 @@ input[type="search"]::-webkit-search-cancel-button {
   column-gap: 8px;
   margin-bottom: 30px;
   position: sticky;
-  top: 50px;
+  top: 0px;
   background-color: black;
   z-index: 1;
+  padding: 10px 3px;
 }
 .dividerLine {
   height: 2px;
@@ -1604,7 +1605,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .chatSection {
   display: block;
-  min-height: 100dvh;
+  height: auto;
   width: 100%;
 }
 .remoteReaction {
@@ -1678,6 +1679,9 @@ input[type="search"]::-webkit-search-cancel-button {
   100% {
     left: 100%;
   }
+}
+.chtSpace {
+  height: 190px;
 }
 /* STICKERS CSS */
 .stkNav {
@@ -2622,6 +2626,12 @@ input[type="search"]::-webkit-search-cancel-button {
   #desk-lyrics-nav {
     transition: background-color 0.5s ease;
   }
+  #desk-room {
+    transition: background-color 0.5s ease;
+  }
+  #desk-room-access {
+    transition: background-color 0.5s ease;
+  }
   .fullScreenRightPanel #desk-lyrics-nav {
     grid-template-columns: auto 30px;
   }
@@ -2660,6 +2670,8 @@ input[type="search"]::-webkit-search-cancel-button {
   .roomAccess {
     top: 0px;
     background-color: var(--desktop-dark-grey);
+    margin: 0px !important;
+    padding: 1rem !important;
   }
   .dsk-rm-tit {
     font-size: 4rem;
@@ -2667,5 +2679,63 @@ input[type="search"]::-webkit-search-cancel-button {
     font-weight: 500;
     padding-left: 1rem;
     margin-top: 1rem;
+  }
+  .dsk-rm-song {
+    padding: 1rem;
+  }
+  .roomPage .labelText {
+    padding-left: 1rem !important;
+  }
+  .noMsg {
+    margin-top: 5rem !important;
+    img {
+      max-width: 200px;
+    }
+  }
+  .chatSection {
+    padding: 0 1rem;
+  }
+  .chtSpace {
+    height: 90px;
+  }
+  .nbh {
+    margin-top: 25px;
+  }
+  .dskReact {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    z-index: 11;
+    transform: translate(-50%, 0%);
+    padding: 8px;
+    background: #ffffff17;
+    border-radius: 40px;
+    backdrop-filter: blur(4px);
+  }
+  .stkCont {
+    overflow-y: scroll;
+    overflow-x: hidden !important;
+    max-height: 60dvh;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  }
+
+  .stkNav .pop {
+    flex: 1;
+
+    img {
+      width: 100% !important;
+      height: auto;
+    }
+  }
+  .plyrIn {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 40px;
+    background-color: #ffffff17;
+    border: none;
+    column-gap: 5px;
+    padding-left: 5px;
+    color: white;
   }
 }

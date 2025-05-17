@@ -53,7 +53,6 @@ export default function Stickers({ pack = "emoji" }) {
       stickerList.push(utils.stickerUrl(packName, i));
     }
     setStickers(stickerList);
-    console.log("stickers", stickerList);
   }, [packName]);
 
   return (
@@ -72,7 +71,7 @@ export default function Stickers({ pack = "emoji" }) {
         ))}
       </div>
       <hr className="dividerLine mb-4" />
-      <div className="stkCont">
+      <div className="stkCont hiddenScrollbar deskScroll">
         {stickers.map((item, index) => {
           return (
             <button key={pack + "-sticker-" + index} className="iconButton pop">

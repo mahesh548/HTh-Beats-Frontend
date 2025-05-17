@@ -1,5 +1,5 @@
-import React from "react";
-import { useContext, useMemo } from "react";
+import React, { useEffect } from "react";
+import { useContext, useMemo, useState } from "react";
 import BackButton from "./components/BackButton";
 import PlaylistOwner from "./components/PlaylistOwner";
 import { channelContext } from "./components/Channel";
@@ -12,7 +12,12 @@ import { HashContext } from "./components/Hash";
 import Emoji from "./components/Emoji";
 import OffCanvas from "./components/BottomSheet";
 import Stickers from "./components/Stickers";
-import { BlockOutlined, IosShareOutlined } from "@mui/icons-material";
+import {
+  BlockOutlined,
+  IosShareOutlined,
+  ExpandCircleDownOutlined,
+  Close,
+} from "@mui/icons-material";
 import QrCode from "./components/QrCode";
 
 export default function Room() {
@@ -26,6 +31,7 @@ export default function Room() {
     defaultUser,
     messages,
     block,
+    sendReaction,
   } = useContext(channelContext);
   const { Queue } = useContext(songContext);
   const navigate = useNavigate();
@@ -78,15 +84,33 @@ export default function Room() {
     }
     close("roomShare");
   };
+  useEffect(() => {
+    if (data && data.image) {
+      setColor(data.image);
+    }
+  }, [data?.image]);
+
+  const setColor = async (url) => {
+    const isDesktop = window.innerWidth >= 1000;
+    if (!isDesktop) return;
+    const color = await utils.getAverageColor(url, 0.3);
+    document
+      .getElementById("desk-room")
+      ?.style?.setProperty("background-color", color);
+    document
+      .getElementById("desk-room-access")
+      ?.style?.setProperty("background-color", color);
+  };
+  const isDesktop = window.innerWidth >= 1000;
   return (
     <>
-      <div className="page hiddenScrollbar">
-        <div className="stickyTop mobo">
+      <div className="page hiddenScrollbar roomPage" id="desk-room">
+        <div className=" mobo">
           <BackButton styleClass="ms-1 mt-2 ps-3" />
         </div>
         <p className="labelText mt-0 p-1 fs-1 mobo">{roomInfo?.title}</p>
         <p className="thinOneLineText dsk-rm-tit desk">{roomInfo?.title}</p>
-        <div className="roomAccess p-1 mt-2">
+        <div className="roomAccess p-1 mt-2" id="desk-room-access">
           <span
             className={`borderBut p-0  ${members.length > 3 && "pe-3"}  ${
               members.length == 1 && "dp"
@@ -115,7 +139,7 @@ export default function Room() {
         </div>
         <hr className="dividerLine" />
         <p className="labelText mt-0 p-1 ">Now playing</p>
-        <div style={{ height: "100px" }}>
+        <div style={{ height: "100px" }} className="dsk-rm-song">
           {!Queue?.song ? (
             <div className="noSong">
               <p className="text-white-50">No active playback in the room.</p>
@@ -123,7 +147,10 @@ export default function Room() {
           ) : (
             <div
               className="playlistSong m-auto mt-2"
-              style={{ gridTemplateColumns: "50px auto 50px", width: "98%" }}
+              style={{
+                gridTemplateColumns: "50px auto max-content",
+                width: "98%",
+              }}
             >
               <img src={data.image} className="playlistSongImg rounded" />
               <div>
@@ -135,7 +162,7 @@ export default function Room() {
                 </p>
               </div>
 
-              <button className="iconButton">
+              <button className="iconButton mobo">
                 <img
                   src={
                     members.find(
@@ -146,6 +173,23 @@ export default function Room() {
                   className="playlistSongImg rounded-circle"
                   style={{ width: "30px", height: "30px" }}
                 />
+              </button>
+              <button className="plyrIn desk">
+                <img
+                  src={
+                    members.find(
+                      (item) => item.clientId == currentSong?.clientId
+                    )?.pic || defaultUser.pic
+                  }
+                  alt=""
+                  className="playlistSongImg rounded-circle"
+                  style={{ width: "30px", height: "30px" }}
+                />
+                <p>
+                  {members.find(
+                    (item) => item.clientId == currentSong?.clientId
+                  )?.username || defaultUser.username}
+                </p>
               </button>
             </div>
           )}
@@ -160,12 +204,12 @@ export default function Room() {
             </p>
           )}
         </div>
-        <hr className="dividerLine" />
+        <hr className="dividerLine nbh" />
         <p className="labelText mt-0 p-1 ">Members activity</p>
         <div className="chatSection">
           {messages.length == 0 && (
             <div
-              className="d-block text-center text-white-50 fw-light"
+              className="d-block text-center text-white-50 fw-light noMsg"
               style={{ marginTop: "50%" }}
             >
               <Emoji
@@ -247,7 +291,44 @@ export default function Room() {
               );
             }
           })}
+          <div className="w-100 float-end chtSpace"></div>
         </div>
+        {isDesktop && (
+          <div className="dskReact">
+            <div className="instantReact">
+              <button className="iconButton">
+                <Emoji
+                  src={utils.stickerUrl("emoji", "39")}
+                  click={() => sendReaction("emoji", "39")}
+                />
+              </button>
+              <button className="iconButton">
+                <Emoji
+                  src={utils.stickerUrl("emoji", "4")}
+                  click={() => sendReaction("emoji", "4")}
+                />
+              </button>
+              <button className="iconButton">
+                <Emoji
+                  src={utils.stickerUrl("emoji", "1")}
+                  click={() => sendReaction("emoji", "1")}
+                />
+              </button>
+              <button className="iconButton">
+                <Emoji
+                  src={utils.stickerUrl("emoji", "17")}
+                  click={() => sendReaction("emoji", "17")}
+                />
+              </button>
+              <button className="iconButton" onClick={() => open("stickers")}>
+                <ExpandCircleDownOutlined
+                  style={{ rotate: "180deg" }}
+                  className="text-white-50"
+                />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
       {openElements.includes(endId) &&
         createPortal(
@@ -260,12 +341,35 @@ export default function Room() {
           />,
           document.body
         )}
-      <OffCanvas
-        open={openElements.includes("stickers")}
-        dismiss={() => close("stickers")}
-      >
-        <Stickers />
-      </OffCanvas>
+      {!isDesktop && (
+        <OffCanvas
+          open={openElements.includes("stickers")}
+          dismiss={() => close("stickers")}
+        >
+          <Stickers />
+        </OffCanvas>
+      )}
+
+      {isDesktop && openElements.includes("stickers") && (
+        <div className="deskBack contextMenuPart" onClick={() => navigate(-1)}>
+          <div
+            className="deskEditCont"
+            onClick={(e) => e.stopPropagation()}
+            style={{ width: "350px" }}
+          >
+            <p className="labelText text-start d-inline-block mt-0">Stickers</p>
+            <button
+              className="iconButton float-end "
+              onClick={() => close("stickers")}
+            >
+              <Close />
+            </button>
+            <hr className="dividerLine" />
+
+            <Stickers />
+          </div>
+        </div>
+      )}
 
       <OffCanvas
         open={openElements.includes("roomShare")}
