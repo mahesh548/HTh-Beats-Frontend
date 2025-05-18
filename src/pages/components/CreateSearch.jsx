@@ -270,11 +270,11 @@ export default function CreateSearch() {
 
   return (
     <div
-      className="page hiddenScrollbar"
+      className="page hiddenScrollbar "
       id="searchPage"
       style={{ overflowY: "scroll" }}
     >
-      <div className="libraryNavCont px-2 position-relative">
+      <div className="libraryNavCont px-2 position-relative mobo">
         <div className="libraryNav mt-4 mb-3">
           <Link to="/profile">
             <img
@@ -285,13 +285,13 @@ export default function CreateSearch() {
           <p className="labelText mt-0">Search</p>
         </div>
       </div>
-      <button className="srchOpenBut" onClick={() => open("search")}>
+      <button className="srchOpenBut mobo" onClick={() => open("search")}>
         <img src={searchSvgOutlined} />
         <p className="text-start">Hey, what do you want to listen?</p>
       </button>
       {discover && (
         <>
-          <p className="labelText px-1">Browse all</p>
+          <p className="labelText px-1 dp-s">Browse all</p>
           <div className="browseCont mt-3 px-1">
             {discover.map((item) => {
               return <CreateRadio data={item} key={`discover_${item.id}`} />;

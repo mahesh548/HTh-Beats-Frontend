@@ -1841,7 +1841,7 @@ input[type="search"]::-webkit-search-cancel-button {
 }
 .screenNavbar {
   display: grid;
-
+  height: 60px;
   grid-template-columns: 80px 1fr auto;
 }
 .screenMain {
@@ -2230,6 +2230,9 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .op-10 {
     opacity: 0.1;
+  }
+  .op-80 {
+    opacity: 0.7;
   }
   .songArtCont div:hover {
     scale: 1.08;
@@ -2751,5 +2754,56 @@ input[type="search"]::-webkit-search-cancel-button {
     column-gap: 5px;
     padding-left: 5px;
     color: white;
+  }
+  .browseCont {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    column-gap: 20px;
+    row-gap: 20px;
+    padding: 0px 20px !important;
+  }
+  .browseCard {
+    display: grid;
+    grid-template-columns: auto 50px;
+    height: 140px;
+    width: 100%;
+    background-color: var(--dark-grey-bg);
+    border: none;
+    overflow: hidden;
+    border-radius: 6px;
+    font-size: 18px;
+    img {
+      height: 100px;
+      width: 100px;
+    }
+    p {
+      font-size: 1.3rem;
+    }
+  }
+  .desk-navbtn {
+    background-color: #1f1f1f;
+    height: 100%;
+    aspect-ratio: 1/1;
+    padding: 4px;
+    border-radius: 100%;
+    img {
+      height: 25px;
+      width: 25px;
+    }
+  }
+  .desk-navbtn img:hover {
+    opacity: 1 !important;
+    scale: 1.02;
+  }
+  .deskSrchBox {
+    display: grid;
+    grid-template-columns: 30px auto 30px;
+    width: 50%;
+    background-color: #1f1f1f;
+    border-radius: 40px;
+    padding: 4px 8px;
+    padding-right: 10px;
+    margin-left: 8px;
   }
 }
