@@ -47,6 +47,10 @@ p {
 .text-wheat {
   color: #f5deb3 !important;
 }
+.bg-wheat {
+  background-color: #f5deb3 !important;
+  background: #f5deb3 !important;
+}
 .hiddenScrollbar {
   overflow: auto;
   scrollbar-width: none;
@@ -2392,8 +2396,18 @@ input[type="search"]::-webkit-search-cancel-button {
   .quickCont.closed .labelText {
     display: none;
   }
+  .quickCont.closed .desk-badge {
+    right: 0px;
+    top: 0px;
+    scale: 0.9;
+    border: 2px solid var(--desktop-dark-grey);
+  }
   .quickCont.open .labelText {
     display: "";
+  }
+  .quickCont.open .desk-badge {
+    right: 25px;
+    top: unset;
   }
   .quickCont.open .qaButton {
     height: 45px;

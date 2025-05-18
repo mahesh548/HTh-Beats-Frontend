@@ -35,9 +35,9 @@ export default function Screen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { openElements, close, open, closeOpen } = useContext(HashContext);
-  const [badge, setBadge] = useState(false);
+
   const [Fullscreen, setFullscreen] = useState("none");
-  const messageCounts = useRef(0);
+
   useEffect(() => {
     const checkAuth = async () => {
       const isAuth = await auth.authentication();
@@ -49,14 +49,6 @@ export default function Screen() {
     };
     checkAuth();
   }, []);
-
-  useEffect(() => {
-    if (!channel || !messages) return;
-    if (location.pathname === "/room") setBadge(false);
-    if (messages?.length != messageCounts.current)
-      setBadge(location.pathname !== "/room");
-    messageCounts.current = messages?.length;
-  }, [channel, messages, location.pathname]);
 
   const isActive = (path) => location.pathname === path;
 
