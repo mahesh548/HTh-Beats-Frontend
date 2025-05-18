@@ -3,15 +3,15 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "./Auth";
 
 //icons
-import homeSvgFilled from "../../assets/icons/homeSvgFilled.svg";
-import homeSvgOutlined from "../../assets/icons/homeSvgOutlined.svg";
+
 import searchSvgFilled from "../../assets/icons/searchSvgFilled.svg";
 import searchSvgOutlined from "../../assets/icons/searchSvgOutlined.svg";
+import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import librarySvgFilled from "../../assets/icons/librarySvgFilled.svg";
 import librarySvgOutlined from "../../assets/icons/librarySvgOutlined.svg";
 import roomFilled from "../../assets/icons/roomFilled.svg";
 import roomFilledActive from "../../assets/icons/roomFilledActive.svg";
-import { Add, MusicNote } from "@mui/icons-material";
+import { Add, ExploreOutlined, MusicNote } from "@mui/icons-material";
 
 import Audio from "./Audio";
 import MiniPlayer from "./MiniPlayer";
@@ -28,6 +28,9 @@ import DeskPlayer from "./DeskPlayer";
 import Library from "../Library";
 import QuickAccess from "./QuickAccess";
 import RightPanel from "./RightPanel";
+//icons
+import homeSvgFilled from "../../assets/icons/homeSvgFilled.svg";
+import homeSvgOutlined from "../../assets/icons/homeSvgOutlined.svg";
 
 export default function Screen() {
   const auth = useContext(AuthContext);
@@ -35,9 +38,9 @@ export default function Screen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { openElements, close, open, closeOpen } = useContext(HashContext);
-  const [badge, setBadge] = useState(false);
+
   const [Fullscreen, setFullscreen] = useState("none");
-  const messageCounts = useRef(0);
+
   useEffect(() => {
     const checkAuth = async () => {
       const isAuth = await auth.authentication();
@@ -50,14 +53,6 @@ export default function Screen() {
     checkAuth();
   }, []);
 
-  useEffect(() => {
-    if (!channel || !messages) return;
-    if (location.pathname === "/room") setBadge(false);
-    if (messages?.length != messageCounts.current)
-      setBadge(location.pathname !== "/room");
-    messageCounts.current = messages?.length;
-  }, [channel, messages, location.pathname]);
-
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -68,13 +63,58 @@ export default function Screen() {
 
       <div className={`${Fullscreen !== "none" ? "fullScreen" : "screen"}`}>
         <div
-          className={`screenNavbar p-2 ${Fullscreen !== "none" && "d-none"}`}
+          className={`screenNavbar p-2 pb-0 ${
+            Fullscreen !== "none" && "d-none"
+          }`}
         >
-          <div className="d-grid justify-content-center">
+          <div className="d-grid justify-content-center align-content-center">
             <img src="/logo.png" height="40px" width="40px" />
           </div>
-          <div></div>
-          <div></div>
+          <div className="d-flex justify-content-center">
+            <button
+              className="iconButton desk-navbtn"
+              onClick={() => navigate("/home")}
+            >
+              <img
+                src={isActive("/home") ? homeSvgFilled : homeSvgOutlined}
+                className={isActive("/home") ? "" : "op-80"}
+              />
+            </button>
+            <div className="deskSrchBox ">
+              <button className="iconButton op-80">
+                <img
+                  src={
+                    isActive("/search") ? searchSvgFilled : searchSvgOutlined
+                  }
+                  height={"25px"}
+                />
+              </button>
+              <div className="inputBox"></div>
+              <button
+                className="iconButton op-80"
+                onClick={() => navigate("/search")}
+              >
+                <ExploreOutlined />
+              </button>
+            </div>
+          </div>
+          <div
+            className="d-flex align-items-center pe-2"
+            style={{ gap: "10px" }}
+          >
+            <button className="iconButton d-flex op-80" style={{ gap: "5px" }}>
+              <img src={downloadOutlined} height="25px" />
+              Install App
+            </button>
+
+            <Link to="/profile">
+              <img
+                src={auth?.user?.pic || "logo.png"}
+                className="rounded-circle"
+                height="35px"
+              />
+            </Link>
+          </div>
         </div>
         <div
           className={`${

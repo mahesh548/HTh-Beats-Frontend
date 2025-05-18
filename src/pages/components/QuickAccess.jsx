@@ -1,18 +1,23 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useRef, useEffect } from "react";
 
 import librarySvgOutlined from "../../assets/icons/librarySvgOutlined.svg";
+import roomFilledActive from "../../assets/icons/roomFilledActive.svg";
 import PanelOpen from "../../assets/icons/PanelOpen.svg";
 import { Add } from "@mui/icons-material";
 import { AuthContext } from "./Auth";
 import utils from "../../../utils";
 import { useNavigate } from "react-router";
 import { HashContext } from "./Hash";
+import { channelContext } from "./Channel";
 
 export default function QuickAccess() {
   const [panelOpen, setOpen] = useState(false);
   const auth = useContext(AuthContext);
   const { openElements, close, open, closeOpen } = useContext(HashContext);
+  const { channel, messages } = useContext(channelContext);
   const navigate = useNavigate();
+  const [badge, setBadge] = useState(false);
+  const messageCounts = useRef(0);
   let recentData = JSON.parse(localStorage?.recent || "[]");
   recentData = [...new Map(recentData.map((item) => [item.id, item])).values()];
   const recents = recentData
@@ -25,7 +30,13 @@ export default function QuickAccess() {
   const openPlaylist = (id) => {
     navigate(`/playlist/${id}`);
   };
-
+  useEffect(() => {
+    if (!channel || !messages) return;
+    if (location.pathname === "/room") setBadge(false);
+    if (messages?.length != messageCounts.current)
+      setBadge(location.pathname !== "/room");
+    messageCounts.current = messages?.length;
+  }, [channel, messages, location.pathname]);
   const isActive = (path) => location.pathname.includes(path);
 
   return (
@@ -50,13 +61,27 @@ export default function QuickAccess() {
         <p className="labelText m-0">Quick access</p>
       </div>
       <hr className="dividerLine op-10 m-0" />
-      <button
-        className="iconButton qaButton"
-        onClick={() => open("createOption")}
-      >
-        <Add />
-        <p>Create</p>
-      </button>
+      {!channel ? (
+        <button
+          className="iconButton qaButton"
+          onClick={() => open("createOption")}
+        >
+          <Add />
+          <p>Create</p>
+        </button>
+      ) : (
+        <button
+          className="iconButton qaButton position-relative"
+          onClick={() => navigate("/room")}
+        >
+          {badge && (
+            <span className="position-absolute p-1 bg-danger rounded-circle desk-badge"></span>
+          )}
+          <img src={roomFilledActive} />
+          <p>Music Room</p>
+        </button>
+      )}
+
       <button
         className={`iconButton qaButton ${
           isActive("/library") && "qaButtonActive"
