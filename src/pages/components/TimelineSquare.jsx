@@ -26,7 +26,7 @@ export default function TimelineSquare({ img, text, id, type, style = "" }) {
       className={style == "round" ? "TimelineRoundItem" : "TimelineSquareItem"}
     >
       <img
-        src={img.replace("150x150", "500x500")}
+        src={img.replace("150x150", "500x500").replace("50x50", "500x500")}
         alt="playlist banner"
         onClick={() => func()}
       />

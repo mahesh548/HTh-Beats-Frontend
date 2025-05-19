@@ -3,6 +3,7 @@ import PageLoader from "./components/PageLoader";
 import { AuthContext } from "./components/Auth";
 
 import CreateSearch from "./components/CreateSearch";
+import DeskSearch from "./components/DeskSearch";
 
 export default function Search() {
   const auth = useContext(AuthContext);
@@ -13,5 +14,13 @@ export default function Search() {
     setSearchData(true);
   }, [auth.user]);
 
-  return searchData == false ? <PageLoader /> : <CreateSearch />;
+  const isDesktop = window.innerWidth >= 1000;
+
+  return searchData == false ? (
+    <PageLoader />
+  ) : !isDesktop ? (
+    <CreateSearch />
+  ) : (
+    <DeskSearch />
+  );
 }
