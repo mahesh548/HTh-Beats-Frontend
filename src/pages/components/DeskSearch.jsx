@@ -14,6 +14,7 @@ import { useInView } from "react-intersection-observer";
 import { Link, useLocation, useNavigate } from "react-router";
 import SearchHistCard from "./SearchHistCard";
 import { showToast } from "./showToast";
+import TimelineSlider from "./TimelineSlider";
 
 const idealFilterData = [
   { value: "playlist", parent: "all", label: "Playlists" },
@@ -24,16 +25,16 @@ const idealFilterData = [
   { value: "saved", parent: "all", label: "Saved" },
 ];
 
-export default function CreateSearch() {
-  const auth = useContext(AuthContext);
+export default function DeskSearch() {
+  // const auth = useContext(AuthContext);
   const { openElements, open, close } = useContext(HashContext);
-  const [searchInput, setSearchInput] = useState("");
+  // const [searchInput, setSearchInput] = useState("");
   const [view, setView] = useState(
     localStorage.searched && JSON.parse(localStorage.searched).length > 0
       ? "history"
       : "default"
   );
-  const [acResult, setAcResult] = useState();
+  // const [acResult, setAcResult] = useState();
   const [searchResult, setSearchResult] = useState([]);
   const [historyResult, setHistoryResult] = useState(
     JSON.parse(localStorage?.searched || "[]")
@@ -42,21 +43,20 @@ export default function CreateSearch() {
   const callAgain = useRef(false);
   const filterActive = useRef(false);
   const location = useLocation();
-  const navigate = useNavigate();
 
   const discover = localStorage?.homeCache
     ? JSON.parse(localStorage.homeCache).radio
     : false;
 
   //to store time difference between key stroke and search
-  let searchTimeOut = useRef(null);
+  // let searchTimeOut = useRef(null);
 
   //for infinite scrolling
   const [moreRef, askMore, entry] = useInView({
     threshold: 1,
   });
 
-  useEffect(() => {
+  /* useEffect(() => {
     // clear old timeout
     clearTimeout(searchTimeOut.current);
     if (searchInput.length === 0) {
@@ -69,16 +69,16 @@ export default function CreateSearch() {
     searchTimeOut.current = setTimeout(() => {
       autoComplete(searchInput);
     }, 1000);
-  }, [searchInput]);
+  }, [searchInput]); */
 
-  const autoComplete = async (query) => {
+  /* const autoComplete = async (query) => {
     setView("loading"); //show loading
     const response = await utils.API(`/search?q=${query}&autocomplete=true`);
     if (response.status && response.data) {
       setAcResult(sortResponse(response.data, query)); // set autocomplete data
       setView("autocomplete"); // set view to autocomplete
     }
-  };
+  }; */
 
   const search = async (query, page = 1, loading = true) => {
     if (loading) {
@@ -93,7 +93,6 @@ export default function CreateSearch() {
       setSearchResult(sortResponse(response.data, query)); // set search result after sort
       setupOriginal(response, query); // set original response for sorting
       setView("search"); // set view to search
-      console.log("view set to search");
       callAgain.current = response.hasMore; // set call again to hasMore (true,false) for more result
     } else if (response.status && response.data && response.page > 1) {
       // if page no is not 1 don't show loading and merge data
@@ -162,12 +161,6 @@ export default function CreateSearch() {
     }
   };
 
-  const processInput = (value) => {
-    setSearchInput(value);
-    if (value.length === 0)
-      setView(localStorage.searched ? "history" : "default");
-  };
-
   const sortResponse = (data, query) => {
     // sort response in way that most matched title come first then least and then most matched subtitle.
     return data
@@ -218,19 +211,6 @@ export default function CreateSearch() {
     search(originalResponse.query, originalResponse.page + 1, false);
   }, [askMore]);
 
-  const updateUrl = (value) => {
-    // save search input into url
-    const param = new URLSearchParams(location.search);
-
-    if (value.length === 0) {
-      param.delete("q");
-    } else {
-      param.set("q", value);
-    }
-
-    navigate(`${location.pathname}?${param.toString()}`, { replace: true });
-  };
-
   useEffect(() => {
     // if query updated in url then search for query
     const params = new URLSearchParams(location.search);
@@ -270,27 +250,41 @@ export default function CreateSearch() {
     });
   };
 
+  const songResult = searchResult
+    .filter((item) => item.type == "song")
+    .map((item) => {
+      if (item?.url && !item.perma_url) item.perma_url = item.url;
+      if (item?.name && !item.title) item.title = item.name;
+      return item;
+    });
+  const playlistResult = searchResult
+    .filter((item) => item.type == "playlist")
+    .map((item) => {
+      if (item?.url && !item.perma_url) item.perma_url = item.url;
+      if (item?.name && !item.title) item.title = item.name;
+      return item;
+    });
+  const artistResult = searchResult
+    .filter((item) => item.type == "artist")
+    .map((item) => {
+      if (item?.url && !item.perma_url) item.perma_url = item.url;
+      if (item?.name && !item.title) item.title = item.name;
+      return item;
+    });
+  const albumResult = searchResult
+    .filter((item) => item.type == "album")
+    .map((item) => {
+      if (item?.url && !item.perma_url) item.perma_url = item.url;
+      if (item?.name && !item.title) item.title = item.name;
+      return item;
+    });
+
   return (
     <div
       className="page hiddenScrollbar position-relative"
       id="searchPage"
       style={{ overflowY: "scroll" }}
     >
-      <div className="libraryNavCont px-2 position-relative mobo">
-        <div className="libraryNav mt-4 mb-3">
-          <Link to="/profile">
-            <img
-              src={auth?.user?.pic || "logo.png"}
-              className="rounded-circle"
-            />
-          </Link>
-          <p className="labelText mt-0">Search</p>
-        </div>
-      </div>
-      <button className="srchOpenBut mobo" onClick={() => open("search")}>
-        <img src={searchSvgOutlined} />
-        <p className="text-start">Hey, what do you want to listen?</p>
-      </button>
       {discover && (
         <>
           <p className="labelText px-1 dp-s">Browse all</p>
@@ -305,35 +299,12 @@ export default function CreateSearch() {
         className="searchCont hiddenScrollbar"
         style={{ display: openElements.includes("search") ? "block" : "none" }}
       >
-        <div className="srchBox pe-3 mobo">
-          <button className="iconButton" onClick={() => close("search")}>
-            <ArrowBack />
-          </button>
-          <input
-            type="search"
-            placeholder="Hey, what do you want to listen?"
-            className="srchInput"
-            value={searchInput}
-            onInput={(e) => processInput(e.target.value)}
-            spellCheck={false}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                updateUrl(e.target.value);
-              }
-            }}
-          />
-          {searchInput.length > 0 && (
-            <button className="iconButton" onClick={() => setSearchInput("")}>
-              <Close />
-            </button>
-          )}
-        </div>
         {view === "search" && (
-          <div className="srchSort hiddenScrollbar">
+          <div className="srchSort hiddenScrollbar dp-s">
             <ChipSort
               filterData={originalResponse?.filterData || []}
               filter={filter}
-              styleClass="srchSortChip"
+              styleClass="srchSortChip "
             />
           </div>
         )}
@@ -347,7 +318,7 @@ export default function CreateSearch() {
             </div>
           )}
           {view === "loading" && <PageLoader />}
-          {view === "history" && historyResult.length > 0 && (
+          {/*  {view === "history" && historyResult.length > 0 && (
             <>
               <p className="labelText ps-2">Recent searches</p>
               <div className="px-2" style={{ paddingBottom: "150px" }}>
@@ -373,45 +344,65 @@ export default function CreateSearch() {
                 </button>
               </div>
             </>
-          )}
-          {view === "autocomplete" && (
-            <div
-              className="overflow-scroll px-2 pe-4"
-              style={{ paddingBottom: "150px" }}
-            >
-              {acResult?.map((item) => (
-                <SearchCard
-                  data={item}
-                  ac={true}
-                  key={item.id}
-                  setGlobalLike={handleLocalLike}
-                />
-              ))}
-              <button className="iconButton p-0">
-                <p className="labelText text-wheat fs-6 mt-2 fw-normal">
-                  {`See more results for "${searchInput}"`}
-                </p>
-              </button>
-            </div>
-          )}
+          )} */}
+
           {view === "search" && (
             <div
               className="overflow-scroll px-2 pt-4 hiddenScrollbar deskScroll"
               style={{ paddingBottom: "150px" }}
             >
-              {searchResult?.map((item) => (
-                <SearchCard
-                  data={item}
-                  ac={false}
-                  key={item.id}
-                  setGlobalLike={handleLocalLike}
+              <div className="d-flex dp-s" style={{ gap: "20px" }}>
+                <div className="w-100 srchSong">
+                  {songResult.length > 0 && (
+                    <p className="labelText ps-2">Songs</p>
+                  )}
+                  {songResult.map((item) => (
+                    <SearchCard
+                      data={item}
+                      ac={false}
+                      key={item.id}
+                      setGlobalLike={handleLocalLike}
+                    />
+                  ))}
+                </div>
+                <div className="w-50">
+                  <p className="labelText">Top result</p>
+                  <div className="topResult">
+                    <img src={searchResult[0]?.image} />
+                    <div className="topResultText">
+                      <p className="thinOneLineText playlistSongTitle">
+                        {searchResult[0]?.title || searchResult[0]?.name}
+                      </p>
+                      <p className="thinOneLineText playlistSongSubTitle">
+                        {`${searchResult[0]?.type} ${
+                          searchResult[0]?.subtitle
+                            ? " " + searchResult[0]?.subtitle
+                            : ""
+                        }`}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {playlistResult.length > 0 && (
+                <TimelineSlider label="Playlists" data={playlistResult} />
+              )}
+              {artistResult.length > 0 && (
+                <TimelineSlider
+                  label="Artists"
+                  data={artistResult}
+                  style="round"
                 />
-              ))}
-              {originalResponse.hasMore && !filterActive.current && (
+              )}
+              {albumResult.length > 0 && (
+                <TimelineSlider label="Albums" data={albumResult} />
+              )}
+
+              {/* {originalResponse.hasMore && !filterActive.current && (
                 <div ref={moreRef}>
                   <PageLoader />
                 </div>
-              )}
+              )} */}
             </div>
           )}
         </div>

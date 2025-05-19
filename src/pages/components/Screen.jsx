@@ -11,7 +11,7 @@ import librarySvgFilled from "../../assets/icons/librarySvgFilled.svg";
 import librarySvgOutlined from "../../assets/icons/librarySvgOutlined.svg";
 import roomFilled from "../../assets/icons/roomFilled.svg";
 import roomFilledActive from "../../assets/icons/roomFilledActive.svg";
-import { Add, ExploreOutlined, MusicNote } from "@mui/icons-material";
+import { Add, Close, ExploreOutlined, MusicNote } from "@mui/icons-material";
 
 import Audio from "./Audio";
 import MiniPlayer from "./MiniPlayer";
@@ -38,6 +38,9 @@ export default function Screen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { openElements, close, open, closeOpen } = useContext(HashContext);
+  const [searchInput, setSearchInput] = useState("");
+  //to store time difference between key stroke and search
+  let searchTimeOut = useRef(null);
 
   const [Fullscreen, setFullscreen] = useState("none");
 
@@ -52,6 +55,38 @@ export default function Screen() {
     };
     checkAuth();
   }, []);
+
+  const processInput = (value) => {
+    setSearchInput(value);
+  };
+
+  const updateUrl = (value) => {
+    // save search input into url
+    const param = new URLSearchParams(location.search);
+
+    if (value.length === 0) {
+      param.delete("q");
+    } else {
+      param.set("q", value);
+    }
+
+    navigate(`/search?open=search&${param.toString()}`, { replace: true });
+  };
+
+  useEffect(() => {
+    // clear old timeout
+    clearTimeout(searchTimeOut.current);
+    if (searchInput.length === 0) {
+      // show history if nothing searched
+      // setView(localStorage.searched ? "history" : "default");
+      return;
+    }
+
+    //set new timeout for new stroke
+    searchTimeOut.current = setTimeout(() => {
+      updateUrl(searchInput);
+    }, 1000);
+  }, [searchInput]);
 
   const isActive = (path) => location.pathname === path;
 
@@ -82,14 +117,34 @@ export default function Screen() {
             </button>
             <div className="deskSrchBox ">
               <button className="iconButton op-80">
-                <img
-                  src={
-                    isActive("/search") ? searchSvgFilled : searchSvgOutlined
-                  }
-                  height={"25px"}
-                />
+                <img src={searchSvgOutlined} height={"25px"} />
               </button>
-              <div className="inputBox"></div>
+              <div
+                className="d-flex"
+                style={{ borderRight: "1px solid #ffffff24" }}
+              >
+                <input
+                  type="search"
+                  placeholder="Hey, what do you want to listen?"
+                  className="srchInput w-100"
+                  value={searchInput}
+                  onInput={(e) => processInput(e.target.value)}
+                  spellCheck={false}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      updateUrl(e.target.value);
+                    }
+                  }}
+                />
+                {searchInput.length > 0 && (
+                  <button
+                    className="iconButton op-80"
+                    onClick={() => setSearchInput("")}
+                  >
+                    <Close />
+                  </button>
+                )}
+              </div>
               <button
                 className="iconButton op-80"
                 onClick={() => navigate("/search")}
@@ -100,10 +155,13 @@ export default function Screen() {
           </div>
           <div
             className="d-flex align-items-center pe-2"
-            style={{ gap: "10px" }}
+            style={{ gap: "20px" }}
           >
-            <button className="iconButton d-flex op-80" style={{ gap: "5px" }}>
-              <img src={downloadOutlined} height="25px" />
+            <button
+              className="iconButton d-flex op-80 align-items-center"
+              style={{ gap: "5px" }}
+            >
+              <img src={downloadOutlined} height="20px" />
               Install App
             </button>
 
@@ -112,6 +170,7 @@ export default function Screen() {
                 src={auth?.user?.pic || "logo.png"}
                 className="rounded-circle"
                 height="35px"
+                style={{ border: "5px solid #ffffff38" }}
               />
             </Link>
           </div>
