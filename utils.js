@@ -1,12 +1,8 @@
 import axios from "axios";
 import { showToast } from "./src/pages/components/showToast";
-const prod = true;
-const apiUrl = prod
-  ? "https://hthbeats-api-bzbgepaqcug2abb4.canadacentral-01.azurewebsites.net/api"
-  : "https://m8b5chhv-5000.inc1.devtunnels.ms/api";
-const backendUrl = prod
-  ? "https://hthbeats-hnhvgzawb9d6h8h0.centralindia-01.azurewebsites.net"
-  : "https://m8b5chhv-8080.inc1.devtunnels.ms";
+const apiUrl = import.meta.env.VITE_API;
+const backendUrl = import.meta.env.VITE_BACKEND;
+
 const activeDownloads = new Set();
 
 const utils = {

@@ -84,6 +84,7 @@ export default function CreateSearch() {
     if (loading) {
       setView("loading"); // show loading only if page no 1
     }
+
     // make api req
     const response = await utils.API(
       `/search?q=${query}&autocomplete=false&page=${page}`
@@ -92,6 +93,7 @@ export default function CreateSearch() {
       setSearchResult(sortResponse(response.data, query)); // set search result after sort
       setupOriginal(response, query); // set original response for sorting
       setView("search"); // set view to search
+      console.log("view set to search");
       callAgain.current = response.hasMore; // set call again to hasMore (true,false) for more result
     } else if (response.status && response.data && response.page > 1) {
       // if page no is not 1 don't show loading and merge data
@@ -270,7 +272,7 @@ export default function CreateSearch() {
 
   return (
     <div
-      className="page hiddenScrollbar "
+      className="page hiddenScrollbar position-relative"
       id="searchPage"
       style={{ overflowY: "scroll" }}
     >
@@ -303,7 +305,7 @@ export default function CreateSearch() {
         className="searchCont hiddenScrollbar"
         style={{ display: openElements.includes("search") ? "block" : "none" }}
       >
-        <div className="srchBox pe-3">
+        <div className="srchBox pe-3 mobo">
           <button className="iconButton" onClick={() => close("search")}>
             <ArrowBack />
           </button>
@@ -394,7 +396,7 @@ export default function CreateSearch() {
           )}
           {view === "search" && (
             <div
-              className="overflow-scroll px-2 pt-4"
+              className="overflow-scroll px-2 pt-4 hiddenScrollbar deskScroll"
               style={{ paddingBottom: "150px" }}
             >
               {searchResult?.map((item) => (
