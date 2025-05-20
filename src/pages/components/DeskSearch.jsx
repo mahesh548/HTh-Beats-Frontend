@@ -29,6 +29,7 @@ export default function DeskSearch() {
   // const auth = useContext(AuthContext);
   const { openElements, open, close } = useContext(HashContext);
   // const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate();
   const [view, setView] = useState(
     localStorage.searched && JSON.parse(localStorage.searched).length > 0
       ? "history"
@@ -43,42 +44,11 @@ export default function DeskSearch() {
   const callAgain = useRef(false);
   const filterActive = useRef(false);
   const location = useLocation();
+  const prevQ = useRef("");
 
   const discover = localStorage?.homeCache
     ? JSON.parse(localStorage.homeCache).radio
     : false;
-
-  //to store time difference between key stroke and search
-  // let searchTimeOut = useRef(null);
-
-  //for infinite scrolling
-  const [moreRef, askMore, entry] = useInView({
-    threshold: 1,
-  });
-
-  /* useEffect(() => {
-    // clear old timeout
-    clearTimeout(searchTimeOut.current);
-    if (searchInput.length === 0) {
-      // show history if nothing searched
-      setView(localStorage.searched ? "history" : "default");
-      return;
-    }
-
-    //set new timeout for new stroke
-    searchTimeOut.current = setTimeout(() => {
-      autoComplete(searchInput);
-    }, 1000);
-  }, [searchInput]); */
-
-  /* const autoComplete = async (query) => {
-    setView("loading"); //show loading
-    const response = await utils.API(`/search?q=${query}&autocomplete=true`);
-    if (response.status && response.data) {
-      setAcResult(sortResponse(response.data, query)); // set autocomplete data
-      setView("autocomplete"); // set view to autocomplete
-    }
-  }; */
 
   const search = async (query, page = 1, loading = true) => {
     if (loading) {
@@ -204,19 +174,15 @@ export default function DeskSearch() {
   };
 
   useEffect(() => {
-    // if loading more is in sight call api with page+1
-    if (!askMore || !callAgain.current) return;
-    callAgain.current = false;
-
-    search(originalResponse.query, originalResponse.page + 1, false);
-  }, [askMore]);
-
-  useEffect(() => {
     // if query updated in url then search for query
     const params = new URLSearchParams(location.search);
     const query = params.get("q");
     if (query && query.length > 0) {
+      if (prevQ.current == query) return;
+      prevQ.current = query;
       search(query);
+    } else {
+      setView("default");
     }
   }, [location.search]);
 
@@ -285,7 +251,7 @@ export default function DeskSearch() {
       id="searchPage"
       style={{ overflowY: "scroll" }}
     >
-      {discover && (
+      {discover && view !== "search" && (
         <>
           <p className="labelText px-1 dp-s">Browse all</p>
           <div className="browseCont mt-3 px-1">
@@ -366,22 +332,39 @@ export default function DeskSearch() {
                   ))}
                 </div>
                 <div className="w-50">
-                  <p className="labelText">Top result</p>
-                  <div className="topResult">
-                    <img src={searchResult[0]?.image} />
-                    <div className="topResultText">
-                      <p className="thinOneLineText playlistSongTitle">
-                        {searchResult[0]?.title || searchResult[0]?.name}
-                      </p>
-                      <p className="thinOneLineText playlistSongSubTitle">
-                        {`${searchResult[0]?.type} ${
-                          searchResult[0]?.subtitle
-                            ? " " + searchResult[0]?.subtitle
-                            : ""
-                        }`}
-                      </p>
-                    </div>
-                  </div>
+                  {!filterActive.current && (
+                    <>
+                      <p className="labelText">Top result</p>
+                      <div
+                        className="topResult"
+                        onClick={() =>
+                          navigate(
+                            `/${searchResult[0]?.type}/${
+                              searchResult[0]?.perma_url || searchResult[0]?.url
+                            }`
+                          )
+                        }
+                      >
+                        <img
+                          src={searchResult[0]?.image
+                            .replace("150x150", "500x500")
+                            .replace("50x50", "500x500")}
+                        />
+                        <div className="topResultText">
+                          <p className="thinOneLineText playlistSongTitle">
+                            {searchResult[0]?.title || searchResult[0]?.name}
+                          </p>
+                          <p className="thinOneLineText playlistSongSubTitle">
+                            {`${searchResult[0]?.type} ${
+                              searchResult[0]?.subtitle
+                                ? " · " + searchResult[0]?.subtitle
+                                : ""
+                            }`}
+                          </p>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
               {playlistResult.length > 0 && (
@@ -397,12 +380,6 @@ export default function DeskSearch() {
               {albumResult.length > 0 && (
                 <TimelineSlider label="Albums" data={albumResult} />
               )}
-
-              {/* {originalResponse.hasMore && !filterActive.current && (
-                <div ref={moreRef}>
-                  <PageLoader />
-                </div>
-              )} */}
             </div>
           )}
         </div>

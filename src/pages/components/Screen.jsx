@@ -38,7 +38,9 @@ export default function Screen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { openElements, close, open, closeOpen } = useContext(HashContext);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState(
+    new URLSearchParams(location.search).get("q") || ""
+  );
   //to store time difference between key stroke and search
   let searchTimeOut = useRef(null);
 
@@ -63,30 +65,40 @@ export default function Screen() {
   const updateUrl = (value) => {
     // save search input into url
     const param = new URLSearchParams(location.search);
+    if (param.get("open") === "search") {
+      param.delete("open");
+    }
 
     if (value.length === 0) {
       param.delete("q");
+      navigate(
+        `${location.pathname}${
+          param.toString().length > 0 ? "?" : ""
+        }${param.toString()}`
+      );
     } else {
       param.set("q", value);
-    }
 
-    navigate(`/search?open=search&${param.toString()}`, { replace: true });
+      navigate(`/search?open=search&${param.toString()}`);
+    }
   };
 
   useEffect(() => {
     // clear old timeout
     clearTimeout(searchTimeOut.current);
-    if (searchInput.length === 0) {
-      // show history if nothing searched
-      // setView(localStorage.searched ? "history" : "default");
-      return;
-    }
 
     //set new timeout for new stroke
     searchTimeOut.current = setTimeout(() => {
       updateUrl(searchInput);
     }, 1000);
   }, [searchInput]);
+
+  useEffect(() => {
+    const q = new URLSearchParams(location.search).get("q");
+    if (!q) {
+      setSearchInput("");
+    }
+  }, [location.search]);
 
   const isActive = (path) => location.pathname === path;
 
