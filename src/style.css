@@ -2807,6 +2807,11 @@ input[type="search"]::-webkit-search-cancel-button {
     padding-right: 10px;
     margin-left: 8px;
     align-content: center;
+    border: 2px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+  .deskSrchBox:focus-within {
+    border-color: white;
   }
   .searchCont {
     position: absolute;

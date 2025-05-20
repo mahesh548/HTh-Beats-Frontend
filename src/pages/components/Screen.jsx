@@ -65,14 +65,20 @@ export default function Screen() {
   const updateUrl = (value) => {
     // save search input into url
     const param = new URLSearchParams(location.search);
+    if (param.get("open") === "search") {
+      param.delete("open");
+    }
 
     if (value.length === 0) {
-      navigate(`/search`);
+      param.delete("q");
+      navigate(
+        `${location.pathname}${
+          param.toString().length > 0 ? "?" : ""
+        }${param.toString()}`
+      );
     } else {
       param.set("q", value);
-      if (param.get("open") === "search") {
-        param.delete("open");
-      }
+
       navigate(`/search?open=search&${param.toString()}`);
     }
   };
@@ -86,6 +92,13 @@ export default function Screen() {
       updateUrl(searchInput);
     }, 1000);
   }, [searchInput]);
+
+  useEffect(() => {
+    const q = new URLSearchParams(location.search).get("q");
+    if (!q) {
+      setSearchInput("");
+    }
+  }, [location.search]);
 
   const isActive = (path) => location.pathname === path;
 
