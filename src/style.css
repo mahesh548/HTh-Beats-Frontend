@@ -2809,6 +2809,7 @@ input[type="search"]::-webkit-search-cancel-button {
     align-content: center;
     border: 2px solid transparent;
     transition: border-color 0.3s ease;
+    position: relative;
   }
   .deskSrchBox:focus-within {
     border-color: white;
@@ -2858,5 +2859,16 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .srchSong .playlistSong:hover {
     background-color: #ffffff1e;
+  }
+  .deskHist {
+    width: 100%;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    z-index: 1;
+    background: #1f1f1f;
+    border-radius: 8px;
+    padding: 10px;
+    height: auto;
   }
 }
