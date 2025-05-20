@@ -29,6 +29,7 @@ export default function DeskSearch() {
   // const auth = useContext(AuthContext);
   const { openElements, open, close } = useContext(HashContext);
   // const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate();
   const [view, setView] = useState(
     localStorage.searched && JSON.parse(localStorage.searched).length > 0
       ? "history"
@@ -217,6 +218,8 @@ export default function DeskSearch() {
     const query = params.get("q");
     if (query && query.length > 0) {
       search(query);
+    } else {
+      setView("default");
     }
   }, [location.search]);
 
@@ -279,13 +282,14 @@ export default function DeskSearch() {
       return item;
     });
 
+  console.log(view);
   return (
     <div
       className="page hiddenScrollbar position-relative"
       id="searchPage"
       style={{ overflowY: "scroll" }}
     >
-      {discover && (
+      {discover && view !== "search" && (
         <>
           <p className="labelText px-1 dp-s">Browse all</p>
           <div className="browseCont mt-3 px-1">
@@ -367,7 +371,16 @@ export default function DeskSearch() {
                 </div>
                 <div className="w-50">
                   <p className="labelText">Top result</p>
-                  <div className="topResult">
+                  <div
+                    className="topResult"
+                    onClick={() =>
+                      navigate(
+                        `/${searchResult[0]?.type}/${
+                          searchResult[0]?.perma_url || searchResult[0]?.url
+                        }`
+                      )
+                    }
+                  >
                     <img src={searchResult[0]?.image} />
                     <div className="topResultText">
                       <p className="thinOneLineText playlistSongTitle">
@@ -376,7 +389,7 @@ export default function DeskSearch() {
                       <p className="thinOneLineText playlistSongSubTitle">
                         {`${searchResult[0]?.type} ${
                           searchResult[0]?.subtitle
-                            ? " " + searchResult[0]?.subtitle
+                            ? " · " + searchResult[0]?.subtitle
                             : ""
                         }`}
                       </p>

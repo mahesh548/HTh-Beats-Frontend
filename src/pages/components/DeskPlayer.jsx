@@ -121,6 +121,7 @@ export default function DeskPlayer({ setFullscreen }) {
         }
       });
     } else {
+      console.log("using open");
       open(type);
     }
   };
@@ -163,16 +164,19 @@ export default function DeskPlayer({ setFullscreen }) {
       <div>
         <div
           className="playlistSong mt-0"
-          style={{ gridTemplateColumns: "80px auto 40px 30px" }}
+          style={{
+            gridTemplateColumns: "80px auto 40px 30px",
+            cursor: "pointer",
+          }}
         >
           <img
             src={data.image}
             alt={data.title}
             className="playlistSongImg miniPlayerPoster"
-            onClick={() => open("player")}
+            onClick={() => toggleRightPanel("player")}
           />
 
-          <div onClick={() => open("player")}>
+          <div onClick={() => toggleRightPanel("player")}>
             <p className="thinOneLineText playlistSongTitle">
               {utils.refineText(data.title)}
             </p>
