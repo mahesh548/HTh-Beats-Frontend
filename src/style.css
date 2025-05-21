@@ -2895,4 +2895,8 @@ input[type="search"]::-webkit-search-cancel-button {
   .contextCont {
     min-width: 300px;
   }
+  .screenshots {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+  }
 }

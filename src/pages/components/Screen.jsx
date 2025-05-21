@@ -245,6 +245,7 @@ export default function Screen() {
             <button
               className="iconButton d-flex op-80 align-items-center"
               style={{ gap: "5px" }}
+              onClick={() => open("Install")}
             >
               <img src={downloadOutlined} height="20px" />
               Install App
