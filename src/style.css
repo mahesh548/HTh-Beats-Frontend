@@ -2895,8 +2895,13 @@ input[type="search"]::-webkit-search-cancel-button {
   .contextCont {
     min-width: 300px;
   }
-  .screenshots {
+  .desk-screenshots {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
+  }
+  .pcSS {
+    width: 300px;
+    border-radius: 8px;
   }
 }
