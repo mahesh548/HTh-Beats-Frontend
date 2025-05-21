@@ -31,6 +31,9 @@ import RightPanel from "./RightPanel";
 //icons
 import homeSvgFilled from "../../assets/icons/homeSvgFilled.svg";
 import homeSvgOutlined from "../../assets/icons/homeSvgOutlined.svg";
+import utils from "../../../utils";
+import { showToast } from "./showToast";
+import SearchHistCard from "./SearchHistCard";
 
 export default function Screen() {
   const auth = useContext(AuthContext);
@@ -38,9 +41,14 @@ export default function Screen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { openElements, close, open, closeOpen } = useContext(HashContext);
+  const [isFocused, setIsFocused] = useState(false);
   const [searchInput, setSearchInput] = useState(
     new URLSearchParams(location.search).get("q") || ""
   );
+  const [historyResult, setHistoryResult] = useState(
+    JSON.parse(localStorage?.searched || "[]")
+  );
+
   //to store time difference between key stroke and search
   let searchTimeOut = useRef(null);
 
@@ -100,6 +108,32 @@ export default function Screen() {
     }
   }, [location.search]);
 
+  const removeFromHistory = async (songId, historyId) => {
+    const oldHistory = JSON.parse(localStorage?.searched);
+    if (oldHistory.length == 0) return;
+    if (songId.includes("all")) {
+      localStorage.setItem("searched", "[]");
+      setHistoryResult([]);
+
+      await utils.BACKEND(`/activity`, "DELETE", {
+        deleteData: { historyIds: ["all"], type: "search", idList: ["all"] },
+      });
+      showToast({
+        text: "Cleared recent searches",
+      });
+      return;
+    }
+    const newHistory = oldHistory.filter(
+      (item) => !(item.id === songId[0] && item.historyId === historyId[0])
+    );
+    localStorage.setItem("searched", JSON.stringify(newHistory));
+    setHistoryResult(newHistory);
+
+    await utils.BACKEND(`/activity`, "DELETE", {
+      deleteData: { historyIds: historyId, type: "search", idList: songId },
+    });
+  };
+
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -142,6 +176,8 @@ export default function Screen() {
                   value={searchInput}
                   onInput={(e) => processInput(e.target.value)}
                   spellCheck={false}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       updateUrl(e.target.value);
@@ -163,6 +199,43 @@ export default function Screen() {
               >
                 <ExploreOutlined />
               </button>
+              {historyResult.length > 0 &&
+                isFocused &&
+                searchInput.length == 0 && (
+                  <div
+                    className="deskHist"
+                    onMouseDown={(e) => {
+                      // optional: prevent blur
+                      e.preventDefault();
+                    }}
+                  >
+                    <>
+                      <p className="labelText ps-2">Recent searches</p>
+                      <div className="px-2 pb-3">
+                        {historyResult.map((item, index) => {
+                          return (
+                            <SearchHistCard
+                              data={item}
+                              removeFromHistory={removeFromHistory}
+                              key={`history_${index}`}
+                            />
+                          );
+                        })}
+                        <button
+                          className="addToBut mt-4 p-1 px-3"
+                          style={{
+                            background: "transparent",
+                            color: "white",
+                            border: "2px solid gray",
+                          }}
+                          onClick={() => removeFromHistory(["all"], ["all"])}
+                        >
+                          Clear recent searches
+                        </button>
+                      </div>
+                    </>
+                  </div>
+                )}
             </div>
           </div>
           <div
@@ -172,6 +245,7 @@ export default function Screen() {
             <button
               className="iconButton d-flex op-80 align-items-center"
               style={{ gap: "5px" }}
+              onClick={() => open("Install")}
             >
               <img src={downloadOutlined} height="20px" />
               Install App

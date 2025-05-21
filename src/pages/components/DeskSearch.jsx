@@ -12,8 +12,7 @@ import ChipSort from "./ChipSort";
 
 import { useInView } from "react-intersection-observer";
 import { Link, useLocation, useNavigate } from "react-router";
-import SearchHistCard from "./SearchHistCard";
-import { showToast } from "./showToast";
+
 import TimelineSlider from "./TimelineSlider";
 
 const idealFilterData = [
@@ -30,16 +29,10 @@ export default function DeskSearch() {
   const { openElements, open, close } = useContext(HashContext);
   // const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
-  const [view, setView] = useState(
-    localStorage.searched && JSON.parse(localStorage.searched).length > 0
-      ? "history"
-      : "default"
-  );
+  const [view, setView] = useState("explore");
   // const [acResult, setAcResult] = useState();
   const [searchResult, setSearchResult] = useState([]);
-  const [historyResult, setHistoryResult] = useState(
-    JSON.parse(localStorage?.searched || "[]")
-  );
+
   const [originalResponse, setOriginalResponse] = useState({ page: 1 });
   const callAgain = useRef(false);
   const filterActive = useRef(false);
@@ -174,47 +167,18 @@ export default function DeskSearch() {
   };
 
   useEffect(() => {
-    // if query updated in url then search for query
     const params = new URLSearchParams(location.search);
     const query = params.get("q");
+
     if (query && query.length > 0) {
-      if (prevQ.current == query) return;
+      if (prevQ.current === query) return;
       prevQ.current = query;
       search(query);
     } else {
-      setView("default");
+      prevQ.current = "";
+      setView("explore");
     }
   }, [location.search]);
-
-  useEffect(() => {
-    setView(historyResult.length > 0 ? "history" : "default");
-  }, [historyResult]);
-
-  const removeFromHistory = async (songId, historyId) => {
-    const oldHistory = JSON.parse(localStorage?.searched);
-    if (oldHistory.length == 0) return;
-    if (songId.includes("all")) {
-      localStorage.setItem("searched", "[]");
-      setHistoryResult([]);
-
-      await utils.BACKEND(`/activity`, "DELETE", {
-        deleteData: { historyIds: ["all"], type: "search", idList: ["all"] },
-      });
-      showToast({
-        text: "Cleared recent searches",
-      });
-      return;
-    }
-    const newHistory = oldHistory.filter(
-      (item) => item.id != songId && item.historyId != historyId
-    );
-    localStorage.setItem("searched", JSON.stringify(newHistory));
-    setHistoryResult(newHistory);
-
-    await utils.BACKEND(`/activity`, "DELETE", {
-      deleteData: { historyIds: historyId, type: "search", idList: songId },
-    });
-  };
 
   const songResult = searchResult
     .filter((item) => item.type == "song")
@@ -244,6 +208,8 @@ export default function DeskSearch() {
       if (item?.name && !item.title) item.title = item.name;
       return item;
     });
+
+  console.log(view);
 
   return (
     <div
@@ -275,42 +241,7 @@ export default function DeskSearch() {
           </div>
         )}
         <div className="searchMain hiddenScrollbar">
-          {view === "default" && (
-            <div className="defaultCont">
-              <p className="text-white fs-5">Search what you like</p>
-              <p className="text-white-50 fs-6">
-                Search for artists, songs, playlists, and more.
-              </p>
-            </div>
-          )}
           {view === "loading" && <PageLoader />}
-          {/*  {view === "history" && historyResult.length > 0 && (
-            <>
-              <p className="labelText ps-2">Recent searches</p>
-              <div className="px-2" style={{ paddingBottom: "150px" }}>
-                {historyResult.map((item, index) => {
-                  return (
-                    <SearchHistCard
-                      data={item}
-                      removeFromHistory={removeFromHistory}
-                      key={`history_${index}`}
-                    />
-                  );
-                })}
-                <button
-                  className="addToBut mt-4 p-1 px-3"
-                  style={{
-                    background: "transparent",
-                    color: "white",
-                    border: "2px solid gray",
-                  }}
-                  onClick={() => removeFromHistory(["all"], ["all"])}
-                >
-                  Clear recent searches
-                </button>
-              </div>
-            </>
-          )} */}
 
           {view === "search" && (
             <div

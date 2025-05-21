@@ -72,51 +72,55 @@ export default function ChangeLang() {
       open={openElements.includes("languages")}
       dismiss={() => close("languages")}
     >
-      <p className="text-white text-center">Choose languages for your music</p>
-      <hr className="dividerLine" />
-      {availableLang.map((item, index) => {
-        return (
-          <div
-            className="playlistSong mt-4 px-2 mb-3"
-            style={{ gridTemplateColumns: "40px auto" }}
-            key={"lang-" + index}
-          >
-            <button
-              className="iconButton"
-              onClick={() => toggleLang(item.value)}
+      <div className="contextCont">
+        <p className="text-white text-center">
+          Choose languages for your music
+        </p>
+        <hr className="dividerLine" />
+        {availableLang.map((item, index) => {
+          return (
+            <div
+              className="playlistSong mt-4 px-2 mb-3"
+              style={{ gridTemplateColumns: "40px auto" }}
+              key={"lang-" + index}
             >
-              {chosen.includes(item.value) ? (
-                <CheckBox className="profileIcon text-wheat" />
-              ) : (
-                <CheckBoxOutlineBlank className="profileIcon" />
-              )}
-            </button>
+              <button
+                className="iconButton"
+                onClick={() => toggleLang(item.value)}
+              >
+                {chosen.includes(item.value) ? (
+                  <CheckBox className="profileIcon text-wheat" />
+                ) : (
+                  <CheckBoxOutlineBlank className="profileIcon" />
+                )}
+              </button>
 
-            <div onClick={() => toggleLang(item.value)}>
-              <p className="thinOneLineText playlistSongTitle fw-normal">
-                {item.display}
-              </p>
-              <p className="thinOneLineText playlistSongSubTitle">
-                {item.native}
-              </p>
+              <div onClick={() => toggleLang(item.value)}>
+                <p className="thinOneLineText playlistSongTitle fw-normal">
+                  {item.display}
+                </p>
+                <p className="thinOneLineText playlistSongSubTitle">
+                  {item.native}
+                </p>
+              </div>
             </div>
+          );
+        })}
+        <div style={{ height: "110px" }}></div>
+        {showSubmit && chosen.length != 0 && (
+          <div
+            className="position-fixed bottom-0 left-0 w-100 pb-3 text-center"
+            style={{ background: "#1f1f1f" }}
+          >
+            <button className="addToBut mb-2" onClick={() => submitLang()}>
+              Save changes
+            </button>
+            <i className="text-white-50 fw-light">
+              {chosen.length} language selected
+            </i>
           </div>
-        );
-      })}
-      <div style={{ height: "110px" }}></div>
-      {showSubmit && chosen.length != 0 && (
-        <div
-          className="position-fixed bottom-0 left-0 w-100 pb-3 text-center"
-          style={{ background: "#1f1f1f" }}
-        >
-          <button className="addToBut mb-2" onClick={() => submitLang()}>
-            Save changes
-          </button>
-          <i className="text-white-50 fw-light">
-            {chosen.length} language selected
-          </i>
-        </div>
-      )}
+        )}
+      </div>
     </OffCanvas>
   );
 }

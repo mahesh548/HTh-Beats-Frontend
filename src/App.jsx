@@ -32,6 +32,7 @@ export default function App() {
   return (
     <>
       {/* <Toaster /> */}
+
       <Routes>
         {/* LOGIN NOT REQUIRED */}
         <Route path="/login" element={<Login />} />

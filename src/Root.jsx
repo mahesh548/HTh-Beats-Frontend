@@ -21,7 +21,7 @@ export default function Root() {
   return (
     <>
       {/* Uncomment the install component in final stage */}
-      {/* <Install /> */}
+      <Install />
       <Toaster />
       <Suspense
         fallback={
