@@ -48,6 +48,7 @@ export default function Screen() {
   const [historyResult, setHistoryResult] = useState(
     JSON.parse(localStorage?.searched || "[]")
   );
+
   //to store time difference between key stroke and search
   let searchTimeOut = useRef(null);
 
@@ -123,7 +124,7 @@ export default function Screen() {
       return;
     }
     const newHistory = oldHistory.filter(
-      (item) => item.id != songId && item.historyId != historyId
+      (item) => !(item.id === songId[0] && item.historyId === historyId[0])
     );
     localStorage.setItem("searched", JSON.stringify(newHistory));
     setHistoryResult(newHistory);
@@ -201,7 +202,13 @@ export default function Screen() {
               {historyResult.length > 0 &&
                 isFocused &&
                 searchInput.length == 0 && (
-                  <div className="deskHist">
+                  <div
+                    className="deskHist"
+                    onMouseDown={(e) => {
+                      // optional: prevent blur
+                      e.preventDefault();
+                    }}
+                  >
                     <>
                       <p className="labelText ps-2">Recent searches</p>
                       <div className="px-2 pb-3">

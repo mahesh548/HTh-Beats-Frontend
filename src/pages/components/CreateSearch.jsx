@@ -260,7 +260,7 @@ export default function CreateSearch() {
       return;
     }
     const newHistory = oldHistory.filter(
-      (item) => item.id != songId && item.historyId != historyId
+      (item) => !(item.id === songId[0] && item.historyId === historyId[0])
     );
     localStorage.setItem("searched", JSON.stringify(newHistory));
     setHistoryResult(newHistory);
