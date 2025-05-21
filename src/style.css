@@ -2904,4 +2904,26 @@ input[type="search"]::-webkit-search-cancel-button {
     width: 300px;
     border-radius: 8px;
   }
+  .launchWrap {
+    width: 350px;
+    height: 90dvh !important;
+  }
+  .pcWrap {
+    max-width: 50vw;
+    background-color: var(--desktop-dark-grey);
+    position: relative;
+    margin: auto;
+    margin-top: 20px;
+    border-radius: 12px;
+    padding: 8px;
+    display: grid;
+    justify-content: center;
+  }
+}
+
+.launchWrap {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100dvh;
+  align-items: center;
 }
