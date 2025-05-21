@@ -132,7 +132,7 @@ export default function Profile() {
   return (
     <div className="page">
       <div className="profilePage">
-        <div className="libraryNavCont">
+        <div className="libraryNavCont mobo">
           <div className="libraryNav">
             <BackButton />
             <p className="text-center text-white fw-light fs-4">
@@ -142,7 +142,7 @@ export default function Profile() {
         </div>
         <div className="profileCont">
           <div
-            className="playlistSong mt-3 px-2 mb-3"
+            className="playlistSong mt-3 px-2 mb-3 profileHeader"
             style={{ gridTemplateColumns: "40px auto 40px" }}
           >
             <img
@@ -236,22 +236,27 @@ export default function Profile() {
           open={openElements.includes("picPreview")}
           dismiss={() => close("picPreview")}
         >
-          <p className="text-white text-center">Preview</p>
-          <hr className="dividerLine" />
-          <img
-            src={preview}
-            id="previewPic"
-            className="d-block m-auto w-50 rounded rounded-circle"
-          />
-          <button className="addToBut mt-4" onClick={() => handleFileUpload()}>
-            Set as profile pic
-          </button>
-          <button
-            className="iconButton mt-3 text-center d-block m-auto"
-            onClick={() => close("picPreview")}
-          >
-            Cancel
-          </button>
+          <div className="contextCont">
+            <p className="text-white text-center">Preview</p>
+            <hr className="dividerLine" />
+            <img
+              src={preview}
+              id="previewPic"
+              className="d-block m-auto w-50 rounded rounded-circle"
+            />
+            <button
+              className="addToBut mt-4"
+              onClick={() => handleFileUpload()}
+            >
+              Set as profile pic
+            </button>
+            <button
+              className="iconButton mt-3 text-center d-block m-auto"
+              onClick={() => close("picPreview")}
+            >
+              Cancel
+            </button>
+          </div>
         </OffCanvas>
         <OffCanvas
           open={openElements.includes("picOption")}
@@ -267,7 +272,7 @@ export default function Profile() {
             accept=".png, .jpg, .jpeg"
           />
           <div
-            className="playlistSong mt-4 px-2 mb-3"
+            className="playlistSong mt-4 px-2 mb-3 cursor-pointer"
             style={{ gridTemplateColumns: "40px auto" }}
           >
             <Upload className="profileIcon" onClick={() => openPS()} />
@@ -278,7 +283,7 @@ export default function Profile() {
             </div>
           </div>
           <div
-            className="playlistSong mt-4 px-2 mb-3"
+            className="playlistSong mt-4 px-2 mb-3 cursor-pointer"
             style={{ gridTemplateColumns: "40px auto" }}
           >
             <DeleteOutline
@@ -296,70 +301,74 @@ export default function Profile() {
           open={openElements.includes("audioQuality")}
           dismiss={() => close("audioQuality")}
         >
-          <p className="text-white text-center">Media quality</p>
-          <hr className="dividerLine" />
+          <div className="contextCont">
+            <p className="text-white text-center">Media quality</p>
+            <hr className="dividerLine" />
 
-          <p className="labelText ps-2 fw-light">Audio streaming quality</p>
-          <p className="playlistSongSubTitle text-white-50 fw-light ps-2">
-            Choose the quality of your audio streaming when you're connected to
-            internet.
-          </p>
+            <p className="labelText ps-2 fw-light">Audio streaming quality</p>
+            <p className="playlistSongSubTitle text-white-50 fw-light ps-2">
+              Choose the quality of your audio streaming when you're connected
+              to internet.
+            </p>
 
-          {audioQuality.map((item, index) => {
-            return (
-              <div
-                className="playlistSong mt-4 px-2 mb-3"
-                style={{ gridTemplateColumns: " auto 40px" }}
-                key={"quality-" + index}
-              >
-                <div onClick={() => setCurrentQ(item.value)}>
-                  <p className="thinOneLineText playlistSongTitle fw-normal">
-                    {item.display}
-                  </p>
-                </div>
-                <button
-                  className="iconButton"
-                  onClick={() => setCurrentQ(item.value)}
+            {audioQuality.map((item, index) => {
+              return (
+                <div
+                  className="playlistSong mt-4 px-2 mb-3"
+                  style={{ gridTemplateColumns: " auto 40px" }}
+                  key={"quality-" + index}
                 >
-                  {currentQ == item.value ? (
-                    <RadioButtonChecked className="profileIcon text-wheat" />
-                  ) : (
-                    <RadioButtonUncheckedOutlined className="profileIcon" />
-                  )}
-                </button>
-              </div>
-            );
-          })}
-          <p className="labelText ps-2 fw-light mt-5">Audio download quality</p>
-          <p className="playlistSongSubTitle text-white-50 fw-light ps-2">
-            Choose the quality of all your audio downloads.
-          </p>
-
-          {audioQuality.map((item, index) => {
-            return (
-              <div
-                className="playlistSong mt-4 px-2 mb-3"
-                style={{ gridTemplateColumns: " auto 40px" }}
-                key={"download-quality-" + index}
-              >
-                <div onClick={() => setCurrentD(item.value)}>
-                  <p className="thinOneLineText playlistSongTitle fw-normal">
-                    {item.display}
-                  </p>
+                  <div onClick={() => setCurrentQ(item.value)}>
+                    <p className="thinOneLineText playlistSongTitle fw-normal">
+                      {item.display}
+                    </p>
+                  </div>
+                  <button
+                    className="iconButton"
+                    onClick={() => setCurrentQ(item.value)}
+                  >
+                    {currentQ == item.value ? (
+                      <RadioButtonChecked className="profileIcon text-wheat" />
+                    ) : (
+                      <RadioButtonUncheckedOutlined className="profileIcon" />
+                    )}
+                  </button>
                 </div>
-                <button
-                  className="iconButton"
-                  onClick={() => setCurrentD(item.value)}
+              );
+            })}
+            <p className="labelText ps-2 fw-light mt-5">
+              Audio download quality
+            </p>
+            <p className="playlistSongSubTitle text-white-50 fw-light ps-2">
+              Choose the quality of all your audio downloads.
+            </p>
+
+            {audioQuality.map((item, index) => {
+              return (
+                <div
+                  className="playlistSong mt-4 px-2 mb-3"
+                  style={{ gridTemplateColumns: " auto 40px" }}
+                  key={"download-quality-" + index}
                 >
-                  {currentD == item.value ? (
-                    <RadioButtonChecked className="profileIcon text-wheat" />
-                  ) : (
-                    <RadioButtonUncheckedOutlined className="profileIcon" />
-                  )}
-                </button>
-              </div>
-            );
-          })}
+                  <div onClick={() => setCurrentD(item.value)}>
+                    <p className="thinOneLineText playlistSongTitle fw-normal">
+                      {item.display}
+                    </p>
+                  </div>
+                  <button
+                    className="iconButton"
+                    onClick={() => setCurrentD(item.value)}
+                  >
+                    {currentD == item.value ? (
+                      <RadioButtonChecked className="profileIcon text-wheat" />
+                    ) : (
+                      <RadioButtonUncheckedOutlined className="profileIcon" />
+                    )}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </OffCanvas>
         <OffCanvas
           open={openElements.includes("manageAccount")}
