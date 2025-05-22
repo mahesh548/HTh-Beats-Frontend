@@ -1,12 +1,12 @@
 export default function LogoBack() {
   return (
     <>
-      <div className="backy">
+      <div className="backy mobo">
         <img src="backy.png" />
       </div>
       <div className="loginTitle">
         <img src="logo.png" alt="logo" />
-        <p>Beats</p>
+        <p className="mobo">Beats</p>
       </div>
     </>
   );

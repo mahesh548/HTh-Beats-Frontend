@@ -57,36 +57,44 @@ export default function signup() {
   };
   return (
     <>
-      <div className="page">
-        <div className="loginContainer">
-          <LogoBack />
-          <div className="inputWrapperLogin">
-            <LoginInput
-              placeholder="Enter Email Adress"
-              formData={emailAdress}
-              setFormData={setEmailAdress}
+      <div className="page initialPage hiddenScrollbar deskScroll">
+        <div className="pcWrap">
+          <div className="loginContainer">
+            <LogoBack />
+            <p
+              className="labelText desk fs-1 mt-1 text-center"
+              style={{ maxWidth: "300px" }}
+            >
+              Sign up to start listening
+            </p>
+            <div className="inputWrapperLogin">
+              <LoginInput
+                placeholder="Enter Email Adress"
+                formData={emailAdress}
+                setFormData={setEmailAdress}
+              />
+              <LoginInput
+                placeholder="Choose User Name"
+                formData={username}
+                setFormData={setUsername}
+              />
+            </div>
+            <LoginButton
+              text={"Continue"}
+              disabled={username.disable || emailAdress.disable}
+              func={() => {
+                signup();
+              }}
+              loader={loader}
             />
-            <LoginInput
-              placeholder="Choose User Name"
-              formData={username}
-              setFormData={setUsername}
-            />
+            <div className="partitionLine">
+              <hr />
+              <p>OR</p>
+              <hr />
+            </div>
+            <ContinueGoogle />
+            <LoginFooter text="already have an account? Login" url="/login" />
           </div>
-          <LoginButton
-            text={"Continue"}
-            disabled={username.disable || emailAdress.disable}
-            func={() => {
-              signup();
-            }}
-            loader={loader}
-          />
-          <div className="partitionLine">
-            <hr />
-            <p>OR</p>
-            <hr />
-          </div>
-          <ContinueGoogle />
-          <LoginFooter text="already have an account? Login" url="/login" />
         </div>
       </div>
     </>

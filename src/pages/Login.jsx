@@ -43,31 +43,36 @@ export default function Login() {
 
   return (
     <>
-      <div className="page">
-        <div className="loginContainer">
-          <LogoBack />
-          <div className="inputWrapperLogin">
-            <LoginInput
-              placeholder="Enter Your Username or Email"
-              formData={username}
-              setFormData={setUsername}
+      <div className="page initialPage hiddenScrollbar deskScroll">
+        <div className="pcWrap">
+          <div className="loginContainer">
+            <LogoBack />
+            <p className="labelText desk fs-2 mt-1 text-center">
+              Login to HTh Beats
+            </p>
+            <div className="inputWrapperLogin">
+              <LoginInput
+                placeholder="Enter Your Username or Email"
+                formData={username}
+                setFormData={setUsername}
+              />
+            </div>
+            <LoginButton
+              text="Continue"
+              disabled={username.disable}
+              func={() => {
+                login();
+              }}
+              loader={loader}
             />
+            <div className="partitionLine">
+              <hr />
+              <p>OR</p>
+              <hr />
+            </div>
+            <ContinueGoogle />
+            <LoginFooter text="don't have an account? Sign Up" url="/signup" />
           </div>
-          <LoginButton
-            text="Continue"
-            disabled={username.disable}
-            func={() => {
-              login();
-            }}
-            loader={loader}
-          />
-          <div className="partitionLine">
-            <hr />
-            <p>OR</p>
-            <hr />
-          </div>
-          <ContinueGoogle />
-          <LoginFooter text="don't have an account? Sign Up" url="/signup" />
         </div>
       </div>
     </>

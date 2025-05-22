@@ -54,48 +54,67 @@ export default function Install() {
               onClick={(e) => e.stopPropagation()}
               style={{ width: "90%" }}
             >
-              <div>
-                <div
-                  className="playlistSong px-3 mb-4 mt-4"
-                  style={{
-                    gridTemplateColumns: "50px auto max-content max-content",
-                  }}
-                >
-                  <img src="/logo.png" alt="Logo" className="playlistSongImg" />
-                  <div className="">
-                    <p className="thinOneLineText playlistSongTitle">
-                      Hertz To hearts - Beats
-                    </p>
-                    <p className="thinOneLineText playlistSongSubTitle">
-                      Download size ~ 1MB
-                    </p>
-                  </div>
+              <div className="desk-screenshots">
+                <img src="pc_screenshot.png" className="pcSS" />
+                <div>
+                  <p className="labelText ps-2 pb-1 mt-1">
+                    Download HTh Beats for windows
+                  </p>
+                  <p className="text-white-50 fs-6 text-start ps-2 fw-light  ">
+                    Install HTh-Beats for faster and easier access to your
+                    favorite musics.
+                  </p>
+                  <ol className="mt-2">
+                    <li className="text-white-50 fs-6 text-start ps-2 fw-light">
+                      Download songs in high quality for free
+                    </li>
+                    <li className="text-white-50 fs-6 text-start ps-2 fw-light">
+                      Collab with friends using shared playlist
+                    </li>
+                    <li className="text-white-50 fs-6 text-start ps-2 fw-light">
+                      Create music room to listen songs with friends in realtime
+                    </li>
+                    <li className="text-white-50 fs-6 text-start ps-2 fw-light">
+                      Handpicked playlists for you
+                    </li>
+                    <li className="text-white-50 fs-6 text-start ps-2 fw-light">
+                      Audio quality up to 320kbps
+                    </li>
+                  </ol>
+                  <hr className="dividerLine" />
+                  <div
+                    className="playlistSong px-3 mb-4 mt-4"
+                    style={{
+                      gridTemplateColumns: "50px auto max-content max-content",
+                    }}
+                  >
+                    <img
+                      src="/logo.png"
+                      alt="Logo"
+                      className="playlistSongImg"
+                    />
+                    <div className="">
+                      <p className="thinOneLineText playlistSongTitle">
+                        Hertz To hearts - Beats
+                      </p>
+                      <p className="thinOneLineText playlistSongSubTitle">
+                        Download size ~ 1MB
+                      </p>
+                    </div>
 
-                  <button
-                    className="iconButton addToBut borderBut px-3 py-2 "
-                    onClick={() => goBack()}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="iconButton addToBut px-3 py-2 "
-                    onClick={() => handleInstallClick()}
-                  >
-                    Install
-                  </button>
-                </div>
-                <hr className="dividerLine" />
-                <p className="text-white-50 fs-6 text-start ps-2 fw-light py-2">
-                  Install HTh-Beats for faster and easier access to your
-                  favorite musics.
-                </p>
-                <div className="sliderContainer screenshots hiddenScrollbar px-2">
-                  <img src="/screenshot1.png" alt="screen shot" />
-                  <img src="/screenshot2.png" alt="screen shot" />
-                  <img src="/screenshot3.png" alt="screen shot" />
-                  <img src="/screenshot4.png" alt="screen shot" />
-                  <img src="/screenshot5.png" alt="screen shot" />
-                  <img src="/screenshot6.png" alt="screen shot" />
+                    <button
+                      className="iconButton addToBut borderBut px-3 py-2 "
+                      onClick={() => goBack()}
+                    >
+                      Later
+                    </button>
+                    <button
+                      className="iconButton addToBut px-3 py-2 "
+                      onClick={() => handleInstallClick()}
+                    >
+                      Install
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

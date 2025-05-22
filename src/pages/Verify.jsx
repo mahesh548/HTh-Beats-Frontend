@@ -40,30 +40,32 @@ export default function Verify() {
     }
   };
   return (
-    <div className="page">
-      <div className="loginContainer">
-        <LogoBack />
-        <div className="otpTitle">
-          <b>Verify Your Email</b>
-          <p>
-            Enter 4 digits OTP that we sent to <span>{userMailHint}</span>
-          </p>
-        </div>
-        <div className="inputWrapperLogin">
-          <LoginInput
-            placeholder="Enter 4 digit OTP"
-            formData={otp}
-            setFormData={setOtp}
+    <div className="page initialPage hiddenScrollbar deskScroll">
+      <div className="pcWrap">
+        <div className="loginContainer">
+          <LogoBack />
+          <div className="otpTitle">
+            <b>Verify Your Email</b>
+            <p>
+              Enter 4 digits OTP that we sent to <span>{userMailHint}</span>
+            </p>
+          </div>
+          <div className="inputWrapperLogin">
+            <LoginInput
+              placeholder="Enter 4 digit OTP"
+              formData={otp}
+              setFormData={setOtp}
+            />
+          </div>
+          <LoginButton
+            text="Verify"
+            disabled={otp.disable}
+            func={() => {
+              verifyOtp();
+            }}
+            loader={loader}
           />
         </div>
-        <LoginButton
-          text="Verify"
-          disabled={otp.disable}
-          func={() => {
-            verifyOtp();
-          }}
-          loader={loader}
-        />
       </div>
     </div>
   );

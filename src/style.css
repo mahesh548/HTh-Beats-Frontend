@@ -2373,7 +2373,7 @@ input[type="search"]::-webkit-search-cancel-button {
     margin-top: -480px;
   }
   .quickCont {
-    height: 100%;
+    height: auto;
   }
   .quickCont.closed {
     display: grid;
@@ -2895,8 +2895,55 @@ input[type="search"]::-webkit-search-cancel-button {
   .contextCont {
     min-width: 300px;
   }
-  .screenshots {
+  .desk-screenshots {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: auto 1fr;
+    column-gap: 20px;
   }
+  .pcSS {
+    width: 300px;
+    border-radius: 8px;
+  }
+  .launchWrap {
+    width: 350px;
+    height: 90dvh !important;
+  }
+  .pcWrap {
+    max-width: 50vw;
+    background-color: transparent;
+    position: relative;
+    margin: auto;
+    border-radius: 12px;
+    padding: 8px;
+    display: grid;
+    justify-content: center;
+  }
+  .inputWrapperLogin {
+    max-width: 300px !important;
+  }
+  .inputWrapperLogin .floatingFormCustomInput {
+    width: 100% !important;
+  }
+  .changeM {
+    position: unset !important;
+  }
+  .initialPage {
+    padding-top: 20px;
+    background: linear-gradient(180deg, #ffffff1c, transparent) !important;
+  }
+  .floatingFormCustomInput input {
+    background-color: transparent !important;
+    border: 1px solid white;
+  }
+  .floatingFormCustomInput input:focus {
+    border: none;
+    box-shadow: 0 0 0 3px white;
+  }
+}
+
+.launchWrap {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100dvh;
+  align-items: center;
 }

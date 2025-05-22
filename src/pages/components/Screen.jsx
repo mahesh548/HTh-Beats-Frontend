@@ -11,7 +11,14 @@ import librarySvgFilled from "../../assets/icons/librarySvgFilled.svg";
 import librarySvgOutlined from "../../assets/icons/librarySvgOutlined.svg";
 import roomFilled from "../../assets/icons/roomFilled.svg";
 import roomFilledActive from "../../assets/icons/roomFilledActive.svg";
-import { Add, Close, ExploreOutlined, MusicNote } from "@mui/icons-material";
+import {
+  Add,
+  ArrowBackIos,
+  ArrowForwardIos,
+  Close,
+  ExploreOutlined,
+  MusicNote,
+} from "@mui/icons-material";
 
 import Audio from "./Audio";
 import MiniPlayer from "./MiniPlayer";
@@ -135,6 +142,9 @@ export default function Screen() {
   };
 
   const isActive = (path) => location.pathname === path;
+  const isPWA =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
 
   return (
     <>
@@ -147,10 +157,23 @@ export default function Screen() {
           className={`screenNavbar p-2 pb-0 ${
             Fullscreen !== "none" && "d-none"
           }`}
+          style={{
+            gridTemplateColumns: isPWA ? "80px auto 1fr auto" : "80px 1fr auto",
+          }}
         >
           <div className="d-grid justify-content-center align-content-center">
             <img src="/logo.png" height="40px" width="40px" />
           </div>
+          {isPWA && (
+            <div className="d-flex">
+              <button className="iconButton op-80" onClick={() => navigate(-1)}>
+                <ArrowBackIos />
+              </button>
+              <button className="iconButton op-80" onClick={() => navigate(1)}>
+                <ArrowForwardIos />
+              </button>
+            </div>
+          )}
           <div className="d-flex justify-content-center">
             <button
               className="iconButton desk-navbtn"
@@ -242,14 +265,16 @@ export default function Screen() {
             className="d-flex align-items-center pe-2"
             style={{ gap: "20px" }}
           >
-            <button
-              className="iconButton d-flex op-80 align-items-center"
-              style={{ gap: "5px" }}
-              onClick={() => open("Install")}
-            >
-              <img src={downloadOutlined} height="20px" />
-              Install App
-            </button>
+            {!isPWA && (
+              <button
+                className="iconButton d-flex op-80 align-items-center"
+                style={{ gap: "5px" }}
+                onClick={() => open("Install")}
+              >
+                <img src={downloadOutlined} height="20px" />
+                Install App
+              </button>
+            )}
 
             <Link to="/profile">
               <img
