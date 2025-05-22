@@ -2373,7 +2373,7 @@ input[type="search"]::-webkit-search-cancel-button {
     margin-top: -480px;
   }
   .quickCont {
-    height: 100%;
+    height: auto;
   }
   .quickCont.closed {
     display: grid;
