@@ -43,10 +43,13 @@ export default function Login() {
 
   return (
     <>
-      <div className="page">
+      <div className="page initialPage hiddenScrollbar deskScroll">
         <div className="pcWrap">
           <div className="loginContainer">
             <LogoBack />
+            <p className="labelText desk fs-2 mt-1 text-center">
+              Login to HTh Beats
+            </p>
             <div className="inputWrapperLogin">
               <LoginInput
                 placeholder="Enter Your Username or Email"

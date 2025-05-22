@@ -10,7 +10,7 @@ export default function Launch() {
 
   return (
     <div
-      className="page position-absolute w-100 hiddenScrollbar"
+      className="page position-absolute w-100 hiddenScrollbar initialPage hiddenScrollbar deskScroll"
       style={{
         background:
           "linear-gradient(180deg, #ffffff2e 0 20%, #00000000 70% 100%)",

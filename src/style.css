@@ -2910,14 +2910,34 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .pcWrap {
     max-width: 50vw;
-    background-color: var(--desktop-dark-grey);
+    background-color: transparent;
     position: relative;
     margin: auto;
-    margin-top: 20px;
     border-radius: 12px;
     padding: 8px;
     display: grid;
     justify-content: center;
+  }
+  .inputWrapperLogin {
+    max-width: 300px !important;
+  }
+  .inputWrapperLogin .floatingFormCustomInput {
+    width: 100% !important;
+  }
+  .changeM {
+    position: unset !important;
+  }
+  .initialPage {
+    padding-top: 20px;
+    background: linear-gradient(180deg, #ffffff1c, transparent) !important;
+  }
+  .floatingFormCustomInput input {
+    background-color: transparent !important;
+    border: 1px solid white;
+  }
+  .floatingFormCustomInput input:focus {
+    border: none;
+    box-shadow: 0 0 0 3px white;
   }
 }
 
