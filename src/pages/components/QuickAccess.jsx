@@ -50,11 +50,16 @@ export default function QuickAccess() {
           onClick={() => setOpen(!panelOpen)}
         >
           {panelOpen ? (
-            <img src={PanelOpen} style={{ scale: "0.8" }} />
+            <img
+              src={PanelOpen}
+              style={{ scale: "0.8" }}
+              title="Collapse quick access"
+            />
           ) : (
             <img
               src={PanelOpen}
               style={{ transform: "scaleX(-1)", scale: "0.9" }}
+              title="Expand quick access"
             />
           )}
         </button>
@@ -65,6 +70,7 @@ export default function QuickAccess() {
         <button
           className="iconButton qaButton"
           onClick={() => open("createOption")}
+          title="Create playlist,music room"
         >
           <Add />
           <p>Create</p>
@@ -73,6 +79,7 @@ export default function QuickAccess() {
         <button
           className="iconButton qaButton position-relative"
           onClick={() => navigate("/room")}
+          title="Open music room"
         >
           {badge && (
             <span className="position-absolute p-1 bg-danger rounded-circle desk-badge"></span>
@@ -87,6 +94,7 @@ export default function QuickAccess() {
           isActive("/library") && "qaButtonActive"
         }`}
         onClick={() => navigate("/library")}
+        title="Open your library"
       >
         <img src={librarySvgOutlined} />
         <p>Your library</p>
@@ -113,7 +121,7 @@ export default function QuickAccess() {
               key={"quick-act-" + index}
               onClick={() => openPlaylist(item?.perma_url)}
             >
-              <img src={item.image} />
+              <img src={item.image} title={`${item.title}`} />
               <div className="text-start">
                 <p className="thinOneLineText playlistSongTitle fw-light">
                   {item.title}
@@ -148,7 +156,7 @@ export default function QuickAccess() {
               key={"quick-rec-" + index}
               onClick={() => openPlaylist(item?.perma_url)}
             >
-              <img src={item.image} />
+              <img src={item.image} title={`${item.title}`} />
               <div className="text-start">
                 <p className="thinOneLineText playlistSongTitle fw-light">
                   {item.title}

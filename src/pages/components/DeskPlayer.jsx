@@ -121,7 +121,6 @@ export default function DeskPlayer({ setFullscreen }) {
         }
       });
     } else {
-      console.log("using open");
       open(type);
     }
   };
@@ -174,6 +173,7 @@ export default function DeskPlayer({ setFullscreen }) {
             alt={data.title}
             className="playlistSongImg miniPlayerPoster"
             onClick={() => toggleRightPanel("player")}
+            title="Now playing"
           />
 
           <div onClick={() => toggleRightPanel("player")}>
@@ -188,7 +188,7 @@ export default function DeskPlayer({ setFullscreen }) {
                   )}
             </p>
           </div>
-          <div>
+          <div title="Add to playlist">
             <LikeSong
               styleClass="miniPlayerButton"
               isLiked={localLike}
@@ -207,16 +207,25 @@ export default function DeskPlayer({ setFullscreen }) {
                 startDownload(data.more_info.encrypted_media_url, data.title)
               }
               className="opacity-50"
+              title="Download"
             >
               <img src={downloadOutlined} width={"25px"} />
             </button>
             <button
               onClick={() => setQueue({ type: "PREV" })}
               className="opacity-50"
+              title="Previous"
             >
               <SkipPreviousRounded style={{ fontSize: "35px" }} />
             </button>
-            <button onClick={() => togglePlay()}>
+            <button
+              onClick={() => togglePlay()}
+              title={`${
+                Queue.status === "pause" || Queue.status === "stop"
+                  ? "Play"
+                  : "Pause"
+              }`}
+            >
               {Queue.status === "pause" || Queue.status === "stop" ? (
                 <PlayCircleFilled style={{ fontSize: "40px" }} />
               ) : (
@@ -226,10 +235,15 @@ export default function DeskPlayer({ setFullscreen }) {
             <button
               onClick={() => setQueue({ type: "NEXT" })}
               className="opacity-50"
+              title="Next"
             >
               <SkipNextRounded style={{ fontSize: "35px" }} />
             </button>
-            <button onClick={() => setRepeat()} className="opacity-50">
+            <button
+              onClick={() => setRepeat()}
+              className="opacity-50"
+              title={`${repeatOne ? "Repeat one" : "Repeat all"}`}
+            >
               {repeatOne ? <RepeatOneOutlined /> : <RepeatOutlined />}
             </button>
           </div>
@@ -261,6 +275,7 @@ export default function DeskPlayer({ setFullscreen }) {
             openElements.includes("player") && "desk-active"
           }`}
           onClick={() => toggleRightPanel("player")}
+          title="Now playing"
         >
           <SlideshowOutlined />
         </button>
@@ -269,6 +284,7 @@ export default function DeskPlayer({ setFullscreen }) {
             openElements.includes("lyrics") && "desk-active"
           }`}
           id="lyricsBtn"
+          title="Lyrics"
         >
           <FormatQuoteRounded />
         </button>
@@ -278,10 +294,11 @@ export default function DeskPlayer({ setFullscreen }) {
             openElements.includes("queue") && "desk-active"
           }`}
           onClick={() => toggleRightPanel("queue")}
+          title="Queue"
         >
           <img src={playlistOutlined} width={"25px"} />
         </button>
-        <button className="iconButton opacity-50">
+        <button className="iconButton opacity-50" title="Share">
           <ShareOutlined />
         </button>
         <div className="volumneCont">
@@ -289,6 +306,7 @@ export default function DeskPlayer({ setFullscreen }) {
             <button
               className="iconButton opacity-50"
               onClick={() => setVolume(0)}
+              title="Mute"
             >
               <VolumeUpOutlined />
             </button>
@@ -296,6 +314,7 @@ export default function DeskPlayer({ setFullscreen }) {
             <button
               className="iconButton opacity-50"
               onClick={() => setVolume(50)}
+              title="Unmute"
             >
               <VolumeMuteOutlined />
             </button>
@@ -308,12 +327,14 @@ export default function DeskPlayer({ setFullscreen }) {
             max={100}
             onChange={(e) => setVolume(e.target.value)}
             id="volumeRange"
+            title={`${volume}`}
           />
         </div>
         {!isFull ? (
           <button
             className="iconButton opacity-50"
             onClick={() => goFullscreen()}
+            title="Enter fullscreen"
           >
             <Fullscreen />
           </button>
@@ -321,6 +342,7 @@ export default function DeskPlayer({ setFullscreen }) {
           <button
             className="iconButton opacity-50"
             onClick={() => exitFullscreen()}
+            title="Exit fullscreen"
           >
             <FullscreenExitOutlined />
           </button>

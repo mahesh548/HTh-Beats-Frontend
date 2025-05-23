@@ -197,6 +197,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
                 Fullscreen == "player" && "d-none"
               } `}
               onClick={() => closePlayer()}
+              title="Hide now playing"
             >
               <img src={PanelOpen} style={{ transform: "scaleX(-1)" }} />
             </button>
@@ -205,18 +206,22 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
                 {Queue.playlist.title}
               </b>
             </div>
-            <OptionSong
-              styleClass=""
-              data={data}
-              likeData={likeData}
-              addId={addId}
-            >
-              <MoreHorizOutlined className="iconButton opacity-50" />
-            </OptionSong>
+            <div title={`More options for ${data.title}`}>
+              <OptionSong
+                styleClass=""
+                data={data}
+                likeData={likeData}
+                addId={addId}
+              >
+                <MoreHorizOutlined className="iconButton opacity-50" />
+              </OptionSong>
+            </div>
+
             {Fullscreen !== "player" ? (
               <button
                 className="iconButton opacity-50 w-100 desk"
                 onClick={() => switchFullscreen("player")}
+                title="Expand now playing"
               >
                 <ZoomOutMapOutlined style={{ height: "18px" }} />
               </button>
@@ -224,6 +229,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
               <button
                 className="iconButton opacity-50 w-100 desk"
                 onClick={() => setFullscreen("none")}
+                title="Collapse now playing"
               >
                 <ZoomInMapOutlined style={{ height: "18px" }} />
               </button>
@@ -288,6 +294,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
               <button
                 className="iconButton opacity-50 w-100 desk"
                 onClick={() => toggleRightPanel("lyrics")}
+                title="Hide lyrics"
               >
                 <img
                   src={PanelOpen}
@@ -319,6 +326,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
               <button
                 className="iconButton opacity-50 w-100 desk"
                 onClick={() => switchFullscreen("lyrics")}
+                title="Expand lyrics"
               >
                 <ZoomOutMapOutlined style={{ height: "18px" }} />
               </button>
@@ -326,6 +334,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
               <button
                 className="iconButton opacity-50 w-100 desk"
                 onClick={() => setFullscreen("none")}
+                title="Collapse lyrics"
               >
                 <ZoomInMapOutlined style={{ height: "18px" }} />
               </button>

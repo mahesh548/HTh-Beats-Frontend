@@ -73,6 +73,7 @@ export default function QueuePage() {
           <button
             className="iconButton opacity-50 w-100 desk"
             onClick={() => closeAll(["player", "queue", "lyrics"])}
+            title="Hide Queue"
           >
             <img
               src={PanelOpen}
