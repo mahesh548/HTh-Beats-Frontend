@@ -93,7 +93,6 @@ export default function CreateSearch() {
       setSearchResult(sortResponse(response.data, query)); // set search result after sort
       setupOriginal(response, query); // set original response for sorting
       setView("search"); // set view to search
-      console.log("view set to search");
       callAgain.current = response.hasMore; // set call again to hasMore (true,false) for more result
     } else if (response.status && response.data && response.page > 1) {
       // if page no is not 1 don't show loading and merge data
@@ -269,6 +268,13 @@ export default function CreateSearch() {
       deleteData: { historyIds: historyId, type: "search", idList: songId },
     });
   };
+  if (document.getElementById("audio")) {
+    if (!document.getElementById("audio").paused) {
+      utils.editMeta("", "#000000");
+    } else {
+      utils.editMeta(`HTh Beats - Search`, "#000000");
+    }
+  }
 
   return (
     <div

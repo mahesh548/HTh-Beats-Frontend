@@ -41,6 +41,8 @@ export default function Login() {
     }
   };
 
+  utils.editMeta("Login to HTh Beats", "#0b0511");
+
   return (
     <>
       <div className="page initialPage hiddenScrollbar deskScroll">

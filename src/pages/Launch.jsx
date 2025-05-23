@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import utils from "../../utils";
 export default function Launch() {
   const navigate = useNavigate();
   const goToLogin = () => {
@@ -7,7 +8,7 @@ export default function Launch() {
   const goToSignup = () => {
     navigate("/signup");
   };
-
+  utils.editMeta("Hertz To hearts - Beats", "#353535");
   return (
     <div
       className="page position-absolute w-100 hiddenScrollbar initialPage hiddenScrollbar deskScroll"

@@ -55,6 +55,7 @@ export default function signup() {
       });
     }
   };
+  utils.editMeta("Create new account", "#0b0511");
   return (
     <>
       <div className="page initialPage hiddenScrollbar deskScroll">

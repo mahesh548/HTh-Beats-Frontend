@@ -39,6 +39,7 @@ export default function Verify() {
       });
     }
   };
+  utils.editMeta("Enter four digit OTP", "#0b0511");
   return (
     <div className="page initialPage hiddenScrollbar deskScroll">
       <div className="pcWrap">
