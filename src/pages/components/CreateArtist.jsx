@@ -45,6 +45,7 @@ export default function CreateArtist({ response }) {
       const color = await utils.getAverageColor(data.image);
 
       setBg(color ? color : "#8d8d8d");
+      utils.editMeta("", color ? color : "#8d8d8d");
     };
     if (data.image) {
       setColor();
@@ -115,7 +116,11 @@ export default function CreateArtist({ response }) {
 
     setData({ ...data, list: newList });
   };
-
+  if (document.getElementById("audio")) {
+    if (document.getElementById("audio").paused) {
+      utils.editMeta(`${data?.name}`);
+    }
+  }
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="artistCover mobo">

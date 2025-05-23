@@ -156,6 +156,13 @@ export default function DeskPlayer({ setFullscreen }) {
     };
   }, [isFull]);
 
+  useEffect(() => {
+    if (!Queue?.song || !Queue?.status) return;
+    if (Queue.status == "play" || Queue.status == "resume") {
+      utils.editMeta(`${data.title}`);
+    }
+  }, [Queue?.song, Queue?.status, data]);
+
   if (!Queue.song) return <></>;
 
   return (

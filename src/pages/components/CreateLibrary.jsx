@@ -45,6 +45,15 @@ export default function CreateLibrary({ response, filter, filterData }) {
   const handleClick = (type, id) => {
     navigate(`/${type}/${id}`);
   };
+
+  if (document.getElementById("audio")) {
+    if (!document.getElementById("audio").paused) {
+      utils.editMeta("", "#000000");
+    } else {
+      utils.editMeta(`HTh Beats - Library`, "#000000");
+    }
+  }
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="libraryCont desk-libraryCont">
