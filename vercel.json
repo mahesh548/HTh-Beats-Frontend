@@ -1,16 +1,12 @@
 {
-  "version": 2,
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
-    }
-  ],
-  "redirects": [
+      "source": "/api/(.*)",
+      "destination": "/api/"
+    },
     {
-      "source": "/:any*",
-      "destination": "/",
-      "status": 308
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
