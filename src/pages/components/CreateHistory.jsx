@@ -127,6 +127,14 @@ export default function CreateHistory({
       next(true);
     }
   };
+  if (document.getElementById("audio")) {
+    if (!document.getElementById("audio").paused) {
+      utils.editMeta("", "#000000");
+    } else {
+      utils.editMeta(`HTh Beats - History`, "#000000");
+    }
+  }
+
   if (response.length == 0) {
     return (
       <div className="page">

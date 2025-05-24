@@ -2939,6 +2939,12 @@ input[type="search"]::-webkit-search-cancel-button {
     border: none;
     box-shadow: 0 0 0 3px white;
   }
+  .tooltip{
+    background-color: var(--dark-grey-bg);
+    border-radius: 8px;
+    color: white;
+    padding: 4px;
+  }
 }
 
 .launchWrap {

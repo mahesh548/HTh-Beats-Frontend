@@ -36,7 +36,7 @@ export default function Navbar() {
   useEffect(() => {
     const checkAuth = async () => {
       const isAuth = await auth.authentication();
-      console.log(isAuth);
+
       if (!isAuth) {
         localStorage.clear();
         navigate("/login");

@@ -31,6 +31,14 @@ export default function CreateHome() {
   }
   const greeting = utils.getUserHomeGreeting(auth?.user?.username);
 
+  if (document.getElementById("audio")) {
+    if (!document.getElementById("audio").paused) {
+      utils.editMeta("", "#000000");
+    } else {
+      utils.editMeta(`HTh Beats - ${greeting.vibeText}`, "#000000");
+    }
+  }
+
   return (
     <div
       className="page hiddenScrollbar deskScroll"

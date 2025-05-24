@@ -64,7 +64,6 @@ export default function Screen() {
   useEffect(() => {
     const checkAuth = async () => {
       const isAuth = await auth.authentication();
-      console.log(isAuth);
       if (!isAuth) {
         localStorage.clear();
         navigate("/login");
@@ -161,15 +160,26 @@ export default function Screen() {
             gridTemplateColumns: isPWA ? "80px auto 1fr auto" : "80px 1fr auto",
           }}
         >
-          <div className="d-grid justify-content-center align-content-center">
+          <div
+            className="d-grid justify-content-center align-content-center"
+            title="HTh Beats"
+          >
             <img src="/logo.png" height="40px" width="40px" />
           </div>
           {isPWA && (
             <div className="d-flex">
-              <button className="iconButton op-80" onClick={() => navigate(-1)}>
+              <button
+                className="iconButton op-80"
+                onClick={() => navigate(-1)}
+                title="Go back"
+              >
                 <ArrowBackIos />
               </button>
-              <button className="iconButton op-80" onClick={() => navigate(1)}>
+              <button
+                className="iconButton op-80"
+                onClick={() => navigate(1)}
+                title="Go forward"
+              >
                 <ArrowForwardIos />
               </button>
             </div>
@@ -178,6 +188,7 @@ export default function Screen() {
             <button
               className="iconButton desk-navbtn"
               onClick={() => navigate("/home")}
+              title="Home"
             >
               <img
                 src={isActive("/home") ? homeSvgFilled : homeSvgOutlined}
@@ -185,7 +196,7 @@ export default function Screen() {
               />
             </button>
             <div className="deskSrchBox ">
-              <button className="iconButton op-80">
+              <button className="iconButton op-80" title="Search">
                 <img src={searchSvgOutlined} height={"25px"} />
               </button>
               <div
@@ -211,6 +222,7 @@ export default function Screen() {
                   <button
                     className="iconButton op-80"
                     onClick={() => setSearchInput("")}
+                    title="Clear"
                   >
                     <Close />
                   </button>
@@ -219,6 +231,7 @@ export default function Screen() {
               <button
                 className="iconButton op-80"
                 onClick={() => navigate("/search")}
+                title="Explore"
               >
                 <ExploreOutlined />
               </button>
@@ -282,6 +295,7 @@ export default function Screen() {
                 className="rounded-circle"
                 height="35px"
                 style={{ border: "5px solid #ffffff38" }}
+                title={`${auth?.user?.username || "Profile"}`}
               />
             </Link>
           </div>

@@ -33,6 +33,7 @@ export default function CreatePlaylist({ response }) {
       const color = await utils.getAverageColor(data.image);
 
       setBg(color ? color : "#8d8d8d");
+      utils.editMeta("", color ? color : "#8d8d8d");
     };
     if (data.image) {
       setColor();
@@ -98,6 +99,13 @@ export default function CreatePlaylist({ response }) {
   const startDownload = async (URL, title) => {
     await utils.downloadThis(URL, title);
   };
+
+  if (document.getElementById("audio")) {
+    if (document.getElementById("audio").paused) {
+      utils.editMeta(`${data?.title}`);
+    }
+  }
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>

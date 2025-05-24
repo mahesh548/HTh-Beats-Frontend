@@ -129,6 +129,12 @@ export default function Profile() {
     }
   };
 
+  if (document.getElementById("audio")) {
+    if (document.getElementById("audio").paused) {
+      utils.editMeta(`HTh Beats - ${auth?.user?.username}`);
+    }
+  }
+
   return (
     <div className="page">
       <div className="profilePage">

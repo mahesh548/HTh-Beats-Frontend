@@ -209,7 +209,13 @@ export default function DeskSearch() {
       return item;
     });
 
-  console.log(view);
+  if (document.getElementById("audio")) {
+    if (!document.getElementById("audio").paused) {
+      utils.editMeta("", "#000000");
+    } else {
+      utils.editMeta(`HTh Beats - Search`, "#000000");
+    }
+  }
 
   return (
     <div

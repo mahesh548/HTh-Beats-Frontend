@@ -44,6 +44,7 @@ export default function SearchHistCard({ data, removeFromHistory }) {
             e.stopPropagation();
             removeFromHistory([data.id], [data.historyId]);
           }}
+          title="Remove"
         >
           <Close className="text-white-50" />
         </button>

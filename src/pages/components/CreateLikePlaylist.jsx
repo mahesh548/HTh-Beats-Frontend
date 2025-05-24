@@ -52,6 +52,13 @@ export default function CreateLikePlaylist({ response }) {
     setData({ ...data, list: newList });
   };
 
+  if (document.getElementById("audio")) {
+    if (document.getElementById("audio").paused) {
+      utils.editMeta(`Liked Songs`);
+    }
+  }
+  utils.editMeta("", bg);
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>

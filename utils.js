@@ -397,6 +397,18 @@ const utils = {
       await new Promise((resolve) => setTimeout(() => resolve(), 3000));
     }
   },
+
+  editMeta: (title = "", theme = "") => {
+    if (title.length > 0) {
+      document.getElementsByTagName("title")[0].innerText = title;
+    }
+    if (theme.length > 0) {
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      if (metaThemeColor) {
+        metaThemeColor.setAttribute("content", theme);
+      }
+    }
+  },
 };
 
 export default utils;
