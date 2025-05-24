@@ -62,6 +62,7 @@ export default function Join() {
   }, [auth.user, id]);
 
   const CreateRoom = ({ data }) => {
+    utils.editMeta(`Join - ${data?.title}`, "#f5deb37d");
     return (
       <div className="page hiddenScrollbar">
         <div

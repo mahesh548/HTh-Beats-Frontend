@@ -24,6 +24,7 @@ export default function Collab() {
       const color = await utils.getAverageColor(playlistData.image);
 
       setBg(color ? color : "#8d8d8d");
+      utils.editMeta("", color ? color : "#8d8d8d");
     };
     if (playlistData.image) {
       setColor();
@@ -68,6 +69,7 @@ export default function Collab() {
   }, [auth.user, token]);
 
   const CreateCollab = ({ data }) => {
+    utils.editMeta(`Collab - ${data?.title}`, "");
     return (
       <div className="page hiddenScrollbar">
         <div

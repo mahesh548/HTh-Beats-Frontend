@@ -101,6 +101,13 @@ export default function Room() {
       .getElementById("desk-room-access")
       ?.style?.setProperty("background-color", color);
   };
+
+  if (document.getElementById("audio")) {
+    if (document.getElementById("audio").paused) {
+      utils.editMeta(`${roomInfo?.title}`);
+    }
+  }
+
   const isDesktop = window.innerWidth >= 1000;
   return (
     <>
