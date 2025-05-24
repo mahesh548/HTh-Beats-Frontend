@@ -16,7 +16,7 @@ export async function GET(request) {
 
   if (isBot) {
     // You can fetch metadata from your backend if needed
-    const meta = await fetch(`${apiDomain}/${type}/${id}`).then((res) =>
+    const meta = await fetch(`${apiDomain}/meta/${type}/${id}`).then((res) =>
       res.json()
     );
 
