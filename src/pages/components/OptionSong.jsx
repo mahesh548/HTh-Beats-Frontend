@@ -90,6 +90,21 @@ export default function OptionSong({ children, styleClass, data, addId }) {
     }, 1000);
     close(eleId);
   };
+  const share = (perma_url) => {
+    const isDesktop = window.innerWidth >= 1000;
+    const shareUrl =
+      "https://hthbeats.vercel.app/api/preview?type=song" + "&id=" + perma_url;
+    if (isDesktop || !navigator.share) {
+      navigator.clipboard.writeText(shareUrl);
+      showToast({
+        text: "Link copied to clipboard",
+      });
+    } else {
+      navigator.share({
+        url: shareUrl,
+      });
+    }
+  };
 
   return (
     <>
@@ -179,7 +194,7 @@ export default function OptionSong({ children, styleClass, data, addId }) {
               <p>View album</p>
             </button>
           )}
-          <button className="icoTextBut">
+          <button className="icoTextBut" onClick={() => share(data.perma_url)}>
             <ShareOutlined />
             <p>Share</p>
           </button>

@@ -15,6 +15,7 @@ import utils from "../../../utils";
 import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import { songContext } from "./Song";
+import { showToast } from "./showToast";
 
 export default function OptionEntity({
   children,
@@ -50,6 +51,24 @@ export default function OptionEntity({
       type: "PLAYLIST",
       value: { ...Queue.playlist, list: newList },
     });
+  };
+  const share = (type, perma_url) => {
+    const isDesktop = window.innerWidth >= 1000;
+    const shareUrl =
+      "https://hthbeats.vercel.app/api/preview?type=" +
+      type +
+      "&id=" +
+      perma_url;
+    if (isDesktop || !navigator.share) {
+      navigator.clipboard.writeText(shareUrl);
+      showToast({
+        text: "Link copied to clipboard",
+      });
+    } else {
+      navigator.share({
+        url: shareUrl,
+      });
+    }
   };
 
   return (
@@ -138,7 +157,10 @@ export default function OptionEntity({
             </>
           )}
 
-          <button className="icoTextBut">
+          <button
+            className="icoTextBut"
+            onClick={() => share(data.type, data.perma_url)}
+          >
             <ShareOutlined />
             <p>Share</p>
           </button>

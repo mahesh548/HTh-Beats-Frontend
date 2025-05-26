@@ -30,6 +30,7 @@ import Profile from "./pages/Profile";
 import PlaylistNotFound from "./pages/components/PlaylistNotFound";
 import { useEffect } from "react";
 import { setClick } from "./pages/components/ClickPosition";
+import PreviewRedirect from "./pages/components/PreviewRedirect";
 
 export default function Desktop() {
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function Desktop() {
           <Route path="/song/:id" element={<Song />} />
           <Route path="/mix/:id" element={<Playlist />} />
           <Route path="/artist/:id" element={<Artist />} />
+          <Route path="/api/*" element={<PreviewRedirect />} />
         </Route>
 
         {/* ERROR PAGES */}

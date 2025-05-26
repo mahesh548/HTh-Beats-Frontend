@@ -227,6 +227,8 @@ export default function CreateCustomPlaylist({ response }) {
                 subtitle: `${data.list_count} songs`,
                 image: data.image,
                 list: data.list,
+                perma_url: data.perma_url,
+                type: "playlist",
               }}
               artists={data.ownerInfo || []}
               addId={addId}

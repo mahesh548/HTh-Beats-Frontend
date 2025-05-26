@@ -27,6 +27,7 @@ import Room from "./pages/Room";
 import Profile from "./pages/Profile";
 /* import { Toaster } from "sonner"; */
 import PlaylistNotFound from "./pages/components/PlaylistNotFound";
+import PreviewRedirect from "./pages/components/PreviewRedirect";
 
 export default function App() {
   return (
@@ -57,6 +58,7 @@ export default function App() {
           <Route path="/song/:id" element={<Song />} />
           <Route path="/mix/:id" element={<Playlist />} />
           <Route path="/artist/:id" element={<Artist />} />
+          <Route path="/api/*" element={<PreviewRedirect />} />
         </Route>
 
         {/* ERROR PAGES */}

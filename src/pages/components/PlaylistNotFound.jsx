@@ -3,7 +3,7 @@ import { Link } from "react-router";
 export default function PlaylistNotFound() {
   return (
     <div className="page">
-      <div className="text-center" style={{ marginTop: "50%" }}>
+      <div className="text-center" style={{ marginTop: "6rem" }}>
         <img src="/logo.png" alt="logo" height="80px" width="80px" />
         <p className="labelText">Page Not Found!</p>
         <p className="text-white-50 mt-2 mb-2">

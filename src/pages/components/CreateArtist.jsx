@@ -197,6 +197,8 @@ export default function CreateArtist({ response }) {
                   subtitle: data?.subtitle || "",
                   image: data.image,
                   list: data.list,
+                  perma_url: data.perma_url,
+                  type: "artist",
                 }}
                 artists={
                   [
