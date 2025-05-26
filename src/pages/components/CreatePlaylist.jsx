@@ -194,6 +194,8 @@ export default function CreatePlaylist({ response }) {
                 subtitle: data.header_desc,
                 image: data.image,
                 list: data.list,
+                perma_url: data.perma_url,
+                type: data.type,
               }}
               artists={data.more_info.artists || []}
               addId={addId}

@@ -28,6 +28,7 @@ import playlistOutlined from "../../assets/icons/playlistOutlined.svg";
 import { createPortal } from "react-dom";
 import AddToPlaylist from "./AddToPlaylist";
 import { channelContext } from "./Channel";
+import { showToast } from "./showToast";
 
 export default function DeskPlayer({ setFullscreen }) {
   const { Queue, setQueue } = useContext(songContext);
@@ -162,6 +163,22 @@ export default function DeskPlayer({ setFullscreen }) {
       utils.editMeta(`${data.title}`);
     }
   }, [Queue?.song, Queue?.status, data]);
+
+  const share = (perma_url) => {
+    const isDesktop = window.innerWidth >= 1000;
+    const shareUrl =
+      "https://hthbeats.vercel.app/api/preview?type=song" + "&id=" + perma_url;
+    if (isDesktop || !navigator.share) {
+      navigator.clipboard.writeText(shareUrl);
+      showToast({
+        text: "Link copied to clipboard",
+      });
+    } else {
+      navigator.share({
+        url: shareUrl,
+      });
+    }
+  };
 
   if (!Queue.song) return <></>;
 
@@ -305,7 +322,11 @@ export default function DeskPlayer({ setFullscreen }) {
         >
           <img src={playlistOutlined} width={"25px"} />
         </button>
-        <button className="iconButton opacity-50" title="Share">
+        <button
+          className="iconButton opacity-50"
+          title="Share"
+          onClick={() => share(data.perma_url)}
+        >
           <ShareOutlined />
         </button>
         <div className="volumneCont">

@@ -133,6 +133,21 @@ export default function Player() {
   const startDownload = async (URL, title) => {
     await utils.downloadThis(URL, title);
   };
+  const share = (perma_url) => {
+    const isDesktop = window.innerWidth >= 1000;
+    const shareUrl =
+      "https://hthbeats.vercel.app/api/preview?type=song" + "&id=" + perma_url;
+    if (isDesktop || !navigator.share) {
+      navigator.clipboard.writeText(shareUrl);
+      showToast({
+        text: "Link copied to clipboard",
+      });
+    } else {
+      navigator.share({
+        url: shareUrl,
+      });
+    }
+  };
   return (
     <div className="playerCont">
       <div className="blurPage">
@@ -267,7 +282,7 @@ export default function Player() {
               {repeatOne ? <RepeatOneOutlined /> : <RepeatOutlined />}
             </button>
 
-            <button>
+            <button onClick={() => share(data.perma_url)}>
               <ShareOutlined />
             </button>
           </div>
