@@ -278,16 +278,19 @@ export default function Screen() {
             className="d-flex align-items-center pe-2"
             style={{ gap: "20px" }}
           >
-            {!isPWA && (
-              <button
-                className="iconButton d-flex op-80 align-items-center"
-                style={{ gap: "5px" }}
-                onClick={() => open("Install")}
-              >
-                <img src={downloadOutlined} height="20px" />
-                Install App
-              </button>
-            )}
+            {!isPWA &&
+              (!window.PWAinstallable ? (
+                <></>
+              ) : (
+                <button
+                  className="iconButton d-flex op-80 align-items-center"
+                  style={{ gap: "5px" }}
+                  onClick={() => open("Install")}
+                >
+                  <img src={downloadOutlined} height="20px" />
+                  Install App
+                </button>
+              ))}
 
             <Link to="/profile">
               <img
