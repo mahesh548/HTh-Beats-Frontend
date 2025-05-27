@@ -6,6 +6,19 @@ import { DoNotDisturbOnOutlined } from "@mui/icons-material";
 import { HashContext } from "./Hash";
 import { useNavigate } from "react-router";
 
+const imgCovers = [
+  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/Playlist_j53blz.png",
+  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748349787/2_d4ikbf.png",
+  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748349788/3_qffw1d.png",
+  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748349788/4_lwf3po.png",
+  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748349788/5_lft8gs.png",
+  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748349788/6_wmnkgw.png",
+  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748349788/7_erk90d.png",
+  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748349788/8_zpik38.png",
+  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748349789/9_kdevno.png",
+  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748349792/10_m9brbd.png",
+];
+
 const editReducer = (state, action) => {
   switch (action.type) {
     case "song":
@@ -16,6 +29,9 @@ const editReducer = (state, action) => {
 
     case "title":
       return { ...state, title: action.value };
+
+    case "img":
+      return { ...state, img: action.value };
 
     default:
       return { ...state };
@@ -57,6 +73,11 @@ export default function EditPlaylist({ editId, title, img, list, saveEdit }) {
     if (editData.list.length != list.length) localChanges.push("list");
     setChanges(localChanges);
   }, [editData]);
+  const changeImg = (src) => {
+    const currentImgIndex = imgCovers.indexOf(src);
+    const nextImgIndex = (currentImgIndex + 1) % imgCovers.length;
+    setEditData({ type: "img", value: imgCovers[nextImgIndex] });
+  };
 
   const isDesktop = window.innerWidth >= 1000;
 
@@ -73,7 +94,12 @@ export default function EditPlaylist({ editId, title, img, list, saveEdit }) {
                 style={{ height: "150px", width: "150px" }}
                 className="d-block m-auto"
               />
-              <button className="iconButton mt-2">Change cover</button>
+              <button
+                className="iconButton mt-2"
+                onClick={() => changeImg(editData.img)}
+              >
+                Change cover
+              </button>
             </div>
             <div>
               <input

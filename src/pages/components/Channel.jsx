@@ -11,7 +11,8 @@ export default function ChannelProvider({ children }) {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const pici = "https://" + window.location.hostname + "/logo.png";
+  const pici =
+    "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png";
   const defaultUser = {
     pic: pici,
     username: "HTh-User",

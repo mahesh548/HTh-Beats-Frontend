@@ -20,7 +20,12 @@ export default function Launch() {
       <div className="pcWrap">
         <div className="launchWrap">
           <div className="text-center">
-            <img src="./logo.png" height="70px" width="70px" className="mb-3" />
+            <img
+              src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png"
+              height="70px"
+              width="70px"
+              className="mb-3"
+            />
             <p className="labelText mt-0 fs-2">Millions of songs.</p>
             <p className="labelText mt-0 fs-2">Free on HTh Beats.</p>
           </div>

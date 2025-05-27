@@ -164,7 +164,11 @@ export default function Screen() {
             className="d-grid justify-content-center align-content-center"
             title="HTh Beats"
           >
-            <img src="/logo.png" height="40px" width="40px" />
+            <img
+              src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png"
+              height="40px"
+              width="40px"
+            />
           </div>
           {isPWA && (
             <div className="d-flex">
@@ -294,7 +298,10 @@ export default function Screen() {
 
             <Link to="/profile">
               <img
-                src={auth?.user?.pic || "logo.png"}
+                src={
+                  auth?.user?.pic ||
+                  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png"
+                }
                 className="rounded-circle"
                 height="35px"
                 style={{ border: "5px solid #ffffff38" }}

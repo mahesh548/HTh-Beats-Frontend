@@ -6,7 +6,7 @@ export default function QrCode({
   size = 120,
   bgColor = "#ffffff",
   fgColor = "#000000",
-  logoSrc = "logo.png",
+  logoSrc = "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png",
   logoSize = 30,
 }) {
   return (

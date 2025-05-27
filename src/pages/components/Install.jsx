@@ -76,7 +76,7 @@ export default function Install() {
                     }}
                   >
                     <img
-                      src="/logo.png"
+                      src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png"
                       alt="Logo"
                       className="playlistSongImg"
                     />

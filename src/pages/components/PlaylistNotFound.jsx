@@ -4,7 +4,12 @@ export default function PlaylistNotFound() {
   return (
     <div className="page">
       <div className="text-center" style={{ marginTop: "6rem" }}>
-        <img src="/logo.png" alt="logo" height="80px" width="80px" />
+        <img
+          src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png"
+          alt="logo"
+          height="80px"
+          width="80px"
+        />
         <p className="labelText">Page Not Found!</p>
         <p className="text-white-50 mt-2 mb-2">
           It seems like page you are looking for is currently unavailable or

@@ -62,7 +62,10 @@ export default function CreateHome() {
         >
           <Link to="/profile">
             <img
-              src={auth?.user?.pic || "logo.png"}
+              src={
+                auth?.user?.pic ||
+                "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png"
+              }
               className="rounded-circle"
               style={{ height: "40px", width: "40px" }}
             />
@@ -76,7 +79,7 @@ export default function CreateHome() {
       </div>
       {installCard && (
         <div
-          className="installCard p-2 mb-3"
+          className="installCard p-2 mb-3 mobo"
           id="installCard"
           style={{ backgroundColor: "pink" }}
         >
