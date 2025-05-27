@@ -2,14 +2,18 @@ import TimelineSlider from "./TimelineSlider";
 import TimelinePromo from "./TimelinePromo";
 import Recent from "./Recent";
 import { AuthContext } from "./Auth";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import utils from "../../../utils";
 import { Link } from "react-router";
+import { Close } from "@mui/icons-material";
 
 export default function CreateHome() {
   const auth = useContext(AuthContext);
   const homeCache = JSON.parse(localStorage.homeCache);
   const recent = JSON.parse(localStorage?.recent || "[]");
+  const [installCard, setInstallCard] = useState(
+    !window.PWAinstallable ? false : true
+  );
   const {
     charts,
     city_mod,
@@ -38,6 +42,13 @@ export default function CreateHome() {
       utils.editMeta(`HTh Beats - ${greeting.vibeText}`, "#000000");
     }
   }
+  const handleInstallClick = async () => {
+    if (window.PWAinstallable) {
+      window.PWAinstallable.prompt();
+      await window.PWAinstallable.userChoice;
+      window.PWAinstallable = null;
+    }
+  };
 
   return (
     <div
@@ -51,7 +62,10 @@ export default function CreateHome() {
         >
           <Link to="/profile">
             <img
-              src={auth?.user?.pic || "logo.png"}
+              src={
+                auth?.user?.pic ||
+                "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png"
+              }
               className="rounded-circle"
               style={{ height: "40px", width: "40px" }}
             />
@@ -63,6 +77,31 @@ export default function CreateHome() {
           </div>
         </div>
       </div>
+      {installCard && (
+        <div
+          className="installCard p-2 mb-3 mobo"
+          id="installCard"
+          style={{ backgroundColor: "pink" }}
+        >
+          <button
+            className="iconButton float-end text-black"
+            onClick={() => setInstallCard(false)}
+          >
+            <Close />
+          </button>
+          <p className="labelText text-black">Install app</p>
+          <p className="text-black">
+            Install HTh Beats for faster and easier access to your favorite
+            musics.
+          </p>
+          <button
+            className="addToBut bg-black text-white px-3 py-2 ms-0"
+            onClick={() => handleInstallClick()}
+          >
+            Install
+          </button>
+        </div>
+      )}
       {recent && recent.length > 0 && <Recent recentData={recent} />}
 
       {charts && charts.length > 0 && (

@@ -64,7 +64,10 @@ export default function CreateLibrary({ response, filter, filterData }) {
           >
             <Link to="/profile">
               <img
-                src={auth?.user?.pic || "logo.png"}
+                src={
+                  auth?.user?.pic ||
+                  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png"
+                }
                 className="rounded-circle"
               />
             </Link>

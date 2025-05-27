@@ -164,7 +164,11 @@ export default function Screen() {
             className="d-grid justify-content-center align-content-center"
             title="HTh Beats"
           >
-            <img src="/logo.png" height="40px" width="40px" />
+            <img
+              src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png"
+              height="40px"
+              width="40px"
+            />
           </div>
           {isPWA && (
             <div className="d-flex">
@@ -278,20 +282,26 @@ export default function Screen() {
             className="d-flex align-items-center pe-2"
             style={{ gap: "20px" }}
           >
-            {!isPWA && (
-              <button
-                className="iconButton d-flex op-80 align-items-center"
-                style={{ gap: "5px" }}
-                onClick={() => open("Install")}
-              >
-                <img src={downloadOutlined} height="20px" />
-                Install App
-              </button>
-            )}
+            {!isPWA &&
+              (!window.PWAinstallable ? (
+                <></>
+              ) : (
+                <button
+                  className="iconButton d-flex op-80 align-items-center"
+                  style={{ gap: "5px" }}
+                  onClick={() => open("Install")}
+                >
+                  <img src={downloadOutlined} height="20px" />
+                  Install App
+                </button>
+              ))}
 
             <Link to="/profile">
               <img
-                src={auth?.user?.pic || "logo.png"}
+                src={
+                  auth?.user?.pic ||
+                  "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png"
+                }
                 className="rounded-circle"
                 height="35px"
                 style={{ border: "5px solid #ffffff38" }}
