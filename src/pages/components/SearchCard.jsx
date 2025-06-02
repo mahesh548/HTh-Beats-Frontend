@@ -22,7 +22,7 @@ export default function SearchCard({ data, ac, setGlobalLike }) {
       return;
     }
 
-    navigate(`/${data.type}/${data?.url || data?.id}`);
+    navigate(`/${data.type}/${data?.url || data?.perma_url}`);
   };
 
   //detecting if song is playable or not
