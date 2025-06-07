@@ -31,11 +31,27 @@ const createHistory = (Queue, songId) => {
     Queue.playlist.type == "mix"
       ? "entity"
       : Queue.playlist.type;
+
+  // create flag for hit and play from search
+  const lastSearchPlay = JSON.parse(sessionStorage.getItem("lastSearchPlay"));
+  const now = Date.now();
+  let mode = "auto";
+
+  if (
+    lastSearchPlay &&
+    lastSearchPlay.songId === songId &&
+    now - lastSearchPlay.timestamp < 10000 // 10 sec window
+  ) {
+    mode = "manual";
+    sessionStorage.removeItem("lastSearchPlay");
+  }
+
   const playedData = {
     activity: "played",
     playlistId: Queue.playlist.id,
     idList: [songId],
     type: type,
+    mode: mode,
   };
   const timeDelay =
     (parseInt(
@@ -46,7 +62,7 @@ const createHistory = (Queue, songId) => {
 
   historyRequest = setTimeout(() => {
     utils.BACKEND("/song_played", "POST", { playedData: playedData });
-  }, timeDelay);
+  }, 0);
 };
 
 const songReducer = (state, action) => {
