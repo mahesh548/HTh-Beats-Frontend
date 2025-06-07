@@ -107,12 +107,6 @@ META_SECRET=&lt;your_meta_secret_here&gt;
 
 ---
 
-> ⚠️ **Disclaimer:**  
-> This project, **HTh Beats**, is a personal portfolio project built solely for learning and showcasing frontend and full-stack development skills.  
-> It is **not affiliated with JioSaavn**, Spotify, or any other music streaming service.  
-> All audio content and media used within the app are **sourced from publicly accessible JioSaavn URLs** and are **not hosted or stored by the developer**.  
-> This project is **not intended for commercial use**, distribution, or monetization.
-
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!  
@@ -120,7 +114,17 @@ Feel free to fork this repository and submit a pull request.
 
 If you find a bug or want to suggest an improvement, please open an issue.
 
+---
+
 ## 📝 License
 
 This project is licensed under the [MIT License](LICENSE).  
 You're free to use, modify, and distribute this project with proper attribution.
+
+---
+
+> ⚠️ **Disclaimer:**  
+> This project, **HTh Beats**, is a personal portfolio project built solely for learning and showcasing frontend and full-stack development skills.  
+> It is **not affiliated with JioSaavn**, Spotify, or any other music streaming service.  
+> All audio content and media used within the app are **sourced from publicly accessible JioSaavn URLs** and are **not hosted or stored by the developer**.  
+> This project is **not intended for commercial use**, distribution, or monetization.
