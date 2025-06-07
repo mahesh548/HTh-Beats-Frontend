@@ -18,11 +18,20 @@
 
 ---
 
-## 🖼 Preview
+## 📱 Preview
 
-> Include a screenshot or GIF below:
-
-![App Preview](https://your-screenshot-link.com)
+<table>
+  <tr>
+    <td><img src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1749318396/screenshot1_qnop7b.png" alt="Screen 1" width="200"/></td>
+    <td><img src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1749318394/screenshot2_xussnc.png" alt="Screen 2" width="200"/></td>
+    <td><img src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1749318418/screenshot3_b8uora.png" alt="Screen 3" width="200"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1749318428/screenshot4_gggycg.png" alt="Screen 4" width="200"/></td>
+    <td><img src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1749318398/screenshot5_z72cyt.png" alt="Screen 5" width="200"/></td>
+    <td><img src="https://res.cloudinary.com/dzjflzbxz/image/upload/v1749318409/screenshot6_bduje6.png" alt="Screen 6" width="200"/></td>
+  </tr>
+</table>
 
 ---
 
