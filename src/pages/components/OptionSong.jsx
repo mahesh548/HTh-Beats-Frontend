@@ -232,6 +232,12 @@ export default function OptionSong({ children, styleClass, data, addId }) {
                   src={item.image}
                   alt={item.name}
                   className="playlistSongImg"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                      item.name
+                    )}&bold=true&background=f5deb3&length=1&font-size=0.6`;
+                  }}
                 />
                 <div>
                   <p className="thinOneLineText playlistSongTitle">

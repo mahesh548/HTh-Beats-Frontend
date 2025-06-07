@@ -22,7 +22,7 @@ export default function SearchCard({ data, ac, setGlobalLike }) {
       return;
     }
 
-    navigate(`/${data.type}/${data?.url || data?.id}`);
+    navigate(`/${data.type}/${data?.url || data?.perma_url}`);
   };
 
   //detecting if song is playable or not
@@ -62,6 +62,15 @@ export default function SearchCard({ data, ac, setGlobalLike }) {
         status: "play",
       },
     });
+
+    // saving songId and timeStamp to create hit and play history
+    sessionStorage.setItem(
+      "lastSearchPlay",
+      JSON.stringify({
+        songId: songData.id,
+        timestamp: Date.now(),
+      })
+    );
   };
 
   const toggleQueue = (data) => {

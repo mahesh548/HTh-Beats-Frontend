@@ -18,6 +18,12 @@ export default function PlaylistOwner({
           <img
             src={src}
             key={`ownerAvt_${Math.random().toString(36).substr(2, 9)}`}
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                name
+              )}&bold=true&background=f5deb3&length=1&font-size=0.6`;
+            }}
           />
         ))}
       </div>
