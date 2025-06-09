@@ -136,7 +136,7 @@ export default function Player() {
   const share = (perma_url) => {
     const isDesktop = window.innerWidth >= 1000;
     const shareUrl =
-      "https://hthbeats.vercel.app/api/preview?type=song" + "&id=" + perma_url;
+      "https://hthbeats.online/api/preview?type=song" + "&id=" + perma_url;
     if (isDesktop || !navigator.share) {
       navigator.clipboard.writeText(shareUrl);
       showToast({
