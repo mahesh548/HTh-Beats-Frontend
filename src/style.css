@@ -1878,6 +1878,13 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 100%;
   display: block;
 }
+.promoCont {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
 @media (max-width: 1024px) {
   /* MOBILE SPECIFIC CSS */
   .desk {
@@ -3084,5 +3091,11 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .desk-80w {
     width: 80%;
+  }
+  .countCard {
+    background-color: var(--light-dark-bg);
+    border-radius: 12px;
+    cursor: pointer;
+    border-bottom: none !important;
   }
 }

@@ -9,6 +9,7 @@ import {
   ManageAccountsOutlined,
   RadioButtonChecked,
   RadioButtonUncheckedOutlined,
+  ShieldOutlined,
   TranslateOutlined,
   Upload,
 } from "@mui/icons-material";
@@ -18,6 +19,7 @@ import OffCanvas from "./components/BottomSheet";
 import utils from "../../utils";
 import ConfirmPrompt from "./components/ConfirmPrompt";
 import { showToast } from "./components/showToast";
+import { useNavigate } from "react-router";
 
 const audioQuality = [
   { value: "12", display: "Data saver" },
@@ -47,6 +49,7 @@ const alertMessage = {
 
 export default function Profile() {
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
   const [preview, setPreview] = useState(null);
   const [profileFile, setProfileFile] = useState(null);
   const [currentQ, setCurrentQ] = useState(
@@ -215,6 +218,22 @@ export default function Profile() {
               </p>
             </div>
           </div>
+          {auth?.user?.role == "admin" && (
+            <div
+              className="playlistSong mt-4 px-2 mb-3"
+              style={{ gridTemplateColumns: "40px auto" }}
+            >
+              <ShieldOutlined className="profileIcon" />
+              <div onClick={() => navigate("/admin")}>
+                <p className="thinOneLineText playlistSongTitle fw-normal">
+                  Admin panel
+                </p>
+                <p className="thinOneLineText playlistSongSubTitle">
+                  Manage users and their data • Manage download permissions.
+                </p>
+              </div>
+            </div>
+          )}
 
           <div
             className="playlistSong mt-4 px-2 mb-3"
