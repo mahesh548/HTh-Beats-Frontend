@@ -320,6 +320,8 @@ const utils = {
     return `${diffInHours}h ago`;
   },
   downloadThis: async (url, title, batch = false) => {
+    const downloadPermission = window.checkDownloadAccess();
+    if (!downloadPermission) return;
     const audioUrl = utils.decryptor(url);
     const streamQuality = localStorage.getItem("stream_quality") || "96";
     const downloadQuality = localStorage.getItem("download_quality") || "96";
@@ -370,6 +372,9 @@ const utils = {
     }
   },
   batchDownload: async (songs) => {
+    const downloadPermission = window.checkDownloadAccess();
+    if (!downloadPermission) return;
+
     let completed = 0;
 
     showToast({
