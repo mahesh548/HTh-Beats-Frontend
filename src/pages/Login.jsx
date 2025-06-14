@@ -32,7 +32,6 @@ export default function Login() {
           message: response.msg,
         });
       }
-      console.log(response);
     } else {
       setUsername({
         ...username,

@@ -3099,3 +3099,11 @@ input[type="search"]::-webkit-search-cancel-button {
     border-bottom: none !important;
   }
 }
+.userSrch > .floatingFormCustomInput {
+  width: 99% !important;
+  padding-left: 0.5rem !important;
+  padding-right: 0.5rem !important;
+  p {
+    margin-top: 4px;
+  }
+}
