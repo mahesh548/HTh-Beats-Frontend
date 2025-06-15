@@ -62,11 +62,22 @@ const createHistory = (Queue, songId) => {
 
   historyRequest = setTimeout(() => {
     utils.BACKEND("/song_played", "POST", { playedData: playedData });
-  }, 0);
+  }, timeDelay);
+};
+
+const testEQProfile = {
+  60: 18, // Bass boost
+  180: 3,
+  400: 0,
+  1000: -2, // Slight dip in mids
+  3000: 4, // Presence boost
+  6000: 2,
+  12000: -3, // Cut some high treble
 };
 
 const songReducer = (state, action) => {
   let liked = [];
+  let effect = JSON.parse(localStorage.getItem("audioEffect")) || "none";
   switch (action.type) {
     case "RESET":
       return {};
@@ -77,7 +88,17 @@ const songReducer = (state, action) => {
           liked.push(item.id);
         }
       });
-      return { ...state, playlist: action.value, saved: liked, isLocal: true };
+      return {
+        ...state,
+        playlist: action.value,
+        saved: liked,
+        isLocal: true,
+        effect: effect,
+      };
+
+    case "AUDIO_EFFECT":
+      localStorage.setItem("audioEffect", JSON.stringify(action.value));
+      return { ...state, effect: action.value };
 
     case "SONG":
       const songId = action.value;
@@ -88,10 +109,11 @@ const songReducer = (state, action) => {
         status: "play",
         previous: [...new Set([...state.previous, songId])],
         isLocal: true,
+        effect: effect,
       };
 
     case "STATUS":
-      return { ...state, status: action.value, isLocal: true };
+      return { ...state, status: action.value, isLocal: true, effect: effect };
 
     case "NEW":
       action.value.playlist.list.forEach((item) => {
@@ -109,6 +131,7 @@ const songReducer = (state, action) => {
         previous: [action.value.song],
         isLocal: true,
         queueStation: queueStation,
+        effect: effect,
       };
 
     case "REMOTE_NEW":
@@ -123,6 +146,7 @@ const songReducer = (state, action) => {
         saved: liked,
         previous: [action.value.song],
         isLocal: false,
+        effect: effect,
       };
 
     case "NEXT":
@@ -134,6 +158,7 @@ const songReducer = (state, action) => {
         status: "play",
         previous: [...new Set([...state.previous, nextId])],
         isLocal: true,
+        effect: effect,
       };
 
     case "PREV":
@@ -145,6 +170,7 @@ const songReducer = (state, action) => {
         status: "play",
         previous: [...new Set([...state.previous, prevId])],
         isLocal: true,
+        effect: effect,
       };
 
     default:

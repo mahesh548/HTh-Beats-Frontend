@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>7-Band Equalizer (captureStream)</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+        height: 300px;
+      }
+      .slider-group {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+        flex-direction: column;
+      }
+      .slider {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      input[type="range"] {
+        width: 90vw;
+        display: block;
+      }
+      html,
+      body {
+        overscroll-behavior: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>7-Band Audio Equalizer (Using captureStream)</h2>
+    <audio
+      id="audio"
+      controls
+      crossorigin="anonymous"
+      src="https://aac.saavncdn.com/522/2636852f19f658db64a549b9832845f0_320.mp4"
+      muted
+    ></audio>
+
+    <div class="slider-group" id="sliders"></div>
+
+    <script>
+      const frequencies = [60, 180, 400, 1000, 3000, 6000, 12000];
+      const audio = document.getElementById("audio");
+      const slidersContainer = document.getElementById("sliders");
+      let audioCtx,
+        streamSource,
+        filters = [];
+
+      // Add sliders for each band
+      frequencies.forEach((freq, i) => {
+        const sliderBox = document.createElement("div");
+        sliderBox.className = "slider";
+        const label = document.createElement("label");
+        label.textContent = freq + "Hz";
+
+        const slider = document.createElement("input");
+        slider.type = "range";
+        slider.min = -30;
+        slider.max = 30;
+        slider.value = 0;
+        slider.step = 1;
+
+        const valueLabel = document.createElement("div");
+        valueLabel.textContent = "0 dB";
+
+        slider.addEventListener("input", () => {
+          if (filters[i]) {
+            filters[i].gain.value = slider.value;
+            valueLabel.textContent = slider.value + " dB";
+          }
+        });
+
+        sliderBox.appendChild(label);
+        sliderBox.appendChild(slider);
+        sliderBox.appendChild(valueLabel);
+        slidersContainer.appendChild(sliderBox);
+      });
+
+      // Setup EQ after audio starts playing {done}
+      audio.addEventListener("play", () => {
+        if (!audio.captureStream) {
+          alert(
+            "Your browser does not support captureStream(). Try Chrome or Edge."
+          );
+          return;
+        }
+
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const stream = audio.captureStream();
+          streamSource = audioCtx.createMediaStreamSource(stream);
+
+          // Create filters
+          filters = frequencies.map((freq) => {
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = "peaking";
+            filter.frequency.value = freq;
+            filter.Q.value = 1;
+            filter.gain.value = 0;
+            return filter;
+          });
+
+          // Connect the filter chain
+          let node = streamSource;
+          filters.forEach((filter) => {
+            node.connect(filter);
+            node = filter;
+          });
+          node.connect(audioCtx.destination);
+        }
+
+        // Resume audio context if needed
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+      });
+    </script>
+  </body>
+</html>

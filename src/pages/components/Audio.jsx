@@ -1,15 +1,20 @@
-import { useContext, useEffect, useCallback } from "react";
+import { useContext, useEffect, useCallback, useState, useRef } from "react";
 import { songContext } from "./Song";
 import utils from "../../../utils";
 import { channelContext } from "./Channel";
 
+const frequencies = [60, 180, 400, 1000, 3000, 6000, 12000];
+
 export default function Audio() {
   const { Queue, setQueue } = useContext(songContext);
   const { channel, currentSong, roomInfo } = useContext(channelContext);
+  const audioCtxRef = useRef(null);
+  const filtersRef = useRef([]);
+  const sourceRef = useRef(null);
 
   const mediaNotification = (mediaData) => {
     if (navigator?.mediaSession) {
-      const defaultArtwork = `https://${location.host}/logo.png`;
+      const defaultArtwork = `https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/logo_s03jy9.png`;
       navigator.mediaSession.metadata = new MediaMetadata({
         title: mediaData?.title || "",
         artist: mediaData?.artist || "",
@@ -45,6 +50,91 @@ export default function Audio() {
       navigator.mediaSession.setActionHandler("seekbackward", null);
     }
   };
+  useEffect(() => {
+    const audio = document.getElementById("audio");
+    if (!audio) return;
+
+    const setupEQ = () => {
+      if (!audio.captureStream || Queue?.effect === "none") return;
+
+      try {
+        const stream = audio.captureStream();
+
+        if (stream.getAudioTracks().length === 0) {
+          console.warn("No audio tracks found in the stream");
+          return;
+        }
+
+        // Create or reuse AudioContext
+        if (!audioCtxRef.current) {
+          audioCtxRef.current = new AudioContext();
+        }
+        const audioCtx = audioCtxRef.current;
+
+        // 🔁 Clean up previous connections
+        if (filtersRef.current?.length) {
+          filtersRef.current.forEach((filter) => filter.disconnect());
+        }
+        if (sourceRef.current) {
+          sourceRef.current.disconnect();
+        }
+
+        // 🔄 Always create new MediaStreamSource for new stream
+        sourceRef.current = audioCtx.createMediaStreamSource(stream);
+        const source = sourceRef.current;
+
+        // Create fresh filters
+        const filters = frequencies.map((freq) => {
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = "peaking";
+          filter.frequency.value = freq;
+          filter.Q.value = 1;
+          filter.gain.value = Queue?.effect?.[freq] || 0;
+          return filter;
+        });
+
+        filtersRef.current = filters;
+
+        // Connect filter chain
+        let node = source;
+        filters.forEach((filter) => {
+          node.connect(filter);
+          node = filter;
+        });
+        node.connect(audioCtx.destination);
+
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+
+        audio.muted = true;
+      } catch (err) {
+        console.error("Audio EQ setup error:", err);
+        audio.muted = false;
+      }
+    };
+
+    audio.addEventListener("loadeddata", setupEQ);
+
+    return () => {
+      audio.removeEventListener("loadeddata", setupEQ);
+
+      // Optional: clean up on unmount
+      if (filtersRef.current?.length) {
+        filtersRef.current.forEach((filter) => filter.disconnect());
+      }
+      if (sourceRef.current) {
+        sourceRef.current.disconnect();
+      }
+    };
+  }, [Queue?.effect, Queue?.song]); // ✅ Depend on song and EQ profile
+
+  useEffect(() => {
+    filtersRef.current.forEach((filter) => {
+      const freq = filter.frequency.value;
+      filter.gain.value = Queue?.effect?.[freq] || 0;
+    });
+  }, [Queue?.effect]);
 
   useEffect(() => {
     const play = () => {
@@ -52,6 +142,7 @@ export default function Audio() {
       const song = utils.getItemFromId(Queue.song, Queue.playlist.list);
       audio.src = utils.decryptor(song.more_info.encrypted_media_url);
       audio.play();
+
       mediaNotification({
         title: utils.refineText(song?.title || ""),
         artist: utils.refineText(song?.subtitle || ""),
@@ -104,6 +195,7 @@ export default function Audio() {
       autoPlay={false}
       style={{ display: "none" }}
       id="audio"
+      crossOrigin="anonymous"
       onTimeUpdate={utils.timelineUpdater}
       onEnded={() => ended()}
     ></audio>
