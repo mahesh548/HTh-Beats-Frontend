@@ -59,43 +59,35 @@ export default function Audio() {
 
       try {
         const stream = audio.captureStream();
-
         if (stream.getAudioTracks().length === 0) {
           console.warn("No audio tracks found in the stream");
           return;
         }
 
-        // Create or reuse AudioContext
         if (!audioCtxRef.current) {
           audioCtxRef.current = new AudioContext();
         }
+
         const audioCtx = audioCtxRef.current;
 
-        // 🔁 Clean up previous connections
-        if (filtersRef.current?.length) {
-          filtersRef.current.forEach((filter) => filter.disconnect());
-        }
-        if (sourceRef.current) {
-          sourceRef.current.disconnect();
-        }
+        // Disconnect old nodes
+        filtersRef.current?.forEach((filter) => filter.disconnect());
+        sourceRef.current?.disconnect();
 
-        // 🔄 Always create new MediaStreamSource for new stream
         sourceRef.current = audioCtx.createMediaStreamSource(stream);
         const source = sourceRef.current;
 
-        // Create fresh filters
         const filters = frequencies.map((freq) => {
           const filter = audioCtx.createBiquadFilter();
           filter.type = "peaking";
           filter.frequency.value = freq;
           filter.Q.value = 1;
-          filter.gain.value = Queue?.effect?.[freq] || 0;
+          filter.gain.value = Queue?.effect?.[freq] ?? 0;
           return filter;
         });
 
         filtersRef.current = filters;
 
-        // Connect filter chain
         let node = source;
         filters.forEach((filter) => {
           node.connect(filter);
@@ -108,6 +100,7 @@ export default function Audio() {
         }
 
         audio.muted = true;
+        console.log("Audio EQ setup complete");
       } catch (err) {
         console.error("Audio EQ setup error:", err);
         audio.muted = false;
@@ -118,23 +111,24 @@ export default function Audio() {
 
     return () => {
       audio.removeEventListener("loadeddata", setupEQ);
-
-      // Optional: clean up on unmount
-      if (filtersRef.current?.length) {
-        filtersRef.current.forEach((filter) => filter.disconnect());
-      }
-      if (sourceRef.current) {
-        sourceRef.current.disconnect();
-      }
+      filtersRef.current?.forEach((filter) => filter.disconnect());
+      sourceRef.current?.disconnect();
     };
-  }, [Queue?.effect, Queue?.song]); // ✅ Depend on song and EQ profile
+  }, [Queue?.song]); // Only when the song changes
 
   useEffect(() => {
+    if (!filtersRef.current?.length || !Queue?.effect) return;
+
     filtersRef.current.forEach((filter) => {
-      const freq = filter.frequency.value;
-      filter.gain.value = Queue?.effect?.[freq] || 0;
+      const freq = filter.frequency.value.toString();
+      const gain = Queue.effect[freq] ?? 0;
+      try {
+        filter.gain.value = gain;
+      } catch (err) {
+        console.error(`Failed to set gain for freq ${freq}:`, err);
+      }
     });
-  }, [Queue?.effect]);
+  }, [Queue?.effect]); // Just update gain values
 
   useEffect(() => {
     const play = () => {

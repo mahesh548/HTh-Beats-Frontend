@@ -65,19 +65,9 @@ const createHistory = (Queue, songId) => {
   }, timeDelay);
 };
 
-const testEQProfile = {
-  60: 18, // Bass boost
-  180: 3,
-  400: 0,
-  1000: -2, // Slight dip in mids
-  3000: 4, // Presence boost
-  6000: 2,
-  12000: -3, // Cut some high treble
-};
-
 const songReducer = (state, action) => {
   let liked = [];
-  let effect = JSON.parse(localStorage.getItem("audioEffect")) || "none";
+  let effect = JSON.parse(localStorage.getItem("frequency")) || "none";
   switch (action.type) {
     case "RESET":
       return {};
@@ -97,7 +87,7 @@ const songReducer = (state, action) => {
       };
 
     case "AUDIO_EFFECT":
-      localStorage.setItem("audioEffect", JSON.stringify(action.value));
+      localStorage.setItem("frequency", JSON.stringify(action.value));
       return { ...state, effect: action.value };
 
     case "SONG":

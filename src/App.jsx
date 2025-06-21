@@ -29,6 +29,7 @@ import Profile from "./pages/Profile";
 import PlaylistNotFound from "./pages/components/PlaylistNotFound";
 import PreviewRedirect from "./pages/components/PreviewRedirect";
 import Admin from "./pages/Admin";
+import SoundEffect from "./pages/components/SoundEffect";
 
 export default function App() {
   return (
@@ -61,6 +62,7 @@ export default function App() {
           <Route path="/artist/:id" element={<Artist />} />
           <Route path="/api/*" element={<PreviewRedirect />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/effects" element={<SoundEffect />} />
         </Route>
 
         {/* ERROR PAGES */}

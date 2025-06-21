@@ -32,6 +32,7 @@ import { useEffect } from "react";
 import { setClick } from "./pages/components/ClickPosition";
 import PreviewRedirect from "./pages/components/PreviewRedirect";
 import Admin from "./pages/Admin";
+import SoundEffect from "./pages/components/SoundEffect";
 
 export default function Desktop() {
   useEffect(() => {
@@ -67,6 +68,7 @@ export default function Desktop() {
           <Route path="/artist/:id" element={<Artist />} />
           <Route path="/api/*" element={<PreviewRedirect />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/effects" element={<SoundEffect />} />
         </Route>
 
         {/* ERROR PAGES */}
