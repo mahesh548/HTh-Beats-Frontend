@@ -11,6 +11,7 @@ export default function Audio() {
   const audioCtxRef = useRef(null);
   const filtersRef = useRef([]);
   const sourceRef = useRef(null);
+  const fxNodeRef = useRef(null);
 
   const mediaNotification = (mediaData) => {
     if (navigator?.mediaSession) {
@@ -50,17 +51,25 @@ export default function Audio() {
       navigator.mediaSession.setActionHandler("seekbackward", null);
     }
   };
+
+  const isFlat = (effect = {}) =>
+    Object.values(effect).every((gain) => gain === 0);
+
   useEffect(() => {
     const audio = document.getElementById("audio");
-    if (!audio) return;
+    if (!audio || !Queue?.song) return;
 
     const setupEQ = () => {
-      if (!audio.captureStream || Queue?.effect === "none") return;
+      const flat = isFlat(Queue.effect);
+      if (flat) {
+        audio.muted = false;
+        return;
+      }
 
       try {
-        const stream = audio.captureStream();
-        if (stream.getAudioTracks().length === 0) {
-          console.warn("No audio tracks found in the stream");
+        const stream = audio.captureStream?.();
+        if (!stream || stream.getAudioTracks().length === 0) {
+          console.warn("No audio tracks found");
           return;
         }
 
@@ -70,13 +79,16 @@ export default function Audio() {
 
         const audioCtx = audioCtxRef.current;
 
-        // Disconnect old nodes
+        // Disconnect previous nodes
         filtersRef.current?.forEach((filter) => filter.disconnect());
         sourceRef.current?.disconnect();
+        fxNodeRef.current?.disconnect();
 
-        sourceRef.current = audioCtx.createMediaStreamSource(stream);
-        const source = sourceRef.current;
+        // Setup source
+        const source = audioCtx.createMediaStreamSource(stream);
+        sourceRef.current = source;
 
+        // Setup EQ filters
         const filters = frequencies.map((freq) => {
           const filter = audioCtx.createBiquadFilter();
           filter.type = "peaking";
@@ -85,24 +97,34 @@ export default function Audio() {
           filter.gain.value = Queue?.effect?.[freq] ?? 0;
           return filter;
         });
-
         filtersRef.current = filters;
 
+        // Gain
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.value = 0.8;
+
+        // Chain setup
         let node = source;
         filters.forEach((filter) => {
           node.connect(filter);
           node = filter;
         });
-        node.connect(audioCtx.destination);
+
+        if (fxNodeRef.current) {
+          node.connect(fxNodeRef.current);
+          node = fxNodeRef.current;
+        }
+
+        node.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
 
         if (audioCtx.state === "suspended") {
           audioCtx.resume();
         }
 
         audio.muted = true;
-        console.log("Audio EQ setup complete");
       } catch (err) {
-        console.error("Audio EQ setup error:", err);
+        console.error("EQ setup error:", err);
         audio.muted = false;
       }
     };
@@ -111,24 +133,248 @@ export default function Audio() {
 
     return () => {
       audio.removeEventListener("loadeddata", setupEQ);
-      filtersRef.current?.forEach((filter) => filter.disconnect());
+      filtersRef.current?.forEach((f) => f.disconnect());
       sourceRef.current?.disconnect();
+      fxNodeRef.current?.disconnect();
+      filtersRef.current = [];
+      sourceRef.current = null;
+
+      if (audioCtxRef.current && !isFlat(Queue.effect)) {
+        audioCtxRef.current.close();
+        audioCtxRef.current = null;
+      }
+
+      audio.muted = false;
     };
-  }, [Queue?.song]); // Only when the song changes
+  }, [Queue?.song]);
 
   useEffect(() => {
-    if (!filtersRef.current?.length || !Queue?.effect) return;
+    const audio = document.getElementById("audio");
+    if (!audio || !Queue?.effect) return;
 
-    filtersRef.current.forEach((filter) => {
-      const freq = filter.frequency.value.toString();
-      const gain = Queue.effect[freq] ?? 0;
-      try {
-        filter.gain.value = gain;
-      } catch (err) {
-        console.error(`Failed to set gain for freq ${freq}:`, err);
+    const flat = isFlat(Queue.effect);
+
+    if (flat) {
+      filtersRef.current?.forEach((f) => f.disconnect());
+      sourceRef.current?.disconnect();
+      fxNodeRef.current?.disconnect();
+
+      filtersRef.current = [];
+      sourceRef.current = null;
+      fxNodeRef.current = null;
+
+      if (audioCtxRef.current) {
+        audioCtxRef.current.close();
+        audioCtxRef.current = null;
       }
-    });
-  }, [Queue?.effect]); // Just update gain values
+
+      audio.muted = false;
+      return;
+    }
+
+    if (!audioCtxRef.current) {
+      const stream = audio.captureStream?.();
+      if (!stream || stream.getAudioTracks().length === 0) return;
+
+      const audioCtx = new AudioContext();
+      audioCtxRef.current = audioCtx;
+
+      const source = audioCtx.createMediaStreamSource(stream);
+      sourceRef.current = source;
+
+      const filters = frequencies.map((freq) => {
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = "peaking";
+        filter.frequency.value = freq;
+        filter.Q.value = 1;
+        filter.gain.value = Queue?.effect?.[freq] ?? 0;
+        return filter;
+      });
+      filtersRef.current = filters;
+
+      const gainNode = audioCtx.createGain();
+      gainNode.gain.value = 0.8;
+
+      let node = source;
+      filters.forEach((filter) => {
+        node.connect(filter);
+        node = filter;
+      });
+
+      if (fxNodeRef.current) {
+        node.connect(fxNodeRef.current);
+        node = fxNodeRef.current;
+      }
+
+      node.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+
+      audio.muted = true;
+    } else {
+      filtersRef.current.forEach((filter) => {
+        const freq = filter.frequency.value.toString();
+        const gain = Queue.effect[freq] ?? 0;
+        try {
+          filter.gain.value = gain;
+        } catch (err) {
+          console.error(`Gain set failed for ${freq}:`, err);
+        }
+      });
+    }
+  }, [Queue?.effect]);
+
+  useEffect(() => {
+    console.log("Applying FX:", Queue?.fx);
+
+    const audio = document.getElementById("audio");
+    if (!audio || !Queue?.fx || Queue.fx === "none") return;
+
+    // ⚡ Create AudioContext if EQ is flat and there's no context yet
+    const isEQFlat = isFlat(Queue.effect);
+    const audioCtx = audioCtxRef.current || new AudioContext();
+
+    if (!audioCtxRef.current) {
+      try {
+        const stream = audio.captureStream?.();
+        if (!stream || stream.getAudioTracks().length === 0) return;
+
+        audioCtxRef.current = audioCtx;
+
+        const source = audioCtx.createMediaStreamSource(stream);
+        sourceRef.current = source;
+
+        const gainNode = audioCtx.createGain();
+        gainNode.gain.value = 0.9;
+
+        let node = source;
+
+        // No EQ applied, directly go to FX
+        if (fxNodeRef.current) {
+          node.connect(fxNodeRef.current);
+          node = fxNodeRef.current;
+        }
+
+        node.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        if (audioCtx.state === "suspended") audioCtx.resume();
+
+        audio.muted = true;
+      } catch (err) {
+        console.error("AudioContext setup for FX failed:", err);
+        audio.muted = false;
+        return;
+      }
+    }
+
+    // 🧠 Always use current context from here
+    const ctx = audioCtxRef.current;
+    const lastNode =
+      filtersRef.current?.length && !isEQFlat
+        ? filtersRef.current.at(-1)
+        : sourceRef.current;
+
+    if (!lastNode) return;
+
+    // 🧹 Clean up old FX
+    if (fxNodeRef.current) {
+      try {
+        fxNodeRef.current.disconnect();
+      } catch (err) {
+        console.warn("Previous FX node disconnect failed:", err);
+      }
+      if (fxNodeRef.current._interval)
+        clearInterval(fxNodeRef.current._interval);
+    }
+
+    let newFxNode = null;
+
+    switch (Queue?.fx) {
+      case "reverb":
+        newFxNode = ctx.createConvolver();
+        // Load your IR externally
+        break;
+
+      case "8d":
+        const panner = ctx.createPanner();
+        panner.panningModel = "HRTF"; // more realistic 3D
+        panner.distanceModel = "inverse";
+        panner.refDistance = 1;
+        panner.maxDistance = 10000;
+        panner.rolloffFactor = 1;
+        panner.coneInnerAngle = 360;
+        panner.coneOuterAngle = 0;
+        panner.coneOuterGain = 0;
+
+        let angle = 0;
+        const radius = 1; // 1 meter around the head
+
+        // 👂 Set listener at origin (head center)
+        ctx.listener.setPosition(0, 0, 0);
+
+        // 🎧 Move the audio in a circle around the listener
+        const interval = setInterval(() => {
+          const x = radius * Math.cos(angle);
+          const z = radius * Math.sin(angle);
+          panner.setPosition(x, 0, z);
+          angle += 0.05;
+        }, 50);
+
+        panner._interval = interval;
+        newFxNode = panner;
+        break;
+
+      case "lofi":
+        const lofi = ctx.createBiquadFilter();
+        lofi.type = "lowpass";
+        lofi.frequency.value = 800;
+        lofi.Q.value = 0.5;
+        newFxNode = lofi;
+        break;
+
+      case "acoustic":
+        const acoustic = ctx.createBiquadFilter();
+        acoustic.type = "highshelf";
+        acoustic.frequency.value = 3000;
+        acoustic.gain.value = 4;
+        newFxNode = acoustic;
+        break;
+    }
+
+    const gainNode = ctx.createGain();
+    gainNode.gain.value = 0.9;
+
+    try {
+      lastNode.disconnect();
+
+      if (newFxNode) {
+        lastNode.connect(newFxNode);
+        newFxNode.connect(gainNode);
+        fxNodeRef.current = newFxNode;
+      } else {
+        lastNode.connect(gainNode);
+        fxNodeRef.current = null;
+      }
+
+      gainNode.connect(ctx.destination);
+    } catch (err) {
+      console.error("FX connection error:", err);
+    }
+
+    return () => {
+      if (fxNodeRef.current) {
+        try {
+          fxNodeRef.current.disconnect();
+        } catch {}
+        if (fxNodeRef.current._interval)
+          clearInterval(fxNodeRef.current._interval);
+      }
+    };
+  }, [Queue?.fx]);
 
   useEffect(() => {
     const play = () => {

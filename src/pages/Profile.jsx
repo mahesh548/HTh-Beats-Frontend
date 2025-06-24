@@ -5,6 +5,7 @@ import {
   DeleteOutline,
   Edit,
   EqualizerOutlined,
+  GraphicEqOutlined,
   InfoOutlined,
   ManageAccountsOutlined,
   RadioButtonChecked,
@@ -137,6 +138,8 @@ export default function Profile() {
       utils.editMeta(`HTh Beats - ${auth?.user?.username}`);
     }
   }
+  const audio = document.getElementById("audio");
+  const soundEffects = audio?.captureStream;
 
   return (
     <div className="page">
@@ -203,6 +206,23 @@ export default function Profile() {
               </p>
             </div>
           </div>
+
+          {soundEffects && (
+            <div
+              className="playlistSong mt-4 px-2 mb-3"
+              style={{ gridTemplateColumns: "40px auto" }}
+            >
+              <GraphicEqOutlined className="profileIcon" />
+              <div onClick={() => navigate("/effects")}>
+                <p className="thinOneLineText playlistSongTitle fw-normal">
+                  Sound effects
+                </p>
+                <p className="thinOneLineText playlistSongSubTitle">
+                  Equalizer • Sound profiles • LoFi, Reverb, unplugged.
+                </p>
+              </div>
+            </div>
+          )}
 
           <div
             className="playlistSong mt-4 px-2 mb-3"
