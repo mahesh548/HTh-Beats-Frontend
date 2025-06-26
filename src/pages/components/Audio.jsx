@@ -3,7 +3,14 @@ import { songContext } from "./Song";
 import utils from "../../../utils";
 import { channelContext } from "./Channel";
 
-const frequencies = [60, 180, 400, 1000, 3000, 6000, 12000];
+const frequencies = [60, 150, 400, 1000, 2400, 15000];
+
+function Preamp(bandValues) {
+  const maxGain = Math.max(...bandValues);
+  const preampDb = -maxGain;
+  const linearGain = Math.pow(10, preampDb / 20);
+  return linearGain;
+}
 
 export default function Audio() {
   const { Queue, setQueue } = useContext(songContext);
@@ -12,6 +19,7 @@ export default function Audio() {
   const filtersRef = useRef([]);
   const sourceRef = useRef(null);
   const fxNodeRef = useRef(null);
+  const gainNodeRef = useRef(null);
 
   const mediaNotification = (mediaData) => {
     if (navigator?.mediaSession) {
@@ -101,7 +109,9 @@ export default function Audio() {
 
         // Gain
         const gainNode = audioCtx.createGain();
-        gainNode.gain.value = 0.8;
+        gainNode.gain.value = Preamp(Object.values(Queue.effect));
+        console.log("preamp is", Preamp(Object.values(Queue.effect)));
+        gainNodeRef.current = gainNode;
 
         // Chain setup
         let node = source;
@@ -193,7 +203,9 @@ export default function Audio() {
       filtersRef.current = filters;
 
       const gainNode = audioCtx.createGain();
-      gainNode.gain.value = 0.8;
+      gainNode.gain.value = Preamp(Object.values(Queue.effect));
+      console.log("preamp is", Preamp(Object.values(Queue.effect)));
+      gainNodeRef.current = gainNode;
 
       let node = source;
       filters.forEach((filter) => {
@@ -220,6 +232,8 @@ export default function Audio() {
         const gain = Queue.effect[freq] ?? 0;
         try {
           filter.gain.value = gain;
+          gainNodeRef.current.gain.value = Preamp(Object.values(Queue.effect));
+          console.log("new preamp value", Preamp(Object.values(Queue.effect)));
         } catch (err) {
           console.error(`Gain set failed for ${freq}:`, err);
         }
@@ -248,7 +262,7 @@ export default function Audio() {
         sourceRef.current = source;
 
         const gainNode = audioCtx.createGain();
-        gainNode.gain.value = 0.9;
+        gainNode.gain.value = 0.8;
 
         let node = source;
 
@@ -294,14 +308,9 @@ export default function Audio() {
     let newFxNode = null;
 
     switch (Queue?.fx) {
-      case "reverb":
-        newFxNode = ctx.createConvolver();
-        // Load your IR externally
-        break;
-
-      case "8d":
+      case "8d": {
         const panner = ctx.createPanner();
-        panner.panningModel = "HRTF"; // more realistic 3D
+        panner.panningModel = "HRTF";
         panner.distanceModel = "inverse";
         panner.refDistance = 1;
         panner.maxDistance = 10000;
@@ -310,43 +319,63 @@ export default function Audio() {
         panner.coneOuterAngle = 0;
         panner.coneOuterGain = 0;
 
-        let angle = 0;
-        const radius = 1; // 1 meter around the head
-
-        // 👂 Set listener at origin (head center)
         ctx.listener.setPosition(0, 0, 0);
 
-        // 🎧 Move the audio in a circle around the listener
+        let angle = 0;
+        const radius = 1;
+
         const interval = setInterval(() => {
-          const x = radius * Math.cos(angle);
-          const z = radius * Math.sin(angle);
+          const x = radius * Math.cos(angle); // left/right
+          const z = radius * Math.sin(angle); // front/back
           panner.setPosition(x, 0, z);
-          angle += 0.05;
+
+          angle += 0.03;
+          if (angle >= 2 * Math.PI) {
+            angle = 0; // Reset after full circle
+          }
         }, 50);
 
         panner._interval = interval;
         newFxNode = panner;
         break;
+      }
 
-      case "lofi":
-        const lofi = ctx.createBiquadFilter();
-        lofi.type = "lowpass";
-        lofi.frequency.value = 800;
-        lofi.Q.value = 0.5;
-        newFxNode = lofi;
+      case "slowreverb": {
+        audio.playbackRate = 0.85;
+
+        const convolver = ctx.createConvolver();
+
+        fetch(
+          "https://res.cloudinary.com/dzjflzbxz/video/upload/v1750844914/vocal_ghsdz4.wav"
+        )
+          .then((r) => r.arrayBuffer())
+          .then((d) => ctx.decodeAudioData(d))
+          .then((buffer) => {
+            convolver.buffer = buffer;
+          })
+          .catch(console.error);
+        const preDelay = ctx.createDelay();
+        preDelay.delayTime.value = 0.05;
+
+        const highShelf = ctx.createBiquadFilter();
+        highShelf.type = "highshelf";
+        highShelf.frequency.value = 3000;
+        highShelf.gain.value = 1.5;
+
+        newFxNode = preDelay;
+        preDelay.connect(convolver);
+        convolver.connect(highShelf);
+        highShelf.connect(ctx.destination);
         break;
+      }
 
-      case "acoustic":
-        const acoustic = ctx.createBiquadFilter();
-        acoustic.type = "highshelf";
-        acoustic.frequency.value = 3000;
-        acoustic.gain.value = 4;
-        newFxNode = acoustic;
+      default:
+        audio.playbackRate = 1;
         break;
     }
 
     const gainNode = ctx.createGain();
-    gainNode.gain.value = 0.9;
+    gainNode.gain.value = 0.8;
 
     try {
       lastNode.disconnect();
@@ -367,6 +396,7 @@ export default function Audio() {
 
     return () => {
       if (fxNodeRef.current) {
+        audio.playbackRate = 1;
         try {
           fxNodeRef.current.disconnect();
         } catch {}
