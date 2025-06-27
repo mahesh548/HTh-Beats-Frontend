@@ -63,77 +63,80 @@ export default function Audio() {
   const isFlat = (effect = {}) =>
     Object.values(effect).every((gain) => gain === 0);
 
+  const setupEQ = () => {
+    const audio = document.getElementById("audio");
+    const flat = isFlat(Queue.effect);
+
+    if (flat) {
+      audio.muted = false;
+      if (Queue?.fx !== "none") addEffect(Queue?.fx);
+      return;
+    }
+
+    try {
+      const stream = audio.captureStream?.();
+      if (!stream || stream.getAudioTracks().length === 0) {
+        console.warn("No audio tracks found");
+        return;
+      }
+
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new AudioContext();
+      }
+
+      const audioCtx = audioCtxRef.current;
+
+      // Disconnect previous nodes
+      filtersRef.current?.forEach((filter) => filter.disconnect());
+      sourceRef.current?.disconnect();
+      fxNodeRef.current?.disconnect();
+
+      // Setup source
+      const source = audioCtx.createMediaStreamSource(stream);
+      sourceRef.current = source;
+
+      // Setup EQ filters
+      const filters = frequencies.map((freq) => {
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = "peaking";
+        filter.frequency.value = freq;
+        filter.Q.value = 1;
+        filter.gain.value = Queue?.effect?.[freq] ?? 0;
+        return filter;
+      });
+      filtersRef.current = filters;
+
+      // Gain
+      const gainNode = audioCtx.createGain();
+      gainNode.gain.value = Preamp(Object.values(Queue.effect));
+      gainNodeRef.current = gainNode;
+
+      // Chain setup
+      let node = source;
+      filters.forEach((filter) => {
+        node.connect(filter);
+        node = filter;
+      });
+
+      node.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+
+      audio.muted = true;
+    } catch (err) {
+      console.error("EQ setup error:", err);
+      audio.muted = false;
+    }
+  };
+
   useEffect(() => {
     const audio = document.getElementById("audio");
     if (!audio || !Queue?.song) return;
 
-    const setupEQ = () => {
-      const flat = isFlat(Queue.effect);
-      if (flat) {
-        audio.muted = false;
-        if (Queue?.fx !== "none") addEffect(Queue?.fx);
-        return;
-      }
-
-      try {
-        const stream = audio.captureStream?.();
-        if (!stream || stream.getAudioTracks().length === 0) {
-          console.warn("No audio tracks found");
-          return;
-        }
-
-        if (!audioCtxRef.current) {
-          audioCtxRef.current = new AudioContext();
-        }
-
-        const audioCtx = audioCtxRef.current;
-
-        // Disconnect previous nodes
-        filtersRef.current?.forEach((filter) => filter.disconnect());
-        sourceRef.current?.disconnect();
-        fxNodeRef.current?.disconnect();
-
-        // Setup source
-        const source = audioCtx.createMediaStreamSource(stream);
-        sourceRef.current = source;
-
-        // Setup EQ filters
-        const filters = frequencies.map((freq) => {
-          const filter = audioCtx.createBiquadFilter();
-          filter.type = "peaking";
-          filter.frequency.value = freq;
-          filter.Q.value = 1;
-          filter.gain.value = Queue?.effect?.[freq] ?? 0;
-          return filter;
-        });
-        filtersRef.current = filters;
-
-        // Gain
-        const gainNode = audioCtx.createGain();
-        gainNode.gain.value = Preamp(Object.values(Queue.effect));
-        console.log("preamp is", Preamp(Object.values(Queue.effect)));
-        gainNodeRef.current = gainNode;
-
-        // Chain setup
-        let node = source;
-        filters.forEach((filter) => {
-          node.connect(filter);
-          node = filter;
-        });
-
-        node.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
-
-        if (audioCtx.state === "suspended") {
-          audioCtx.resume();
-        }
-
-        audio.muted = true;
-      } catch (err) {
-        console.error("EQ setup error:", err);
-        audio.muted = false;
-      }
-    };
+    setupEQ();
 
     audio.addEventListener("loadeddata", setupEQ);
 
@@ -161,7 +164,6 @@ export default function Audio() {
     const flat = isFlat(Queue.effect);
 
     if (flat) {
-      console.log("running this");
       filtersRef.current?.forEach((f) => f.disconnect());
       sourceRef.current?.disconnect();
       fxNodeRef.current?.disconnect();
@@ -182,10 +184,7 @@ export default function Audio() {
       addEffect(Queue?.fx);
       return;
     }
-    console.log("going to disconnect fx :", fxNodeRef.current);
     if (fxNodeRef.current) {
-      console.log("disconnecting fx");
-
       try {
         // Disconnect current FX node
         fxNodeRef.current.disconnect();
@@ -225,7 +224,6 @@ export default function Audio() {
 
       const gainNode = audioCtx.createGain();
       gainNode.gain.value = Preamp(Object.values(Queue.effect));
-      console.log("preamp is", Preamp(Object.values(Queue.effect)));
       gainNodeRef.current = gainNode;
 
       let node = source;
@@ -301,7 +299,6 @@ export default function Audio() {
 
       switch (fx) {
         case "8d": {
-          console.log("adding fx: ", Queue.fx);
           audio.playbackRate = 1;
 
           const panner = ctx.createPanner();
@@ -327,7 +324,6 @@ export default function Audio() {
         }
 
         case "slowreverb": {
-          console.log("adding fx: ", Queue.fx);
           audio.playbackRate = 0.85;
 
           const convolver = ctx.createConvolver();
@@ -432,6 +428,7 @@ export default function Audio() {
       document.getElementById("audio").currentTime = 0;
       const audio = document.getElementById("audio");
       audio.play();
+      setupEQ();
     } else {
       setQueue({ type: "NEXT" });
     }

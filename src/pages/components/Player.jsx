@@ -171,7 +171,7 @@ export default function Player() {
                 className="thinOneLineText"
                 style={{ color: "white", fontWeight: "bold" }}
               >
-                {Queue.playlist.title}
+                {utils.refineText(Queue.playlist.title)}
               </b>
             </div>
             <OptionSong

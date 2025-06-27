@@ -458,8 +458,6 @@ export default function SoundEffect() {
     setGraphWidth(width);
   }, []);
 
-  console.log(Queue?.fx);
-
   if (!isDesktop && openElements.includes("equalizer")) {
     return (
       <div className="page hiddenScrollbar deskScroll">
