@@ -68,7 +68,7 @@ const createHistory = (Queue, songId) => {
 const songReducer = (state, action) => {
   let liked = [];
   let effect = JSON.parse(localStorage.getItem("frequency")) || "none";
-  let fx = JSON.parse(localStorage.getItem("fx")) || "none";
+  let fx = localStorage.getItem("fx") || "none";
   switch (action.type) {
     case "RESET":
       return {};
@@ -93,7 +93,7 @@ const songReducer = (state, action) => {
       return { ...state, effect: action.value, fx: fx };
 
     case "AUDIO_FX":
-      localStorage.setItem("fx", JSON.stringify(action.value));
+      localStorage.setItem("fx", action.value);
       return { ...state, effect: effect, fx: action.value };
 
     case "SONG":

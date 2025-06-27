@@ -71,6 +71,7 @@ export default function Audio() {
       const flat = isFlat(Queue.effect);
       if (flat) {
         audio.muted = false;
+        if (Queue?.fx !== "none") addEffect(Queue?.fx);
         return;
       }
 
@@ -120,11 +121,6 @@ export default function Audio() {
           node = filter;
         });
 
-        if (fxNodeRef.current) {
-          node.connect(fxNodeRef.current);
-          node = fxNodeRef.current;
-        }
-
         node.connect(gainNode);
         gainNode.connect(audioCtx.destination);
 
@@ -165,6 +161,7 @@ export default function Audio() {
     const flat = isFlat(Queue.effect);
 
     if (flat) {
+      console.log("running this");
       filtersRef.current?.forEach((f) => f.disconnect());
       sourceRef.current?.disconnect();
       fxNodeRef.current?.disconnect();
@@ -179,8 +176,32 @@ export default function Audio() {
       }
 
       audio.muted = false;
+      audio.playbackRate = 1;
+
+      if (!audio || !Queue?.fx || Queue.fx === "none") return;
+      addEffect(Queue?.fx);
       return;
     }
+    console.log("going to disconnect fx :", fxNodeRef.current);
+    if (fxNodeRef.current) {
+      console.log("disconnecting fx");
+
+      try {
+        // Disconnect current FX node
+        fxNodeRef.current.disconnect();
+
+        // Reconnect filter end directly to gain
+        filtersRef.current?.[filtersRef.current.length - 1]?.connect(
+          gainNodeRef.current
+        );
+
+        // Clear the ref
+        fxNodeRef.current = null;
+      } catch (err) {
+        console.error("Error while disconnecting FX:", err);
+      }
+    }
+    audio.playbackRate = 1;
 
     if (!audioCtxRef.current) {
       const stream = audio.captureStream?.();
@@ -213,11 +234,6 @@ export default function Audio() {
         node = filter;
       });
 
-      if (fxNodeRef.current) {
-        node.connect(fxNodeRef.current);
-        node = fxNodeRef.current;
-      }
-
       node.connect(gainNode);
       gainNode.connect(audioCtx.destination);
 
@@ -233,178 +249,141 @@ export default function Audio() {
         try {
           filter.gain.value = gain;
           gainNodeRef.current.gain.value = Preamp(Object.values(Queue.effect));
-          console.log("new preamp value", Preamp(Object.values(Queue.effect)));
         } catch (err) {
           console.error(`Gain set failed for ${freq}:`, err);
         }
       });
     }
-  }, [Queue?.effect]);
+  }, [Queue?.effect, Queue.fx]);
 
-  useEffect(() => {
-    console.log("Applying FX:", Queue?.fx);
-
+  const addEffect = (fx) => {
     const audio = document.getElementById("audio");
-    if (!audio || !Queue?.fx || Queue.fx === "none") return;
+    try {
+      const stream = audio.captureStream?.();
+      if (!stream || stream.getAudioTracks().length === 0) return;
 
-    // ⚡ Create AudioContext if EQ is flat and there's no context yet
-    const isEQFlat = isFlat(Queue.effect);
-    const audioCtx = audioCtxRef.current || new AudioContext();
+      const audioCtx = new AudioContext();
+      audioCtxRef.current = audioCtx;
 
-    if (!audioCtxRef.current) {
-      try {
-        const stream = audio.captureStream?.();
-        if (!stream || stream.getAudioTracks().length === 0) return;
+      const source = audioCtx.createMediaStreamSource(stream);
+      sourceRef.current = source;
 
-        audioCtxRef.current = audioCtx;
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      audio.muted = true;
 
-        const source = audioCtx.createMediaStreamSource(stream);
-        sourceRef.current = source;
+      const ctx = audioCtxRef.current;
 
-        const gainNode = audioCtx.createGain();
-        gainNode.gain.value = 0.8;
+      // Create gain node
+      const gainNode = ctx.createGain();
+      gainNode.gain.value = 0.8;
+      gainNodeRef.current = gainNode;
 
-        let node = source;
+      // Setup EQ filters
+      const filters = frequencies.map((freq) => {
+        const filter = ctx.createBiquadFilter();
+        filter.type = "peaking";
+        filter.frequency.value = freq;
+        filter.Q.value = 1;
+        filter.gain.value = Queue?.effect?.[freq] ?? 0;
+        return filter;
+      });
+      filtersRef.current = filters;
 
-        // No EQ applied, directly go to FX
-        if (fxNodeRef.current) {
-          node.connect(fxNodeRef.current);
-          node = fxNodeRef.current;
+      // Chain EQ filters
+      let filterChainStart = filters[0];
+      let filterChainEnd = filters[filters.length - 1];
+      filters.reduce((prev, curr) => {
+        prev.connect(curr);
+        return curr;
+      });
+
+      let newFxNode = null;
+
+      switch (fx) {
+        case "8d": {
+          console.log("adding fx: ", Queue.fx);
+          audio.playbackRate = 1;
+
+          const panner = ctx.createPanner();
+          panner.panningModel = "HRTF";
+          panner.distanceModel = "inverse";
+          panner.refDistance = 1;
+
+          ctx.listener.setPosition(0, 0, 0);
+
+          let angle = 0;
+          const radius = 1;
+          const interval = setInterval(() => {
+            const x = radius * Math.cos(angle);
+            const z = radius * Math.sin(angle);
+            panner.setPosition(x, 0, z);
+            angle += 0.03;
+            if (angle >= 2 * Math.PI) angle = 0;
+          }, 50);
+
+          panner._interval = interval;
+          newFxNode = panner;
+          break;
         }
 
-        node.connect(gainNode);
-        gainNode.connect(audioCtx.destination);
+        case "slowreverb": {
+          console.log("adding fx: ", Queue.fx);
+          audio.playbackRate = 0.85;
 
-        if (audioCtx.state === "suspended") audioCtx.resume();
+          const convolver = ctx.createConvolver();
+          const preDelay = ctx.createDelay();
+          preDelay.delayTime.value = 0.05;
 
-        audio.muted = true;
-      } catch (err) {
-        console.error("AudioContext setup for FX failed:", err);
-        audio.muted = false;
-        return;
-      }
-    }
+          const highShelf = ctx.createBiquadFilter();
+          highShelf.type = "highshelf";
+          highShelf.frequency.value = 3000;
+          highShelf.gain.value = 1.5;
 
-    // 🧠 Always use current context from here
-    const ctx = audioCtxRef.current;
-    const lastNode =
-      filtersRef.current?.length && !isEQFlat
-        ? filtersRef.current.at(-1)
-        : sourceRef.current;
+          const reverbInput = preDelay; // filters will connect to this
+          const reverbOutput = ctx.createGain(); // acts like final node of FX chain
 
-    if (!lastNode) return;
+          // chain: input -> delay -> convolver -> highshelf -> output
+          preDelay.connect(convolver);
+          convolver.connect(highShelf);
+          highShelf.connect(reverbOutput);
 
-    // 🧹 Clean up old FX
-    if (fxNodeRef.current) {
-      try {
-        fxNodeRef.current.disconnect();
-      } catch (err) {
-        console.warn("Previous FX node disconnect failed:", err);
-      }
-      if (fxNodeRef.current._interval)
-        clearInterval(fxNodeRef.current._interval);
-    }
+          fetch(
+            "https://res.cloudinary.com/dzjflzbxz/video/upload/v1750844914/vocal_ghsdz4.wav"
+          )
+            .then((r) => r.arrayBuffer())
+            .then((d) => ctx.decodeAudioData(d))
+            .then((buffer) => {
+              convolver.buffer = buffer;
 
-    let newFxNode = null;
+              // connect filter → reverbInput
+              source.connect(filterChainStart);
+              filterChainEnd.connect(reverbInput);
+              reverbOutput.connect(gainNode);
+              gainNode.connect(ctx.destination);
 
-    switch (Queue?.fx) {
-      case "8d": {
-        const panner = ctx.createPanner();
-        panner.panningModel = "HRTF";
-        panner.distanceModel = "inverse";
-        panner.refDistance = 1;
-        panner.maxDistance = 10000;
-        panner.rolloffFactor = 1;
-        panner.coneInnerAngle = 360;
-        panner.coneOuterAngle = 0;
-        panner.coneOuterGain = 0;
+              fxNodeRef.current = reverbInput; // So we can disconnect properly later
+            })
+            .catch(console.error);
 
-        ctx.listener.setPosition(0, 0, 0);
-
-        let angle = 0;
-        const radius = 1;
-
-        const interval = setInterval(() => {
-          const x = radius * Math.cos(angle); // left/right
-          const z = radius * Math.sin(angle); // front/back
-          panner.setPosition(x, 0, z);
-
-          angle += 0.03;
-          if (angle >= 2 * Math.PI) {
-            angle = 0; // Reset after full circle
-          }
-        }, 50);
-
-        panner._interval = interval;
-        newFxNode = panner;
-        break;
+          return; // Don't proceed to default connect chain
+        }
       }
 
-      case "slowreverb": {
-        audio.playbackRate = 0.85;
-
-        const convolver = ctx.createConvolver();
-
-        fetch(
-          "https://res.cloudinary.com/dzjflzbxz/video/upload/v1750844914/vocal_ghsdz4.wav"
-        )
-          .then((r) => r.arrayBuffer())
-          .then((d) => ctx.decodeAudioData(d))
-          .then((buffer) => {
-            convolver.buffer = buffer;
-          })
-          .catch(console.error);
-        const preDelay = ctx.createDelay();
-        preDelay.delayTime.value = 0.05;
-
-        const highShelf = ctx.createBiquadFilter();
-        highShelf.type = "highshelf";
-        highShelf.frequency.value = 3000;
-        highShelf.gain.value = 1.5;
-
-        newFxNode = preDelay;
-        preDelay.connect(convolver);
-        convolver.connect(highShelf);
-        highShelf.connect(ctx.destination);
-        break;
-      }
-
-      default:
-        audio.playbackRate = 1;
-        break;
-    }
-
-    const gainNode = ctx.createGain();
-    gainNode.gain.value = 0.8;
-
-    try {
-      lastNode.disconnect();
-
+      // Final connection (for "8d" or no FX): filters → [fx?] → gain → destination
+      source.connect(filterChainStart);
       if (newFxNode) {
-        lastNode.connect(newFxNode);
+        filterChainEnd.connect(newFxNode);
         newFxNode.connect(gainNode);
-        fxNodeRef.current = newFxNode;
       } else {
-        lastNode.connect(gainNode);
-        fxNodeRef.current = null;
+        filterChainEnd.connect(gainNode);
       }
-
       gainNode.connect(ctx.destination);
-    } catch (err) {
-      console.error("FX connection error:", err);
+      fxNodeRef.current = newFxNode;
+    } catch (error) {
+      audio.muted = false;
+      console.log("error creating audio context: ", error);
     }
-
-    return () => {
-      if (fxNodeRef.current) {
-        audio.playbackRate = 1;
-        try {
-          fxNodeRef.current.disconnect();
-        } catch {}
-        if (fxNodeRef.current._interval)
-          clearInterval(fxNodeRef.current._interval);
-      }
-    };
-  }, [Queue?.fx]);
+  };
 
   useEffect(() => {
     const play = () => {

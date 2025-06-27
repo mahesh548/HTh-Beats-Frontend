@@ -69,7 +69,7 @@ const defaultFrequency = {
 const headphoneSettings = {
   _: {
     name: "None",
-    img: "default_headphone.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005621/default_headphone_wwf6pw.png",
     id: "_",
     accentColor: "wheat",
     eq: {
@@ -83,7 +83,7 @@ const headphoneSettings = {
   },
   earpods: {
     name: "Apple earpods",
-    img: "earpods.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005620/earpods_lwwpn3.png",
     id: "earpods",
     accentColor: "cadetblue",
     eq: {
@@ -97,7 +97,7 @@ const headphoneSettings = {
   },
   airpodsPro2: {
     name: "AirPods Pro 2",
-    img: "airpods2.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005620/airpods2_fl8anb.png",
     id: "airpodsPro2",
     accentColor: "crimson",
     eq: {
@@ -112,7 +112,7 @@ const headphoneSettings = {
 
   realmeAir5: {
     name: "Realme Buds Air 5 Pro",
-    img: "realmebuds5.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005621/realmebuds5_p95tx7.png",
     id: "realmeAir5",
     accentColor: "darkorange",
     eq: {
@@ -127,7 +127,7 @@ const headphoneSettings = {
 
   samsungBudsPlus: {
     name: "Galaxy Buds Plus",
-    img: "GalaxyBudsPlus.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005621/GalaxyBudsPlus_dfueid.png",
     id: "samsungBudsPlus",
     accentColor: "darkslateblue",
     eq: {
@@ -141,7 +141,7 @@ const headphoneSettings = {
   },
   samsungBudsLive: {
     name: "Galaxy Buds Live",
-    img: "GalaxyBudsLive.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005621/GalaxyBudsLive_rbjgmr.png",
     id: "samsungBudsLive",
     accentColor: "darkslategray",
     eq: {
@@ -155,7 +155,7 @@ const headphoneSettings = {
   },
   xiaomi: {
     name: "Xiaomi Mi ANC",
-    img: "XiaomiAnc.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005620/XiaomiAnc_gslydy.png",
     id: "xiaomi",
     accentColor: "brown",
     eq: {
@@ -169,7 +169,7 @@ const headphoneSettings = {
   },
   mark: {
     name: "Mark Levinson No 5909",
-    img: "Mark.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005922/Mark_gri8ms.png",
     id: "mark",
     accentColor: "coral",
     eq: {
@@ -183,7 +183,7 @@ const headphoneSettings = {
   },
   oppoEnco: {
     name: "Oppo Enco Air3",
-    img: "OppoEnco.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005621/OppoEnco_ypuzro.png",
     id: "oppoEnco",
     accentColor: "darkorchid",
     eq: {
@@ -197,7 +197,7 @@ const headphoneSettings = {
   },
   oppoPm2: {
     name: "Oppo PM2",
-    img: "OppoPm2.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005621/OppoPm2_yoghu3.png",
     id: "oppoPm2",
     accentColor: "slategrey",
     eq: {
@@ -211,7 +211,7 @@ const headphoneSettings = {
   },
   jbl: {
     name: "JBL TUNE 120TWS",
-    img: "JBLtune.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005621/JBLtune_c9cfho.png",
     id: "jbl",
     accentColor: "darkgoldenrod",
     eq: {
@@ -225,7 +225,7 @@ const headphoneSettings = {
   },
   sonyFloat: {
     name: "Sony Float Run",
-    img: "SonyFloat.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005622/SonyFloat_olxvxb.png",
     id: "sonyFloat",
     accentColor: "dodgerblue",
     eq: {
@@ -239,7 +239,7 @@ const headphoneSettings = {
   },
   sonyDRZ7: {
     name: "Sony DR-Z7",
-    img: "SonyDRZ7.png",
+    img: "https://res.cloudinary.com/dzjflzbxz/image/upload/v1751005622/SonyDRZ7_nxtkhu.png",
     id: "sonyDRZ7",
     accentColor: "limegreen",
     eq: {
@@ -321,13 +321,14 @@ const LineGraph = ({ data, height = 100, width = 300, color = "wheat" }) => {
 
 export default function SoundEffect() {
   const isDesktop = window.innerWidth >= 1000;
+  const { Queue, setQueue } = useContext(songContext);
   const [frequency, setFrequency] = useState(
-    JSON.parse(localStorage.getItem("frequency")) || defaultFrequency["Flat"]
+    Queue?.effect || defaultFrequency["Flat"]
   );
   const { openElements, open, close, closeOpen } = useContext(HashContext);
   const [presetName, setPresetName] = useState("Flat");
   const [headphone, setHeadphone] = useState(headphoneSettings["_"]);
-  const { setQueue } = useContext(songContext);
+
   const [graphWidth, setGraphWidth] = useState(300);
 
   if (document.getElementById("audio")) {
@@ -335,16 +336,50 @@ export default function SoundEffect() {
       utils.editMeta(`HTh Beats - Effects`);
     }
   }
-  const setFreq = (value, freq) => {
+  const isFlat = (effect = {}) =>
+    Object.values(effect).every((gain) => gain === 0);
+
+  useEffect(() => {
+    if (!Queue?.effect) return;
+    setFrequency(Queue?.effect);
+  }, [Queue?.effect]);
+
+  const setFreq = (value, freq, fx) => {
     const newFrequency = {
       ...frequency,
       [freq]: parseInt(value),
     };
-    setFrequency(newFrequency);
+
+    if (!isFlat(newFrequency) && fx !== "none") {
+      setQueue({
+        type: "AUDIO_FX",
+        value: "none",
+      });
+    }
 
     setQueue({
       type: "AUDIO_EFFECT",
       value: newFrequency,
+    });
+  };
+  const setEffect = (fx, freq) => {
+    if (!isFlat(freq)) {
+      setQueue({
+        type: "AUDIO_EFFECT",
+        value: defaultFrequency["Flat"],
+      });
+    }
+    if (Queue?.fx == fx) {
+      setQueue({
+        type: "AUDIO_FX",
+        value: "none",
+      });
+
+      return;
+    }
+    setQueue({
+      type: "AUDIO_FX",
+      value: fx,
     });
   };
   const getSliderBackground = (
@@ -384,18 +419,30 @@ export default function SoundEffect() {
     setHeadphone(headphone);
   }, [frequency]);
 
-  const setPreset = (preset) => {
+  const setPreset = (preset, fx) => {
     const newFrequency = defaultFrequency[preset];
-    setFrequency(newFrequency);
+
+    if (!isFlat(newFrequency) && fx !== "none") {
+      setQueue({
+        type: "AUDIO_FX",
+        value: "none",
+      });
+    }
     setQueue({
       type: "AUDIO_EFFECT",
       value: newFrequency,
     });
     setPresetName(preset);
   };
-  const setHeadset = (id) => {
+  const setHeadset = (id, fx) => {
     const newFrequency = headphoneSettings[id].eq;
-    setFrequency(newFrequency);
+
+    if (!isFlat(newFrequency) && fx !== "none") {
+      setQueue({
+        type: "AUDIO_FX",
+        value: "none",
+      });
+    }
     setQueue({
       type: "AUDIO_EFFECT",
       value: newFrequency,
@@ -410,6 +457,8 @@ export default function SoundEffect() {
       .getBoundingClientRect().width;
     setGraphWidth(width);
   }, []);
+
+  console.log(Queue?.fx);
 
   if (!isDesktop && openElements.includes("equalizer")) {
     return (
@@ -430,7 +479,9 @@ export default function SoundEffect() {
                     max={10}
                     className="equ"
                     value={frequency[freq]}
-                    onInput={(e) => setFreq(e.target.value, freq)}
+                    onInput={(e) =>
+                      setFreq(e.target.value, freq, Queue?.fx || "none")
+                    }
                     step={1}
                     style={{
                       background: getSliderBackground(frequency[freq]),
@@ -447,6 +498,12 @@ export default function SoundEffect() {
       </div>
     );
   }
+
+  const getAccentColor = (headphone, fx) => {
+    if (fx == "8d") return "tomato";
+    if (fx == "slowreverb") return "thistle";
+    return headphone?.accentColor || "wheat";
+  };
 
   return (
     <div className="page hiddenScrollbar deskScroll">
@@ -470,7 +527,7 @@ export default function SoundEffect() {
             <LineGraph
               data={Object.values(frequency)}
               width={graphWidth}
-              color={headphone?.accentColor || "wheat"}
+              color={getAccentColor(headphone, Queue?.fx)}
             />
           </div>
           <div className="fxCont">
@@ -505,25 +562,21 @@ export default function SoundEffect() {
             </div>
             <div className="d-grid">
               <button
-                onClick={() => {
-                  setQueue({
-                    type: "AUDIO_FX",
-                    value: "8d",
-                  });
-                }}
+                onClick={() => setEffect("8d", frequency)}
                 className="text-start iconButton fxInact text-white p-3"
+                style={{
+                  backgroundColor: Queue?.fx == "8d" ? "tomato" : "",
+                }}
               >
                 <ThreeDRotationOutlined />
                 <p className="mt-2">3D Audio</p>
               </button>
               <button
-                onClick={() => {
-                  setQueue({
-                    type: "AUDIO_FX",
-                    value: "slowreverb",
-                  });
-                }}
+                onClick={() => setEffect("slowreverb", frequency)}
                 className="text-start iconButton fxInact text-white p-3 "
+                style={{
+                  backgroundColor: Queue?.fx == "slowreverb" ? "thistle" : "",
+                }}
               >
                 <LeakAddOutlined />
                 <p className="mt-2">Slowed & reverb</p>
@@ -543,7 +596,9 @@ export default function SoundEffect() {
                     max={10}
                     className="equ"
                     value={frequency[freq]}
-                    onInput={(e) => setFreq(e.target.value, freq)}
+                    onInput={(e) =>
+                      setFreq(e.target.value, freq, Queue?.fx || "none")
+                    }
                     step={1}
                     style={{
                       background: getSliderBackground(frequency[freq]),
@@ -585,7 +640,7 @@ export default function SoundEffect() {
               <button
                 className="icoTextBut w-100 text-start"
                 key={"preset " + index}
-                onClick={() => setPreset(preset)}
+                onClick={() => setPreset(preset, Queue?.fx || "none")}
               >
                 {presetName == preset ? (
                   <RadioButtonCheckedTwoTone className="text-wheat" />
@@ -618,13 +673,17 @@ export default function SoundEffect() {
                 >
                   <button
                     className="iconButton headThumb pb-2"
-                    onClick={() => setHeadset(headphoneData.id)}
+                    onClick={() =>
+                      setHeadset(headphoneData.id, Queue?.fx || "none")
+                    }
                   >
                     <img src={headphoneData.img} className="imInact" />
                   </button>
                   <button
                     className="iconButton text-center"
-                    onClick={() => setHeadset(headphoneData.id)}
+                    onClick={() =>
+                      setHeadset(headphoneData.id, Queue?.fx || "none")
+                    }
                   >
                     <p
                       className={
