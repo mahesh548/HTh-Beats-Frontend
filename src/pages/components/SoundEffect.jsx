@@ -463,6 +463,29 @@ export default function SoundEffect() {
     setGraphWidth(width);
   }, []);
 
+  const getAccentColor = (headphone, fx) => {
+    if (fx == "8d") return "tomato";
+    if (fx == "slowreverb") return "thistle";
+    return headphone?.accentColor || "wheat";
+  };
+  useEffect(() => {
+    const volumeRange = document.getElementById("moboVolume");
+
+    if (volume == null || volume == undefined || volume == NaN) return;
+
+    if (volumeRange) volumeRange.style.setProperty("--progress", `${volume}%`);
+    const timeout = setTimeout(() => {
+      if (Queue.volume !== volume / 100) {
+        setQueue({
+          type: "AUDIO_VOL",
+          value: volume / 100,
+        });
+      }
+    }, 100); // debounce 100ms
+
+    return () => clearTimeout(timeout);
+  }, [volume]);
+
   if (!isDesktop && openElements.includes("equalizer")) {
     return (
       <div className="page hiddenScrollbar deskScroll">
@@ -501,29 +524,6 @@ export default function SoundEffect() {
       </div>
     );
   }
-
-  const getAccentColor = (headphone, fx) => {
-    if (fx == "8d") return "tomato";
-    if (fx == "slowreverb") return "thistle";
-    return headphone?.accentColor || "wheat";
-  };
-  useEffect(() => {
-    const volumeRange = document.getElementById("moboVolume");
-
-    if (volume == null || volume == undefined || volume == NaN) return;
-
-    if (volumeRange) volumeRange.style.setProperty("--progress", `${volume}%`);
-    const timeout = setTimeout(() => {
-      if (Queue.volume !== volume / 100) {
-        setQueue({
-          type: "AUDIO_VOL",
-          value: volume / 100,
-        });
-      }
-    }, 100); // debounce 100ms
-
-    return () => clearTimeout(timeout);
-  }, [volume]);
 
   return (
     <div className="page hiddenScrollbar deskScroll">
