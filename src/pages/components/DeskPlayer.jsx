@@ -37,7 +37,7 @@ export default function DeskPlayer({ setFullscreen }) {
   const { open, openElements, close, closeOpen, closeAll } =
     useContext(HashContext);
   const [volume, setVolume] = useState(
-    (document.getElementById("audio")?.volume || 1) * 100
+    localStorage.getItem("volume") * 100 || 100
   );
 
   const [isFull, setIsFull] = useState(false);
@@ -101,12 +101,14 @@ export default function DeskPlayer({ setFullscreen }) {
   };
 
   useEffect(() => {
-    const audio = document.getElementById("audio");
     const volumeRange = document.getElementById("volumeRange");
 
     if (volumeRange) volumeRange.style.setProperty("--progress", `${volume}%`);
-    if (audio) audio.volume = volume / 100;
-  }, [volume]);
+    setQueue({
+      type: "AUDIO_VOL",
+      value: volume / 100,
+    });
+  }, [volume, setQueue]);
 
   const toggleRightPanel = (type) => {
     const allTypes = ["player", "queue", "lyrics"];

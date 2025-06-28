@@ -2024,40 +2024,7 @@ input[type="search"]::-webkit-search-cancel-button {
     margin: auto;
     border-radius: 4px;
   }
-  .volumneRange {
-    appearance: none !important;
-    height: 4px;
-    background: transparent;
-    cursor: pointer;
-    width: 100px;
-  }
 
-  .volumneRange::-webkit-slider-runnable-track {
-    height: 4px;
-    background: linear-gradient(
-      to right,
-      white 0%,
-      white var(--progress, 50%),
-      rgba(255, 255, 255, 0.3) var(--progress, 50%),
-      rgba(255, 255, 255, 0.3) 100%
-    );
-    border-radius: 4px;
-  }
-
-  .volumneRange::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    height: 8px;
-    width: 8px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0);
-    margin-top: -2px;
-    pointer-events: none;
-  }
-
-  .volumneRange:hover::-webkit-slider-thumb {
-    background: rgba(255, 255, 255, 0.9);
-    pointer-events: auto;
-  }
   .iconButton:hover {
     scale: 1.02;
     opacity: 1 !important;
@@ -3212,4 +3179,47 @@ input[type="search"]::-webkit-search-cancel-button {
   p {
     margin-top: 4px;
   }
+}
+.moboVolumeRange {
+  background: linear-gradient(
+    to right,
+    var(--accentColor, white) 0%,
+    var(--accentColor, white) var(--progress, 100%),
+    var(--light-dark-bg) var(--progress, 100%),
+    var(--light-dark-bg) 100%
+  );
+}
+.volumneRange {
+  appearance: none !important;
+  height: 4px;
+  background: transparent;
+  cursor: pointer;
+  width: 100px;
+}
+
+.volumneRange::-webkit-slider-runnable-track {
+  height: 4px;
+  background: linear-gradient(
+    to right,
+    var(--accentColor, white) 0%,
+    var(--accentColor, white) var(--progress, 100%),
+    rgba(255, 255, 255, 0.3) var(--progress, 100%),
+    rgba(255, 255, 255, 0.3) 100%
+  );
+  border-radius: 4px;
+}
+
+.volumneRange::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0);
+  margin-top: -2px;
+  pointer-events: none;
+}
+
+.volumneRange:hover::-webkit-slider-thumb {
+  background: rgba(255, 255, 255, 0.9);
+  pointer-events: auto;
 }

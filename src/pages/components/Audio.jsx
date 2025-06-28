@@ -20,6 +20,7 @@ export default function Audio() {
   const sourceRef = useRef(null);
   const fxNodeRef = useRef(null);
   const gainNodeRef = useRef(null);
+  const volNodeRef = useRef(null);
 
   const mediaNotification = (mediaData) => {
     if (navigator?.mediaSession) {
@@ -90,6 +91,7 @@ export default function Audio() {
       filtersRef.current?.forEach((filter) => filter.disconnect());
       sourceRef.current?.disconnect();
       fxNodeRef.current?.disconnect();
+      volNodeRef.current?.disconnect();
 
       // Setup source
       const source = audioCtx.createMediaStreamSource(stream);
@@ -111,6 +113,12 @@ export default function Audio() {
       gainNode.gain.value = Preamp(Object.values(Queue.effect));
       gainNodeRef.current = gainNode;
 
+      // 🎯 New Volume Node (added at end)
+      const volumeNode = audioCtx.createGain();
+      const storedVol = parseFloat(localStorage.getItem("volume"));
+      volumeNode.gain.value = isNaN(storedVol) ? 1 : storedVol;
+      volNodeRef.current = volumeNode;
+
       // Chain setup
       let node = source;
       filters.forEach((filter) => {
@@ -119,7 +127,8 @@ export default function Audio() {
       });
 
       node.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
+      gainNode.connect(volumeNode); // connect to volume node
+      volumeNode.connect(audioCtx.destination); // final output
 
       if (audioCtx.state === "suspended") {
         audioCtx.resume();
@@ -145,8 +154,10 @@ export default function Audio() {
       filtersRef.current?.forEach((f) => f.disconnect());
       sourceRef.current?.disconnect();
       fxNodeRef.current?.disconnect();
+      volNodeRef.current?.disconnect();
       filtersRef.current = [];
       sourceRef.current = null;
+      volNodeRef.current = null;
 
       if (audioCtxRef.current && !isFlat(Queue.effect)) {
         audioCtxRef.current.close();
@@ -167,10 +178,12 @@ export default function Audio() {
       filtersRef.current?.forEach((f) => f.disconnect());
       sourceRef.current?.disconnect();
       fxNodeRef.current?.disconnect();
+      volNodeRef.current?.disconnect();
 
       filtersRef.current = [];
       sourceRef.current = null;
       fxNodeRef.current = null;
+      volNodeRef.current = null;
 
       if (audioCtxRef.current) {
         audioCtxRef.current.close();
@@ -189,10 +202,16 @@ export default function Audio() {
         // Disconnect current FX node
         fxNodeRef.current.disconnect();
 
-        // Reconnect filter end directly to gain
+        // Reconnect filter end directly to gain → volume → destination
         filtersRef.current?.[filtersRef.current.length - 1]?.connect(
           gainNodeRef.current
         );
+
+        // 🧠 Make sure gainNode is connected to volumeNode (if not already)
+        gainNodeRef.current?.disconnect();
+        gainNodeRef.current?.connect(volNodeRef.current);
+
+        // ⚠️ DO NOT connect volumeNode to destination here — that’s already done in setup
 
         // Clear the ref
         fxNodeRef.current = null;
@@ -200,46 +219,11 @@ export default function Audio() {
         console.error("Error while disconnecting FX:", err);
       }
     }
+
     audio.playbackRate = 1;
 
     if (!audioCtxRef.current) {
-      const stream = audio.captureStream?.();
-      if (!stream || stream.getAudioTracks().length === 0) return;
-
-      const audioCtx = new AudioContext();
-      audioCtxRef.current = audioCtx;
-
-      const source = audioCtx.createMediaStreamSource(stream);
-      sourceRef.current = source;
-
-      const filters = frequencies.map((freq) => {
-        const filter = audioCtx.createBiquadFilter();
-        filter.type = "peaking";
-        filter.frequency.value = freq;
-        filter.Q.value = 1;
-        filter.gain.value = Queue?.effect?.[freq] ?? 0;
-        return filter;
-      });
-      filtersRef.current = filters;
-
-      const gainNode = audioCtx.createGain();
-      gainNode.gain.value = Preamp(Object.values(Queue.effect));
-      gainNodeRef.current = gainNode;
-
-      let node = source;
-      filters.forEach((filter) => {
-        node.connect(filter);
-        node = filter;
-      });
-
-      node.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      if (audioCtx.state === "suspended") {
-        audioCtx.resume();
-      }
-
-      audio.muted = true;
+      setupEQ();
     } else {
       filtersRef.current.forEach((filter) => {
         const freq = filter.frequency.value.toString();
@@ -275,6 +259,12 @@ export default function Audio() {
       const gainNode = ctx.createGain();
       gainNode.gain.value = 0.8;
       gainNodeRef.current = gainNode;
+
+      // 🎯 Create volume node
+      const volumeNode = ctx.createGain();
+      const storedVol = parseFloat(localStorage.getItem("volume"));
+      volumeNode.gain.value = isNaN(storedVol) ? 1 : storedVol;
+      volNodeRef.current = volumeNode;
 
       // Setup EQ filters
       const filters = frequencies.map((freq) => {
@@ -335,10 +325,9 @@ export default function Audio() {
           highShelf.frequency.value = 3000;
           highShelf.gain.value = 1.5;
 
-          const reverbInput = preDelay; // filters will connect to this
-          const reverbOutput = ctx.createGain(); // acts like final node of FX chain
+          const reverbInput = preDelay;
+          const reverbOutput = ctx.createGain();
 
-          // chain: input -> delay -> convolver -> highshelf -> output
           preDelay.connect(convolver);
           convolver.connect(highShelf);
           highShelf.connect(reverbOutput);
@@ -351,21 +340,21 @@ export default function Audio() {
             .then((buffer) => {
               convolver.buffer = buffer;
 
-              // connect filter → reverbInput
               source.connect(filterChainStart);
               filterChainEnd.connect(reverbInput);
               reverbOutput.connect(gainNode);
-              gainNode.connect(ctx.destination);
+              gainNode.connect(volumeNode); // 🧠 connect gain → volume
+              volumeNode.connect(ctx.destination); // 🎯 volume is final output
 
-              fxNodeRef.current = reverbInput; // So we can disconnect properly later
+              fxNodeRef.current = reverbInput;
             })
             .catch(console.error);
 
-          return; // Don't proceed to default connect chain
+          return;
         }
       }
 
-      // Final connection (for "8d" or no FX): filters → [fx?] → gain → destination
+      // Final connection (for "8d" or no FX): filters → [fx?] → gain → volume → destination
       source.connect(filterChainStart);
       if (newFxNode) {
         filterChainEnd.connect(newFxNode);
@@ -373,13 +362,32 @@ export default function Audio() {
       } else {
         filterChainEnd.connect(gainNode);
       }
-      gainNode.connect(ctx.destination);
+
+      gainNode.connect(volumeNode); // 🧠 gain → volume
+      volumeNode.connect(ctx.destination); // 🎯 final output
+
       fxNodeRef.current = newFxNode;
     } catch (error) {
       audio.muted = false;
       console.log("error creating audio context: ", error);
     }
   };
+
+  useEffect(() => {
+    if (typeof Queue?.volume !== "number") return;
+    const audio = document.getElementById("audio");
+
+    const volumeValue = Queue.volume;
+    audio.volume = volumeValue;
+
+    // Update volume node if it exists
+    if (volNodeRef.current) {
+      volNodeRef.current.gain.setValueAtTime(
+        volumeValue,
+        volNodeRef.current.context.currentTime
+      );
+    }
+  }, [Queue?.volume]);
 
   useEffect(() => {
     const play = () => {

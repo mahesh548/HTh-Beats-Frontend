@@ -11,6 +11,8 @@ import {
   RadioButtonUnchecked,
   Settings,
   ThreeDRotationOutlined,
+  VolumeMuteOutlined,
+  VolumeUpOutlined,
 } from "@mui/icons-material";
 import OffCanvas from "./BottomSheet";
 import { HashContext } from "./Hash";
@@ -328,6 +330,9 @@ export default function SoundEffect() {
   const { openElements, open, close, closeOpen } = useContext(HashContext);
   const [presetName, setPresetName] = useState("Flat");
   const [headphone, setHeadphone] = useState(headphoneSettings["_"]);
+  const [volume, setVolume] = useState(
+    localStorage.getItem("volume") * 100 || 100
+  );
 
   const [graphWidth, setGraphWidth] = useState(300);
 
@@ -502,6 +507,23 @@ export default function SoundEffect() {
     if (fx == "slowreverb") return "thistle";
     return headphone?.accentColor || "wheat";
   };
+  useEffect(() => {
+    const volumeRange = document.getElementById("moboVolume");
+
+    if (volume == null || volume == undefined || volume == NaN) return;
+
+    if (volumeRange) volumeRange.style.setProperty("--progress", `${volume}%`);
+    const timeout = setTimeout(() => {
+      if (Queue.volume !== volume / 100) {
+        setQueue({
+          type: "AUDIO_VOL",
+          value: volume / 100,
+        });
+      }
+    }, 100); // debounce 100ms
+
+    return () => clearTimeout(timeout);
+  }, [volume]);
 
   return (
     <div className="page hiddenScrollbar deskScroll">
@@ -609,6 +631,49 @@ export default function SoundEffect() {
               );
             })}
           </div>
+        </div>
+        <div
+          className="graphCont mobo py-3 px-2 position-relative moboVolumeRange"
+          style={{
+            marginTop: "10px",
+            "--accentColor": getAccentColor(headphone, Queue?.fx),
+          }}
+          id="moboVolume"
+        >
+          <div
+            className="volumneCont"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "auto auto",
+              justifyContent: "space-between",
+            }}
+          >
+            <button className="iconButton " title="Unmute">
+              <VolumeMuteOutlined
+                style={{
+                  color: getAccentColor(headphone, Queue?.fx),
+                  mixBlendMode: "difference",
+                }}
+              />
+            </button>
+
+            <button className="iconButton " title="Mute">
+              <VolumeUpOutlined
+                style={{
+                  color: getAccentColor(headphone, Queue?.fx),
+                  mixBlendMode: "difference",
+                }}
+              />
+            </button>
+          </div>
+          <input
+            type="range"
+            className="w-100 position-absolute top-0 start-0 h-100 opacity-0"
+            min={0}
+            value={volume}
+            max={100}
+            onChange={(e) => setVolume(e.target.value)}
+          />
         </div>
         <div className="graphCont" style={{ marginTop: "10px" }}>
           <button
