@@ -64,10 +64,18 @@ const createHistory = (Queue, songId) => {
     utils.BACKEND("/song_played", "POST", { playedData: playedData });
   }, timeDelay);
 };
+const flatEq = {
+  60: 0,
+  150: 0,
+  400: 0,
+  1000: 0,
+  2400: 0,
+  15000: 0,
+};
 
 const songReducer = (state, action) => {
   let liked = [];
-  let effect = JSON.parse(localStorage.getItem("frequency")) || "none";
+  let effect = JSON.parse(localStorage.getItem("frequency")) || flatEq;
   let fx = localStorage.getItem("fx") || "none";
   let volume = localStorage.getItem("volume") || 1;
   const constant = { effect, fx, volume };
