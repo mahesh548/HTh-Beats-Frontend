@@ -57,7 +57,8 @@ export default function LikeSong({
         likeClicked?.(obj);
         showToast({
           text: "Added to Liked songs",
-          image: "/Like.png",
+          image:
+            "https://res.cloudinary.com/dzjflzbxz/image/upload/v1748345555/Like_pimjzb.png",
           actionText: "Change",
           onAction: () => open(addId),
           type: "imgBtn",

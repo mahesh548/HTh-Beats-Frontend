@@ -54,8 +54,14 @@ export default function TimelineSlider({ data, label, style = "" }) {
           <div className="slider">
             {" "}
             {data.map((item) => {
-              const { id, image, title, type, perma_url } = item;
-              const perma_id = perma_url.split("/").pop();
+              const { id, image, title, type, perma_url, url } = item;
+              let perma_id = "";
+              if (perma_url) {
+                perma_id = perma_url.split("/").pop();
+              }
+              if (!perma_url && url) {
+                perma_id = url.split("/").pop();
+              }
 
               return (
                 <TimelineSquare

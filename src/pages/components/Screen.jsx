@@ -41,6 +41,7 @@ import homeSvgOutlined from "../../assets/icons/homeSvgOutlined.svg";
 import utils from "../../../utils";
 import { showToast } from "./showToast";
 import SearchHistCard from "./SearchHistCard";
+import RequestDownload from "./RequestDownload";
 
 export default function Screen() {
   const auth = useContext(AuthContext);
@@ -150,6 +151,7 @@ export default function Screen() {
       <Audio />
       <RealtimeSong />
       <ChangeLang />
+      <RequestDownload />
 
       <div className={`${Fullscreen !== "none" ? "fullScreen" : "screen"}`}>
         <div

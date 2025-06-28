@@ -63,9 +63,13 @@ export default function CreateHistory({
     return `del_${Math.random().toString(36).substr(2, 9)}`;
   }, [response]);
 
-  const handleClick = (type, id) => {
-    if (item.activity == "played" && type == "song") return;
+  const handleClick = (type, id, activity) => {
+    if (activity == "played" && type == "song") return;
     if (type == "search") return;
+    navigate(`/${type}/${id}`);
+  };
+  const handleListClick = (type, id) => {
+    if (!type || !id) return;
     navigate(`/${type}/${id}`);
   };
   const toggleAccordian = (id) => {
@@ -224,7 +228,9 @@ export default function CreateHistory({
                       ? "deleteList"
                       : "libraryList"
                   } `}
-                  onClick={() => handleClick(item.type, item?.perma_url)}
+                  onClick={() =>
+                    handleClick(item.type, item?.perma_url, item?.activity)
+                  }
                 >
                   {openElements.includes("deleteHist") && (
                     <button
@@ -299,33 +305,26 @@ export default function CreateHistory({
                         <div
                           className="playlistSong"
                           key={`song_hist_${data.id}`}
+                          onClick={() =>
+                            handleListClick(
+                              "song",
+                              data?.perma_url || data?.url
+                            )
+                          }
                         >
                           <img
                             src={data.image}
                             alt={data.title}
                             className="playlistSongImg"
-                            onClick={() => handleClick("song", data.perma_url)}
                           />
                           <div className="extendedGrid">
-                            <p
-                              className="thinOneLineText playlistSongTitle"
-                              onClick={() =>
-                                handleClick("song", data.perma_url)
-                              }
-                            >
+                            <p className="thinOneLineText playlistSongTitle">
                               {utils.refineText(data.title)}
                             </p>
-                            <p
-                              className="thinOneLineText playlistSongSubTitle"
-                              onClick={() =>
-                                handleClick("song", data.perma_url)
-                              }
-                            >
+                            <p className="thinOneLineText playlistSongSubTitle">
                               {data.subtitle?.length != 0
                                 ? utils.refineText(data.subtitle)
-                                : utils.refineText(
-                                    `${data.more_info?.music}, ${data.more_info?.album}, ${data.more_info?.label}`
-                                  )}
+                                : "Song"}
                             </p>
                           </div>
 
