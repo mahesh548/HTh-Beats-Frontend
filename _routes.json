@@ -8,9 +8,12 @@
     "/artist/*"
   ],
   "exclude": [
-    "/*.*",
-    "/assets/*",
-    "/favicon.ico",
-    "/manifest.json"
+    "/*",           // ← Exclude EVERYTHING by default
+    "/**",          // ← Double insurance (deep catch-all)
+    "!/playlist/*", // ← Allow only these
+    "!/album/*",
+    "!/song/*",
+    "!/mix/*",
+    "!/artist/*"
   ]
 }
