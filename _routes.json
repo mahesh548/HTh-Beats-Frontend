@@ -1,4 +1,5 @@
 {
+  "version": 1,
   "include": [
     "/playlist/*",
     "/album/*",
@@ -7,14 +8,9 @@
     "/artist/*"
   ],
   "exclude": [
-    "/playlist/*.*",
-    "/album/*.*",
-    "/song/*.*",
-    "/mix/*.*",
-    "/artist/*.*",
+    "/*.*",
     "/assets/*",
     "/favicon.ico",
-    "/manifest.json",
-    "/*.*"
+    "/manifest.json"
   ]
 }
