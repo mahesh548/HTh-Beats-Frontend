@@ -1,46 +1,29 @@
-export async function onRequest({ request, env }) {
+export async function onRequest(context) {
+  const { request, env } = context;
   const userAgent = request.headers.get("user-agent") || "";
   const url = new URL(request.url);
   const pathname = url.pathname;
 
-  // Detect bots (WhatsApp, Facebook, Twitter, etc.)
-  const isBot =
-    /bot|crawl|facebook|twitter|discord|whatsapp|linkedin|preview/i.test(
-      userAgent
-    );
-
-  // Match dynamic paths like /playlist/123 or /album/xyz
   const pathParts = pathname.split("/").filter(Boolean);
   const [type, id] = pathParts;
+  const isDynamic = pathParts.length === 2;
 
-  const isDynamicRoute = pathParts.length === 2;
+  const isBot = /bot|crawl|facebook|twitter|discord|whatsapp|linkedin|preview/i.test(userAgent);
 
-  // Only handle if it's a bot AND a dynamic route
-  if (isBot && isDynamicRoute) {
+  // If it's a bot and a dynamic playlist-type URL
+  if (isBot && isDynamic) {
     try {
-      const apiDomain = env.VITE_API;
-      const secret = env.META_SECRET;
-
-      const metaRes = await fetch(
-        `${apiDomain}/meta/${type}/${id}?secret=${secret}`
-      );
-      const meta = await metaRes.json();
+      const meta = await fetch(`${env.VITE_API}/meta/${type}/${id}?secret=${env.META_SECRET}`).then(res => res.json());
 
       const html = `<!DOCTYPE html>
 <html>
 <head>
-  <meta property="og:title" content="${meta?.title || "HTh Beats"}" />
-  <meta property="og:description" content="${
-    meta?.subtitle || "Listen millions of songs for free."
-  }" />
-  <meta property="og:image" content="${
-    meta?.image || "https://hthbeats.online/logo.png"
-  }" />
-  <meta property="og:url" content="https://hthbeats.online/${type}/${id}" />
-  <title>${meta?.title || "HTh Beats"}</title>
-</head>
-<body></body>
-</html>`;
+  <meta property="og:title" content="${meta?.title || 'HTh Beats'}" />
+  <meta property="og:description" content="${meta?.subtitle || 'Listen to millions of songs for free.'}" />
+  <meta property="og:image" content="${meta?.image || 'https://yourdomain.com/logo.png'}" />
+  <meta property="og:url" content="https://yourdomain.com/${type}/${id}" />
+  <title>${meta?.title || 'HTh Beats'}</title>
+</head><body></body></html>`;
 
       return new Response(html, {
         headers: {
@@ -48,11 +31,11 @@ export async function onRequest({ request, env }) {
           "Cache-Control": "public, max-age=600",
         },
       });
-    } catch (err) {
-      return new Response("Meta fetch failed", { status: 500 });
+    } catch {
+      return new Response("Error loading meta", { status: 500 });
     }
   }
 
-  // If not bot or not a dynamic route: continue to React normally
-  return new Response(null, { status: 204 });
+  // 💡 Let everything else load like normal
+  return context.next();
 }
