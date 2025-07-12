@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run postbuild",
+    "postbuild": "cpx \"functions/_routes.json\" dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
