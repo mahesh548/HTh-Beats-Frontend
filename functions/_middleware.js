@@ -1,25 +1,26 @@
 export async function onRequest(context) {
-  const { request, next } = context;
+  const { request, next, env } = context;
   const userAgent = request.headers.get("user-agent") || "";
   const url = new URL(request.url);
   const pathname = url.pathname;
 
-  // Match supported dynamic routes
-  const match = pathname.match(/^\/(playlist|album|song|mix|artist)\/([^\/]+)$/);
+  const match = pathname.match(
+    /^\/(playlist|album|song|mix|artist)\/([^\/]+)$/
+  );
   if (!match) return next();
 
   const [_, type, id] = match;
 
-  // Check for known bots
-  const isBot = /bot|crawl|slurp|spider|facebook|twitter|discord|whatsapp|linkedin|embed/i.test(userAgent);
+  const isBot =
+    /bot|crawl|slurp|spider|facebook|twitter|discord|whatsapp|linkedin|embed/i.test(
+      userAgent
+    );
   if (!isBot) return next();
 
-  // Env vars (defined in Cloudflare Pages project settings)
-  const apiDomain = import.meta.env.VITE_API;
-  const secret = import.meta.env.META_SECRET;
-  const frontendDomain = "https://hth-beats.pages.dev"; // Replace with your frontend URL
+  const apiDomain = env.VITE_API;
+  const secret = env.META_SECRET;
+  const frontendDomain = "https://hthbeats.online";
 
-  // Fetch metadata
   let meta = {};
   try {
     const res = await fetch(`${apiDomain}/meta/${type}/${id}?secret=${secret}`);
@@ -54,7 +55,7 @@ export async function onRequest(context) {
   return new Response(html, {
     headers: {
       "Content-Type": "text/html",
-      "Cache-Control": "public, max-age=600"
-    }
+      "Cache-Control": "public, max-age=600",
+    },
   });
 }
