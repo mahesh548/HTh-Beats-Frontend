@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "include": ["/playlist/*", "/album/*", "/song/*", "/mix/*", "/artist/*"],
+  "exclude": [
+    "/*.*",
+    "/assets/*",
+    "/manifest.webmanifest",
+    "/registerSW.js",
+    "/sw.js",
+    "/",
+    "/index.html",
+    "/home",
+    "/profile",
+    "/login",
+    "/register"
+  ]
+}
