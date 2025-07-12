@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "include": [
+    "/playlist/*",
+    "/album/*",
+    "/song/*",
+    "/mix/*",
+    "/artist/*"
+  ],
+  "exclude": [
+    "/*",          // Exclude EVERYTHING by default
+    "/**"          // Double insurance (deep catch-all)
+  ]
+}

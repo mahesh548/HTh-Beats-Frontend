@@ -1,58 +1,60 @@
-export async function onRequest({ request, env }) {
+export async function onRequest(context) {
+  const { request, next } = context;
   const userAgent = request.headers.get("user-agent") || "";
   const url = new URL(request.url);
   const pathname = url.pathname;
 
-  // Detect bots (WhatsApp, Facebook, Twitter, etc.)
-  const isBot =
-    /bot|crawl|facebook|twitter|discord|whatsapp|linkedin|preview/i.test(
-      userAgent
-    );
+  // Match supported dynamic routes
+  const match = pathname.match(/^\/(playlist|album|song|mix|artist)\/([^\/]+)$/);
+  if (!match) return next();
 
-  // Match dynamic paths like /playlist/123 or /album/xyz
-  const pathParts = pathname.split("/").filter(Boolean);
-  const [type, id] = pathParts;
+  const [_, type, id] = match;
 
-  const isDynamicRoute = pathParts.length === 2;
+  // Check for known bots
+  const isBot = /bot|crawl|slurp|spider|facebook|twitter|discord|whatsapp|linkedin|embed/i.test(userAgent);
+  if (!isBot) return next();
 
-  // Only handle if it's a bot AND a dynamic route
-  if (isBot && isDynamicRoute) {
-    try {
-      const apiDomain = env.VITE_API;
-      const secret = env.META_SECRET;
+  // Env vars (defined in Cloudflare Pages project settings)
+  const apiDomain = import.meta.env.VITE_API;
+  const secret = import.meta.env.META_SECRET;
+  const frontendDomain = "https://hth-beats.pages.dev"; // Replace with your frontend URL
 
-      const metaRes = await fetch(
-        `${apiDomain}/meta/${type}/${id}?secret=${secret}`
-      );
-      const meta = await metaRes.json();
-
-      const html = `<!DOCTYPE html>
-<html>
-<head>
-  <meta property="og:title" content="${meta?.title || "HTh Beats"}" />
-  <meta property="og:description" content="${
-    meta?.subtitle || "Listen millions of songs for free."
-  }" />
-  <meta property="og:image" content="${
-    meta?.image || "https://hthbeats.online/logo.png"
-  }" />
-  <meta property="og:url" content="https://hthbeats.online/${type}/${id}" />
-  <title>${meta?.title || "HTh Beats"}</title>
-</head>
-<body></body>
-</html>`;
-
-      return new Response(html, {
-        headers: {
-          "Content-Type": "text/html",
-          "Cache-Control": "public, max-age=600",
-        },
-      });
-    } catch (err) {
-      return new Response("Meta fetch failed", { status: 500 });
-    }
+  // Fetch metadata
+  let meta = {};
+  try {
+    const res = await fetch(`${apiDomain}/meta/${type}/${id}?secret=${secret}`);
+    meta = await res.json();
+  } catch (err) {
+    console.error("Metadata fetch failed:", err);
   }
 
-  // If not bot or not a dynamic route: continue to React normally
-  return new Response(null, { status: 204 });
+  const title = meta?.title || "HTh Beats";
+  const desc = meta?.subtitle || "Listen millions of songs for free.";
+  const image = meta?.image || `${frontendDomain}/logo.png`;
+  const pageUrl = `${frontendDomain}/${type}/${id}`;
+
+  const html = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${title}</title>
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${desc}" />
+    <meta property="og:image" content="${image}" />
+    <meta property="og:url" content="${pageUrl}" />
+  </head>
+  <body>
+    <script>
+      window.location.href = "${pageUrl}";
+    </script>
+  </body>
+</html>`;
+
+  return new Response(html, {
+    headers: {
+      "Content-Type": "text/html",
+      "Cache-Control": "public, max-age=600"
+    }
+  });
 }
