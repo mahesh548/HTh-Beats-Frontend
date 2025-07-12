@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && npm run postbuild",
-    "postbuild": "cpx \"functions/*.{js,json}\" dist/functions",
+    "postbuild": "cpx \"functions/_routes.json\" dist",
     "lint": "eslint .",
     "preview": "vite preview"
   },
