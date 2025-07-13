@@ -75,6 +75,10 @@ export default function CreateSearch() {
     setView("loading"); //show loading
     const response = await utils.API(`/search?q=${query}&autocomplete=true`);
     if (response.status && response.data) {
+      if (response.data.length === 0) {
+        updateUrl(query); // update url if no result found
+        return;
+      }
       setAcResult(sortResponse(response.data, query)); // set autocomplete data
       setView("autocomplete"); // set view to autocomplete
     }
@@ -396,7 +400,10 @@ export default function CreateSearch() {
                   setGlobalLike={handleLocalLike}
                 />
               ))}
-              <button className="iconButton p-0">
+              <button
+                className="iconButton p-0"
+                onClick={() => updateUrl(searchInput)}
+              >
                 <p className="labelText text-wheat fs-6 mt-2 fw-normal">
                   {`See more results for "${searchInput}"`}
                 </p>
