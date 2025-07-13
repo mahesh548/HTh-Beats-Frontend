@@ -6,7 +6,7 @@
 <p align="center"><i>A sleek, responsive Spotify clone frontend built with React + Custom CSS + Bootstrap</i></p>
 
 <p align="center">
-  <a href="https://hthbeats.online"><img src="https://img.shields.io/badge/Live Demo-Click Here-blue?style=for-the-badge&logo=vercel" /></a>
+  <a href="https://hthbeats.online"><img src="https://img.shields.io/badge/Live Demo-Click Here-blue?style=for-the-badge&logo=cloudflare" /></a>
   <img src="https://img.shields.io/badge/Frontend-React-blue?style=for-the-badge&logo=react" />
   <img src="https://img.shields.io/badge/Custom_CSS-%23f7f7f7?style=for-the-badge&logo=css3&logoColor=blue" />
   <img src="https://img.shields.io/badge/Partial-Bootstrap-7952B3?style=for-the-badge&logo=bootstrap" />
