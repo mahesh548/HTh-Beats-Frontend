@@ -54,8 +54,7 @@ export default function OptionEntity({
   };
   const share = (type, perma_url) => {
     const isDesktop = window.innerWidth >= 1000;
-    const shareUrl =
-      "https://hthbeats.online/api/preview?type=" + type + "&id=" + perma_url;
+    const shareUrl = "https://hthbeats.online/" + type + "/" + perma_url;
     if (isDesktop || !navigator.share) {
       navigator.clipboard.writeText(shareUrl);
       showToast({
