@@ -23,7 +23,9 @@ export default function Recent({ recentData }) {
           <div
             key={`recent_${index}`}
             className="recentChip"
-            onClick={() => navigate(`/${item.type}/${item.perma_url}`)}
+            onClick={() =>
+              navigate(`/${item?.type}/${item?.perma_url || item?.url}`)
+            }
           >
             <img src={item.image} />
             <p className="thinTwoLineText mt-0">
