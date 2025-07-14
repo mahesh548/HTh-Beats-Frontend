@@ -154,7 +154,9 @@ export default function QuickAccess() {
             <button
               className="qaList"
               key={"quick-rec-" + index}
-              onClick={() => openPlaylist(item?.perma_url)}
+              onClick={() =>
+                navigate(`/${item?.type}/${item?.perma_url || item?.url}`)
+              }
             >
               <img src={item.image} title={`${item.title}`} />
               <div className="text-start">
