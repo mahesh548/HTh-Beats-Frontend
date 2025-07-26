@@ -500,13 +500,12 @@ p {
   height: 60px;
   display: grid;
   grid-template-columns: 55px auto;
-  top: 10px;
+  top: 0px;
   left: 0px;
-  width: 95%;
+  width: 100%;
   column-gap: 0px;
   left: 50%;
   translate: -50% 0;
-  border-radius: 8px;
   z-index: 1;
   align-items: center;
 }

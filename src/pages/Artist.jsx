@@ -4,6 +4,7 @@ import PageLoader from "./components/PageLoader";
 import utils from "../../utils";
 import { AuthContext } from "./components/Auth";
 import CreateArtist from "./components/CreateArtist";
+import PlaylistNotFound from "./components/PlaylistNotFound";
 
 export default function Artist() {
   const auth = useContext(AuthContext);
@@ -37,6 +38,14 @@ export default function Artist() {
       getArtist();
     }
   }, [auth.user, id]);
+
+  if (
+    playlistData !== false &&
+    playlistData?.list &&
+    playlistData?.list?.length == 0
+  ) {
+    return <PlaylistNotFound />;
+  }
 
   return playlistData == false ? (
     <PageLoader />
