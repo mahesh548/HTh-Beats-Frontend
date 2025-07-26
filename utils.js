@@ -1,5 +1,7 @@
 import axios from "axios";
 import { showToast } from "./src/pages/components/showToast";
+import { Vibrant } from "node-vibrant/browser";
+
 const apiUrl = import.meta.env.VITE_API;
 const backendUrl = import.meta.env.VITE_BACKEND;
 
@@ -147,40 +149,25 @@ const utils = {
   capitalLetter: (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1, str.length);
   },
+
   getAverageColor: (imageUrl, factor = 1) => {
     return new Promise((resolve) => {
-      const img = new Image();
-      img.crossOrigin = "Anonymous";
-      img.src = imageUrl;
-
-      img.onload = () => {
-        const canvas = document.createElement("canvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0, img.width, img.height);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const pixels = imageData.data;
-        let r = 0,
-          g = 0,
-          b = 0;
-        for (let i = 0; i < pixels.length; i += 4) {
-          r += pixels[i];
-          g += pixels[i + 1];
-          b += pixels[i + 2];
-        }
-
-        const pixelCount = pixels.length / 4;
-        r = Math.floor((r / pixelCount) * factor);
-        g = Math.floor((g / pixelCount) * factor);
-        b = Math.floor((b / pixelCount) * factor);
-
-        resolve(`rgb(${r}, ${g}, ${b})`);
-      };
-
-      img.onerror = () => {
-        resolve("");
-      };
+      Vibrant.from(imageUrl)
+        .getPalette()
+        .then((palette) => {
+          const color = palette.DarkVibrant;
+          if (color) {
+            const [r, g, b] = color.rgb;
+            resolve(
+              `rgb(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)})`
+            );
+          } else {
+            resolve("#f5deb3"); // fallback if DarkVibrant is not found
+          }
+        })
+        .catch(() => {
+          resolve("#f5deb3"); // handle error case
+        });
     });
   },
   Logout: () => {
