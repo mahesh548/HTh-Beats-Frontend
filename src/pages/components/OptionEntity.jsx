@@ -16,6 +16,7 @@ import likeOutlined from "../../assets/icons/likeOutlined.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import { songContext } from "./Song";
 import { showToast } from "./showToast";
+import { useNavigate } from "react-router";
 
 export default function OptionEntity({
   children,
@@ -33,6 +34,7 @@ export default function OptionEntity({
 }) {
   const { Queue, setQueue } = useContext(songContext);
   const { openElements, open, close, closeOpen } = useContext(HashContext);
+  const navigate = useNavigate();
 
   const eleId = useMemo(() => {
     return `more_${data.id}_${Math.random().toString(36).substr(2, 9)}`;
@@ -51,6 +53,11 @@ export default function OptionEntity({
       type: "PLAYLIST",
       value: { ...Queue.playlist, list: newList },
     });
+  };
+  const openArtist = (perma_url) => {
+    if (!perma_url || perma_url?.length == 0) return;
+    const artistId = perma_url.split("/").pop();
+    navigate(`/artist/${artistId}`);
   };
   const share = (type, perma_url) => {
     const isDesktop = window.innerWidth >= 1000;
@@ -185,6 +192,7 @@ export default function OptionEntity({
                     marginBottom: "25px",
                     cursor: "pointer",
                   }}
+                  onClick={() => openArtist(item?.perma_url)}
                   key={`${item.name}_${item.id}`}
                 >
                   <img

@@ -14,6 +14,7 @@ import LikeSong from "./LikeSong";
 import TimelineSlider from "./TimelineSlider";
 import PageLoader from "./PageLoader";
 import { showToast } from "./showToast";
+import { useNavigate } from "react-router";
 
 export default function CreatePlaylist({ response }) {
   const { openElements } = useContext(HashContext);
@@ -22,6 +23,7 @@ export default function CreatePlaylist({ response }) {
   const [bg, setBg] = useState("#8d8d8d");
   const [isLiked, setIsLiked] = useState(false);
   const [relatedPlaylist, setRelatedPlaylist] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setData(response);
@@ -98,6 +100,12 @@ export default function CreatePlaylist({ response }) {
   }, [data?.id]);
   const startDownload = async (URL, title) => {
     await utils.downloadThis(URL, title);
+  };
+
+  const openArtist = (perma_url) => {
+    if (!perma_url || perma_url?.length == 0) return;
+    const artistId = perma_url.split("/").pop();
+    navigate(`/artist/${artistId}`);
   };
 
   if (document.getElementById("audio")) {
@@ -186,13 +194,21 @@ export default function CreatePlaylist({ response }) {
       </div>
       <div>
         <p className="labelText ps-2 mt-4 mb-2 dp-s">Featured artist</p>
-        <div className="songArtCont">
+        <div className="w-100 ps-2  mb-2 dp-s">
           {data.more_info.artistMap.artists.map((item) => {
             return (
-              <div key={item.id}>
-                <img src={item.image} />
-
-                <p className="thinTwoLineText">{utils.refineText(item.name)}</p>
+              <div
+                key={item.id}
+                className="playlistSong albumList"
+                onClick={() => openArtist(item?.perma_url)}
+              >
+                <img src={item.image} className="rounded-circle" />
+                <div>
+                  <p className="thinOneLineText playlistSongTitle">
+                    {utils.refineText(item.name)}
+                  </p>
+                  <p className="thinOneLineText playlistSongSubTitle">Artist</p>
+                </div>
               </div>
             );
           })}
