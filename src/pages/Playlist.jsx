@@ -96,6 +96,14 @@ export default function playlist() {
     }
   }, [auth.user, id]);
 
+  if (
+    playlistData !== false &&
+    playlistData?.list &&
+    playlistData?.list?.length == 0
+  ) {
+    return <PlaylistNotFound />;
+  }
+
   return playlistData == false ? (
     <PageLoader />
   ) : playlistData.entityType === "entity" ||
