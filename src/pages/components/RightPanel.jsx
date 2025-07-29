@@ -32,6 +32,7 @@ import OptionSong from "./OptionSong";
 import OffCanvas from "./BottomSheet";
 import BackButton from "./BackButton";
 import { showToast } from "./showToast";
+import Video from "./Video";
 
 export default function RightPanel({ Fullscreen, setFullscreen }) {
   const { Queue, setQueue } = useContext(songContext);
@@ -187,6 +188,19 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
     <>
       {openElements.includes("player") && (
         <div className="desk-player px-2" id="desk-player">
+          {Fullscreen !== "player" &&
+          data.more_info.hasOwnProperty("has_video") &&
+          data.more_info.has_video ? (
+            <div className="videoPage">
+              <div></div>
+              <Video
+                src={data.more_info.video_preview_url}
+                thumbSrc={data.more_info.video_thumbnail}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
           <div
             className={`${
               Fullscreen !== "player" ? "desk-playerNav" : "desk-playerNav-full"
@@ -236,7 +250,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
             )}
           </div>
 
-          <div className="bannerWrapper">
+          {/*  <div className="bannerWrapper">
             <img
               src={utils
                 .getItemFromId(Queue.song, Queue.playlist.list)
@@ -244,7 +258,22 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
               alt={data.title}
               className="playerBanner"
             />
-          </div>
+          </div> */}
+          {Fullscreen !== "player" &&
+          data.more_info.hasOwnProperty("has_video") &&
+          data.more_info.has_video ? (
+            <div className="bannerWrapper"></div>
+          ) : (
+            <div className="bannerWrapper">
+              <img
+                src={utils
+                  .getItemFromId(Queue.song, Queue.playlist.list)
+                  .image.replace("150x150", "500x500")}
+                alt={data.title}
+                className="playerBanner"
+              />
+            </div>
+          )}
           <div
             className={`playerDetails ${Fullscreen == "player" && "d-none"}`}
           >

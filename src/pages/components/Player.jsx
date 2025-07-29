@@ -26,6 +26,7 @@ import OptionSong from "./OptionSong";
 import OffCanvas from "./BottomSheet";
 import BackButton from "./BackButton";
 import { showToast } from "./showToast";
+import Video from "./Video";
 
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
@@ -35,6 +36,7 @@ export default function Player() {
   const [repeatOne, setRepeatOne] = useState(
     JSON.parse(localStorage.getItem("repeat")) || false
   );
+  const [showControl, setShowControl] = useState(true);
   const lyrics = useRef({
     data: ["Lyrics not available for this track!"],
     id: null,
@@ -92,7 +94,34 @@ export default function Player() {
     } else {
       setLocalLike(false);
     }
+    setShowControl(true);
   }, [data?.savedIn, Queue?.song]);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      /*  if (!Queue.song || !data) return;
+      if (!data.more_info.hasOwnProperty("has_video")) {
+        setShowControl(true);
+        return;
+      }
+
+      if (!data.has_video) {
+        setShowControl(true);
+        return;
+      } */
+
+      const middle = document.getElementById("middle-touch-zone");
+      const clickedInsideMiddle = middle?.contains(e.target);
+      if (clickedInsideMiddle) {
+        setShowControl((prev) => !prev);
+      } else {
+        setShowControl(true);
+      }
+    };
+
+    document.addEventListener("click", handleClick, true);
+    return () => document.removeEventListener("click", handleClick, true);
+  }, [Queue?.song]);
 
   if (Queue.song == undefined) {
     return <></>;
@@ -149,10 +178,21 @@ export default function Player() {
   };
   return (
     <div className="playerCont">
-      <div className="blurPage">
-        <div></div>
-        <img src={data.image} alt="" />
-      </div>
+      {data.more_info.hasOwnProperty("has_video") &&
+      data.more_info.has_video ? (
+        <div className="videoPage">
+          <div></div>
+          <Video
+            src={data.more_info.video_preview_url}
+            thumbSrc={data.more_info.video_thumbnail}
+          />
+        </div>
+      ) : (
+        <div className="blurPage">
+          <div></div>
+          <img src={data.image} alt="" />
+        </div>
+      )}
       <SwipeableViews
         resistance
         disabled={isSliding}
@@ -182,15 +222,20 @@ export default function Player() {
               <MoreHorizRounded />
             </OptionSong>
           </div>
-          <div className="bannerWrapper">
-            <img
-              src={utils
-                .getItemFromId(Queue.song, Queue.playlist.list)
-                .image.replace("150x150", "500x500")}
-              alt={data.title}
-              className="playerBanner"
-            />
-          </div>
+          {data.more_info.hasOwnProperty("has_video") &&
+          data.more_info.has_video ? (
+            <div className="bannerWrapper" id="middle-touch-zone"></div>
+          ) : (
+            <div className="bannerWrapper">
+              <img
+                src={utils
+                  .getItemFromId(Queue.song, Queue.playlist.list)
+                  .image.replace("150x150", "500x500")}
+                alt={data.title}
+                className="playerBanner"
+              />
+            </div>
+          )}
 
           <div className="playerController">
             <div className="playerDetails">
@@ -246,7 +291,10 @@ export default function Player() {
             <div id="fd" className="fd">
               {utils.formatDuration(data.more_info.duration) || "00:00"}
             </div>
-            <div className="playerButtons">
+            <div
+              className="playerButtons"
+              style={{ display: showControl ? "grid" : "none" }}
+            >
               <button
                 style={{ justifyContent: "start" }}
                 onClick={() =>
@@ -276,7 +324,10 @@ export default function Player() {
               </button>
             </div>
           </div>
-          <div className="playerBottomBar">
+          <div
+            className="playerBottomBar"
+            style={{ display: showControl ? "grid" : "none" }}
+          >
             <button onClick={() => setRepeat()}>
               {repeatOne ? <RepeatOneOutlined /> : <RepeatOutlined />}
             </button>

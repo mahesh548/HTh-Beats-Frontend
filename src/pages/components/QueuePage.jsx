@@ -34,7 +34,7 @@ export default function QueuePage() {
   const SortableSong = SortableElement(({ item }) => {
     const isLiked = Queue?.saved && Queue?.saved.includes(item.id);
     return (
-      <div className="sortPlaylistSong">
+      <div className="sortPlaylistSong mb-3">
         <DragHand />
         <PlaylistSong
           data={item}
@@ -66,7 +66,13 @@ export default function QueuePage() {
     });
   };
   return (
-    <div className="queuePage">
+    <div
+      className="queuePage hiddenScrollbar"
+      style={{
+        backgroundColor: "var(--desktop-dark-grey)",
+        overflowY: "scroll",
+      }}
+    >
       <div className="queuePageLayout">
         <div className="navbarAddTo">
           <BackButton styleClass="mobo" />
