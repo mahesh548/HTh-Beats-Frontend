@@ -99,7 +99,9 @@ export default function playlist() {
   if (
     playlistData !== false &&
     playlistData?.list &&
-    playlistData?.list?.length == 0
+    playlistData?.list?.length == 0 &&
+    playlistData?.entityType !== "private" &&
+    playlistData?.entityType !== "collab"
   ) {
     return <PlaylistNotFound />;
   }

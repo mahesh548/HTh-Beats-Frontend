@@ -4,7 +4,12 @@ import BackButton from "./BackButton";
 
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import moreOutlined from "../../assets/icons/moreOutlined.svg";
-import { PauseRounded, PlayArrowRounded } from "@mui/icons-material";
+import {
+  PauseRounded,
+  PlayArrowRounded,
+  VideoCameraBackOutlined,
+  VideoLibraryOutlined,
+} from "@mui/icons-material";
 import PlaylistSong from "./PlaylistSong";
 import { songContext } from "./Song";
 import { useInView } from "react-intersection-observer";
@@ -18,6 +23,7 @@ import PlaylistOwner from "./PlaylistOwner";
 import TimelineSlider from "./TimelineSlider";
 import PageLoader from "./PageLoader";
 import DownloadEntity from "./DownloadEntity";
+import Reels from "./Reels";
 
 export default function CreatePlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -170,6 +176,12 @@ export default function CreatePlaylist({ response }) {
         </div>
         <div className="playlistButtonCont">
           <div>
+            <button
+              className="playlistButtonSecondary"
+              onClick={() => open("reels")}
+            >
+              <VideoLibraryOutlined />
+            </button>
             <LikeEntity
               isLiked={data.isLiked}
               styleClass="playlistButtonSecondary"
@@ -280,6 +292,11 @@ export default function CreatePlaylist({ response }) {
             results={(obj) => handleLocalLike(obj)}
             eleId={addId}
           />,
+          document.body
+        )}
+      {openElements.includes("reels") &&
+        createPortal(
+          <Reels data={data} setGlobalLike={handleLocalLike} />,
           document.body
         )}
     </div>
