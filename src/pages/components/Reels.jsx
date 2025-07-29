@@ -7,6 +7,8 @@ import { songContext } from "./Song";
 
 export default function Reels({ data, setGlobalLike = () => {} }) {
   const { Queue, setQueue } = useContext(songContext);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   return (
     <div
       className="floatingPage"
@@ -22,7 +24,13 @@ export default function Reels({ data, setGlobalLike = () => {} }) {
           <VolumeUpOutlined />
         </button>
       </div>
-      <SwipeableViews resistance axis="y" containerStyle={{ height: "100dvh" }}>
+      <SwipeableViews
+        resistance
+        axis="y"
+        containerStyle={{ height: "100dvh" }}
+        index={0}
+        onChangeIndex={(index) => setCurrentIndex(index)}
+      >
         {data.list.map((song, index) => {
           const isLiked = Queue?.saved && Queue?.saved.includes(song.id);
           return (
@@ -31,6 +39,7 @@ export default function Reels({ data, setGlobalLike = () => {} }) {
               key={`reels-${song?.id}-${index}`}
               setGlobalLike={setGlobalLike}
               isLiked={isLiked}
+              inView={index == currentIndex}
             />
           );
         })}

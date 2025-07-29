@@ -33,7 +33,7 @@ const GetVideo = ({ has_video, url = "", thumb = "", img = "" }) => {
   }
 };
 
-export default function ReelVideo({ song, setGlobalLike, isLiked }) {
+export default function ReelVideo({ song, setGlobalLike, isLiked, inView }) {
   const { openElements, open, close } = useContext(HashContext);
   const [localLike, setLocalLike] = useState(false);
 
@@ -65,6 +65,14 @@ export default function ReelVideo({ song, setGlobalLike, isLiked }) {
     setLocalLike(savedTo.length > 0);
     setGlobalLike?.(obj, data.id);
   };
+  const setColor = async (src) => {
+    console.log("called");
+    document.getElementById("reelVid-" + song.id).style.backgroundColor =
+      await utils.getAverageColor(src);
+  };
+  if (inView) {
+    setColor(song.image);
+  }
 
   const data = song?.more_info;
   return (
@@ -75,33 +83,33 @@ export default function ReelVideo({ song, setGlobalLike, isLiked }) {
         thumb={data?.video_thumbnail}
         img={song?.image}
       />
-      <div className="reelController">
-        <div className="reelInfo">
-          <div className="d-flex">
-            <PlaylistOwner
-              srcArray={data?.artistMap?.artists
-                .slice(0, 3)
-                .map((item) => item.image)}
-              label={""}
-              name={data?.artistMap?.artists[0].name}
-              totalOwner={data?.artistMap?.artists.length}
-              action={() => open(artId)}
-            />
-            <OptionSong
-              styleClass="playlistSongButton"
-              data={song}
-              likeData={likeData}
-              addId={addId}
-            >
-              <MoreVertOutlined />
-            </OptionSong>
-          </div>
-
-          <div className="playlistSong">
+      <div className="reelController px-3 py-3">
+        <div className="d-flex mb-2 px-1 ps-2 artInfo">
+          <PlaylistOwner
+            srcArray={data?.artistMap?.artists
+              .slice(0, 3)
+              .map((item) => item.image)}
+            label={""}
+            name={data?.artistMap?.artists[0].name}
+            totalOwner={data?.artistMap?.artists.length}
+            action={() => open(artId)}
+          />
+          <OptionSong
+            styleClass="iconButton"
+            data={song}
+            likeData={likeData}
+            addId={addId}
+          >
+            <MoreVertOutlined />
+          </OptionSong>
+        </div>
+        <div className="reelInfo px-2 py-2">
+          <div className="playlistSong mt-0">
             <img
               src={song.image}
               alt={song.title}
               className="playlistSongImg"
+              style={{ borderRadius: "8px", width: "60px", height: "60px" }}
             />
             <div>
               <p className="thinOneLineText playlistSongTitle">

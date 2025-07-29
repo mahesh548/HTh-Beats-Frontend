@@ -3263,13 +3263,24 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 100%;
   background-color: var(--desktop-dark-grey);
   overflow: hidden;
+  transition: background 0.5s ease;
 }
 .reelController {
   position: absolute;
   bottom: 10px;
   width: 100vw;
-  background-color: red;
-  height: 200px;
+}
+.reelInfo {
+  background-color: #ffffff41;
+  border-radius: 16px;
+}
+.artInfo .playlistOwner {
+  margin-top: 0px;
+  .ownerTxt p {
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+  }
 }
 .imageVid {
   height: 100%;
@@ -3336,7 +3347,7 @@ input[type="search"]::-webkit-search-cancel-button {
   }
 }
 .reelInfo .playlistSong {
-  grid-template-columns: 50px 1fr 40px;
+  grid-template-columns: 60px 1fr 40px;
   column-gap: 8px;
   .playlistSongTitle {
     font-size: 18px;
