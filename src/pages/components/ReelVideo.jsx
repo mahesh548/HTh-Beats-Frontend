@@ -15,7 +15,7 @@ const GetVideo = ({ has_video, url = "", thumb = "", img = "" }) => {
   } else {
     return (
       <div className="imageVid">
-        <div className="d-flex">
+        <div className="d-flex justify-content-center">
           <div className="visualizer">
             <div className="bar"></div>
             <div className="bar"></div>
@@ -74,8 +74,10 @@ export default function ReelVideo({
     setGlobalLike?.(obj, data.id);
   };
   const setColor = async (src) => {
-    document.getElementById("reelVid-" + song.id).style.backgroundColor =
-      await utils.getAverageColor(src);
+    const ele = document.getElementById("reelVid-" + song.id);
+    if (ele) {
+      ele.style.backgroundColor = await utils.getAverageColor(src);
+    }
   };
   if (index == currentIndex) {
     setTimeout(() => {
@@ -126,6 +128,103 @@ export default function ReelVideo({
       ></div>
     );
   }
+
+  const isDesktop = window.innerWidth >= 1000;
+
+  if (isDesktop) {
+    return (
+      <div className="reelVideoCont position-relative">
+        <div className="reelController px-3 py-3 position-relative d-flex flex-column justify-content-center">
+          <div className="reelInfo px-2 py-2 mb-3">
+            <div
+              className="playlistSong mt-0"
+              style={{ gridTemplateColumns: "1fr 40px" }}
+            >
+              <div onClick={() => songFromReel(song?.id)}>
+                <p className="thinOneLineText playlistSongTitle">
+                  {utils.refineText(song.title)}
+                </p>
+                <p className="thinOneLineText playlistSongSubTitle">
+                  {song.subtitle?.length != 0
+                    ? utils.refineText(song.subtitle)
+                    : utils.refineText(
+                        `${song.more_info?.music}, ${song.more_info?.album}, ${song.more_info?.label}`
+                      )}
+                </p>
+              </div>
+              <LikeSong
+                styleClass="playerDetailsButton"
+                isLiked={localLike}
+                likeData={likeData}
+                addId={addId}
+                key={`reelLike_${song.id}`}
+              />
+            </div>
+          </div>
+          <div
+            className="reelTimeLine my-0 mx-auto mt-4"
+            id={"reelTimeLine-" + index}
+          ></div>
+          <div className="d-flex mb-2 px-1 artInfo position-absolute w-100 bottom-0">
+            <PlaylistOwner
+              srcArray={data?.artistMap?.artists
+                .slice(0, 3)
+                .map((item) => item.image)}
+              label={""}
+              name={data?.artistMap?.artists[0].name}
+              totalOwner={data?.artistMap?.artists.length}
+              action={() => {}}
+            />
+            <OptionSong
+              styleClass="iconButton"
+              data={song}
+              likeData={likeData}
+              addId={addId}
+            >
+              <MoreVertOutlined />
+            </OptionSong>
+          </div>
+        </div>
+        <div className="h-100">
+          <GetVideo
+            has_video={data?.has_video || false}
+            url={data?.video_preview_url}
+            thumb={data?.video_thumbnail}
+            img={song?.image}
+          />
+        </div>
+
+        {openElements.includes(addId) &&
+          createPortal(
+            <AddToPlaylist
+              likeData={likeData}
+              playlistIds={song.savedIn || []}
+              results={(obj) => addResult(obj)}
+              eleId={addId}
+            />,
+            document.body
+          )}
+        {currentIndex == index && (
+          <audio
+            src={utils.decryptor(data?.encrypted_media_url || "")}
+            controls
+            autoPlay={true}
+            style={{ display: "none" }}
+            preload="auto"
+            crossOrigin="anonymous"
+            id="reelAudio"
+            onLoadedMetadata={(e) => {
+              if (e.target.duration < 60) return;
+              e.target.currentTime = 30;
+            }}
+            onTimeUpdate={() => reelTimeUpdate(index)}
+            muted={muted}
+          ></audio>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="reelVideoCont position-relative" id={"reelVid-" + song.id}>
       {currentIndex == index && (
