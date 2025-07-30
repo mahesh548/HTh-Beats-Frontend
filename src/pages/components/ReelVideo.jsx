@@ -33,8 +33,16 @@ const GetVideo = ({ has_video, url = "", thumb = "", img = "" }) => {
   }
 };
 
-export default function ReelVideo({ song, setGlobalLike, isLiked, inView }) {
-  const { openElements, open, close } = useContext(HashContext);
+export default function ReelVideo({
+  song,
+  setGlobalLike,
+  isLiked,
+  index,
+  currentIndex,
+  muted,
+  play,
+}) {
+  const { openElements, close } = useContext(HashContext);
   const [localLike, setLocalLike] = useState(false);
 
   useEffect(() => {
@@ -66,17 +74,77 @@ export default function ReelVideo({ song, setGlobalLike, isLiked, inView }) {
     setGlobalLike?.(obj, data.id);
   };
   const setColor = async (src) => {
-    console.log("called");
     document.getElementById("reelVid-" + song.id).style.backgroundColor =
       await utils.getAverageColor(src);
   };
-  if (inView) {
-    setColor(song.image);
+  if (index == currentIndex) {
+    setTimeout(() => {
+      setColor(song.image);
+    }, 500);
   }
 
+  const reelTimeUpdate = (index) => {
+    const reelAudio = document.getElementById("reelAudio");
+    const currentTime = reelAudio.currentTime;
+    const timeLine = document.getElementById("reelTimeLine-" + index);
+
+    if (reelAudio.duration > 60) {
+      // Play from 30s to 60s
+      if (currentTime > 60) {
+        reelAudio.currentTime = 30;
+      }
+
+      // Duration of this playback slice = 30s, offset = 30
+      timeLine.style.background = utils.timeLineStyleReel(reelAudio, 30, 30);
+    } else {
+      // Play from 0s to 30s
+      if (currentTime > 30) {
+        reelAudio.currentTime = 0;
+      }
+
+      // Duration = 30s, offset = 0
+      timeLine.style.background = utils.timeLineStyleReel(reelAudio, 30, 0);
+    }
+  };
+  const songFromReel = (id) => {
+    setTimeout(() => {
+      play(id);
+    }, 500);
+    close("reels");
+  };
+
   const data = song?.more_info;
+  if (
+    index !== currentIndex &&
+    index !== currentIndex - 1 &&
+    index !== currentIndex + 1
+  ) {
+    return (
+      <div
+        className="reelVideoCont position-relative"
+        id={"reelVid-" + song.id}
+      ></div>
+    );
+  }
   return (
     <div className="reelVideoCont position-relative" id={"reelVid-" + song.id}>
+      {currentIndex == index && (
+        <audio
+          src={utils.decryptor(data?.encrypted_media_url || "")}
+          controls
+          autoPlay={true}
+          style={{ display: "none" }}
+          preload="auto"
+          crossOrigin="anonymous"
+          id="reelAudio"
+          onLoadedMetadata={(e) => {
+            if (e.target.duration < 60) return;
+            e.target.currentTime = 30;
+          }}
+          onTimeUpdate={() => reelTimeUpdate(index)}
+          muted={muted}
+        ></audio>
+      )}
       <GetVideo
         has_video={data?.has_video || false}
         url={data?.video_preview_url}
@@ -92,7 +160,7 @@ export default function ReelVideo({ song, setGlobalLike, isLiked, inView }) {
             label={""}
             name={data?.artistMap?.artists[0].name}
             totalOwner={data?.artistMap?.artists.length}
-            action={() => open(artId)}
+            action={() => {}}
           />
           <OptionSong
             styleClass="iconButton"
@@ -110,8 +178,9 @@ export default function ReelVideo({ song, setGlobalLike, isLiked, inView }) {
               alt={song.title}
               className="playlistSongImg"
               style={{ borderRadius: "8px", width: "60px", height: "60px" }}
+              onClick={() => songFromReel(song?.id)}
             />
-            <div>
+            <div onClick={() => songFromReel(song?.id)}>
               <p className="thinOneLineText playlistSongTitle">
                 {utils.refineText(song.title)}
               </p>
@@ -132,6 +201,7 @@ export default function ReelVideo({ song, setGlobalLike, isLiked, inView }) {
             />
           </div>
         </div>
+        <div className="reelTimeLine" id={"reelTimeLine-" + index}></div>
       </div>
       {openElements.includes(addId) &&
         createPortal(

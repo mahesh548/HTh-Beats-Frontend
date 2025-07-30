@@ -296,7 +296,7 @@ export default function CreatePlaylist({ response }) {
         )}
       {openElements.includes("reels") &&
         createPortal(
-          <Reels data={data} setGlobalLike={handleLocalLike} />,
+          <Reels data={data} setGlobalLike={handleLocalLike} play={play} />,
           document.body
         )}
     </div>

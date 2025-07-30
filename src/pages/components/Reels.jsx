@@ -2,12 +2,13 @@ import SwipeableViews from "react-swipeable-views";
 import BackButton from "./BackButton";
 import ReelVideo from "./ReelVideo";
 import { useContext, useState } from "react";
-import { Speaker, VolumeUpOutlined } from "@mui/icons-material";
+import { VolumeOffOutlined, VolumeUpOutlined } from "@mui/icons-material";
 import { songContext } from "./Song";
 
-export default function Reels({ data, setGlobalLike = () => {} }) {
+export default function Reels({ data, setGlobalLike = () => {}, play }) {
   const { Queue, setQueue } = useContext(songContext);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [muted, setMuted] = useState(true);
 
   return (
     <div
@@ -20,9 +21,15 @@ export default function Reels({ data, setGlobalLike = () => {} }) {
       >
         <BackButton />
         <p className="thinOneLineText fw-bold">{data?.title || "HTh Videos"}</p>
-        <button className="iconButton">
-          <VolumeUpOutlined />
-        </button>
+        {muted ? (
+          <button className="iconButton" onClick={() => setMuted(false)}>
+            <VolumeOffOutlined />
+          </button>
+        ) : (
+          <button className="iconButton" onClick={() => setMuted(true)}>
+            <VolumeUpOutlined />
+          </button>
+        )}
       </div>
       <SwipeableViews
         resistance
@@ -39,7 +46,10 @@ export default function Reels({ data, setGlobalLike = () => {} }) {
               key={`reels-${song?.id}-${index}`}
               setGlobalLike={setGlobalLike}
               isLiked={isLiked}
-              inView={index == currentIndex}
+              index={index}
+              currentIndex={currentIndex}
+              muted={muted}
+              play={play}
             />
           );
         })}

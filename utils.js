@@ -233,6 +233,19 @@ const utils = {
       "%, #80808096 100%)"
     );
   },
+  timeLineStyleReel: (audioElement, displayDuration, offset = 0) => {
+    const played = audioElement.currentTime - offset;
+    const value = (played / displayDuration) * 100;
+
+    return (
+      "linear-gradient(to right, #ffffff 0%, #ffffff " +
+      value +
+      "%, #ffffff80 " +
+      value +
+      "%, #ffffff80 100%)"
+    );
+  },
+
   formatMetric: (num) => {
     if (num < 1000) return num.toString();
 
