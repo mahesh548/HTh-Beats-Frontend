@@ -1,7 +1,7 @@
 import SwipeableViews from "react-swipeable-views";
 import BackButton from "./BackButton";
 import ReelVideo from "./ReelVideo";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import {
   CloseOutlined,
   VolumeOffOutlined,
@@ -12,13 +12,29 @@ import { useNavigate } from "react-router";
 
 export default function Reels({ data, setGlobalLike = () => {}, play }) {
   const { Queue, setQueue } = useContext(songContext);
-  const [currentIndex, setCurrentIndex] = useState(3);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [muted, setMuted] = useState(false);
   const navigate = useNavigate();
 
   const goBack = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "ArrowDown") {
+        setCurrentIndex((prev) => Math.min(prev + 1, data.list.length - 1));
+      } else if (e.key === "ArrowUp") {
+        setCurrentIndex((prev) => Math.max(prev - 1, 0));
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [data.list.length]);
 
   const isDesktop = window.innerWidth >= 1000;
 

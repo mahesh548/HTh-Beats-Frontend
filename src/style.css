@@ -3409,4 +3409,28 @@ input[type="search"]::-webkit-search-cancel-button {
       font-size: 12px;
     }
   }
+  .deskVidWrap {
+    video {
+      height: 90%;
+      width: 60%;
+      display: block;
+      margin: auto;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 12px;
+    }
+  }
+  .gradientBall {
+    height: 80%;
+    aspect-ratio: 1/1;
+    position: absolute;
+    background-color: var(--desktop-dark-grey);
+    top: 50%;
+    right: 0;
+    border-radius: 100%;
+    transform: translate(50%, -50%);
+    filter: blur(60px);
+    transition: 1s ease;
+  }
 }

@@ -185,7 +185,10 @@ export default function ReelVideo({
             </OptionSong>
           </div>
         </div>
-        <div className="h-100">
+        <div className="h-100 deskVidWrap">
+          {currentIndex == index && (
+            <div className="gradientBall" id={"reelVid-" + song.id}></div>
+          )}
           <GetVideo
             has_video={data?.has_video || false}
             url={data?.video_preview_url}
