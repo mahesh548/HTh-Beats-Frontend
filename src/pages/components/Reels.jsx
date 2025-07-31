@@ -3,6 +3,8 @@ import BackButton from "./BackButton";
 import ReelVideo from "./ReelVideo";
 import { useContext, useState, useEffect } from "react";
 import {
+  ArrowDownwardOutlined,
+  ArrowUpwardOutlined,
   CloseOutlined,
   VolumeOffOutlined,
   VolumeUpOutlined,
@@ -86,6 +88,29 @@ export default function Reels({ data, setGlobalLike = () => {}, play }) {
                 );
               })}
             </SwipeableViews>
+            <div
+              className="d-flex flex-column position-absolute"
+              style={{ bottom: "20px", right: "20px", gap: "20px" }}
+            >
+              <button
+                className="iconButton"
+                onClick={() => {
+                  setCurrentIndex((prev) => Math.max(prev - 1, 0));
+                }}
+              >
+                <ArrowUpwardOutlined className="opacity-50" />
+              </button>
+              <button
+                className="iconButton"
+                onClick={() => {
+                  setCurrentIndex((prev) =>
+                    Math.min(prev + 1, data.list.length - 1)
+                  );
+                }}
+              >
+                <ArrowDownwardOutlined className="opacity-50" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
