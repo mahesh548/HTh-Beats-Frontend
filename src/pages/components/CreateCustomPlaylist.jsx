@@ -178,6 +178,12 @@ export default function CreateCustomPlaylist({ response }) {
           butText: "Leave collab",
         };
 
+  const playReel = () => {
+    setQueue({ type: "STATUS", value: "pause" });
+    setTimeout(() => {
+      open("reels");
+    }, 300);
+  };
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
@@ -223,7 +229,7 @@ export default function CreateCustomPlaylist({ response }) {
           <div>
             <ReelButton
               data={data?.list?.[0] || null}
-              open={() => open("reels")}
+              open={() => playReel()}
             />
             <OptionEntity
               styleClass="playlistButtonSecondary"

@@ -123,6 +123,14 @@ export default function CreateArtist({ response }) {
       utils.editMeta(`${data?.name}`);
     }
   }
+
+  const playReel = () => {
+    setQueue({ type: "STATUS", value: "pause" });
+    setTimeout(() => {
+      open("reels");
+    }, 300);
+  };
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="artistCover mobo">
@@ -177,7 +185,7 @@ export default function CreateArtist({ response }) {
             <div>
               <ReelButton
                 data={data?.list?.[0] || null}
-                open={() => open("reels")}
+                open={() => playReel()}
               />
               <LikeEntity
                 isLiked={data.isLiked}

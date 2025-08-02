@@ -75,8 +75,10 @@ export default function ReelVideo({
   };
   const setColor = async (src) => {
     const ele = document.getElementById("reelVid-" + song.id);
+    const color = await utils.getAverageColor(src);
+    utils.editMeta("HTh Beats - Videos", color);
     if (ele) {
-      ele.style.backgroundColor = await utils.getAverageColor(src);
+      ele.style.backgroundColor = color;
     }
   };
   if (index == currentIndex) {
