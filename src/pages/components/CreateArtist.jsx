@@ -24,6 +24,8 @@ import twitter from "../../assets/icons/twitter.svg";
 import wiki from "../../assets/icons/wiki.svg";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import DownloadEntity from "./DownloadEntity";
+import Reels from "./Reels";
+import ReelButton from "./ReelButton";
 
 export default function CreateArtist({ response }) {
   const navigate = useNavigate();
@@ -173,6 +175,10 @@ export default function CreateArtist({ response }) {
           </div>
           <div className="playlistButtonCont">
             <div>
+              <ReelButton
+                data={data?.list?.[0] || null}
+                open={() => open("reels")}
+              />
               <LikeEntity
                 isLiked={data.isLiked}
                 styleClass="playlistButtonSecondary"
@@ -437,6 +443,11 @@ export default function CreateArtist({ response }) {
             results={(obj) => handleLocalLike(obj)}
             eleId={addId}
           />,
+          document.body
+        )}
+      {openElements.includes("reels") &&
+        createPortal(
+          <Reels data={data} setGlobalLike={handleLocalLike} play={play} />,
           document.body
         )}
     </div>

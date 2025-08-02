@@ -194,7 +194,12 @@ export default function EditPlaylist({ editId, title, img, list, saveEdit }) {
             style={{ height: "150px", width: "150px" }}
             className="d-block m-auto"
           />
-          <button className="iconButton mt-2">Change cover</button>
+          <button
+            className="iconButton mt-2"
+            onClick={() => changeImg(editData.img)}
+          >
+            Change cover
+          </button>
         </div>
         <input
           type="text"
