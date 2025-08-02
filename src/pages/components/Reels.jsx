@@ -13,7 +13,7 @@ import { songContext } from "./Song";
 import { useNavigate } from "react-router";
 
 export default function Reels({ data, setGlobalLike = () => {}, play }) {
-  const { Queue, setQueue } = useContext(songContext);
+  const { Queue } = useContext(songContext);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [muted, setMuted] = useState(false);
   const navigate = useNavigate();

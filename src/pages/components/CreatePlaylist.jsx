@@ -24,6 +24,7 @@ import TimelineSlider from "./TimelineSlider";
 import PageLoader from "./PageLoader";
 import DownloadEntity from "./DownloadEntity";
 import Reels from "./Reels";
+import ReelButton from "./ReelButton";
 
 export default function CreatePlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -134,6 +135,7 @@ export default function CreatePlaylist({ response }) {
       utils.editMeta(`${data?.title}`);
     }
   }
+
   return (
     <div className="page hiddenScrollbar" style={{ overflowY: "scroll" }}>
       <div className="backgroundGradient" style={{ backgroundColor: bg }}></div>
@@ -176,12 +178,10 @@ export default function CreatePlaylist({ response }) {
         </div>
         <div className="playlistButtonCont">
           <div>
-            <button
-              className="playlistButtonSecondary"
-              onClick={() => open("reels")}
-            >
-              <VideoLibraryOutlined />
-            </button>
+            <ReelButton
+              data={data?.list?.[0] || null}
+              open={() => open("reels")}
+            />
             <LikeEntity
               isLiked={data.isLiked}
               styleClass="playlistButtonSecondary"

@@ -28,6 +28,8 @@ import { showToast } from "./showToast";
 import downloadOutlined from "../../assets/icons/downloadOutlined.svg";
 import DownloadEntity from "./DownloadEntity";
 import { Link } from "react-router";
+import Reels from "./Reels";
+import ReelButton from "./ReelButton";
 
 export default function CreateCustomPlaylist({ response }) {
   const { openElements, open } = useContext(HashContext);
@@ -219,6 +221,10 @@ export default function CreateCustomPlaylist({ response }) {
         </div>
         <div className="playlistButtonCont">
           <div>
+            <ReelButton
+              data={data?.list?.[0] || null}
+              open={() => open("reels")}
+            />
             <OptionEntity
               styleClass="playlistButtonSecondary"
               data={{
@@ -382,6 +388,11 @@ export default function CreateCustomPlaylist({ response }) {
             butText={delText.butText}
             onConfirm={deletePlaylist}
           />,
+          document.body
+        )}
+      {openElements.includes("reels") &&
+        createPortal(
+          <Reels data={data} setGlobalLike={handleLocalLike} play={play} />,
           document.body
         )}
     </div>
