@@ -3374,17 +3374,55 @@ input[type="search"]::-webkit-search-cancel-button {
 .reelButton {
   width: 35px;
   margin-right: 10px;
-  border: 2px solid #ffffff86;
   aspect-ratio: 10/12;
   padding: 2px;
   border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid;
+  border-color: transparent;
+  animation: addBorder 5s steps(1, end) forwards;
   img {
     border-radius: 4px;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    position: relative;
+    z-index: 1;
   }
 }
+@keyframes addBorder {
+  100% {
+    border-color: rgba(255, 255, 255, 0.384);
+  }
+}
+
+.reelButton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.185) 0%,
+    rgba(255, 255, 255, 0.747) 50%,
+    rgba(255, 255, 255, 0.185) 100%
+  );
+  animation: shimmer 1.2s ease-in-out 4;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
 @media (min-width: 1024px) {
   .reelVideoCont {
     max-height: 88vh;
