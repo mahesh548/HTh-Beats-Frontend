@@ -124,8 +124,10 @@ export default function CreateArtist({ response }) {
     }
   }
 
-  const playReel = () => {
-    setQueue({ type: "STATUS", value: "pause" });
+  const playReel = (status) => {
+    if (status == "play") {
+      setQueue({ type: "STATUS", value: "pause" });
+    }
     setTimeout(() => {
       open("reels");
     }, 300);
@@ -185,7 +187,7 @@ export default function CreateArtist({ response }) {
             <div>
               <ReelButton
                 data={data?.list?.[0] || null}
-                open={() => playReel()}
+                open={() => playReel(Queue?.status)}
               />
               <LikeEntity
                 isLiked={data.isLiked}
