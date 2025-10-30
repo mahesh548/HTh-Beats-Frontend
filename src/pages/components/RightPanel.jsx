@@ -33,6 +33,7 @@ import OffCanvas from "./BottomSheet";
 import BackButton from "./BackButton";
 import { showToast } from "./showToast";
 import Video from "./Video";
+import Lyrics from "./Lyrics";
 
 export default function RightPanel({ Fullscreen, setFullscreen }) {
   const { Queue, setQueue } = useContext(songContext);
@@ -120,7 +121,6 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
     }
 
     if (lyrics.current?.id == id && lyrics.current.data.length > 2) {
-      console.log("toggling the panel");
       toggleRightPanel("lyrics");
       return;
     }
@@ -130,13 +130,11 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
     }
 
     lyrics.current.id = id;
-    lyrics.current.data = ["Lyrics not available for this track!"];
+    lyrics.current.data = "Lyrics not available for this track!";
 
     const response = await utils.API(`/lyrics?id=${id}`, "GET");
     if (response.status) {
-      const lyricArray = response.lyrics.split("<br>");
-      lyrics.current = { data: lyricArray, id: id };
-      console.log("togglint the panel");
+      lyrics.current = { data: response?.lyrics, id: id };
       toggleRightPanel("lyrics");
     }
   };
@@ -369,22 +367,8 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
               </button>
             )}
           </div>
-          <div className="hiddenScrollbar deskScroll">
-            {lyrics.current.data.map((line, index) => {
-              if (line.length == 0) {
-                return (
-                  <div key={"lyrics-line-" + index} className="mt-4 mb-2"></div>
-                );
-              }
-              return (
-                <p
-                  key={"lyrics-line-" + index}
-                  className={`text-white  fw-normal mt-2 mb-2 px-2 ps-3 lyricalText`}
-                >
-                  {line}
-                </p>
-              );
-            })}
+          <div className="hiddenScrollbar deskScroll" id="lyricsCont">
+            <Lyrics data={lyrics.current.data || ""} />
           </div>
         </div>
       )}
