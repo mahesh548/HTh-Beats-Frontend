@@ -3,6 +3,19 @@ import { useEffect, useMemo, useState } from "react";
 export default function Lyrics({ data }) {
   const [currentLine, setCurrentLine] = useState(null);
 
+  const isInView = (element) => {
+    const container = document.getElementById("lyricsCont");
+    if (!element || !container) return false;
+
+    const elemRect = element.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    return (
+      elemRect.top >= containerRect.top &&
+      elemRect.bottom <= containerRect.bottom
+    );
+  };
+
   const lrcToObject = (lrcText) => {
     const lines = lrcText.split("\n");
     const lyricsObj = {};
@@ -50,6 +63,20 @@ export default function Lyrics({ data }) {
     };
   }, [lyricsData]);
 
+  useEffect(() => {
+    const activeLine = document.getElementsByClassName("activeLyrics");
+    if (activeLine.length > 0) {
+      console.log(activeLine);
+      const currentElement = activeLine[activeLine.length - 1];
+      if (isInView(currentElement)) {
+        currentElement.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
+    }
+  }, [currentLine]);
+
   return (
     <>
       {Object.entries(lyricsData).map(([time, line], index) => {
@@ -59,9 +86,12 @@ export default function Lyrics({ data }) {
         return (
           <p
             key={"lyrics-line-" + index}
-            className={`text-white${
-              time == currentLine ? "" : "-50"
+            className={`${
+              Number(time) <= Number(currentLine)
+                ? "text-white activeLyrics"
+                : "text-black"
             }  fw-normal mt-2 mb-2 px-2 ps-3 lyricalText`}
+            id={`${Number(time) == Number(currentLine) ? "currentLine" : ""}`}
           >
             {line}
           </p>

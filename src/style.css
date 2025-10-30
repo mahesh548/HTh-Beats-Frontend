@@ -1903,6 +1903,10 @@ input[type="search"]::-webkit-search-cancel-button {
   .queuePageLayout .sortPlaylistSong .playlistSong {
     margin-top: 0px;
   }
+  .lyricalText {
+    font-size: 2rem;
+    font-weight: bolder;
+  }
 }
 @media (min-width: 1024px) {
   /* DESKTOP SPECIFIC CSS */
@@ -2631,6 +2635,7 @@ input[type="search"]::-webkit-search-cancel-button {
   }
   .lyricalText {
     padding-inline-start: 1rem;
+    font-weight: bolder;
   }
   #desk-lyrics {
     transition: background-color 0.5s ease;

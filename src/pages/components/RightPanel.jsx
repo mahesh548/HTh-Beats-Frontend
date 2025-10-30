@@ -367,7 +367,7 @@ export default function RightPanel({ Fullscreen, setFullscreen }) {
               </button>
             )}
           </div>
-          <div className="hiddenScrollbar deskScroll">
+          <div className="hiddenScrollbar deskScroll" id="lyricsCont">
             <Lyrics data={lyrics.current.data || ""} />
           </div>
         </div>

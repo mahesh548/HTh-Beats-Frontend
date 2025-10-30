@@ -356,6 +356,7 @@ export default function Player() {
         <div
           className="floatingPage overflow-scroll hiddenScrollbar"
           style={{ backgroundColor: lyrics.current.color }}
+          id="lyricsCont"
         >
           <div
             className="libraryNavCont px-2"
