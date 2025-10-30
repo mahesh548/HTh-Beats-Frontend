@@ -27,6 +27,7 @@ import OffCanvas from "./BottomSheet";
 import BackButton from "./BackButton";
 import { showToast } from "./showToast";
 import Video from "./Video";
+import Lyrics from "./Lyrics";
 
 export default function Player() {
   const { Queue, setQueue } = useContext(songContext);
@@ -143,14 +144,15 @@ export default function Player() {
       showToast({ text: "Fetching lyrics..." });
       return;
     }
-
-    lyrics.current.id = id;
-    lyrics.current.data = ["Lyrics not available for this track!"];
+    lyrics.current = {
+      data: "Lyrics not available for this track!",
+      id: id,
+      color,
+    };
 
     const response = await utils.API(`/lyrics?id=${id}`, "GET");
     if (response.status) {
-      const lyricArray = response.lyrics.split("<br>");
-      lyrics.current = { data: lyricArray, id: id, color: color };
+      lyrics.current = { data: response?.lyrics, id: id, color };
       open("lyrics");
     }
   };
@@ -383,21 +385,7 @@ export default function Player() {
             </div>
           </div>
           <div style={{ marginTop: "80px" }}>
-            {lyrics.current.data.map((line, index) => {
-              if (line.length == 0) {
-                return (
-                  <div key={"lyrics-line-" + index} className="mt-4 mb-2"></div>
-                );
-              }
-              return (
-                <p
-                  key={"lyrics-line-" + index}
-                  className="text-white mt-2 mb-2 px-2 ps-3 fs-4 fw-normal"
-                >
-                  {line}
-                </p>
-              );
-            })}
+            <Lyrics data={lyrics.current?.data} />
           </div>
         </div>
       )}
